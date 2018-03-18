@@ -7,8 +7,7 @@
     "scripts": {
         "build": "tsc",
         "offline": "serverless offline start",
-        "deploy": "serverless client deploy && serverless deploy",
-        "test": "tsc"
+        "deploy": "serverless client deploy && serverless deploy"
     },
     "author": "James Lockman, Arthur Lockman",
     "license": "MIT",

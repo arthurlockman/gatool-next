@@ -10,7 +10,6 @@ provider:
   runtime: nodejs6.10
   region: us-east-1
   role: arn:aws:iam::336977810532:role/service-role/GAToolRole
-  profile: aws-arthurlockman
   stage: production
   environment: # Environment variables available to the whole service
     FRC_API_KEY: ${ssm:frc-api-key~true}
