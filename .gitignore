@@ -1,0 +1,11 @@
+node_modules/*
+npm-debug.log
+token.json
+.idea/*
+database/*.*
+server.crt
+server.key
+.build/*
+.serverless/*
+dist/*
+package-lock.json

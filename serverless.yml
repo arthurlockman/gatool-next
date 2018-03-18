@@ -1,0 +1,159 @@
+# This file is the main config file for the service.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+
+service: GAToolBackend
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  region: us-east-1
+  role: arn:aws:iam::336977810532:role/service-role/GAToolRole
+  profile: aws-arthurlockman
+  stage: production
+  environment: # Environment variables available to the whole service
+    FRC_API_KEY: ${ssm:frc-api-key~true}
+    TBA_API_HEADER: ${ssm:tba-api-header~true}
+    TBA_API_KEY: ${ssm:tba-api-token~true}
+    FRC_CURRENT_SEASON: 2018
+    HIGH_SCORES_TABLE_NAME: HighScoresTable
+    USERS_TABLE_NAME: UsersTable
+    WEBSITE_BUCKET: gatoolwebsite
+
+functions: # TODO: outline all functions
+  ServeUI:
+    handler: handler.ServeUI
+    description: Serve the UI
+    events:
+      - http:
+          path: /{page}
+          method: get
+          request:
+            parameters:
+              path:
+                page: true
+  ServeUIBase:
+    handler: handler.ServeUI
+    description: Serve the UI
+    events:
+      - http:
+          path: /
+          method: get
+  GetEvents:
+    handler: handler.GetEvents
+    description: Get events for a specific year
+    events:
+      - http:
+          path: api/{year}/events
+          method: get
+          request:
+            parameters:
+              paths:
+                year: true
+  GetEventTeams:
+    handler: handler.GetEventTeams
+    description: Get teams for a specific event for a specific year
+    events:
+      - http:
+          path: api/{year}/teams/{eventCode}/{page}
+          method: get
+          request:
+            parameters:
+              paths:
+                year: true
+                eventCode: true
+                page: true
+  GetTeamAwards:
+    handler: handler.GetTeamAwards
+    description: Get awards for a specific team in a specific year
+    events:
+      - http:
+          path: api/{year}/awards/{teamNumber}
+          method: get
+          request:
+            parameters:
+              paths:
+                year: true
+                teamNumber: true
+  GetEventScores:
+    handler: handler.GetEventScores
+    description: Get scores for a specific event with a year, competition level, and a start/end (match number)
+    events:
+      - http:
+          path: api/{year}/scores/{eventCode}/{tournamentLevel}/{start}/{end}
+          method: get
+          request:
+            parameters:
+              paths:
+                year: true
+                eventCode: true
+                tournamentLevel: true
+                start: true
+                end: true
+  GetEventSchedule:
+    handler: handler.GetEventSchedule
+    description: Get the event schedule for a specific event, year, and competition level
+    events:
+      - http:
+          path: api/{year}/schedule/{eventCode}/{tournamentLevel}
+          method: get
+          request:
+            parameters:
+              year: true
+              eventCode: true
+              tournamentLevel: true
+  UpdateHighScores:
+    handler: handler.UpdateHighScores
+    description: Update the event high scores at a regular interval
+    timeout: 60
+    events:
+      - schedule:
+          rate: rate(5 minutes)
+          enabled: false
+
+# TODO: leverage API Gateway caching for requests
+# TODO: add custom domain name mapping: https://stackoverflow.com/a/39595088
+# TODO: outline resources and tables needed for the service
+# TODO: handle authentication with a users table and a login function
+
+# resources:
+#   Resources:
+#     HighScoresTable:
+#       Type: AWS::DynamoDB::Table
+#       Properties:
+#         TableName: HighScoresTable
+#         AttributeDefinitions:
+#           - AttributeName: yearType
+#             AttributeType: S
+#         KeySchema:
+#           - AttributeName: yearType
+#             KeyType: HASH
+#         ProvisionedThroughput:
+#           ReadCapacityUnits: 1
+#           WriteCapacityUnits: 1
+#     UsersTable:
+#       Type: AWS::DynamoDB::Table
+#       Properties:
+#         TableName: UsersTable
+#         AttributeDefinitions:
+#           - AttributeName: email
+#             AttributeType: S
+#         KeySchema:
+#           - AttributeName: email
+#             KeyType: HASH
+#         ProvisionedThroughput:
+#           ReadCapacityUnits: 1
+#           WriteCapacityUnits: 1
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+  - serverless-finch
+
+custom:
+  client:
+    bucketName: gatoolwebsite
+    distributionFolder: ui
+    indexDocument: index.html
+    errorDocument: error.html

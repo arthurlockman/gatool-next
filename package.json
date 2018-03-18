@@ -1,0 +1,27 @@
+{
+    "name": "gatool",
+    "version": "2.0.0",
+    "repository": "https://github.com/arthurlockman/gatool",
+    "description": "GATool",
+    "main": "dist/handler.js",
+    "scripts": {
+        "build": "tsc",
+        "offline": "serverless offline start",
+        "deploy": "serverless client deploy && serverless deploy"
+    },
+    "author": "James Lockman, Arthur Lockman",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/aws-lambda": "0.0.32",
+        "serverless": "^1.26.0",
+        "serverless-finch": "^1.4.0",
+        "serverless-offline": "^3.17.0",
+        "serverless-plugin-typescript": "^1.1.5",
+        "tslint": "^5.9.1"
+    },
+    "dependencies": {
+        "@types/node": "^9.4.6",
+        "request": "^2.83.0",
+        "request-promise": "^4.2.2"
+    }
+}
