@@ -10,7 +10,7 @@ script:
   - rm -r dist/
 deploy:
   - provider: script
-    script: npm run deploy
+    script: npm i && npm run deploy
     on:
       branch: master
 
