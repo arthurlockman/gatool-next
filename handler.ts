@@ -1,4 +1,7 @@
 import { Handler, Context, Callback } from 'aws-lambda';
+import { Match, MatchWithEventDetails, MatchWithHighScoreDetails } from './model/match';
+import { EventSchedule, EventType } from './model/event';
+
 const rp = require('request-promise');
 const AWS = require('aws-sdk');
 const DynamoDB = new AWS.DynamoDB.DocumentClient({ region: 'us-east-1' });
@@ -84,7 +87,7 @@ const GetOffseasonEvents: Handler = (event: any, context: Context, callback: Cal
 const UpdateHighScores: Handler = (event: any, context: Context, callback: Callback) => {
     return GetDataFromFIRST(process.env.FRC_CURRENT_SEASON + '/events').then((eventList) => {
         const promises = [];
-        const order = [];
+        const order: EventType[] = [];
         const currentDate = new Date();
         currentDate.setDate(currentDate.getDate() + 1);
         for (const _event of eventList.Events) {
@@ -102,20 +105,58 @@ const UpdateHighScores: Handler = (event: any, context: Context, callback: Callb
                 });
             }
         }
-        Promise.all(promises).then((data) => {
+        Promise.all(promises).then((events) => {
             // TODO: calculate high scores and store to table
-            // Qual (no fouls), Playoff (no fouls)
-            // Qual (offsetting fouls), Playoff (offsetting fouls)
-            // Qual, Playoff
-            for (const match of data) {
-                const eventCode = order[data.indexOf(match)].eventCode;
-                const type = order[data.indexOf(match)].type;
-                if (match.Schedule[0] && match.Schedule[0].actualStartTime) {
-                    // Process score since it's a real score, store to table
+            const matches: MatchWithEventDetails[] = [];
+            for (const _event of (events as EventSchedule[])) {
+                const evt = order[events.indexOf(_event)];
+                if (_event.Schedule[0]) {
+                    for (const match of _event.Schedule) {
+                        if (match.postResultTime && match.postResultTime !== '') {
+                            // Result was posted, so the match has occurred
+                            matches.push({
+                                event: evt,
+                                match: match
+                            });
+                        }
+                    }
                 } else {
-                    console.log('Event', eventCode, type, 'has no schedule data, likely occurs in the future');
+                    console.log('Event', evt.eventCode, evt.type, 'has no schedule data, likely occurs in the future');
                 }
             }
+            const overallHighScorePlayoff: MatchWithEventDetails[] = [];
+            const overallHighScoreQual: MatchWithEventDetails[] = [];
+            const penaltyFreeHighScorePlayoff: MatchWithEventDetails[] = [];
+            const penaltyFreeHighScoreQual: MatchWithEventDetails[] = [];
+            const offsettingPenaltyHighScorePlayoff: MatchWithEventDetails[] = [];
+            const offsettingPenaltyHighScoreQual: MatchWithEventDetails[] = [];
+            for (const match of matches) {
+                if (match.event.type === 'playoff') {
+                    overallHighScorePlayoff.push(match);
+                }
+                if (match.event.type === 'qual') {
+                    overallHighScoreQual.push(match);
+                }
+                if (match.event.type === 'playoff'
+                    && match.match.scoreBlueFoul === 0 && match.match.scoreRedFoul === 0) {
+                    penaltyFreeHighScorePlayoff.push(match);
+                } else if (match.event.type === 'qual'
+                    && match.match.scoreBlueFoul === 0 && match.match.scoreRedFoul === 0) {
+                    penaltyFreeHighScoreQual.push(match);
+                } else if (match.event.type === 'playoff'
+                    && match.match.scoreBlueFoul === match.match.scoreRedFoul && match.match.scoreBlueFoul > 0) {
+                    offsettingPenaltyHighScorePlayoff.push(match);
+                } else if (match.event.type === 'qual'
+                    && match.match.scoreBlueFoul === match.match.scoreRedFoul && match.match.scoreBlueFoul > 0) {
+                    offsettingPenaltyHighScoreQual.push(match);
+                }
+            }
+            StoreHighScore(process.env.FRC_CURRENT_SEASON, 'overall', 'playoff', FindHighestScore(overallHighScorePlayoff));
+            StoreHighScore(process.env.FRC_CURRENT_SEASON, 'overall', 'qual', FindHighestScore(overallHighScoreQual));
+            StoreHighScore(process.env.FRC_CURRENT_SEASON, 'penaltyFree', 'playoff', FindHighestScore(penaltyFreeHighScorePlayoff));
+            StoreHighScore(process.env.FRC_CURRENT_SEASON, 'penaltyFree', 'qual', FindHighestScore(penaltyFreeHighScoreQual));
+            StoreHighScore(process.env.FRC_CURRENT_SEASON, 'offsetting', 'playoff', FindHighestScore(offsettingPenaltyHighScorePlayoff));
+            StoreHighScore(process.env.FRC_CURRENT_SEASON, 'offsetting', 'qual', FindHighestScore(offsettingPenaltyHighScoreQual));
             callback();
         });
     });
@@ -176,33 +217,55 @@ function ReturnJsonWithCode(statusCode: number, body: any, callback: any) {
 
 /**
  * Store a high score in the database
- * @param score The match score
- * @param matchNumber The match number
- * @param eventCode The event code
- * @param eventName The event name
- * @param year The year for the score
- * @param type The type (qual, playoff) for the score
- * @param fouls The foul type (none, offsetting, included)
+ * @param year The year for this score
+ * @param type The type for this score
+ * @param level The competition level (qual or playoff)
+ * @param match The match to store
  */
-function StoreHighScore(score: string, matchNumber: string, eventCode: string,
-    eventName: string, year: string, type: string, fouls: string): Promise<any> {
+function StoreHighScore(year: string, type: string, level: string, match: MatchWithHighScoreDetails): Promise<any> {
     const params = {
-        TableName: process.env.HIGH_SCORES_TABLE_NAME,
+        TableName: 'HighScoresTable',
         Item: {
-            yearType: year + type + fouls,
+            yearType: year + type + level,
             year: year,
             type: type,
-            fouls: fouls,
-            eventCode: eventCode,
-            eventName: eventName,
-            matchNumber: matchNumber
+            level: level,
+            matchData: match
         }
     };
     return DynamoDB.put(params, (err, data) => {
         if (err) {
+            console.log(err.message);
             return Promise.reject(err);
         } else {
             return Promise.resolve();
         }
     });
+}
+
+/**
+ * Finds the highest score of a list of matches
+ * @param matches Matches to find the highest score of
+ */
+function FindHighestScore(matches: MatchWithEventDetails[]): MatchWithHighScoreDetails {
+    let highScore = 0;
+    let alliance = '';
+    let _match: MatchWithEventDetails;
+    for (const match of matches) {
+        if (match.match.scoreBlueFinal > highScore) {
+            highScore = match.match.scoreBlueFinal;
+            alliance = 'blue';
+            _match = match;
+        }
+        if (match.match.scoreRedFinal > highScore) {
+            highScore = match.match.scoreRedFinal;
+            alliance = 'red';
+            _match = match;
+        }
+    }
+    return {
+        event: _match.event,
+        highScoreAlliance: alliance,
+        match: _match.match
+    };
 }

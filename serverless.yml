@@ -108,42 +108,42 @@ functions: # TODO: outline all functions
     timeout: 60
     events:
       - schedule:
-          rate: rate(5 minutes)
-          enabled: false
+          rate: rate(10 minutes)
+          enabled: true
 
 # TODO: leverage API Gateway caching for requests
 # TODO: add custom domain name mapping: https://stackoverflow.com/a/39595088
 # TODO: outline resources and tables needed for the service
 # TODO: handle authentication with a users table and a login function
 
-# resources:
-#   Resources:
-#     HighScoresTable:
-#       Type: AWS::DynamoDB::Table
-#       Properties:
-#         TableName: HighScoresTable
-#         AttributeDefinitions:
-#           - AttributeName: yearType
-#             AttributeType: S
-#         KeySchema:
-#           - AttributeName: yearType
-#             KeyType: HASH
-#         ProvisionedThroughput:
-#           ReadCapacityUnits: 1
-#           WriteCapacityUnits: 1
-#     UsersTable:
-#       Type: AWS::DynamoDB::Table
-#       Properties:
-#         TableName: UsersTable
-#         AttributeDefinitions:
-#           - AttributeName: email
-#             AttributeType: S
-#         KeySchema:
-#           - AttributeName: email
-#             KeyType: HASH
-#         ProvisionedThroughput:
-#           ReadCapacityUnits: 1
-#           WriteCapacityUnits: 1
+resources:
+  Resources:
+    HighScoresTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: HighScoresTable
+        AttributeDefinitions:
+          - AttributeName: yearType
+            AttributeType: S
+        KeySchema:
+          - AttributeName: yearType
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: UsersTable
+        AttributeDefinitions:
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: email
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
 
 plugins:
   - serverless-plugin-typescript
