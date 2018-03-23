@@ -77,7 +77,12 @@ const GetEventSchedule: Handler = (event: any, context: Context, callback: Callb
 };
 
 const GetHighScores: Handler = (event: any, context: Context, callback: Callback) => {
-    // TODO: implement this stub
+    const params = {
+        TableName: 'HighScoresTable'
+    };
+    return DynamoDB.scan(params, (err, data) => {
+        ReturnJsonWithCode(200, data.Items.filter(x => x.year === event.pathParameters.year), callback);
+    });
 };
 
 const GetOffseasonEvents: Handler = (event: any, context: Context, callback: Callback) => {
@@ -162,7 +167,7 @@ const UpdateHighScores: Handler = (event: any, context: Context, callback: Callb
     });
 };
 
-export { GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedule, UpdateHighScores, ServeUI }
+export { GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedule, UpdateHighScores, ServeUI, GetHighScores }
 
 /**
  * Get and return data from the FIRST API

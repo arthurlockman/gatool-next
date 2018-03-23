@@ -63,6 +63,17 @@ functions: # TODO: outline all functions
                 year: true
                 eventCode: true
                 page: true
+  GetHighScores:
+    handler: handler.GetHighScores
+    description: Get high scores for a specific year
+    events:
+      - http:
+          path: api/{year}/highscores
+          method: get
+          request:
+            parameters:
+              paths:
+                year: true
   GetTeamAwards:
     handler: handler.GetTeamAwards
     description: Get awards for a specific team in a specific year
