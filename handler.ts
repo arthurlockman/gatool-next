@@ -176,6 +176,7 @@ export { GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedu
  */
 function GetDataFromFIRSTAndReturn(path: string, callback: any) {
     return GetDataFromFIRST(path).then((body) => {
+        console.log(body);
         ReturnJsonWithCode(200, body, callback);
     });
 }
@@ -213,6 +214,8 @@ function ReturnJsonWithCode(statusCode: number, body: any, callback: any) {
         statusCode: statusCode,
         body: JSON.stringify(body),
         headers: {
+            'Access-Control-Allow-Origin': '*', // Required for CORS support to work
+            'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS
             'Content-Type': 'application/json',
             'charset': 'utf-8'
         },
