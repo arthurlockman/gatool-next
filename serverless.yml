@@ -172,4 +172,4 @@ custom:
     bucketName: gatoolwebsite
     distributionFolder: ui
     indexDocument: index.html
-    errorDocument: error.html
+    errorDocument: error.html    
