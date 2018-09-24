@@ -102,18 +102,6 @@ functions: # TODO: outline all functions
               year: true
               eventCode: true
               tournamentLevel: true
-  GetAwards:
-    handler: handler.GetAwards
-    description: Get the awards for a specific team for a specific year
-    events:
-    - http:
-        path: api/{year}/awards/{teamNumber}
-        method: get
-        cors: true
-        request:
-          parameters:
-            year: true
-            teamNumber: true
   Login:
     handler: handler.Login
     description: Log a user in to the application

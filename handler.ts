@@ -52,12 +52,6 @@ const Login: Handler = (event: APIGatewayEvent, context: Context, callback: Call
 };
 
 // noinspection JSUnusedGlobalSymbols
-const GetAwards: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
-    return GetDataFromFIRSTAndReturn(event.pathParameters.year + '/awards/' +
-        event.pathParameters.teamNumber, callback);
-};
-
-// noinspection JSUnusedGlobalSymbols
 const GetOffseasonEvents: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
     // TODO: implement this stub
 };
