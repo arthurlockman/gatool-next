@@ -12,6 +12,7 @@ provider:
   role: arn:aws:iam::336977810532:role/service-role/GAToolRole
   stage: production
   environment: # Environment variables available to the whole service
+    SERVICE_AWS_REGION: ${self:provider.region}
     FRC_API_KEY: ${ssm:frc-api-key~true}
     TBA_API_HEADER: ${ssm:tba-api-header~true}
     TBA_API_KEY: ${ssm:tba-api-token~true}
@@ -21,24 +22,6 @@ provider:
     WEBSITE_BUCKET: gatoolwebsite
 
 functions: # TODO: outline all functions
-  ServeUI:
-    handler: handler.ServeUI
-    description: Serve the UI
-    events:
-      - http:
-          path: /{page}
-          method: get
-          request:
-            parameters:
-              path:
-                page: true
-  ServeUIBase:
-    handler: handler.ServeUI
-    description: Serve the UI
-    events:
-      - http:
-          path: /
-          method: get
   GetEvents:
     handler: handler.GetEvents
     description: Get events for a specific year
@@ -119,6 +102,14 @@ functions: # TODO: outline all functions
               year: true
               eventCode: true
               tournamentLevel: true
+  Login:
+    handler: Handler.Login
+    description: Log a user in to the application
+    events:
+      - http:
+          path: api/login
+          method: post
+          cors: true
   UpdateHighScores:
     handler: handler.UpdateHighScores
     description: Update the event high scores at a regular interval
@@ -128,8 +119,6 @@ functions: # TODO: outline all functions
           rate: rate(10 minutes)
           enabled: true
 
-# TODO: leverage API Gateway caching for requests
-# TODO: add custom domain name mapping: https://stackoverflow.com/a/39595088
 # TODO: outline resources and tables needed for the service
 # TODO: handle authentication with a users table and a login function
 
@@ -172,4 +161,4 @@ custom:
     bucketName: gatoolwebsite
     distributionFolder: ui
     indexDocument: index.html
-    errorDocument: error.html    
+    errorDocument: error.html
