@@ -103,7 +103,7 @@ functions: # TODO: outline all functions
               eventCode: true
               tournamentLevel: true
   Login:
-    handler: Handler.Login
+    handler: handler.Login
     description: Log a user in to the application
     events:
       - http:
