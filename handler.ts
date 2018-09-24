@@ -46,6 +46,16 @@ const GetHighScores: Handler = (event: APIGatewayEvent, context: Context, callba
 };
 
 // noinspection JSUnusedGlobalSymbols
+const GetEventAlliances: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+    return GetDataFromFIRSTAndReturn(`${event.pathParameters.year}/alliances/${event.pathParameters.eventCode}`, callback);
+};
+
+// noinspection JSUnusedGlobalSymbols
+const GetEventRankings: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+    return GetDataFromFIRSTAndReturn(`${event.pathParameters.year}/rankings/${event.pathParameters.eventCode}`, callback);
+};
+
+// noinspection JSUnusedGlobalSymbols
 const Login: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
     // TODO: properly implement login
     ReturnJsonWithCode(200, {}, callback);
@@ -147,7 +157,8 @@ const UpdateHighScores: Handler = (event: APIGatewayEvent, context: Context, cal
 };
 
 // noinspection JSUnusedGlobalSymbols
-export {GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedule, UpdateHighScores, GetHighScores, GetOffseasonEvents}
+export {GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedule,
+    UpdateHighScores, GetHighScores, GetOffseasonEvents, GetEventAlliances, GetEventRankings}
 
 // Handle unexpected application errors
 process.on('unhandledRejection', (reason, p) => {

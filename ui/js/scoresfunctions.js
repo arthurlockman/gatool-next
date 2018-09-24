@@ -33,7 +33,7 @@ function getHighScores() {
 	"use strict";
 	var req = new XMLHttpRequest();
 	var eventNames = JSON.parse(localStorage.events);
-	req.open('GET', apiURL + localStorage.currentYear + '/highscore/');
+	req.open('GET', apiURL + localStorage.currentYear + '/highscores');
 	req.addEventListener('load', function () {
 		$("#eventhighscorestable").html('<thead><tr><td colspan="2">Event High Scores</td></tr></thead><tr><td id="eventHighQualsNoFouls">Qual (no penalties)<br>No matches meet criteria<br></td><td id="eventHighPlayoffNoFouls">Playoff (no penalties)<br>No matches meet criteria</td></tr><tr> <td id="eventHighQualsOffsettingFouls">Qual (offsetting fouls)<br>No matches meet criteria<br></td><td id="eventHighPlayoffOffsettingFouls">Playoff (offsetting fouls)<br>No matches meet criteria<br></td></tr><tr><td id="eventHighQuals">Qual<br>No matches meet criteria<br></td><td id="eventHighPlayoff">Playoff<br>No matches meet criteria</td></tr>');
 		var data = JSON.parse(req.responseText);
@@ -93,7 +93,7 @@ function getTeamRanks() {
 	$('#teamRanksPicker').addClass('alert-danger');
 	var team = {};
 	var req = new XMLHttpRequest();
-	req.open('GET', apiURL + localStorage.currentYear + '/Rankings/' + localStorage.currentEvent);
+	req.open('GET', apiURL + localStorage.currentYear + '/rankings/' + localStorage.currentEvent);
 	req.addEventListener('load', function () {
 		var data = JSON.parse(req.responseText);
 		if (data.Rankings.length === 0) {
