@@ -16,7 +16,7 @@ var CSVParser = {
   //---------------------------------------
 
   isNumber: function(string) {
-    if( (string == null) || isNaN( new Number(string) ) ) {
+    if( (string == null) || isNaN( Number(string) ) ) {
       return false;
     }
     return true;
@@ -48,9 +48,8 @@ var CSVParser = {
     var columnDelimiter = ",";
     if (numTabs > numCommas) {
       columnDelimiter = "\t"
-    };
-
-    if (delimiterType === "comma") {
+    }
+      if (delimiterType === "comma") {
       columnDelimiter = ","
     } else if (delimiterType === "tab") {
       columnDelimiter = "\t"
@@ -79,11 +78,9 @@ var CSVParser = {
         dataArray[i][j] = dataArray[i][j].replace("\t", "\\t");
         dataArray[i][j] = dataArray[i][j].replace("\n", "\\n");
         dataArray[i][j] = dataArray[i][j].replace("\r", "\\r");
-      };
-    };
-
-
-    var headerNames = [];
+      }
+    }
+      var headerNames = [];
     var headerTypes = [];
     var numColumns = dataArray[0].length;
     var numRows = dataArray.length;
@@ -99,29 +96,28 @@ var CSVParser = {
       for (var i=0; i < numColumns; i++) {
         headerNames.push("val"+String(i));
         headerTypes.push("");
-      };
-
+      }
     }
 
 
     if (upcaseHeaders) {
       for (var i = headerNames.length - 1; i >= 0; i--){
         headerNames[i] = headerNames[i].toUpperCase();
-      };
-    };
-    if (downcaseHeaders) {
+      }
+    }
+      if (downcaseHeaders) {
       for (var i = headerNames.length - 1; i >= 0; i--){
         headerNames[i] = headerNames[i].toLowerCase();
-      };
-    };
-
-    //test all the rows for proper number of columns.
+      }
+    }
+      //test all the rows for proper number of columns.
     for (var i=0; i < dataArray.length; i++) {
       var numValues = dataArray[i].length;
-      if (numValues != numColumns) {this.log("Error parsing row "+String(i)+". Wrong number of columns.")};
-    };
-
-    //test columns for number data type
+        if (numValues != numColumns) {
+            this.log("Error parsing row " + String(i) + ". Wrong number of columns.")
+        }
+    }
+      //test columns for number data type
     var numRowsToTest = dataArray.length;
     var threshold = 0.9;
     for (var i=0; i < headerNames.length; i++) {
@@ -134,16 +130,14 @@ var CSVParser = {
             dataArray[r][i] = dataArray[r][i].replace(",", ".");
           }
           if (CSVParser.isNumber(dataArray[r][i])) {
-            numInts++
+            numInts++;
             if (String(dataArray[r][i]).indexOf(".") > 0) {
               numFloats++
             }
-          };
-        };
-
-      };
-
-      if ((numInts / numRowsToTest) > threshold){
+          }
+        }
+      }
+        if ((numInts / numRowsToTest) > threshold){
         if (numFloats > 0) {
           headerTypes[i] = "float"
         } else {
@@ -181,11 +175,10 @@ var CSVParser = {
     if (this.errorLog.length > 0) {
       for (var i=0; i < this.errorLog.length; i++) {
         out += ("!!"+this.errorLog[i] + "!!\n");
-      };
-      out += "\n"
-    };
-
-    return out;
+      }
+        out += "\n"
+    }
+      return out;
   },
 
 
@@ -282,4 +275,4 @@ var CSVParser = {
 
 
 
-}
+};
