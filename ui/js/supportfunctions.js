@@ -391,7 +391,7 @@ function loadEnvironment() {
 
                 var req = new XMLHttpRequest();
                 req.open('GET', apiURL + '/loadenvironment/');
-                req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+                req.setRequestHeader("Authorization", localStorage.getItem("token"));
                 //req.setRequestHeader("userKey", getCookie("loggedin"));
                 req.addEventListener('load', function () {
                     dialogRef.close();
@@ -518,7 +518,7 @@ function saveEnvironment() {
                 var req = new XMLHttpRequest();
                 req.open('POST', apiURL + '/saveenvironment/');
                 req.setRequestHeader("Content-type", "application/json");
-                req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+                req.setRequestHeader("Authorization", localStorage.getItem("token"));
                 //req.setRequestHeader("userKey", getCookie("loggedin"));
                 req.addEventListener('load', function () {
                     dialogRef.close();

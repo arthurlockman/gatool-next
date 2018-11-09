@@ -5,7 +5,7 @@ function getTeamUpdates(teamNumber, singleton) {
     $('#teamDataTabPicker').addClass('alert-danger');
     var req = new XMLHttpRequest();
     req.open('GET', apiURL + 'getTeamUpdate/' + teamNumber);
-    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+    req.setRequestHeader("Authorization", localStorage.getItem("token"));
     req.addEventListener('load', function () {
         var teamUpdates = JSON.parse(Base64.decode(req.responseText));
         //var teamData = JSON.parse(localStorage["teamData" + teamNumber]);
@@ -85,7 +85,7 @@ function sendTeamUpdates(teamNumber, singleton) {
     teamUpdates.teamNotesLocal = teamData.teamNotesLocal;
     teamUpdates.source = getCookie("loggedin");
     req.open('GET', apiURL + 'putTeamUpdate/' + teamNumber + '/' + Base64.encode(JSON.stringify(teamUpdates)));
-    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+    req.setRequestHeader("Authorization", localStorage.getItem("token"));
     req.addEventListener('load', function () {
         teamUpdateCalls--;
         if ((teamAwardCalls === 0) && (teamUpdateCalls === 0) && (lastSchedulePage)) {
