@@ -21,6 +21,7 @@ function getEventScores(eventCode, type, year, tlevel) {
     return new Promise(function (resolve, reject) {
 
         var req = new XMLHttpRequest();
+        req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
         req.open('GET', apiURL + year + '/schedule/' + eventCode + "/" + tlevel + "?returnschedule=false");
         req.addEventListener('load', function () {
             resolve(JSON.parse(req.responseText));
@@ -32,6 +33,7 @@ function getEventScores(eventCode, type, year, tlevel) {
 function getHighScores() {
     "use strict";
     var req = new XMLHttpRequest();
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     var eventNames = JSON.parse(localStorage.events);
     req.open('GET', apiURL + localStorage.currentYear + '/highscores');
     req.addEventListener('load', function () {
@@ -93,6 +95,7 @@ function getTeamRanks() {
     $('#teamRanksPicker').addClass('alert-danger');
     var team = {};
     var req = new XMLHttpRequest();
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.open('GET', apiURL + localStorage.currentYear + '/rankings/' + localStorage.currentEvent);
     req.addEventListener('load', function () {
         var data = JSON.parse(req.responseText);

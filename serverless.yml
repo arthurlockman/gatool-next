@@ -20,6 +20,7 @@ provider:
     HIGH_SCORES_TABLE_NAME: HighScoresTable
     USERS_TABLE_NAME: UsersTable
     WEBSITE_BUCKET: gatoolwebsite
+    COGNITO_ARN: arn:aws:cognito-idp:us-east-1:336977810532:userpool/us-east-1_EhZVYw2tf
 
 functions: # TODO: outline all functions
   GetEvents:
@@ -30,6 +31,8 @@ functions: # TODO: outline all functions
           path: api/{year}/events
           method: get
           cors: true
+          authorizer:
+            arn: ${env.COGNITO_ARN}
           request:
             parameters:
               paths:
@@ -42,6 +45,8 @@ functions: # TODO: outline all functions
           path: api/{year}/teams/{eventCode}/{page}
           method: get
           cors: true
+          authorizer:
+            arn: ${env.COGNITO_ARN}
           request:
             parameters:
               paths:
@@ -56,6 +61,8 @@ functions: # TODO: outline all functions
           path: api/{year}/highscores
           method: get
           cors: true
+          authorizer:
+            arn: ${env.COGNITO_ARN}
           request:
             parameters:
               paths:
@@ -68,6 +75,8 @@ functions: # TODO: outline all functions
           path: api/{year}/awards/{teamNumber}
           method: get
           cors: true
+          authorizer:
+            arn: ${env.COGNITO_ARN}
           request:
             parameters:
               paths:
@@ -81,6 +90,8 @@ functions: # TODO: outline all functions
           path: api/{year}/scores/{eventCode}/{tournamentLevel}/{start}/{end}
           method: get
           cors: true
+          authorizer:
+            arn: ${env.COGNITO_ARN}
           request:
             parameters:
               paths:
@@ -97,6 +108,8 @@ functions: # TODO: outline all functions
           path: api/{year}/schedule/{eventCode}/{tournamentLevel}
           method: get
           cors: true
+          authorizer:
+            arn: ${env.COGNITO_ARN}
           request:
             parameters:
               year: true
@@ -110,6 +123,8 @@ functions: # TODO: outline all functions
           path: api/{year}/alliances/{eventCode}
           method: get
           cors: true
+          authorizer:
+            arn: ${env.COGNITO_ARN}
           request:
             parameters:
               year: true
@@ -122,6 +137,8 @@ functions: # TODO: outline all functions
         path: api/{year}/rankings/{eventCode}
         method: get
         cors: true
+        authorizer:
+          arn: ${env.COGNITO_ARN}
         request:
           parameters:
             year: true
@@ -144,7 +161,6 @@ functions: # TODO: outline all functions
           enabled: true
 
 # TODO: outline resources and tables needed for the service
-# TODO: handle authentication with a users table and a login function
 
 resources:
   Resources:

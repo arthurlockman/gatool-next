@@ -4,6 +4,7 @@ function getTeamUpdates(teamNumber, singleton) {
     "use strict";
     $('#teamDataTabPicker').addClass('alert-danger');
     var req = new XMLHttpRequest();
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.open('GET', apiURL + 'getTeamUpdate/' + teamNumber);
     req.addEventListener('load', function () {
         var teamUpdates = JSON.parse(Base64.decode(req.responseText));
@@ -70,6 +71,7 @@ function sendTeamUpdates(teamNumber, singleton) {
     "use strict";
     $('#teamDataTabPicker').addClass('alert-danger');
     var req = new XMLHttpRequest();
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     var teamUpdates = {};
     //var teamData = JSON.parse(localStorage["teamData" + teamNumber]);
     var teamData = decompressLocalStorage("teamData" + teamNumber);
