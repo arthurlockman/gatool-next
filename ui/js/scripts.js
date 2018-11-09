@@ -65,6 +65,7 @@ var matchTimer = setInterval(function () {
 var apiURL = "/api/";
 window.onload = function () {
     "use strict";
+    login();
     $('#scheduleProgressBar').hide();
     $("#loadingFeedback").html("Restoring settings...");
     if (localStorage.currentYear) {
@@ -241,6 +242,52 @@ window.onload = function () {
     $("#loadingFeedback").fadeOut()
 };
 window.addEventListener("resize", scaleRows);
+
+function login() {
+    "use strict";
+    if (window.location.hash)
+    {
+        var hash = window.location.hash.substring(1);
+        var params = {};
+        hash.split('&').map(hk => {
+            let temp = hk.split('=');
+            params[temp[0]] = temp[1]
+        });
+        localStorage.setItem("token", params["id_token"]);
+    }
+    var token = localStorage.getItem("token");
+    if (token === null || token === "")
+    {
+        redirectToLogin();
+    } else {
+        try {
+            var parsedToken = parseJwt(token);
+            var date = new Date(0);
+            date.setUTCSeconds(parsedToken.exp);
+            var expired = !(date.valueOf() > new Date().valueOf());
+            if (expired)
+            {
+                redirectToLogin();
+            }
+        } catch (e)
+        {
+            redirectToLogin();
+        }
+    }
+}
+
+function redirectToLogin() {
+    "use strict";
+    var redirectUrl = "https://gatool.auth.us-east-1.amazoncognito.com/login?response_type=token&client_id=7pu4qsq0e12ccinv4pbl0ihpn&redirect_uri=https://www.gatool.org/";
+    localStorage.removeItem("token");
+    window.location.replace(redirectUrl);
+}
+
+function parseJwt (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace('-', '+').replace('_', '/');
+    return JSON.parse(window.atob(base64));
+}
 
 function displayAwards() {
     "use strict";
@@ -437,12 +484,12 @@ function loadEventsList() {
     localStorage.currentYear = e.options[e.selectedIndex].value;
     $("#eventUpdateContainer").html("Loading event list...");
     var req = new XMLHttpRequest();
-    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     var endpoint = "/events";
     if (localStorage.offseason === "true") {
         endpoint = "/offseasoneventsv2"
     }
     req.open('GET', apiURL + localStorage.currentYear + endpoint);
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         localStorage.currentEventList = JSON.stringify(JSON.parse(req.responseText).Events);
         currentEventList = JSON.parse(req.responseText).Events;
@@ -583,8 +630,8 @@ function getRegularSeasonSchedule() {
     var qualScheduleLength = 0;
     lastMatchPlayed = 0;
     var req = new XMLHttpRequest();
-    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.open('GET', apiURL + localStorage.currentYear + '/schedule/' + localStorage.currentEvent + '/qual?returnschedule=true');
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         var data = JSON.parse(req.responseText);
         if (data.Schedule.length === 0) {
@@ -631,8 +678,8 @@ function getRegularSeasonSchedule() {
         req1.send()
     });
     var req1 = new XMLHttpRequest();
-    req1.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req1.open('GET', apiURL + localStorage.currentYear + '/schedule/' + localStorage.currentEvent + '/playoff?returnschedule=true');
+    req1.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req1.addEventListener('load', function () {
         $("#playoffScheduleAlert").show();
         var data = JSON.parse(req1.responseText);
@@ -706,8 +753,8 @@ function getRegularSeasonSchedule() {
         }
     });
     var reqChamps = new XMLHttpRequest();
-    reqChamps.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     reqChamps.open('GET', apiURL + localStorage.currentYear + '/schedule/' + localStorage.currentEvent + '/playoff?returnschedule=true');
+    reqChamps.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     reqChamps.addEventListener('load', function () {
         var data = JSON.parse(reqChamps.responseText);
         if (data.Schedule.length === 0) {
@@ -850,12 +897,12 @@ function getTeamList(year, pageNumber) {
     $("#teamDataTabPicker").addClass("alert-danger");
     $("#teamUpdateContainer").html("Loading team data...");
     var req = new XMLHttpRequest();
-    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     var endpoint = "/teams/";
     if (localStorage.offseason === "true") {
         endpoint = "/offseasonteams/"
     }
     req.open('GET', apiURL + year + endpoint + localStorage.currentEvent + '/' + pageNumber);
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         var data = "";
         $('#teamloadprogress').show();
@@ -928,8 +975,8 @@ function getTeamList(year, pageNumber) {
 function getAvatars() {
     "use strict";
     var req = new XMLHttpRequest();
-    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.open('GET', apiURL + localStorage.currentYear + '/avatars/' + localStorage.currentEvent);
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         var data = JSON.parse(req.responseText);
         var teamData = {};
@@ -978,8 +1025,8 @@ function getAllianceList() {
     "use strict";
     $("#allianceUpdateContainer").html("Loading Alliance data...");
     var req2 = new XMLHttpRequest();
-    req2.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req2.open('GET', apiURL + localStorage.currentYear + '/alliances/' + localStorage.currentEvent);
+    req2.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req2.addEventListener('load', function () {
         var data = JSON.parse(req2.responseText);
         if (data.Alliances.length === 0) {
@@ -1620,8 +1667,8 @@ function getTeamAwards(teamNumber, year) {
     var awardHilight = {"before": "<b>", "after": "</b>"};
     var awardName = "";
     var req = new XMLHttpRequest();
-    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.open('GET', apiURL + year + '/awards/' + teamNumber + "/");
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         teamLoadProgressBar++;
         $('#teamloadprogressbar').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
@@ -1666,8 +1713,8 @@ function getTeamData(teamList, year) {
     for (var team in teamList) {
         teamDataLoadPromises.push(new Promise((resolve, reject) => {
             var req = new XMLHttpRequest();
-            req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
             req.open('GET', apiURL + year + '/teamdata/' + team.teamNumber + "/");
+            req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
             req.addEventListener('load', function () {
                 if (req.responseText.substr(0, 5) !== '"Team') {
                     var data = JSON.parse(req.responseText);
@@ -1691,8 +1738,8 @@ function getTeamData(teamList, year) {
 function scoreDetails(matchNumber, tournamentLevel) {
     "use strict";
     var req = new XMLHttpRequest();
-    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.open('GET', apiURL + localStorage.currentYear + '/scores/' + localStorage.currentEvent + "/" + tournamentLevel + "/" + matchNumber + "/" + matchNumber + "/");
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         if (req.responseText.substr(0, 5) !== '"Team') {
             var data = JSON.parse(req.responseText).MatchScores[0];

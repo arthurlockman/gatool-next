@@ -1,10 +1,5 @@
 $("#loadingFeedback").html("Loading support functions...");
 
-window.onload = function () {
-    // Check logins on page load
-    login();
-};
-
 function timer() {
     "use strict";
     if (localStorage.clock === "running") {
@@ -289,53 +284,6 @@ function logout() {
     });
 }
 
-function login() {
-    "use strict";
-    if (window.location.hash)
-    {
-        var hash = window.location.hash.substring(1);
-        var params = {};
-        hash.split('&').map(hk => {
-            let temp = hk.split('=');
-            params[temp[0]] = temp[1]
-        });
-        localStorage.setItem("token", params["id_token"]);
-    }
-    var token = localStorage.getItem("token");
-    if (token === null || token === "")
-    {
-        redirectToLogin();
-    } else {
-        try {
-            var parsedToken = parseJwt(token);
-            var date = new Date(0);
-            date.setUTCSeconds(parsedToken.exp);
-            var expired = !(date.valueOf() > new Date().valueOf());
-            if (expired)
-            {
-                redirectToLogin();
-            }
-        } catch (e)
-        {
-            redirectToLogin();
-        }
-    }
-}
-
-function redirectToLogin() {
-    "use strict";
-    var redirectUrl = "https://gatool.auth.us-east-1.amazoncognito.com/login?response_type=token&client_id=7pu4qsq0e12ccinv4pbl0ihpn&redirect_uri=https://www.gatool.org/";
-    localStorage.removeItem("token");
-    window.location.replace(redirectUrl);
-
-}
-
-function parseJwt (token) {
-    var base64Url = token.split('.')[1];
-    var base64 = base64Url.replace('-', '+').replace('_', '/');
-    return JSON.parse(window.atob(base64));
-}
-
 function getCookie(cname) {
     "use strict";
     var name = cname + "=";
@@ -442,8 +390,8 @@ function loadEnvironment() {
             action: function (dialogRef) {
 
                 var req = new XMLHttpRequest();
-                req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
                 req.open('GET', apiURL + '/loadenvironment/');
+                req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
                 //req.setRequestHeader("userKey", getCookie("loggedin"));
                 req.addEventListener('load', function () {
                     dialogRef.close();
@@ -568,9 +516,9 @@ function saveEnvironment() {
                 environment.allianceSelectionReady = allianceSelectionReady;
 
                 var req = new XMLHttpRequest();
-                req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
                 req.open('POST', apiURL + '/saveenvironment/');
                 req.setRequestHeader("Content-type", "application/json");
+                req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
                 //req.setRequestHeader("userKey", getCookie("loggedin"));
                 req.addEventListener('load', function () {
                     dialogRef.close();
