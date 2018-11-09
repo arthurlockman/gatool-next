@@ -254,6 +254,7 @@ function login() {
             params[temp[0]] = temp[1]
         });
         localStorage.setItem("token", params["id_token"]);
+        window.location.hash = "";
     }
     var token = localStorage.getItem("token");
     if (token === null || token === "")
