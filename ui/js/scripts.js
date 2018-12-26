@@ -63,6 +63,29 @@ var matchTimer = setInterval(function () {
     timer()
 }, 1000);
 var apiURL = "/api/";
+
+const lockOptions = {
+    allowSignUp: false,
+    auth: {
+        responseType: "token id_token",
+        redirect: false,
+        sso: true,
+        params: {
+            scope: "openid profile email",
+        },
+    },
+};
+var lock = new Auth0Lock(
+    'afsE1dlAGS609U32NjmvNMaYSQmtO3NT',
+    'gatool.auth0.com',
+    lockOptions
+);
+
+// Listening for the authenticated event
+lock.on("authenticated", function(authResult) {
+    localStorage.setItem('token', authResult.idToken);
+});
+
 window.onload = function () {
     "use strict";
     login();
@@ -245,21 +268,10 @@ window.addEventListener("resize", scaleRows);
 
 function login() {
     "use strict";
-    if (window.location.hash)
-    {
-        var hash = window.location.hash.substring(1);
-        var params = {};
-        hash.split('&').map(hk => {
-            let temp = hk.split('=');
-            params[temp[0]] = temp[1]
-        });
-        localStorage.setItem("token", params["id_token"]);
-        window.location.hash = "";
-    }
-    var token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (token === null || token === "")
     {
-        redirectToLogin();
+        lock.show();
     } else {
         try {
             var parsedToken = parseJwt(token);
@@ -268,26 +280,45 @@ function login() {
             var expired = !(date.valueOf() > new Date().valueOf());
             if (expired)
             {
-                redirectToLogin();
+                lock.show();
             }
         } catch (e)
         {
-            redirectToLogin();
+            lock.show();
         }
     }
-}
-
-function redirectToLogin() {
-    "use strict";
-    var redirectUrl = "https://gatool.auth.us-east-1.amazoncognito.com/login?response_type=token&client_id=7pu4qsq0e12ccinv4pbl0ihpn&redirect_uri=https://www.gatool.org/";
-    localStorage.removeItem("token");
-    window.location.replace(redirectUrl);
 }
 
 function parseJwt (token) {
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace('-', '+').replace('_', '/');
     return JSON.parse(window.atob(base64));
+}
+
+function logout() {
+    "use strict";
+    BootstrapDialog.show({
+        type: 'type-primary',
+        title: '<b>Logout of gatool</b>',
+        message: 'You are about to logout of gatool. Your local changes will be preserved until you reset your browser cache, so your changes will be here when you login again on this device. Are you sure you want to do this?',
+        buttons: [{
+            icon: 'glyphicon glyphicon-check',
+            label: "No, I don't want to logout now.",
+            hotkey: 78, // "N".
+            cssClass: "btn btn-info col-md-5 col-xs-12 col-sm-12 alertButton",
+            action: function (dialogRef) {
+                dialogRef.close();
+            }
+        }, {
+            icon: 'glyphicon glyphicon-log-out',
+            label: 'Yes, I do want to logout now.',
+            hotkey: 13, // Enter.
+            cssClass: 'btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton',
+            action: function (dialogRef) {
+                lock.logout();
+            }
+        }]
+    });
 }
 
 function displayAwards() {

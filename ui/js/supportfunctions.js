@@ -257,33 +257,6 @@ function resetLocalStorage() {
     });
 }
 
-function logout() {
-    "use strict";
-    BootstrapDialog.show({
-        type: 'type-primary',
-        title: '<b>Logout of gatool</b>',
-        message: 'You are about to logout of gatool. Your local changes will be preserved until you reset your browser cache, so your changes will be here when you login again on this device. Are you sure you want to do this?',
-        buttons: [{
-            icon: 'glyphicon glyphicon-check',
-            label: "No, I don't want to logout now.",
-            hotkey: 78, // "N".
-            cssClass: "btn btn-info col-md-5 col-xs-12 col-sm-12 alertButton",
-            action: function (dialogRef) {
-                dialogRef.close();
-            }
-        }, {
-            icon: 'glyphicon glyphicon-log-out',
-            label: 'Yes, I do want to logout now.',
-            hotkey: 13, // Enter.
-            cssClass: 'btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton',
-            action: function (dialogRef) {
-                dialogRef.close();
-                location.href = "/logout";
-            }
-        }]
-    });
-}
-
 function getCookie(cname) {
     "use strict";
     var name = cname + "=";
