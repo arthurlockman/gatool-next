@@ -9,3 +9,5 @@ server.key
 .serverless/*
 dist/*
 package-lock.json
+event.test.json
+

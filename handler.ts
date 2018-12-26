@@ -1,4 +1,4 @@
-import {APIGatewayEvent, Callback, Context, Handler} from 'aws-lambda';
+import {APIGatewayEvent, Callback, Context, CustomAuthorizerEvent, Handler} from 'aws-lambda';
 import {MatchWithEventDetails} from './model/match';
 import {EventSchedule, EventType} from './model/event';
 import {GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode} from './utils/utils';
@@ -158,24 +158,38 @@ const UpdateHighScores: Handler = (event: APIGatewayEvent, context: Context, cal
  * @throws Returns 401 if the token is invalid or has expired.
  */
 // noinspection JSUnusedGlobalSymbols
-const Authorize: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
-    const token = event.headers['Authorization'];
+const Authorize: Handler = (event: CustomAuthorizerEvent, context: Context, callback: Callback) => {
+    const token = event.authorizationToken;
     try {
         // Verify using getKey callback
         // Example uses https://github.com/auth0/node-jwks-rsa as a way to fetch the keys.
+        const decoded = jwt.decode(token.replace('Bearer ', ''), { complete: true });
+        if (decoded === null) {
+            callback('Unauthorized.');
+        }
         const client = jwksClient({
             jwksUri: 'https://gatool.auth0.com/.well-known/jwks.json'
         });
-        function getKey(header, authCallback) {
-            client.getSigningKey(header.kid, function(err, key) {
-                const signingKey = key.publicKey || key.rsaPublicKey;
-                authCallback(null, signingKey);
+        client.getSigningKey(decoded.header.kid, function(e, key) {
+            if (e) {
+                callback('Unauthorized.');
+            }
+            const signingKey = key.publicKey || key.rsaPublicKey;
+            const options = { audience: 'afsE1dlAGS609U32NjmvNMaYSQmtO3NT', issuer: 'https://gatool.auth0.com/' };
+            jwt.verify(token, signingKey, options, function(err, validToken) {
+                callback(null, {
+                    principalId: decoded.sub,
+                    policyDocument: {
+                        Version: '2012-10-17', // default version
+                        Statement: [{
+                            Action: 'execute-api:Invoke', // default action
+                            Effect: 'Allow',
+                            Resource: '*',
+                        }]
+                    },
+                    context: { scope: decoded.scope }
+                });
             });
-        }
-
-        const options = { audience: 'afsE1dlAGS609U32NjmvNMaYSQmtO3NT', issuer: 'https://gatool.auth0.com/' };
-        jwt.verify(token, getKey, options, function(err, decoded) {
-            console.log(decoded.foo) // bar
         });
     } catch (e) {
         callback('Unauthorized'); // Return a 401 Unauthorized response
