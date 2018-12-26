@@ -69,10 +69,9 @@ const lockOptions = {
     auth: {
         responseType: "token id_token",
         redirect: false,
-        sso: true,
         params: {
             scope: "openid profile email",
-        },
+        }
     },
 };
 var lock = new Auth0Lock(
