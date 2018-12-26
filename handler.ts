@@ -184,7 +184,8 @@ const Authorize: Handler = (event: APIGatewayEvent, context: Context, callback: 
 
 // noinspection JSUnusedGlobalSymbols
 export {GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedule,
-    UpdateHighScores, GetHighScores, GetOffseasonEvents, GetEventAlliances, GetEventRankings}
+    UpdateHighScores, GetHighScores, GetOffseasonEvents, GetEventAlliances, GetEventRankings,
+    Authorize}
 
 // Handle unexpected application errors
 process.on('unhandledRejection', (reason, p) => {
