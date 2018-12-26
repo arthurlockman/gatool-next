@@ -4,7 +4,8 @@ import {EventSchedule, EventType} from './model/event';
 import {GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode} from './utils/utils';
 import {GetHighScoresFromDb, StoreHighScore} from './utils/databaseUtils';
 import {FindHighestScore} from './utils/scoreUtils';
-import {cookie} from 'request-promise';
+const jwt = require('jsonwebtoken');
+const jwksClient = require('jwks-rsa');
 
 // noinspection JSUnusedGlobalSymbols
 const GetEvents: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
@@ -53,12 +54,6 @@ const GetEventAlliances: Handler = (event: APIGatewayEvent, context: Context, ca
 // noinspection JSUnusedGlobalSymbols
 const GetEventRankings: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
     return GetDataFromFIRSTAndReturn(`${event.pathParameters.year}/rankings/${event.pathParameters.eventCode}`, callback);
-};
-
-// noinspection JSUnusedGlobalSymbols
-const Login: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
-    // TODO: properly implement login
-    ReturnJsonWithCode(200, {}, callback);
 };
 
 // noinspection JSUnusedGlobalSymbols
@@ -154,6 +149,37 @@ const UpdateHighScores: Handler = (event: APIGatewayEvent, context: Context, cal
             });
         });
     });
+};
+
+/**
+ * Authorizer functions are executed before your actual functions.
+ * @method authorize
+ * @param {String} event.authorizationToken - JWT
+ * @throws Returns 401 if the token is invalid or has expired.
+ */
+// noinspection JSUnusedGlobalSymbols
+const Authorize: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+    const token = event.headers['Authorization'];
+    try {
+        // Verify using getKey callback
+        // Example uses https://github.com/auth0/node-jwks-rsa as a way to fetch the keys.
+        const client = jwksClient({
+            jwksUri: 'https://gatool.auth0.com/.well-known/jwks.json'
+        });
+        function getKey(header, authCallback) {
+            client.getSigningKey(header.kid, function(err, key) {
+                const signingKey = key.publicKey || key.rsaPublicKey;
+                authCallback(null, signingKey);
+            });
+        }
+
+        const options = { audience: 'afsE1dlAGS609U32NjmvNMaYSQmtO3NT', issuer: 'https://gatool.auth0.com/' };
+        jwt.verify(token, getKey, options, function(err, decoded) {
+            console.log(decoded.foo) // bar
+        });
+    } catch (e) {
+        callback('Unauthorized'); // Return a 401 Unauthorized response
+    }
 };
 
 // noinspection JSUnusedGlobalSymbols

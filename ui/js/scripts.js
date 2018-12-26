@@ -267,7 +267,7 @@ window.addEventListener("resize", scaleRows);
 
 function login() {
     "use strict";
-    const token = localStorage.getItem("token");
+    const token = "Bearer " + localStorage.getItem("token");
     if (token === null || token === "")
     {
         lock.show();
@@ -520,7 +520,7 @@ function loadEventsList() {
         endpoint = "/offseasoneventsv2"
     }
     req.open('GET', apiURL + localStorage.currentYear + endpoint);
-    req.setRequestHeader("Authorization", localStorage.getItem("token"));
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         localStorage.currentEventList = JSON.stringify(JSON.parse(req.responseText).Events);
         currentEventList = JSON.parse(req.responseText).Events;
@@ -662,7 +662,7 @@ function getRegularSeasonSchedule() {
     lastMatchPlayed = 0;
     var req = new XMLHttpRequest();
     req.open('GET', apiURL + localStorage.currentYear + '/schedule/' + localStorage.currentEvent + '/qual?returnschedule=true');
-    req.setRequestHeader("Authorization", localStorage.getItem("token"));
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         var data = JSON.parse(req.responseText);
         if (data.Schedule.length === 0) {
@@ -710,7 +710,7 @@ function getRegularSeasonSchedule() {
     });
     var req1 = new XMLHttpRequest();
     req1.open('GET', apiURL + localStorage.currentYear + '/schedule/' + localStorage.currentEvent + '/playoff?returnschedule=true');
-    req1.setRequestHeader("Authorization", localStorage.getItem("token"));
+    req1.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req1.addEventListener('load', function () {
         $("#playoffScheduleAlert").show();
         var data = JSON.parse(req1.responseText);
@@ -785,7 +785,7 @@ function getRegularSeasonSchedule() {
     });
     var reqChamps = new XMLHttpRequest();
     reqChamps.open('GET', apiURL + localStorage.currentYear + '/schedule/' + localStorage.currentEvent + '/playoff?returnschedule=true');
-    reqChamps.setRequestHeader("Authorization", localStorage.getItem("token"));
+    reqChamps.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     reqChamps.addEventListener('load', function () {
         var data = JSON.parse(reqChamps.responseText);
         if (data.Schedule.length === 0) {
@@ -933,7 +933,7 @@ function getTeamList(year, pageNumber) {
         endpoint = "/offseasonteams/"
     }
     req.open('GET', apiURL + year + endpoint + localStorage.currentEvent + '/' + pageNumber);
-    req.setRequestHeader("Authorization", localStorage.getItem("token"));
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         var data = "";
         $('#teamloadprogress').show();
@@ -1007,7 +1007,7 @@ function getAvatars() {
     "use strict";
     var req = new XMLHttpRequest();
     req.open('GET', apiURL + localStorage.currentYear + '/avatars/' + localStorage.currentEvent);
-    req.setRequestHeader("Authorization", localStorage.getItem("token"));
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         var data = JSON.parse(req.responseText);
         var teamData = {};
@@ -1057,7 +1057,7 @@ function getAllianceList() {
     $("#allianceUpdateContainer").html("Loading Alliance data...");
     var req2 = new XMLHttpRequest();
     req2.open('GET', apiURL + localStorage.currentYear + '/alliances/' + localStorage.currentEvent);
-    req2.setRequestHeader("Authorization", localStorage.getItem("token"));
+    req2.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req2.addEventListener('load', function () {
         var data = JSON.parse(req2.responseText);
         if (data.Alliances.length === 0) {
@@ -1699,7 +1699,7 @@ function getTeamAwards(teamNumber, year) {
     var awardName = "";
     var req = new XMLHttpRequest();
     req.open('GET', apiURL + year + '/awards/' + teamNumber + "/");
-    req.setRequestHeader("Authorization", localStorage.getItem("token"));
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         teamLoadProgressBar++;
         $('#teamloadprogressbar').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
@@ -1745,7 +1745,7 @@ function getTeamData(teamList, year) {
         teamDataLoadPromises.push(new Promise((resolve, reject) => {
             var req = new XMLHttpRequest();
             req.open('GET', apiURL + year + '/teamdata/' + team.teamNumber + "/");
-            req.setRequestHeader("Authorization", localStorage.getItem("token"));
+            req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
             req.addEventListener('load', function () {
                 if (req.responseText.substr(0, 5) !== '"Team') {
                     var data = JSON.parse(req.responseText);
@@ -1770,7 +1770,7 @@ function scoreDetails(matchNumber, tournamentLevel) {
     "use strict";
     var req = new XMLHttpRequest();
     req.open('GET', apiURL + localStorage.currentYear + '/scores/' + localStorage.currentEvent + "/" + tournamentLevel + "/" + matchNumber + "/" + matchNumber + "/");
-    req.setRequestHeader("Authorization", localStorage.getItem("token"));
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         if (req.responseText.substr(0, 5) !== '"Team') {
             var data = JSON.parse(req.responseText).MatchScores[0];

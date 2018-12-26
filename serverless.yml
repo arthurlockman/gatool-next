@@ -22,6 +22,8 @@ provider:
     WEBSITE_BUCKET: gatoolwebsite
 
 functions: # TODO: outline all functions
+  Authorize:
+    handler: handler.Authorize
   GetEvents:
     handler: handler.GetEvents
     description: Get events for a specific year
@@ -30,8 +32,7 @@ functions: # TODO: outline all functions
           path: api/{year}/events
           method: get
           cors: true
-          authorizer:
-            arn: arn:aws:cognito-idp:us-east-1:336977810532:userpool/us-east-1_EhZVYw2tf
+          authorizer: Authorize
           request:
             parameters:
               paths:
@@ -44,8 +45,7 @@ functions: # TODO: outline all functions
           path: api/{year}/teams/{eventCode}/{page}
           method: get
           cors: true
-          authorizer:
-            arn: arn:aws:cognito-idp:us-east-1:336977810532:userpool/us-east-1_EhZVYw2tf
+          authorizer: Authorize
           request:
             parameters:
               paths:
@@ -60,8 +60,7 @@ functions: # TODO: outline all functions
           path: api/{year}/highscores
           method: get
           cors: true
-          authorizer:
-            arn: arn:aws:cognito-idp:us-east-1:336977810532:userpool/us-east-1_EhZVYw2tf
+          authorizer: Authorize
           request:
             parameters:
               paths:
@@ -74,8 +73,7 @@ functions: # TODO: outline all functions
           path: api/{year}/awards/{teamNumber}
           method: get
           cors: true
-          authorizer:
-            arn: arn:aws:cognito-idp:us-east-1:336977810532:userpool/us-east-1_EhZVYw2tf
+          authorizer: Authorize
           request:
             parameters:
               paths:
@@ -89,8 +87,7 @@ functions: # TODO: outline all functions
           path: api/{year}/scores/{eventCode}/{tournamentLevel}/{start}/{end}
           method: get
           cors: true
-          authorizer:
-            arn: arn:aws:cognito-idp:us-east-1:336977810532:userpool/us-east-1_EhZVYw2tf
+          authorizer: Authorize
           request:
             parameters:
               paths:
@@ -107,8 +104,7 @@ functions: # TODO: outline all functions
           path: api/{year}/schedule/{eventCode}/{tournamentLevel}
           method: get
           cors: true
-          authorizer:
-            arn: arn:aws:cognito-idp:us-east-1:336977810532:userpool/us-east-1_EhZVYw2tf
+          authorizer: Authorize
           request:
             parameters:
               year: true
@@ -122,8 +118,7 @@ functions: # TODO: outline all functions
           path: api/{year}/alliances/{eventCode}
           method: get
           cors: true
-          authorizer:
-            arn: arn:aws:cognito-idp:us-east-1:336977810532:userpool/us-east-1_EhZVYw2tf
+          authorizer: Authorize
           request:
             parameters:
               year: true
@@ -136,20 +131,11 @@ functions: # TODO: outline all functions
         path: api/{year}/rankings/{eventCode}
         method: get
         cors: true
-        authorizer:
-          arn: arn:aws:cognito-idp:us-east-1:336977810532:userpool/us-east-1_EhZVYw2tf
+        authorizer: Authorize
         request:
           parameters:
             year: true
             eventCode: true
-  Login:
-    handler: handler.Login
-    description: Log a user in to the application
-    events:
-      - http:
-          path: api/login
-          method: post
-          cors: true
   UpdateHighScores:
     handler: handler.UpdateHighScores
     description: Update the event high scores at a regular interval
