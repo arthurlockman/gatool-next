@@ -66,6 +66,7 @@ var apiURL = "/api/";
 
 const lockOptions = {
     allowSignUp: false,
+    autoclose: true,
     auth: {
         responseType: "token id_token",
         redirect: false,
