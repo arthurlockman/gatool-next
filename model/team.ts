@@ -3,4 +3,4 @@ export class Team {
     station: string;
     surrogate: boolean;
     dq: boolean;
-};
+}

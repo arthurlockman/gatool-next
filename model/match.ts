@@ -15,16 +15,16 @@ export class Match {
     scoreBlueFoul: number;
     scoreBlueAuto: number;
     teams: Team[];
-};
+}
 
 export class MatchWithEventDetails {
     event: EventType;
     match: Match;
-};
+}
 
 export class MatchWithHighScoreDetails {
     event: EventType;
     match: Match;
     // Either 'red' or 'blue'
     highScoreAlliance: string;
-};
+}

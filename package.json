@@ -17,6 +17,7 @@
         "@types/node": "^10.5.4",
         "@types/request-promise": "^4.1.42",
         "serverless": "^1.29.2",
+        "serverless-apigw-binary": "^0.4.4",
         "serverless-finch": "^2.2.0",
         "serverless-offline": "^3.31.3",
         "serverless-openapi-documentation": "^0.4.0",

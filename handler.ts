@@ -1,7 +1,7 @@
 import {APIGatewayEvent, Callback, Context, CustomAuthorizerEvent, Handler} from 'aws-lambda';
 import {MatchWithEventDetails} from './model/match';
-import {EventSchedule, EventType} from './model/event';
-import {GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode} from './utils/utils';
+import {EventAvatars, EventSchedule, EventType, TeamAvatar} from './model/event';
+import {GetAvatarData, GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode} from './utils/utils';
 import {GetHighScoresFromDb, StoreHighScore} from './utils/databaseUtils';
 import {FindHighestScore} from './utils/scoreUtils';
 const jwt = require('jsonwebtoken');
@@ -54,6 +54,60 @@ const GetEventAlliances: Handler = (event: APIGatewayEvent, context: Context, ca
 // noinspection JSUnusedGlobalSymbols
 const GetEventRankings: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
     return GetDataFromFIRSTAndReturn(`${event.pathParameters.year}/rankings/${event.pathParameters.eventCode}`, callback);
+};
+
+// noinspection JSUnusedGlobalSymbols
+const GetEventAvatars: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+    const initialAvatarData = GetAvatarData(event.pathParameters.year, event.pathParameters.eventCode);
+    initialAvatarData.then(avatarList => {
+        if (avatarList.statusCode) {
+            return ReturnJsonWithCode(avatarList.statusCode, avatarList.message, callback);
+        }
+        if (avatarList.pageTotal === 1) {
+            return ReturnJsonWithCode(200, avatarList, callback);
+        } else {
+            const promises: Promise<EventAvatars>[] = [];
+            for (let i = 2; i <= avatarList.pageTotal; i++) {
+                promises.push(GetAvatarData(event.pathParameters.year, event.pathParameters.eventcode, i));
+            }
+            Promise.all(promises).then(allAvatarData => {
+                allAvatarData.map(avatar => {
+                    avatarList.teamCountPage += avatar.teamCountPage;
+                    avatarList.teamCountTotal += avatar.teamCountTotal;
+                    avatarList.teams = avatarList.teams.concat(avatar.teams);
+                });
+                return ReturnJsonWithCode(200, avatarList, callback);
+            });
+        }
+    });
+};
+
+// noinspection JSUnusedGlobalSymbols
+const GetTeamAvatar: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+    const avatar = GetDataFromFIRST(
+        `${event.pathParameters.year}/avatars?teamNumber=${event.pathParameters.teamNumber}`);
+    avatar.then(value => {
+        const allAvatars = value as EventAvatars;
+        const teamAvatar = allAvatars.teams[0];
+        if (teamAvatar.encodedAvatar == null) {
+            throw new Error('Bad request');
+        }
+        callback(null, {
+            statusCode: 200,
+            body: teamAvatar.encodedAvatar,
+            headers: {
+                'Access-Control-Allow-Origin': '*', // Required for CORS support to work
+                'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS
+                'Content-Type': 'image/png',
+                'charset': 'utf-8'
+            },
+            isBase64Encoded: true
+        })
+    }).catch(rejection => {
+        const statusCode = rejection.response ? parseInt(rejection.response.statusCode, 10) : 404;
+        const message = rejection.response ? rejection.response.body : 'Avatar not found.';
+        return ReturnJsonWithCode(statusCode, message, callback);
+    });
 };
 
 // noinspection JSUnusedGlobalSymbols
@@ -151,13 +205,13 @@ const UpdateHighScores: Handler = (event: APIGatewayEvent, context: Context, cal
     });
 };
 
+// noinspection JSUnusedGlobalSymbols
 /**
  * Authorizer functions are executed before your actual functions.
  * @method authorize
  * @param {String} event.authorizationToken - JWT
  * @throws Returns 401 if the token is invalid or has expired.
  */
-// noinspection JSUnusedGlobalSymbols
 const Authorize: Handler = (event: CustomAuthorizerEvent, context: Context, callback: Callback) => {
     const token = event.authorizationToken;
     try {
@@ -178,7 +232,7 @@ const Authorize: Handler = (event: CustomAuthorizerEvent, context: Context, call
             const options = { audience: 'afsE1dlAGS609U32NjmvNMaYSQmtO3NT', issuer: 'https://gatool.auth0.com/' };
             jwt.verify(token, signingKey, options, function(err, validToken) {
                 callback(null, {
-                    principalId: decoded.sub,
+                    principalId: decoded.payload.sub,
                     policyDocument: {
                         Version: '2012-10-17', // default version
                         Statement: [{
@@ -187,7 +241,7 @@ const Authorize: Handler = (event: CustomAuthorizerEvent, context: Context, call
                             Resource: '*',
                         }]
                     },
-                    context: { scope: decoded.scope }
+                    context: { scope: decoded.payload.scope }
                 });
             });
         });
@@ -197,9 +251,9 @@ const Authorize: Handler = (event: CustomAuthorizerEvent, context: Context, call
 };
 
 // noinspection JSUnusedGlobalSymbols
-export {GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedule,
+export {GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedule, GetEventAvatars,
     UpdateHighScores, GetHighScores, GetOffseasonEvents, GetEventAlliances, GetEventRankings,
-    Authorize}
+    Authorize, GetTeamAvatar}
 
 // Handle unexpected application errors
 process.on('unhandledRejection', (reason, p) => {

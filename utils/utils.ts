@@ -1,3 +1,5 @@
+import {EventAvatars} from '../model/event';
+
 const rp = require('request-promise');
 
 /**
@@ -9,6 +11,8 @@ function GetDataFromFIRSTAndReturn(path: string, callback: any) {
     return GetDataFromFIRST(path).then((body) => {
         console.log(body);
         ReturnJsonWithCode(200, body, callback);
+    }).catch(rejection => {
+        ReturnJsonWithCode(parseInt(rejection.response.statusCode, 10), rejection.response.body, callback);
     });
 }
 
@@ -29,10 +33,33 @@ function GetDataFromFIRST(path: string): Promise<any> {
         };
         return rp(options);
     } catch (err) {
-        console.error(err);
         return Promise.reject(err);
     }
 }
+
+/**
+ * Get data from FIRST for team avatars
+ * @param year The team avatar year to get
+ * @param eventCode The event code to retrieve
+ * @param page The page to get
+ */
+const GetAvatarData = (year: string, eventCode: string, page?: number): Promise<any> => {
+    const pageString = (page != null) ? `&page=${page}` : '';
+    const avatarData = GetDataFromFIRST(`${year}/avatars?eventCode=${eventCode}${pageString}`);
+    return avatarData.then(response => {
+        const avatars = response as EventAvatars;
+        avatars.teams = avatars.teams.map(team => {
+            team.encodedAvatar = `api/${year}/avatars/team/${team.teamNumber}/avatar.png`;
+            return team;
+        });
+        return avatars;
+    }).catch(rejection => {
+        return {
+            statusCode: parseInt(rejection.response.statusCode, 10),
+            message: rejection.response.body
+        };
+    });
+};
 
 /**
  * Return JSON data to the user with a specific status code.
@@ -54,4 +81,4 @@ function ReturnJsonWithCode(statusCode: number, body: any, callback: any) {
     });
 }
 
-export {GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode}
+export {GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode, GetAvatarData}
