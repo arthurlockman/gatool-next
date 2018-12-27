@@ -2,7 +2,7 @@ import {APIGatewayEvent, Callback, Context, CustomAuthorizerEvent, Handler} from
 import {MatchWithEventDetails} from './model/match';
 import {EventAvatars, EventSchedule, EventType, TeamAvatar} from './model/event';
 import {BuildHighScoreJson, GetAvatarData, GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode} from './utils/utils';
-import {GetHighScoresFromDb, GetTeamUpdatesForTeam, StoreHighScore} from './utils/databaseUtils';
+import {GetHighScoresFromDb, GetTeamUpdatesForTeam, StoreHighScore, StoreTeamUpdateForTeam} from './utils/databaseUtils';
 import {FindHighestScore} from './utils/scoreUtils';
 const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
@@ -200,7 +200,7 @@ const GetOffseasonEvents: Handler = (event: APIGatewayEvent, context: Context, c
 // noinspection JSUnusedGlobalSymbols
 const GetTeamUpdates: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
     return GetTeamUpdatesForTeam(event.pathParameters.teamNumber).then(updateData => {
-        return ReturnJsonWithCode(200, updateData, callback); // TODO: fix this data retrieval
+        return ReturnJsonWithCode(200, JSON.parse(updateData.Item.data), callback); // TODO: fix this data retrieval
     }).catch(err => {
         return ReturnJsonWithCode(404, 'No update data found.', callback);
     });
@@ -208,7 +208,12 @@ const GetTeamUpdates: Handler = (event: APIGatewayEvent, context: Context, callb
 
 // noinspection JSUnusedGlobalSymbols
 const PutTeamUpdates: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
-    // TODO: implement this stub
+    return StoreTeamUpdateForTeam(event.pathParameters.teamNumber, JSON.parse(event.body)).then(_ => {
+        return ReturnJsonWithCode(200, `Update stored for team ${event.pathParameters.teamNumber}`, callback);
+    }).catch(err => {
+        return ReturnJsonWithCode(500,
+            `Error storing team update for team ${event.pathParameters.teamNumber}: ${err.message}`, callback);
+    });
 };
 
 // noinspection JSUnusedGlobalSymbols

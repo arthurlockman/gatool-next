@@ -27,7 +27,7 @@ function StoreHighScore(year: string, type: string, level: string, match: MatchW
         } else {
             return Promise.resolve();
         }
-    });
+    }).promise();
 }
 
 /**
@@ -41,16 +41,40 @@ function GetHighScoresFromDb(): Promise<any> {
 }
 
 /**
- * Get all high scores from the database.
+ * Get the team updates for a particular team.
+ * @param teamNumber The team number to retrieve.
  */
 function GetTeamUpdatesForTeam(teamNumber: string): Promise<any> {
     const params = {
         TableName: 'TeamUpdatesTable',
         Key: {
-            teamNumber: teamNumber
+            'teamNumber': teamNumber
         }
     };
     return DynamoDB.get(params).promise();
 }
 
-export {StoreHighScore, GetHighScoresFromDb, GetTeamUpdatesForTeam}
+/**
+ * Store the team update for a particular team.
+ * @param teamNumber The team number.
+ * @param updateData The update data to store.
+ */
+function StoreTeamUpdateForTeam(teamNumber: string, updateData: any): Promise<any> {
+    const params = {
+        TableName: 'TeamUpdatesTable',
+        Item: {
+            teamNumber: teamNumber,
+            data: JSON.stringify(updateData)
+        }
+    };
+    return DynamoDB.put(params, (err, data) => {
+        if (err) {
+            console.error(err.message);
+            return Promise.reject(err);
+        } else {
+            return Promise.resolve();
+        }
+    }).promise();
+}
+
+export {StoreHighScore, GetHighScoresFromDb, GetTeamUpdatesForTeam, StoreTeamUpdateForTeam}

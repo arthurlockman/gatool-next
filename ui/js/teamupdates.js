@@ -7,7 +7,7 @@ function getTeamUpdates(teamNumber, singleton) {
     req.open('GET', apiURL + 'team/' + teamNumber + '/updates');
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
-        var teamUpdates = JSON.parse(Base64.decode(req.responseText));
+        var teamUpdates = JSON.parse(req.responseText);
         //var teamData = JSON.parse(localStorage["teamData" + teamNumber]);
         var teamData = decompressLocalStorage("teamData" + teamNumber);
         teamData.nameShortLocal = teamUpdates.nameShortLocal;
@@ -127,7 +127,7 @@ function sendTeamUpdates(teamNumber, singleton) {
 
         }
     });
-    req.send(Base64.encode(JSON.stringify(teamUpdates)));
+    req.send(JSON.stringify(teamUpdates));
 }
 
 function saveTeamUpdates() {
