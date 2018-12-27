@@ -1,7 +1,7 @@
 import {APIGatewayEvent, Callback, Context, CustomAuthorizerEvent, Handler} from 'aws-lambda';
 import {MatchWithEventDetails} from './model/match';
 import {EventAvatars, EventSchedule, EventType, TeamAvatar} from './model/event';
-import {GetAvatarData, GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode} from './utils/utils';
+import {BuildHighScoreJson, GetAvatarData, GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode} from './utils/utils';
 import {GetHighScoresFromDb, StoreHighScore} from './utils/databaseUtils';
 import {FindHighestScore} from './utils/scoreUtils';
 const jwt = require('jsonwebtoken');
@@ -107,6 +107,88 @@ const GetTeamAvatar: Handler = (event: APIGatewayEvent, context: Context, callba
         const statusCode = rejection.response ? parseInt(rejection.response.statusCode, 10) : 404;
         const message = rejection.response ? rejection.response.body : 'Avatar not found.';
         return ReturnJsonWithCode(statusCode, message, callback);
+    });
+};
+
+const GetEventHighScores: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+    return GetDataFromFIRST(`${event.pathParameters.year}/events/`).then( (eventList) => {
+        const evtList = eventList.Events.filter(evt => evt.code === event.pathParameters.eventCode);
+        if (evtList.length !== 1) {
+            return ReturnJsonWithCode(404, 'Event not found.', callback);
+        }
+        const eventDetails = evtList[0];
+        return GetDataFromFIRST(`${event.pathParameters.year}/schedule/${event.pathParameters.eventCode}/qual/hybrid`)
+            .then((qualMatchList) => {
+                return GetDataFromFIRST(`${event.pathParameters.year}/schedule/${event.pathParameters.eventCode}/playoff/hybrid`)
+                    .then((playoffMatchList) => {
+                        let matches: MatchWithEventDetails[] = qualMatchList.Schedule
+                            .map(x => {return {event: {eventCode: eventDetails.code, type: 'qual'}, match: x}})
+                                .concat(playoffMatchList.Schedule
+                                    .map(x => {return {event: {eventCode: eventDetails.code, type: 'playoff'}, match: x}}));
+                        matches = matches.filter(match => match.match.postResultTime && match.match.postResultTime !== '');
+                        const overallHighScorePlayoff: MatchWithEventDetails[] = [];
+                        const overallHighScoreQual: MatchWithEventDetails[] = [];
+                        const penaltyFreeHighScorePlayoff: MatchWithEventDetails[] = [];
+                        const penaltyFreeHighScoreQual: MatchWithEventDetails[] = [];
+                        const offsettingPenaltyHighScorePlayoff: MatchWithEventDetails[] = [];
+                        const offsettingPenaltyHighScoreQual: MatchWithEventDetails[] = [];
+                        for (const match of matches) {
+                            if (match.event.type === 'playoff') {
+                                overallHighScorePlayoff.push(match);
+                            }
+                            if (match.event.type === 'qual') {
+                                overallHighScoreQual.push(match);
+                            }
+                            if (match.event.type === 'playoff'
+                                && match.match.scoreBlueFoul === 0 && match.match.scoreRedFoul === 0) {
+                                penaltyFreeHighScorePlayoff.push(match);
+                            } else if (match.event.type === 'qual'
+                                && match.match.scoreBlueFoul === 0 && match.match.scoreRedFoul === 0) {
+                                penaltyFreeHighScoreQual.push(match);
+                            } else if (match.event.type === 'playoff'
+                                && match.match.scoreBlueFoul === match.match.scoreRedFoul && match.match.scoreBlueFoul > 0) {
+                                offsettingPenaltyHighScorePlayoff.push(match);
+                            } else if (match.event.type === 'qual'
+                                && match.match.scoreBlueFoul === match.match.scoreRedFoul && match.match.scoreBlueFoul > 0) {
+                                offsettingPenaltyHighScoreQual.push(match);
+                            }
+                        }
+                        const highScoresData = [];
+                        if (overallHighScorePlayoff.length > 0) {
+                            highScoresData.push(BuildHighScoreJson(event.pathParameters.year, 'overall', 'playoff',
+                                FindHighestScore(overallHighScorePlayoff)));
+                        }
+                        if (overallHighScoreQual.length > 0) {
+                            highScoresData.push(BuildHighScoreJson(event.pathParameters.year, 'overall', 'qual',
+                                FindHighestScore(overallHighScoreQual)));
+                        }
+                        if (penaltyFreeHighScorePlayoff.length > 0) {
+                            highScoresData.push(BuildHighScoreJson(event.pathParameters.year, 'penaltyFree', 'playoff',
+                                FindHighestScore(penaltyFreeHighScorePlayoff)));
+                        }
+                        if (penaltyFreeHighScoreQual.length > 0) {
+                            highScoresData.push(BuildHighScoreJson(event.pathParameters.year, 'penaltyFree', 'qual',
+                                FindHighestScore(penaltyFreeHighScoreQual)));
+                        }
+                        if (offsettingPenaltyHighScorePlayoff.length > 0) {
+                            highScoresData.push(BuildHighScoreJson(event.pathParameters.year, 'offsetting', 'playoff',
+                                FindHighestScore(offsettingPenaltyHighScorePlayoff)));
+                        }
+                        if (offsettingPenaltyHighScoreQual.length > 0) {
+                            highScoresData.push(BuildHighScoreJson(event.pathParameters.year, 'offsetting', 'qual',
+                                FindHighestScore(offsettingPenaltyHighScoreQual)));
+                        }
+                        return ReturnJsonWithCode(200, highScoresData, callback);
+                    }).catch(rejection => {
+                        const statusCode = rejection.response ? parseInt(rejection.response.statusCode, 10) : 400;
+                        const message = rejection.response ? rejection.response.body : 'Bad request.';
+                        return ReturnJsonWithCode(statusCode, message, callback);
+                    });
+            }).catch(rejection => {
+                const statusCode = rejection.response ? parseInt(rejection.response.statusCode, 10) : 400;
+                const message = rejection.response ? rejection.response.body : 'Bad request.';
+                return ReturnJsonWithCode(statusCode, message, callback);
+            });
     });
 };
 
@@ -253,7 +335,7 @@ const Authorize: Handler = (event: CustomAuthorizerEvent, context: Context, call
 // noinspection JSUnusedGlobalSymbols
 export {GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedule, GetEventAvatars,
     UpdateHighScores, GetHighScores, GetOffseasonEvents, GetEventAlliances, GetEventRankings,
-    Authorize, GetTeamAvatar}
+    Authorize, GetTeamAvatar, GetEventHighScores}
 
 // Handle unexpected application errors
 process.on('unhandledRejection', (reason, p) => {

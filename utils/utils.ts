@@ -1,4 +1,5 @@
 import {EventAvatars} from '../model/event';
+import {MatchWithHighScoreDetails} from '../model/match';
 
 const rp = require('request-promise');
 
@@ -81,4 +82,21 @@ function ReturnJsonWithCode(statusCode: number, body: any, callback: any) {
     });
 }
 
-export {GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode, GetAvatarData}
+/**
+ * Build a JSON object for a high score
+ * @param year The year
+ * @param type The score type
+ * @param level The score level
+ * @param match The score match data
+ */
+const BuildHighScoreJson = (year: string, type: string, level: string, match: MatchWithHighScoreDetails): any => {
+    return {
+        yearType: year + type + level,
+            year: year,
+        type: type,
+        level: level,
+        matchData: match
+    }
+};
+
+export {GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode, GetAvatarData, BuildHighScoreJson}

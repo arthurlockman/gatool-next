@@ -18,7 +18,6 @@ provider:
     TBA_API_KEY: ${ssm:tba-api-token~true}
     FRC_CURRENT_SEASON: 2018
     HIGH_SCORES_TABLE_NAME: HighScoresTable
-    USERS_TABLE_NAME: UsersTable
     WEBSITE_BUCKET: gatoolwebsite
 
 functions: # TODO: outline all functions
@@ -124,6 +123,20 @@ functions: # TODO: outline all functions
                 tournamentLevel: true
                 start: true
                 end: true
+  GetEventHighScores:
+    handler: handler.GetEventHighScores
+    description: Get high scores for a specific event and year
+    events:
+      - http:
+          path: api/{year}/highscores/{eventCode}
+          method: get
+          cors: true
+          authorizer: Authorize
+          request:
+            parameters:
+              paths:
+                year: true
+                eventCode: true
   GetEventSchedule:
     handler: handler.GetEventSchedule
     description: Get the event schedule for a specific event, year, and competition level
@@ -186,19 +199,6 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: yearType
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-    UsersTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: UsersTable
-        AttributeDefinitions:
-          - AttributeName: email
-            AttributeType: S
-        KeySchema:
-          - AttributeName: email
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
