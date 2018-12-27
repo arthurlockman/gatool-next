@@ -84,6 +84,7 @@ var lock = new Auth0Lock(
 // Listening for the authenticated event
 lock.on("authenticated", function(authResult) {
     localStorage.setItem('token', authResult.idToken);
+    location.reload();
 });
 
 window.onload = function () {
@@ -315,6 +316,7 @@ function logout() {
             hotkey: 13, // Enter.
             cssClass: 'btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton',
             action: function (dialogRef) {
+                localStorage.removeItem("token");
                 lock.logout();
             }
         }]
