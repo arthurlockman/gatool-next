@@ -40,4 +40,17 @@ function GetHighScoresFromDb(): Promise<any> {
     return DynamoDB.scan(params).promise();
 }
 
-export {StoreHighScore, GetHighScoresFromDb}
+/**
+ * Get all high scores from the database.
+ */
+function GetTeamUpdatesForTeam(teamNumber: string): Promise<any> {
+    const params = {
+        TableName: 'TeamUpdatesTable',
+        Key: {
+            teamNumber: teamNumber
+        }
+    };
+    return DynamoDB.get(params).promise();
+}
+
+export {StoreHighScore, GetHighScoresFromDb, GetTeamUpdatesForTeam}

@@ -18,9 +18,10 @@ provider:
     TBA_API_KEY: ${ssm:tba-api-token~true}
     FRC_CURRENT_SEASON: 2018
     HIGH_SCORES_TABLE_NAME: HighScoresTable
+    TEAM_UPDATES_TABLE_NAME: TeamUpdatesTable
     WEBSITE_BUCKET: gatoolwebsite
 
-functions: # TODO: outline all functions
+functions:
   Authorize:
     handler: handler.Authorize
   GetEvents:
@@ -78,6 +79,32 @@ functions: # TODO: outline all functions
             parameters:
               paths:
                 year: true
+                teamNumber: true
+  GetTeamUpdates:
+    handler: handler.GetTeamUpdates
+    description: Get updates stored for a particular team.
+    events:
+      - http:
+          path: api/team/{teamNumber}/updates
+          method: get
+          cors: true
+          authorizer: Authorize
+          request:
+            parameters:
+              paths:
+                teamNumber: true
+  PutTeamUpdates:
+    handler: handler.PutTeamUpdates
+    description: Store updates for a particular team.
+    events:
+      - http:
+          path: api/team/{teamNumber}/updates
+          method: put
+          cors: true
+          authorizer: Authorize
+          request:
+            parameters:
+              paths:
                 teamNumber: true
   GetHighScores:
     handler: handler.GetHighScores
@@ -200,9 +227,18 @@ resources:
         KeySchema:
           - AttributeName: yearType
             KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+        BillingMode: PAY_PER_REQUEST
+    TeamUpdatesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: TeamUpdatesTable
+        AttributeDefinitions:
+          - AttributeName: teamNumber
+            AttributeType: S
+        KeySchema:
+          - AttributeName: teamNumber
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
 
 plugins:
   - serverless-plugin-typescript

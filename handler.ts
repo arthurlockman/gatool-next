@@ -2,7 +2,7 @@ import {APIGatewayEvent, Callback, Context, CustomAuthorizerEvent, Handler} from
 import {MatchWithEventDetails} from './model/match';
 import {EventAvatars, EventSchedule, EventType, TeamAvatar} from './model/event';
 import {BuildHighScoreJson, GetAvatarData, GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode} from './utils/utils';
-import {GetHighScoresFromDb, StoreHighScore} from './utils/databaseUtils';
+import {GetHighScoresFromDb, GetTeamUpdatesForTeam, StoreHighScore} from './utils/databaseUtils';
 import {FindHighestScore} from './utils/scoreUtils';
 const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
@@ -198,6 +198,20 @@ const GetOffseasonEvents: Handler = (event: APIGatewayEvent, context: Context, c
 };
 
 // noinspection JSUnusedGlobalSymbols
+const GetTeamUpdates: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+    return GetTeamUpdatesForTeam(event.pathParameters.teamNumber).then(updateData => {
+        return ReturnJsonWithCode(200, updateData, callback); // TODO: fix this data retrieval
+    }).catch(err => {
+        return ReturnJsonWithCode(404, 'No update data found.', callback);
+    });
+};
+
+// noinspection JSUnusedGlobalSymbols
+const PutTeamUpdates: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+    // TODO: implement this stub
+};
+
+// noinspection JSUnusedGlobalSymbols
 const UpdateHighScores: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
     return GetDataFromFIRST(process.env.FRC_CURRENT_SEASON + '/events').then((eventList) => {
         const promises = [];
@@ -335,7 +349,7 @@ const Authorize: Handler = (event: CustomAuthorizerEvent, context: Context, call
 // noinspection JSUnusedGlobalSymbols
 export {GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedule, GetEventAvatars,
     UpdateHighScores, GetHighScores, GetOffseasonEvents, GetEventAlliances, GetEventRankings,
-    Authorize, GetTeamAvatar, GetEventHighScores}
+    Authorize, GetTeamAvatar, GetEventHighScores, GetTeamUpdates, PutTeamUpdates}
 
 // Handle unexpected application errors
 process.on('unhandledRejection', (reason, p) => {
