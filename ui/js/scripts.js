@@ -62,7 +62,7 @@ var matchTimer = setInterval(function () {
     "use strict";
     timer()
 }, 1000);
-var apiURL = "/api/";
+var apiURL = "https://www.gatool.org/api/";
 
 const lockOptions = {
     allowSignUp: false,
@@ -1031,17 +1031,6 @@ function getAvatars() {
     req.send()
 }
 
-function winningAllianceTeams(match) {
-    "use strict";
-    var teams = [];
-    for (var i = 0; i < match.details.teams.length; i++) {
-        if (match.details.teams[i].station.startsWith(match.alliance)) {
-            teams.push(match.details.teams[i].teamNumber)
-        }
-    }
-    return teams.join(", ")
-}
-
 function getTeamAwardsAsync(teamList, currentYear) {
     "use strict";
     var teamAwardRequests = [];
@@ -1708,17 +1697,16 @@ function getTeamAwards(teamNumber, year) {
         $('#teamloadprogressbar').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
         $('#teamProgressBarLoading').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
         var data = JSON.parse(req.responseText);
-        for (var j = 0; j <= 2; j++) {
-            if (data[j].Awards !== '{"Awards":[]}') {
-                for (var i = 0; i < data[j].Awards.length; i++) {
-                    awardName = data[j].Awards[i].name;
-                    awardHilight = awardsHilight(awardName);
-                    awards += '<span class="awardsDepth' + String(j + 1) + '">' + awardHilight.before + String(year - j) + ' <span class="awardsEventName">' + eventNames[String(year - j)][data[j].Awards[i].eventCode] + '</span><span class="awardsEventCode">' + data[j].Awards[i].eventCode + '</span>: ' + awardName + awardHilight.after;
-                    if (i === data[j].Awards.length - 1) {
-                        awards += '<span class="lastAward' + String(j + 1) + '"><span class="awardsSeparator1"> || </span><span class="awardsSeparator2"> // </span><span class="awardsSeparator3"><br></span></span></span>'
-                    } else {
-                        awards += '<span class="awardsSeparator1"> || </span><span class="awardsSeparator2"> // </span><span class="awardsSeparator3"><br></span></span>'
-                    }
+        if (data.Awards !== '{"Awards":[]}') {
+            for (var i = 0; i < data.Awards.length; i++) {
+                awardName = data.Awards[i].name;
+                awardHilight = awardsHilight(awardName);
+                var j = 0;
+                awards += '<span class="awardsDepth' + String(j + 1) + '">' + awardHilight.before + String(year - j) + ' <span class="awardsEventName">' + eventNames[String(year - j)][data.Awards[i].eventCode] + '</span><span class="awardsEventCode">' + data.Awards[i].eventCode + '</span>: ' + awardName + awardHilight.after;
+                if (i === data.Awards.length - 1) {
+                    awards += '<span class="lastAward' + String(j + 1) + '"><span class="awardsSeparator1"> || </span><span class="awardsSeparator2"> // </span><span class="awardsSeparator3"><br></span></span></span>'
+                } else {
+                    awards += '<span class="awardsSeparator1"> || </span><span class="awardsSeparator2"> // </span><span class="awardsSeparator3"><br></span></span>'
                 }
             }
         }
