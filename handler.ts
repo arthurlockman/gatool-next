@@ -4,12 +4,13 @@ import {EventAvatars, EventSchedule, EventType, TeamAvatar} from './model/event'
 import {BuildHighScoreJson, GetAvatarData, GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode} from './utils/utils';
 import {
     GetHighScoresFromDb,
-    GetTeamUpdatesForTeam, RetrieveUserPreferences,
+    GetTeamUpdatesForTeam,
     StoreHighScore,
     StoreTeamUpdateForTeam,
-    StoreUserPreferences
 } from './utils/databaseUtils';
 import {FindHighestScore} from './utils/scoreUtils';
+import {RetrieveUserPreferences, StoreUserPreferences} from './utils/s3StorageUtils';
+
 const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
 
@@ -229,7 +230,7 @@ const GetUserPreferences: Handler = (event: APIGatewayEvent, context: Context, c
     if (decoded !== null && decoded.payload.email !== null) {
         const userName: string = decoded.payload.email;
         return RetrieveUserPreferences(userName).then(preferences => {
-            return ReturnJsonWithCode(200, JSON.parse(preferences.Item.data), callback);
+            return ReturnJsonWithCode(200, JSON.parse(preferences.Body.toString('utf-8')), callback);
         }).catch(err => {
             return ReturnJsonWithCode(204, null, callback); // no preference data found
         });

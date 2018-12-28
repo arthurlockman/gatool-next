@@ -19,7 +19,6 @@ provider:
     FRC_CURRENT_SEASON: 2018
     HIGH_SCORES_TABLE_NAME: HighScoresTable
     TEAM_UPDATES_TABLE_NAME: TeamUpdatesTable
-    PREFERENCES_TABLE_NAME: UserPreferencesTable
     WEBSITE_BUCKET: gatoolwebsite
 
 functions:
@@ -258,17 +257,10 @@ resources:
           - AttributeName: teamNumber
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
-    UserPreferencesTable:
-      Type: AWS::DynamoDB::Table
+    UserPreferencesBucket:
+      Type: AWS::S3::Bucket
       Properties:
-        TableName: UserPreferencesTable
-        AttributeDefinitions:
-          - AttributeName: userName
-            AttributeType: S
-        KeySchema:
-          - AttributeName: userName
-            KeyType: HASH
-        BillingMode: PAY_PER_REQUEST
+          BucketName: gatooluserpreferences
 
 plugins:
   - serverless-plugin-typescript

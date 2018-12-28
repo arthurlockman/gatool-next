@@ -77,42 +77,4 @@ function StoreTeamUpdateForTeam(teamNumber: string, updateData: any): Promise<an
     }).promise();
 }
 
-/**
- * Get stored user preferences.
- * @param userName The username to retrieve.
- */
-function RetrieveUserPreferences(userName: string): Promise<any> {
-    const params = {
-        TableName: 'UserPreferencesTable',
-        Key: {
-            'userName': userName
-        }
-    };
-    return DynamoDB.get(params).promise();
-}
-
-/**
- * Store a user's preferences.
- * @param userName The username
- * @param preferences The preferences to store.
- */
-function StoreUserPreferences(userName: string, preferences: any): Promise<any> {
-    const params = {
-        TableName: 'UserPreferencesTable',
-        Item: {
-            userName: userName,
-            data: JSON.stringify(preferences)
-        }
-    };
-    return DynamoDB.put(params, (err, data) => {
-        if (err) {
-            console.error(err.message);
-            return Promise.reject(err);
-        } else {
-            return Promise.resolve();
-        }
-    }).promise();
-}
-
-export {StoreHighScore, GetHighScoresFromDb, GetTeamUpdatesForTeam, StoreTeamUpdateForTeam,
-    RetrieveUserPreferences, StoreUserPreferences}
+export {StoreHighScore, GetHighScoresFromDb, GetTeamUpdatesForTeam, StoreTeamUpdateForTeam}
