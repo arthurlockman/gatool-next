@@ -202,7 +202,7 @@ const GetTeamUpdates: Handler = (event: APIGatewayEvent, context: Context, callb
     return GetTeamUpdatesForTeam(event.pathParameters.teamNumber).then(updateData => {
         return ReturnJsonWithCode(200, JSON.parse(updateData.Item.data), callback); // TODO: fix this data retrieval
     }).catch(err => {
-        return ReturnJsonWithCode(404, 'No update data found.', callback);
+        return ReturnJsonWithCode(204, null, callback); // no update data found
     });
 };
 
