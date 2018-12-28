@@ -7,20 +7,23 @@ function getTeamUpdates(teamNumber, singleton) {
     req.open('GET', apiURL + 'team/' + teamNumber + '/updates');
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
-        var teamUpdates = JSON.parse(req.responseText);
-        //var teamData = JSON.parse(localStorage["teamData" + teamNumber]);
-        var teamData = decompressLocalStorage("teamData" + teamNumber);
-        teamData.nameShortLocal = teamUpdates.nameShortLocal;
-        teamData.cityStateLocal = teamUpdates.cityStateLocal;
-        teamData.topSponsorsLocal = teamUpdates.topSponsorsLocal;
-        teamData.sponsorsLocal = teamUpdates.sponsorsLocal;
-        teamData.organizationLocal = teamUpdates.organizationLocal;
-        teamData.robotNameLocal = teamUpdates.robotNameLocal;
-        teamData.awardsLocal = teamUpdates.awardsLocal;
-        teamData.teamMottoLocal = teamUpdates.teamMottoLocal;
-        teamData.teamNotesLocal = teamUpdates.teamNotesLocal;
-        //localStorage["teamData" + teamNumber] = JSON.stringify(teamData);
-        compressLocalStorage("teamData" + teamNumber, teamData);
+        if (req.status !== 204) {
+            var teamUpdates = JSON.parse(req.responseText);
+            //var teamData = JSON.parse(localStorage["teamData" + teamNumber]);
+            var teamData = decompressLocalStorage("teamData" + teamNumber);
+            teamData.nameShortLocal = teamUpdates.nameShortLocal;
+            teamData.cityStateLocal = teamUpdates.cityStateLocal;
+            teamData.topSponsorsLocal = teamUpdates.topSponsorsLocal;
+            teamData.sponsorsLocal = teamUpdates.sponsorsLocal;
+            teamData.organizationLocal = teamUpdates.organizationLocal;
+            teamData.robotNameLocal = teamUpdates.robotNameLocal;
+            teamData.awardsLocal = teamUpdates.awardsLocal;
+            teamData.teamMottoLocal = teamUpdates.teamMottoLocal;
+            teamData.teamNotesLocal = teamUpdates.teamNotesLocal;
+            //localStorage["teamData" + teamNumber] = JSON.stringify(teamData);
+            compressLocalStorage("teamData" + teamNumber, teamData);
+            
+        }
         teamUpdateCalls--;
         if ((teamAwardCalls === 0) && (teamUpdateCalls === 0) && (lastSchedulePage)) {
             $('#teamDataTabPicker').removeClass('alert-danger');
@@ -63,6 +66,8 @@ function getTeamUpdates(teamNumber, singleton) {
                 });
             }
         }
+
+
     });
     req.send();
 }
