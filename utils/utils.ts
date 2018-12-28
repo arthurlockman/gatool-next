@@ -50,7 +50,7 @@ const GetAvatarData = (year: string, eventCode: string, page?: number): Promise<
     return avatarData.then(response => {
         const avatars = response as EventAvatars;
         avatars.teams = avatars.teams.map(team => {
-            team.encodedAvatar = `api/${year}/avatars/team/${team.teamNumber}/avatar.png`;
+            team.encodedAvatar = (team.encodedAvatar === null) ? null : `api/${year}/avatars/team/${team.teamNumber}/avatar.png`;
             return team;
         });
         return avatars;
