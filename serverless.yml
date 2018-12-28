@@ -19,6 +19,7 @@ provider:
     FRC_CURRENT_SEASON: 2018
     HIGH_SCORES_TABLE_NAME: HighScoresTable
     TEAM_UPDATES_TABLE_NAME: TeamUpdatesTable
+    PREFERENCES_TABLE_NAME: UserPreferencesTable
     WEBSITE_BUCKET: gatoolwebsite
 
 functions:
@@ -204,6 +205,24 @@ functions:
           parameters:
             year: true
             eventCode: true
+  GetUserPreferences:
+    handler: handler.GetUserPreferences
+    description: Get the stored preferences for a particular user.
+    events:
+      - http:
+          path: api/user/preferences
+          method: get
+          cors: true
+          authorizer: Authorize
+  PutUserPreferences:
+    handler: handler.PutUserPreferences
+    description: Store user preferences.
+    events:
+      - http:
+          path: api/user/preferences
+          method: put
+          cors: true
+          authorizer: Authorize
   UpdateHighScores:
     handler: handler.UpdateHighScores
     description: Update the event high scores at a regular interval
@@ -237,6 +256,17 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: teamNumber
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+    UserPreferencesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: UserPreferencesTable
+        AttributeDefinitions:
+          - AttributeName: userName
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userName
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
 

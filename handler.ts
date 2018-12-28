@@ -2,7 +2,13 @@ import {APIGatewayEvent, Callback, Context, CustomAuthorizerEvent, Handler} from
 import {MatchWithEventDetails} from './model/match';
 import {EventAvatars, EventSchedule, EventType, TeamAvatar} from './model/event';
 import {BuildHighScoreJson, GetAvatarData, GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode} from './utils/utils';
-import {GetHighScoresFromDb, GetTeamUpdatesForTeam, StoreHighScore, StoreTeamUpdateForTeam} from './utils/databaseUtils';
+import {
+    GetHighScoresFromDb,
+    GetTeamUpdatesForTeam, RetrieveUserPreferences,
+    StoreHighScore,
+    StoreTeamUpdateForTeam,
+    StoreUserPreferences
+} from './utils/databaseUtils';
 import {FindHighestScore} from './utils/scoreUtils';
 const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
@@ -200,7 +206,7 @@ const GetOffseasonEvents: Handler = (event: APIGatewayEvent, context: Context, c
 // noinspection JSUnusedGlobalSymbols
 const GetTeamUpdates: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
     return GetTeamUpdatesForTeam(event.pathParameters.teamNumber).then(updateData => {
-        return ReturnJsonWithCode(200, JSON.parse(updateData.Item.data), callback); // TODO: fix this data retrieval
+        return ReturnJsonWithCode(200, JSON.parse(updateData.Item.data), callback);
     }).catch(err => {
         return ReturnJsonWithCode(204, null, callback); // no update data found
     });
@@ -214,6 +220,37 @@ const PutTeamUpdates: Handler = (event: APIGatewayEvent, context: Context, callb
         return ReturnJsonWithCode(500,
             `Error storing team update for team ${event.pathParameters.teamNumber}: ${err.message}`, callback);
     });
+};
+
+// noinspection JSUnusedGlobalSymbols
+const GetUserPreferences: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+    const token = event.headers['Authorization'];
+    const decoded = jwt.decode(token.replace('Bearer ', ''), { complete: true });
+    if (decoded !== null && decoded.payload.email !== null) {
+        const userName: string = decoded.payload.email;
+        return RetrieveUserPreferences(userName).then(preferences => {
+            return ReturnJsonWithCode(200, JSON.parse(preferences.Item.data), callback);
+        }).catch(err => {
+            return ReturnJsonWithCode(204, null, callback); // no preference data found
+        });
+    }
+    return ReturnJsonWithCode(400, 'Unable to decode user from token.', callback);
+};
+
+// noinspection JSUnusedGlobalSymbols
+const PutUserPreferences: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+    const token = event.headers['Authorization'];
+    const decoded = jwt.decode(token.replace('Bearer ', ''), { complete: true });
+    if (decoded !== null && decoded.payload.email !== null) {
+        const userName: string = decoded.payload.email;
+        return StoreUserPreferences(userName, JSON.parse(event.body)).then(_ => {
+            return ReturnJsonWithCode(200, `Preferences stored for ${userName}`, callback);
+        }).catch(err => {
+            return ReturnJsonWithCode(500,
+                `Error storing preferences for user ${userName}: ${err.message}`, callback);
+        });
+    }
+    return ReturnJsonWithCode(400, 'Unable to decode user from token.', callback);
 };
 
 // noinspection JSUnusedGlobalSymbols
@@ -354,7 +391,8 @@ const Authorize: Handler = (event: CustomAuthorizerEvent, context: Context, call
 // noinspection JSUnusedGlobalSymbols
 export {GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedule, GetEventAvatars,
     UpdateHighScores, GetHighScores, GetOffseasonEvents, GetEventAlliances, GetEventRankings,
-    Authorize, GetTeamAvatar, GetEventHighScores, GetTeamUpdates, PutTeamUpdates}
+    Authorize, GetTeamAvatar, GetEventHighScores, GetTeamUpdates, PutTeamUpdates, GetUserPreferences,
+    PutUserPreferences}
 
 // Handle unexpected application errors
 process.on('unhandledRejection', (reason, p) => {

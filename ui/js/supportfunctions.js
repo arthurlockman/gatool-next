@@ -363,9 +363,8 @@ function loadEnvironment() {
             action: function (dialogRef) {
 
                 var req = new XMLHttpRequest();
-                req.open('GET', apiURL + '/loadenvironment/');
+                req.open('GET', apiURL + 'user/preferences');
                 req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
-                //req.setRequestHeader("userKey", getCookie("loggedin"));
                 req.addEventListener('load', function () {
                     dialogRef.close();
                     environment = JSON.parse(req.responseText);
@@ -489,10 +488,9 @@ function saveEnvironment() {
                 environment.allianceSelectionReady = allianceSelectionReady;
 
                 var req = new XMLHttpRequest();
-                req.open('POST', apiURL + '/saveenvironment/');
+                req.open('PUT', apiURL + 'user/preferences');
                 req.setRequestHeader("Content-type", "application/json");
                 req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
-                //req.setRequestHeader("userKey", getCookie("loggedin"));
                 req.addEventListener('load', function () {
                     dialogRef.close();
                     if (req.responseText === "OK") {
