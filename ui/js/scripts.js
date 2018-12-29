@@ -70,6 +70,7 @@ const lockOptions = {
     auth: {
         responseType: "token id_token",
         redirect: false,
+        sso: false,
         params: {
             scope: "openid profile email",
         }
