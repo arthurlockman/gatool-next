@@ -278,3 +278,6 @@ custom:
     types:
       - 'image/png'
       - 'image/jpeg'
+      - 'image/*'
+      - 'image/apng'
+      - 'image/webp'
