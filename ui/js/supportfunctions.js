@@ -453,7 +453,9 @@ function saveEnvironment() {
                 var localStorageKeys = Object.keys(localStorage);
                 for (var i = 0; i < localStorageKeys.length; i++) {
                     if (localStorageKeys[i].startsWith("teamData")) {
+                        //if (Number(localStorageKeys[i].slice(8)>9000)) {
                         environment.localStorage[localStorageKeys[i]] = JSON.stringify(decompressLocalStorage(localStorageKeys[i]));
+                        //}                  
                     } else {
                         environment.localStorage[localStorageKeys[i]] = localStorage[localStorageKeys[i]];
                     }
@@ -493,7 +495,7 @@ function saveEnvironment() {
                 req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
                 req.addEventListener('load', function () {
                     dialogRef.close();
-                    if (req.responseText === "OK") {
+                    if (req.status === 200) {
                         BootstrapDialog.show({
                             message: "Environment saved to gatool Cloud.",
                             buttons: [{

@@ -1013,6 +1013,7 @@ function getAvatars() {
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         var data = JSON.parse(req.responseText);
+        console.log(req.responseText);
         var teamData = {};
         for (var i = 0; i < data.teams.length; i++) {
             if (typeof localStorage["teamData" + data.teams[i].teamNumber] !== "undefined") {
