@@ -64,29 +64,28 @@ var matchTimer = setInterval(function () {
 }, 1000);
 var apiURL = "https://www.gatool.org/api/";
 
-const lockOptions = {
-    allowSignUp: false,
-    autoclose: true,
-    auth: {
-        responseType: "token id_token",
-        redirect: false,
-        sso: false,
-        params: {
-            scope: "openid profile email",
-        }
-    },
-};
-var lock = new Auth0Lock(
-    'afsE1dlAGS609U32NjmvNMaYSQmtO3NT',
-    'gatool.auth0.com',
-    lockOptions
-);
-
-// Listening for the authenticated event
-lock.on("authenticated", function(authResult) {
-    localStorage.setItem('token', authResult.idToken);
-    location.reload();
+var webAuth = new auth0.WebAuth({
+    domain: 'gatool.auth0.com',
+    clientID: 'afsE1dlAGS609U32NjmvNMaYSQmtO3NT',
+    responseType: 'token id_token',
+    audience: 'https://gatool.auth0.com/userinfo',
+    scope: 'openid',
+    redirectUri: window.location.href
 });
+
+function handleAuthentication() {
+    webAuth.parseHash(function(err, authResult) {
+        if (authResult && authResult.accessToken && authResult.idToken) {
+            localStorage.setItem('token', authResult.idToken);
+            window.location.href = window.location.href.split('#')[0];
+        } else if (err) {
+            console.log(err);
+            alert(
+                'Error: ' + err.error + '. Check the console for further details.'
+            );
+        }
+    });
+}
 
 window.onload = function () {
     "use strict";
@@ -270,23 +269,27 @@ window.addEventListener("resize", scaleRows);
 
 function login() {
     "use strict";
-    const token = "Bearer " + localStorage.getItem("token");
-    if (token === null || token === "")
-    {
-        lock.show();
+    if (window.location.hash) {
+        handleAuthentication();
     } else {
-        try {
-            var parsedToken = parseJwt(token);
-            var date = new Date(0);
-            date.setUTCSeconds(parsedToken.exp);
-            var expired = !(date.valueOf() > new Date().valueOf());
-            if (expired)
-            {
-                lock.show();
-            }
-        } catch (e)
+        const token = "Bearer " + localStorage.getItem("token");
+        if (token === null || token === "")
         {
-            lock.show();
+            webAuth.authorize();
+        } else {
+            try {
+                var parsedToken = parseJwt(token);
+                var date = new Date(0);
+                date.setUTCSeconds(parsedToken.exp);
+                var expired = !(date.valueOf() > new Date().valueOf());
+                if (expired)
+                {
+                    webAuth.authorize();
+                }
+            } catch (e)
+            {
+                webAuth.authorize();
+            }
         }
     }
 }
@@ -318,7 +321,7 @@ function logout() {
             cssClass: 'btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton',
             action: function (dialogRef) {
                 localStorage.removeItem("token");
-                lock.logout();
+                webAuth.logout({returnTo: window.location.href});
             }
         }]
     });
