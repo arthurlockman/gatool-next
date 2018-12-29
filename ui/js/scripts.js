@@ -993,7 +993,7 @@ function getTeamList(year, pageNumber) {
             } else {
                 localStorage.teamList = JSON.stringify(eventTeamList);
                 getTeamAwardsAsync(eventTeamList, year);
-                if (localStorage.currentYear === "2018") {
+                if (Number(localStorage.currentYear) >= 2018) {
                     getAvatars()
                 }
                 getHybridSchedule();
@@ -1013,7 +1013,6 @@ function getAvatars() {
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         var data = JSON.parse(req.responseText);
-        console.log(req.responseText);
         var teamData = {};
         for (var i = 0; i < data.teams.length; i++) {
             if (typeof localStorage["teamData" + data.teams[i].teamNumber] !== "undefined") {
@@ -1908,7 +1907,7 @@ function updateTeamTableRow(teamData) {
     }
     var returnData = '<tr class="teamsTableRow"><td class = "btn-default" id="teamTableNumber' + teamData.teamNumber + '" onclick="updateTeamInfo(' + teamData.teamNumber + ')"><span class="teamDataNumber">' + teamData.teamNumber + '</span><br><span id="lastVisit' + teamData.teamNumber + '" teamNumber = "' + teamData.teamNumber + '"  lastvisit = "' + teamInfo.lastVisit + '">' + lastVisit + '</span></td>';
     returnData += '<td id="teamTableRank' + teamData.teamNumber + '" class="rank0"></td>';
-    if ((teamInfo.avatar !== "null") && (localStorage.currentYear === "2018" && (typeof teamInfo !== "undefined"))) {
+    if ((teamInfo.avatar !== "null") && (Number(localStorage.currentYear) >= 2018 && (typeof teamInfo !== "undefined"))) {
         avatar = '<img src="' + teamInfo.avatar + '">&nbsp;'
     }
     if (teamInfo.nameShortLocal === "") {
@@ -2055,7 +2054,7 @@ function generateTeamTableRow(teamData) {
     }
     returnData += '<tr class="teamsTableRow"><td class = "btn-default" id="teamTableNumber' + teamData.teamNumber + '" onclick="updateTeamInfo(' + teamData.teamNumber + ')"><span class="teamDataNumber">' + teamData.teamNumber + '</span><br><span id="lastVisit' + teamData.teamNumber + '" teamNumber = "' + teamData.teamNumber + '" lastvisit = "' + teamInfo.lastVisit + '">' + lastVisit + '</span></td>';
     returnData += '<td id="teamTableRank' + teamData.teamNumber + '" class="rank0"></td>';
-    if ((teamInfo.avatar !== "null") && (localStorage.currentYear === "2018")) {
+    if ((teamInfo.avatar !== "null") && (Number(localStorage.currentYear) >= 2018)) {
         avatar = '<img src="' + teamInfo.avatar + '">&nbsp;'
     }
     if (teamInfo.nameShortLocal === "") {
