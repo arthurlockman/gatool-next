@@ -74,7 +74,7 @@ var webAuth = new auth0.WebAuth({
 });
 
 function handleAuthentication() {
-    webAuth.parseHash(function(err, authResult) {
+    webAuth.parseHash(function (err, authResult) {
         if (authResult && authResult.accessToken && authResult.idToken) {
             localStorage.setItem('token', authResult.idToken);
             window.location.href = window.location.href.split('#')[0];
@@ -273,8 +273,7 @@ function login() {
         handleAuthentication();
     } else {
         const token = "Bearer " + localStorage.getItem("token");
-        if (token === null || token === "")
-        {
+        if (token === null || token === "") {
             webAuth.authorize();
         } else {
             try {
@@ -282,19 +281,17 @@ function login() {
                 var date = new Date(0);
                 date.setUTCSeconds(parsedToken.exp);
                 var expired = !(date.valueOf() > new Date().valueOf());
-                if (expired)
-                {
+                if (expired) {
                     webAuth.authorize();
                 }
-            } catch (e)
-            {
+            } catch (e) {
                 webAuth.authorize();
             }
         }
     }
 }
 
-function parseJwt (token) {
+function parseJwt(token) {
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace('-', '+').replace('_', '/');
     return JSON.parse(window.atob(base64));
@@ -321,7 +318,7 @@ function logout() {
             cssClass: 'btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton',
             action: function (dialogRef) {
                 localStorage.removeItem("token");
-                webAuth.logout({returnTo: window.location.href});
+                webAuth.logout({ returnTo: window.location.href });
             }
         }]
     });
@@ -577,7 +574,7 @@ function createEventMenu() {
     var options = [];
     var events = {};
     for (var i = 0; i < tmp.length; i++) {
-        var _option = {text: tmp[i].name, value: tmp[i]};
+        var _option = { text: tmp[i].name, value: tmp[i] };
         options.push(_option);
         events[tmp[i].code] = tmp[i].name
     }
@@ -1016,19 +1013,21 @@ function getAvatars() {
     req.open('GET', apiURL + localStorage.currentYear + '/avatars/' + localStorage.currentEvent);
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
-        var data = JSON.parse(req.responseText);
-        var teamData = {};
-        for (var i = 0; i < data.teams.length; i++) {
-            if (typeof localStorage["teamData" + data.teams[i].teamNumber] !== "undefined") {
-                teamData = decompressLocalStorage("teamData" + data.teams[i].teamNumber);
-                if (data.teams[i].encodedAvatar !== null) {
-                    teamData.avatar = data.teams[i].encodedAvatar;
-                    $("#avatar" + data.teams[i].teamNumber).html('<img src="' + data.teams[i].encodedAvatar + '">&nbsp;')
-                } else {
-                    teamData.avatar = "null";
-                    $("#avatar" + data.teams[i].teamNumber).html("")
+        if (req.status === 200) {
+            var data = JSON.parse(req.responseText);
+            var teamData = {};
+            for (var i = 0; i < data.teams.length; i++) {
+                if (typeof localStorage["teamData" + data.teams[i].teamNumber] !== "undefined") {
+                    teamData = decompressLocalStorage("teamData" + data.teams[i].teamNumber);
+                    if (data.teams[i].encodedAvatar !== null) {
+                        teamData.avatar = data.teams[i].encodedAvatar;
+                        $("#avatar" + data.teams[i].teamNumber).html('<img src="' + data.teams[i].encodedAvatar + '">&nbsp;')
+                    } else {
+                        teamData.avatar = "null";
+                        $("#avatar" + data.teams[i].teamNumber).html("")
+                    }
+                    compressLocalStorage("teamData" + data.teams[i].teamNumber, teamData)
                 }
-                compressLocalStorage("teamData" + data.teams[i].teamNumber, teamData)
             }
         }
     });
@@ -1213,10 +1212,10 @@ function announceDisplay() {
                 blueTeams = blueTeams.filter(checkTeam)
             }
             if (ii === 6) {
-                currentMatchData.teams[ii] = {"teamNumber": redTeams[0]}
+                currentMatchData.teams[ii] = { "teamNumber": redTeams[0] }
             }
             if (ii === 7) {
-                currentMatchData.teams[ii] = {"teamNumber": blueTeams[0]}
+                currentMatchData.teams[ii] = { "teamNumber": blueTeams[0] }
             }
             var teamData = decompressLocalStorage("teamData" + currentMatchData.teams[ii].teamNumber);
             $('#' + stationList[ii] + 'TeamNumber').html("<b>" + currentMatchData.teams[ii].teamNumber + "</b>");
@@ -1691,7 +1690,7 @@ function getTeamAwards(teamNumber, year) {
     eventNames["2016"] = events2016;
     eventNames["2015"] = events2015;
     var teamData = decompressLocalStorage("teamData" + teamNumber);
-    var awardHilight = {"before": "<b>", "after": "</b>"};
+    var awardHilight = { "before": "<b>", "after": "</b>" };
     var awardName = "";
     var req = new XMLHttpRequest();
     req.open('GET', apiURL + year + '/awards/' + teamNumber + "/");
@@ -1951,7 +1950,7 @@ function generateTeamTableRow(teamData) {
     "use strict";
     var teamInfo = {};
     var avatar = "";
-    if (typeof(localStorage["teamData" + teamData.teamNumber]) !== 'undefined') {
+    if (typeof (localStorage["teamData" + teamData.teamNumber]) !== 'undefined') {
         teamInfo = decompressLocalStorage("teamData" + teamData.teamNumber);
         if (typeof teamInfo.cityStateSort === "undefined") {
             teamInfo.cityStateSort = teamData.country + ":" + teamData.stateProv + ":" + teamData.city
@@ -2498,9 +2497,9 @@ function davidPriceFormat(priceMatchData) {
 function awardsHilight(awardName) {
     "use strict";
     if (awardName === "District Chairman's Award" || awardName === "District Event Winner" || awardName === "District Event Finalist" || awardName === "Regional Engineering Inspiration Award" || awardName === "District Engineering Inspiration Award" || awardName === "District Championship Finalist" || awardName === "District Championship Winner" || awardName === "Regional Winners" || awardName === "Regional Finalists" || awardName === "Regional Chairman's Award" || awardName === "FIRST Dean's List Finalist Award" || awardName === "Championship Subdivision Winner" || awardName === "Championship Subdivision Finalist" || awardName === "Championship Winner" || awardName === "Championship Finalist" || awardName === "Chairman's Award" || awardName === "FIRST Dean's List Award" || awardName === "Woodie Flowers Award") {
-        return {"before": "<span class ='awardHilight'>", "after": "</span>"}
+        return { "before": "<span class ='awardHilight'>", "after": "</span>" }
     } else {
-        return {"before": "<span>", "after": "</span>"}
+        return { "before": "<span>", "after": "</span>" }
     }
 }
 
@@ -2516,13 +2515,13 @@ function handleQualsFiles(e) {
             var data = e.target.result;
             var workbook;
             if (rABS) {
-                workbook = XLSX.read(data, {type: 'binary'})
+                workbook = XLSX.read(data, { type: 'binary' })
             } else {
                 var arr = fixdata(data);
-                workbook = XLSX.read(btoa(arr), {type: 'base64'})
+                workbook = XLSX.read(btoa(arr), { type: 'base64' })
             }
             var worksheet = workbook.Sheets[workbook.SheetNames[0]];
-            var schedule = XLSX.utils.sheet_to_json(worksheet, {range: 4});
+            var schedule = XLSX.utils.sheet_to_json(worksheet, { range: 4 });
             var formattedSchedule = {};
             var innerSchedule = [];
             var teamListArray = [];
@@ -2569,7 +2568,7 @@ function handleQualsFiles(e) {
                             "station": "Blue2",
                             "surrogate": !1,
                             "dq": !1
-                        }, {"teamNumber": schedule[i]["Blue 3"], "station": "Blue3", "surrogate": !1, "dq": !1}]
+                        }, { "teamNumber": schedule[i]["Blue 3"], "station": "Blue3", "surrogate": !1, "dq": !1 }]
                     };
                     if (teamListArray.indexOf(schedule[i]["Red 1"]) === -1) {
                         teamListArray.push(schedule[i]["Red 1"])
@@ -2597,7 +2596,7 @@ function handleQualsFiles(e) {
                 return a - b
             });
             for (i = 0; i < teamListArray.length; i++) {
-                teamToInsert = {"teamNumber": teamListArray[i]};
+                teamToInsert = { "teamNumber": teamListArray[i] };
                 teamList.push(teamToInsert)
             }
             $("#eventTeamCount").html(teamList.length);
@@ -2624,13 +2623,13 @@ function handlePlayoffFiles(e) {
             var data = e.target.result;
             var workbook;
             if (rABS) {
-                workbook = XLSX.read(data, {type: 'binary'})
+                workbook = XLSX.read(data, { type: 'binary' })
             } else {
                 var arr = fixdata(data);
-                workbook = XLSX.read(btoa(arr), {type: 'base64'})
+                workbook = XLSX.read(btoa(arr), { type: 'base64' })
             }
             var worksheet = workbook.Sheets[workbook.SheetNames[0]];
-            var schedule = XLSX.utils.sheet_to_json(worksheet, {range: 4});
+            var schedule = XLSX.utils.sheet_to_json(worksheet, { range: 4 });
             var formattedSchedule = {};
             var innerSchedule = [];
             for (var i = 0; i < schedule.length; i++) {
@@ -2673,7 +2672,7 @@ function handlePlayoffFiles(e) {
                             "station": "Blue2",
                             "surrogate": !1,
                             "dq": !1
-                        }, {"teamNumber": schedule[i]["Blue 3"], "station": "Blue3", "surrogate": !1, "dq": !1}]
+                        }, { "teamNumber": schedule[i]["Blue 3"], "station": "Blue3", "surrogate": !1, "dq": !1 }]
                     };
                     innerSchedule.push(tempRow)
                 }
