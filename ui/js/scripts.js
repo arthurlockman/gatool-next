@@ -385,7 +385,9 @@ function initEnvironment() {
     $('#ranksContainer').html("No Rankings available.");
     $('#allianceSelectionTable').hide();
     $('#allianceUndoButton').hide();
-    $("#davidPriceAlliances").hide()
+    $("#davidPriceNumber").html("No Sched");
+    $("#davidPriceAlliances").hide();
+
 }
 
 function prepareAllianceSelection() {
@@ -413,6 +415,8 @@ function handleEventSelection() {
     $("#PlayoffFiles").show();
     $("#QualsFilesReset").hide();
     $("#PlayoffFilesReset").hide();
+    $("#davidPriceNumber").html("No Sched");
+    $("#davidPriceAlliances").hide();
     clearFileInput("QualsFiles");
     clearFileInput("PlayoffFiles");
     document.getElementById("QualsFiles").addEventListener('change', handleQualsFiles, !1);
@@ -478,6 +482,8 @@ function handleOffseasonEventSelection() {
     $('#allianceUndoButton').hide();
     $("#allianceSelectionTabPicker").addClass("alert-danger");
     $("#teamloadprogress").show();
+    $("#davidPriceNumber").html("No Sched");
+    $("#davidPriceAlliances").hide();
     eventTeamList = [];
     eventQualsSchedule = [];
     eventPlayoffSchedule = [];
@@ -526,10 +532,12 @@ function loadEventsList() {
     req.open('GET', apiURL + localStorage.currentYear + endpoint);
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
-        localStorage.currentEventList = JSON.stringify(JSON.parse(req.responseText).Events);
-        currentEventList = JSON.parse(req.responseText).Events;
-        createEventMenu();
-        filterEvents()
+        if (req.status === 200) {
+            localStorage.currentEventList = JSON.stringify(JSON.parse(req.responseText).Events);
+            currentEventList = JSON.parse(req.responseText).Events;
+            createEventMenu();
+            filterEvents()
+        }
     });
     req.send()
 }
@@ -668,177 +676,183 @@ function getRegularSeasonSchedule() {
     req.open('GET', apiURL + localStorage.currentYear + '/schedule/' + localStorage.currentEvent + '/qual?returnschedule=true');
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
-        var data = JSON.parse(req.responseText);
-        if (data.Schedule.length === 0) {
-            $('#scheduleContainer').html('<b>No qualification matches have been scheduled for this event.</b>');
-            localStorage.qualsList = '{"Schedule":[]}';
-            localStorage.playoffList = '{"Schedule":[]}'
-        } else {
-            $("#scheduleContainer").html('<p class = "eventName">' + localStorage.eventName + '</p><table id="scheduleTable" class="table table-bordered table-responsive table-striped"></table>');
-            matchSchedule += '<thead class="thead-default"><tr><td class="col2"><b>Time</b></td><td  class="col2"><b>Description</b></td><td class="col1"><b>Match Number</b></td><td class="col1"><b>Score</b></td><td class="col1"><b>Station 1</b></td><td class="col1"><b>Station 2</b></td><td class="col1"><b>Station 3</b></td></tr></thead><tbody>';
-            qualScheduleLength = data.Schedule.length;
-            for (var i = 0; i < data.Schedule.length; i++) {
-                var element = data.Schedule[i];
-                var optionClass = "";
-                if ((element.scoreRedFinal !== null) && (element.scoreBlueFinal !== null)) {
-                    optionClass = ' class="bg-success" '
+        if (req.status === 200) {
+            var data = JSON.parse(req.responseText);
+            if (data.Schedule.length === 0) {
+                $('#scheduleContainer').html('<b>No qualification matches have been scheduled for this event.</b>');
+                localStorage.qualsList = '{"Schedule":[]}';
+                localStorage.playoffList = '{"Schedule":[]}'
+            } else {
+                $("#scheduleContainer").html('<p class = "eventName">' + localStorage.eventName + '</p><table id="scheduleTable" class="table table-bordered table-responsive table-striped"></table>');
+                matchSchedule += '<thead class="thead-default"><tr><td class="col2"><b>Time</b></td><td  class="col2"><b>Description</b></td><td class="col1"><b>Match Number</b></td><td class="col1"><b>Score</b></td><td class="col1"><b>Station 1</b></td><td class="col1"><b>Station 2</b></td><td class="col1"><b>Station 3</b></td></tr></thead><tbody>';
+                qualScheduleLength = data.Schedule.length;
+                for (var i = 0; i < data.Schedule.length; i++) {
+                    var element = data.Schedule[i];
+                    var optionClass = "";
+                    if ((element.scoreRedFinal !== null) && (element.scoreBlueFinal !== null)) {
+                        optionClass = ' class="bg-success" '
+                    }
+                    matchSchedule += generateMatchTableRow(element);
+                    matchPicker += '<option id="matchPicker' + parseInt(i + 1) + '"' + optionClass + ' matchNumber="' + parseInt(i + 1) + '" value="' + parseInt(i + 1) + '">' + element.description + '</option>';
+                    if ((element.scoreRedFinal !== null) && (element.scoreBlueFinal !== null)) {
+                        lastMatchPlayed = parseInt(i + 1)
+                    }
                 }
-                matchSchedule += generateMatchTableRow(element);
-                matchPicker += '<option id="matchPicker' + parseInt(i + 1) + '"' + optionClass + ' matchNumber="' + parseInt(i + 1) + '" value="' + parseInt(i + 1) + '">' + element.description + '</option>';
-                if ((element.scoreRedFinal !== null) && (element.scoreBlueFinal !== null)) {
-                    lastMatchPlayed = parseInt(i + 1)
+                localStorage.qualsList = JSON.stringify(data);
+                $("#announceBanner, #playByPlayBanner").hide();
+                $("#announceDisplay, #playByPlayDisplay").show();
+                haveSchedule = !0;
+                lastQualsUpdate = req.getResponseHeader("Last-Modified");
+                if (lastMatchPlayed >= data.Schedule.length - 1) {
+                    $("#allianceSelectionPlaceholder").hide();
+                    $("#allianceSelectionTable").show();
+                    $(".thirdAllianceSelection").hide();
+                    $("#backupTeamsTable").show();
+                    if (inChamps() || inSubdivision()) {
+                        $(".thirdAllianceSelection").show();
+                        $("#backupTeamsTable").hide()
+                    }
+                    qualsComplete = !0
                 }
+                $('#scheduleTabPicker').removeClass('alert-danger');
+                $('#scheduleTabPicker').addClass('alert-success');
+                matchCount = parseInt(Number(JSON.parse(localStorage.qualsList).Schedule.length) * 6 / Number(JSON.parse(localStorage.teamList).length))
             }
-            localStorage.qualsList = JSON.stringify(data);
-            $("#announceBanner, #playByPlayBanner").hide();
-            $("#announceDisplay, #playByPlayDisplay").show();
-            haveSchedule = !0;
-            lastQualsUpdate = req.getResponseHeader("Last-Modified");
-            if (lastMatchPlayed >= data.Schedule.length - 1) {
-                $("#allianceSelectionPlaceholder").hide();
-                $("#allianceSelectionTable").show();
-                $(".thirdAllianceSelection").hide();
-                $("#backupTeamsTable").show();
-                if (inChamps() || inSubdivision()) {
-                    $(".thirdAllianceSelection").show();
-                    $("#backupTeamsTable").hide()
-                }
-                qualsComplete = !0
-            }
-            $('#scheduleTabPicker').removeClass('alert-danger');
-            $('#scheduleTabPicker').addClass('alert-success');
-            matchCount = parseInt(Number(JSON.parse(localStorage.qualsList).Schedule.length) * 6 / Number(JSON.parse(localStorage.teamList).length))
+            $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a") + "... and looking for Playoff schedule...");
+            req1.send()
         }
-        $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a") + "... and looking for Playoff schedule...");
-        req1.send()
     });
     var req1 = new XMLHttpRequest();
     req1.open('GET', apiURL + localStorage.currentYear + '/schedule/' + localStorage.currentEvent + '/playoff?returnschedule=true');
     req1.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req1.addEventListener('load', function () {
-        $("#playoffScheduleAlert").show();
-        var data = JSON.parse(req1.responseText);
-        if (data.Schedule.length === 0) {
-            document.getElementById('scheduleContainer').innerHTML += '<p><b>No playoff matches have been scheduled for this event.</b></p>';
-            localStorage.playoffList = "";
-            $("#matchPicker").html(matchPicker);
+        if (req1.status === 200) {
+            $("#playoffScheduleAlert").show();
+            var data = JSON.parse(req1.responseText);
+            if (data.Schedule.length === 0) {
+                document.getElementById('scheduleContainer').innerHTML += '<p><b>No playoff matches have been scheduled for this event.</b></p>';
+                localStorage.playoffList = "";
+                $("#matchPicker").html(matchPicker);
+                if (localStorage.autoAdvance === "true") {
+                    if (lastMatchPlayed < (qualScheduleLength)) {
+                        localStorage.currentMatch = String(lastMatchPlayed + 1)
+                    } else {
+                        localStorage.currentMatch = String(lastMatchPlayed)
+                    }
+                    document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
+                    $("#matchPicker").selectpicker('refresh')
+                } else if (localStorage.currentMatch) {
+                    document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
+                    $("#matchPicker").selectpicker('refresh')
+                }
+                if (haveSchedule) {
+                    announceDisplay()
+                }
+            } else {
+                haveSchedule = !0;
+                for (var i = 0; i < data.Schedule.length; i++) {
+                    var element = data.Schedule[i];
+                    var optionClass = "";
+                    if ((element.scoreRedFinal !== null) && (element.scoreBlueFinal !== null)) {
+                        optionClass = ' class="bg-success" ';
+                        lastMatchPlayed = i + qualScheduleLength + 1
+                    }
+                    matchSchedule += generateMatchTableRow(element);
+                    matchPicker += '<option id="matchPicker' + parseInt(i + qualScheduleLength + 1) + '"' + optionClass + ' matchNumber="' + parseInt(i + qualScheduleLength + 1) + '" value="' + parseInt(i + qualScheduleLength + 1) + '">' + element.description + '</option>'
+                }
+                $("#matchPicker").html(matchPicker);
+                document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
+                $("#matchPicker").selectpicker('refresh');
+                localStorage.inPlayoffs = "true";
+                prepareAllianceSelection();
+                $("#allianceSelectionPlaceholder").hide();
+                $("#allianceSelectionTable").show();
+                if (lastMatchPlayed >= data.Schedule.length - 1) {
+                    $("#allianceSelectionPlaceholder").hide();
+                    $("#allianceSelectionTable").show();
+                    $(".thirdAllianceSelection").hide();
+                    $("#backupTeamsTable").show();
+                    if (inChamps() || inSubdivision()) {
+                        $(".thirdAllianceSelection").show();
+                        $("#backupTeamsTable").hide()
+                    }
+                }
+                getAllianceList()
+            }
+            if (matchSchedule) {
+                document.getElementById('scheduleTable').innerHTML += matchSchedule
+            }
+            $('#scheduleProgressBar').hide();
+            localStorage.playoffList = JSON.stringify(data);
+            $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"));
             if (localStorage.autoAdvance === "true") {
-                if (lastMatchPlayed < (qualScheduleLength)) {
+                if (lastMatchPlayed < (qualScheduleLength + data.Schedule.length)) {
                     localStorage.currentMatch = String(lastMatchPlayed + 1)
                 } else {
                     localStorage.currentMatch = String(lastMatchPlayed)
                 }
                 document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
                 $("#matchPicker").selectpicker('refresh')
-            } else if (localStorage.currentMatch) {
-                document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
-                $("#matchPicker").selectpicker('refresh')
             }
-            if (haveSchedule) {
+            if (matchSchedule) {
                 announceDisplay()
             }
-        } else {
-            haveSchedule = !0;
-            for (var i = 0; i < data.Schedule.length; i++) {
-                var element = data.Schedule[i];
-                var optionClass = "";
-                if ((element.scoreRedFinal !== null) && (element.scoreBlueFinal !== null)) {
-                    optionClass = ' class="bg-success" ';
-                    lastMatchPlayed = i + qualScheduleLength + 1
-                }
-                matchSchedule += generateMatchTableRow(element);
-                matchPicker += '<option id="matchPicker' + parseInt(i + qualScheduleLength + 1) + '"' + optionClass + ' matchNumber="' + parseInt(i + qualScheduleLength + 1) + '" value="' + parseInt(i + qualScheduleLength + 1) + '">' + element.description + '</option>'
-            }
-            $("#matchPicker").html(matchPicker);
-            document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
-            $("#matchPicker").selectpicker('refresh');
-            localStorage.inPlayoffs = "true";
-            prepareAllianceSelection();
-            $("#allianceSelectionPlaceholder").hide();
-            $("#allianceSelectionTable").show();
-            if (lastMatchPlayed >= data.Schedule.length - 1) {
-                $("#allianceSelectionPlaceholder").hide();
-                $("#allianceSelectionTable").show();
-                $(".thirdAllianceSelection").hide();
-                $("#backupTeamsTable").show();
-                if (inChamps() || inSubdivision()) {
-                    $(".thirdAllianceSelection").show();
-                    $("#backupTeamsTable").hide()
-                }
-            }
-            getAllianceList()
-        }
-        if (matchSchedule) {
-            document.getElementById('scheduleTable').innerHTML += matchSchedule
-        }
-        $('#scheduleProgressBar').hide();
-        localStorage.playoffList = JSON.stringify(data);
-        $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"));
-        if (localStorage.autoAdvance === "true") {
-            if (lastMatchPlayed < (qualScheduleLength + data.Schedule.length)) {
-                localStorage.currentMatch = String(lastMatchPlayed + 1)
-            } else {
-                localStorage.currentMatch = String(lastMatchPlayed)
-            }
-            document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
-            $("#matchPicker").selectpicker('refresh')
-        }
-        if (matchSchedule) {
-            announceDisplay()
         }
     });
     var reqChamps = new XMLHttpRequest();
     reqChamps.open('GET', apiURL + localStorage.currentYear + '/schedule/' + localStorage.currentEvent + '/playoff?returnschedule=true');
     reqChamps.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     reqChamps.addEventListener('load', function () {
-        var data = JSON.parse(reqChamps.responseText);
-        if (data.Schedule.length === 0) {
-            $('#scheduleContainer').html('<b>No matches have been scheduled for this event.</b>');
-            localStorage.qualsList = '{"Schedule":[]}';
-            localStorage.playoffList = '{"Schedule":[]}'
-        } else {
-            haveSchedule = !0;
-            $("#scheduleContainer").html('<p class = "eventName">' + localStorage.eventName + '</p><table id="scheduleTable" class="table table-bordered table-responsive table-striped"></table>');
-            matchSchedule += '<thead class="thead-default"><tr><td class="col2"><b>Time</b></td><td  class="col2"><b>Description</b></td><td class="col1"><b>Match Number</b></td><td class="col1"><b>Score</b></td><td class="col1"><b>Station 1</b></td><td class="col1"><b>Station 2</b></td><td class="col1"><b>Station 3</b></td></tr></thead><tbody>';
-            qualScheduleLength = data.Schedule.length;
-            for (var i = 0; i < data.Schedule.length; i++) {
-                var element = data.Schedule[i];
-                matchSchedule += generateMatchTableRow(element);
-                matchPicker += '<option id="matchPicker' + parseInt(i + 1) + '" matchNumber="' + parseInt(i + 1) + '">' + element.description + '</option>';
-                if ((element.scoreRedFinal !== null) && (element.scoreBlueFinal !== null)) {
-                    lastMatchPlayed = element.matchNumber
+        if (reqChamps.status === 200) {
+            var data = JSON.parse(reqChamps.responseText);
+            if (data.Schedule.length === 0) {
+                $('#scheduleContainer').html('<b>No matches have been scheduled for this event.</b>');
+                localStorage.qualsList = '{"Schedule":[]}';
+                localStorage.playoffList = '{"Schedule":[]}'
+            } else {
+                haveSchedule = !0;
+                $("#scheduleContainer").html('<p class = "eventName">' + localStorage.eventName + '</p><table id="scheduleTable" class="table table-bordered table-responsive table-striped"></table>');
+                matchSchedule += '<thead class="thead-default"><tr><td class="col2"><b>Time</b></td><td  class="col2"><b>Description</b></td><td class="col1"><b>Match Number</b></td><td class="col1"><b>Score</b></td><td class="col1"><b>Station 1</b></td><td class="col1"><b>Station 2</b></td><td class="col1"><b>Station 3</b></td></tr></thead><tbody>';
+                qualScheduleLength = data.Schedule.length;
+                for (var i = 0; i < data.Schedule.length; i++) {
+                    var element = data.Schedule[i];
+                    matchSchedule += generateMatchTableRow(element);
+                    matchPicker += '<option id="matchPicker' + parseInt(i + 1) + '" matchNumber="' + parseInt(i + 1) + '">' + element.description + '</option>';
+                    if ((element.scoreRedFinal !== null) && (element.scoreBlueFinal !== null)) {
+                        lastMatchPlayed = element.matchNumber
+                    }
                 }
-            }
-            localStorage.qualsList = JSON.stringify(data);
-            $("#announceBanner, #playByPlayBanner").hide();
-            $("#announceDisplay, #playByPlayDisplay").show();
-            $("#matchPicker").html(matchPicker);
-            document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
-            $("#matchPicker").selectpicker('refresh');
-            localStorage.inPlayoffs = "true";
-            if (localStorage.autoAdvance === "true") {
-                if (lastMatchPlayed < (qualScheduleLength)) {
-                    localStorage.currentMatch = String(lastMatchPlayed + 1)
-                } else {
-                    localStorage.currentMatch = String(lastMatchPlayed)
+                localStorage.qualsList = JSON.stringify(data);
+                $("#announceBanner, #playByPlayBanner").hide();
+                $("#announceDisplay, #playByPlayDisplay").show();
+                $("#matchPicker").html(matchPicker);
+                document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
+                $("#matchPicker").selectpicker('refresh');
+                localStorage.inPlayoffs = "true";
+                if (localStorage.autoAdvance === "true") {
+                    if (lastMatchPlayed < (qualScheduleLength)) {
+                        localStorage.currentMatch = String(lastMatchPlayed + 1)
+                    } else {
+                        localStorage.currentMatch = String(lastMatchPlayed)
+                    }
+                    document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
+                    $("#matchPicker").selectpicker('refresh')
+                } else if (localStorage.currentMatch) {
+                    document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
+                    $("#matchPicker").selectpicker('refresh')
                 }
-                document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
-                $("#matchPicker").selectpicker('refresh')
-            } else if (localStorage.currentMatch) {
-                document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
-                $("#matchPicker").selectpicker('refresh')
+                $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"));
+                $('#scheduleTabPicker').removeClass('alert-danger');
+                $('#scheduleTabPicker').addClass('alert-success');
+                if (matchSchedule) {
+                    document.getElementById('scheduleTable').innerHTML += matchSchedule
+                }
+                $('#scheduleProgressBar').hide();
+                localStorage.playoffList = '{"Schedule":[]}';
+                $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"));
+                displayAwardsTeams(allianceListUnsorted.slice(0));
+                getAllianceList()
             }
-            $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"));
-            $('#scheduleTabPicker').removeClass('alert-danger');
-            $('#scheduleTabPicker').addClass('alert-success');
-            if (matchSchedule) {
-                document.getElementById('scheduleTable').innerHTML += matchSchedule
-            }
-            $('#scheduleProgressBar').hide();
-            localStorage.playoffList = '{"Schedule":[]}';
-            $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"));
-            displayAwardsTeams(allianceListUnsorted.slice(0));
-            getAllianceList()
         }
     });
     if (inChamps() || (inMiChamps() && (localStorage.currentYear >= 2017))) {
@@ -939,70 +953,72 @@ function getTeamList(year, pageNumber) {
     req.open('GET', apiURL + year + endpoint + localStorage.currentEvent + '/' + pageNumber);
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
-        var data = "";
-        $('#teamloadprogress').show();
-        $('#teamProgressBar').show();
-        if (pageNumber === 1) {
-            $("#teamsTableBody").empty()
-        }
-        if (req.responseText.includes('"teams":')) {
-            data = JSON.parse(req.responseText)
-        } else {
-            data = JSON.parse('{"teams":[],"teamCountTotal":0,"teamCountPage":0,"pageCurrent":0,"pageTotal":0}')
-        }
-        if (data.teams.length === 0 && pageNumber === 1) {
-            $('#teamsTableEventName').html('Event team list unavailable.');
-            $("#eventTeamCount").html(data.teamCountTotal);
-            teamCountTotal = data.teamCountTotal;
-            localStorage.teamList = ""
-        } else {
+        if (req.status === 200) {
+            var data = "";
+            $('#teamloadprogress').show();
+            $('#teamProgressBar').show();
             if (pageNumber === 1) {
+                $("#teamsTableBody").empty()
+            }
+            if (req.responseText.includes('"teams":')) {
+                data = JSON.parse(req.responseText)
+            } else {
+                data = JSON.parse('{"teams":[],"teamCountTotal":0,"teamCountPage":0,"pageCurrent":0,"pageTotal":0}')
+            }
+            if (data.teams.length === 0 && pageNumber === 1) {
+                $('#teamsTableEventName').html('Event team list unavailable.');
                 $("#eventTeamCount").html(data.teamCountTotal);
                 teamCountTotal = data.teamCountTotal;
-                $('#teamsTableEventName').html(localStorage.eventName)
-            }
-            for (var i = 0; i < data.teams.length; i++) {
-                var element = data.teams[i];
-                $('#teamsTableBody').append(generateTeamTableRow(element));
-                eventTeamList.push(data.teams[i])
-            }
-            for (var j = 0; j < eventTeamList.length; j++) {
-                var team = decompressLocalStorage("teamData" + eventTeamList[j].teamNumber);
-                team.rank = "";
-                team.alliance = "";
-                team.allianceName = "";
-                team.allianceChoice = "";
-                team.sortOrder1 = "";
-                team.sortOrder2 = "";
-                team.sortOrder3 = "";
-                team.sortOrder4 = "";
-                team.sortOrder5 = "";
-                team.sortOrder6 = "";
-                team.wins = "";
-                team.losses = "";
-                team.ties = "";
-                team.qualAverage = "";
-                team.dq = "";
-                team.matchesPlayed = "";
-                compressLocalStorage("teamData" + eventTeamList[j].teamNumber, team);
-                highScores['"' + eventTeamList[j].teamNumber + '.score"'] = 0;
-                highScores['"' + eventTeamList[j].teamNumber + '.description"'] = ""
-            }
-            if (data.pageCurrent < data.pageTotal) {
-                lastSchedulePage = !1;
-                getTeamList(year, parseInt(pageNumber) + 1)
+                localStorage.teamList = ""
             } else {
-                localStorage.teamList = JSON.stringify(eventTeamList);
-                getTeamAwardsAsync(eventTeamList, year);
-                if (Number(localStorage.currentYear) >= 2018) {
-                    getAvatars()
+                if (pageNumber === 1) {
+                    $("#eventTeamCount").html(data.teamCountTotal);
+                    teamCountTotal = data.teamCountTotal;
+                    $('#teamsTableEventName').html(localStorage.eventName)
                 }
-                getHybridSchedule();
-                displayAwardsTeams();
-                lastSchedulePage = !0
+                for (var i = 0; i < data.teams.length; i++) {
+                    var element = data.teams[i];
+                    $('#teamsTableBody').append(generateTeamTableRow(element));
+                    eventTeamList.push(data.teams[i])
+                }
+                for (var j = 0; j < eventTeamList.length; j++) {
+                    var team = decompressLocalStorage("teamData" + eventTeamList[j].teamNumber);
+                    team.rank = "";
+                    team.alliance = "";
+                    team.allianceName = "";
+                    team.allianceChoice = "";
+                    team.sortOrder1 = "";
+                    team.sortOrder2 = "";
+                    team.sortOrder3 = "";
+                    team.sortOrder4 = "";
+                    team.sortOrder5 = "";
+                    team.sortOrder6 = "";
+                    team.wins = "";
+                    team.losses = "";
+                    team.ties = "";
+                    team.qualAverage = "";
+                    team.dq = "";
+                    team.matchesPlayed = "";
+                    compressLocalStorage("teamData" + eventTeamList[j].teamNumber, team);
+                    highScores['"' + eventTeamList[j].teamNumber + '.score"'] = 0;
+                    highScores['"' + eventTeamList[j].teamNumber + '.description"'] = ""
+                }
+                if (data.pageCurrent < data.pageTotal) {
+                    lastSchedulePage = !1;
+                    getTeamList(year, parseInt(pageNumber) + 1)
+                } else {
+                    localStorage.teamList = JSON.stringify(eventTeamList);
+                    getTeamAwardsAsync(eventTeamList, year);
+                    if (Number(localStorage.currentYear) >= 2018) {
+                        getAvatars()
+                    }
+                    getHybridSchedule();
+                    displayAwardsTeams();
+                    lastSchedulePage = !0
+                }
             }
+            $("#teamUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"))
         }
-        $("#teamUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"))
     });
     req.send()
 }
@@ -1054,56 +1070,58 @@ function getAllianceList() {
     req2.open('GET', apiURL + localStorage.currentYear + '/alliances/' + localStorage.currentEvent);
     req2.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req2.addEventListener('load', function () {
-        var data = JSON.parse(req2.responseText);
-        if (data.Alliances.length === 0) {
-            $('#allianceUpdateContainer').html('<b>No Playoff Alliance data available for this event.</b>');
-            localStorage.Alliances = {}
-        } else {
-            localStorage.Alliances = JSON.stringify(data);
-            for (var i = 0; i < data.Alliances.length; i++) {
-                var element = data.Alliances[i];
-                var team = {};
-                if (element.captain !== null) {
-                    team = decompressLocalStorage("teamData" + element.captain);
-                    team.alliance = element.number;
-                    team.allianceName = element.name;
-                    team.allianceChoice = "Captain";
-                    compressLocalStorage("teamData" + element.captain, team)
-                }
-                if (element.round1 !== null) {
-                    team = decompressLocalStorage("teamData" + element.round1);
-                    team.alliance = element.number;
-                    team.allianceName = element.name;
-                    team.allianceChoice = "Round 1 Selection";
-                    compressLocalStorage("teamData" + element.round1, team)
-                }
-                if (element.round2 !== null) {
-                    team = decompressLocalStorage("teamData" + element.round2);
-                    team.alliance = element.number;
-                    team.allianceName = element.name;
-                    team.allianceChoice = "Round 2 Selection";
-                    compressLocalStorage("teamData" + element.round2, team)
-                }
-                if (element.round3 !== null) {
-                    team = decompressLocalStorage("teamData" + element.round3);
-                    team.alliance = element.number;
-                    team.allianceName = element.name;
-                    team.allianceChoice = "Round 3 Selection";
-                    compressLocalStorage("teamData" + element.round3, team)
-                }
-                if (element.backup !== null) {
-                    team = decompressLocalStorage("teamData" + element.backup);
-                    team.alliance = element.number;
-                    team.allianceName = element.name;
-                    team.allianceChoice = "Backup Robot replacing " + element.backupReplaced;
-                    compressLocalStorage("teamData" + element.backup, team)
+        if (req2.status === 200) {
+            var data = JSON.parse(req2.responseText);
+            if (data.Alliances.length === 0) {
+                $('#allianceUpdateContainer').html('<b>No Playoff Alliance data available for this event.</b>');
+                localStorage.Alliances = {}
+            } else {
+                localStorage.Alliances = JSON.stringify(data);
+                for (var i = 0; i < data.Alliances.length; i++) {
+                    var element = data.Alliances[i];
+                    var team = {};
+                    if (element.captain !== null) {
+                        team = decompressLocalStorage("teamData" + element.captain);
+                        team.alliance = element.number;
+                        team.allianceName = element.name;
+                        team.allianceChoice = "Captain";
+                        compressLocalStorage("teamData" + element.captain, team)
+                    }
+                    if (element.round1 !== null) {
+                        team = decompressLocalStorage("teamData" + element.round1);
+                        team.alliance = element.number;
+                        team.allianceName = element.name;
+                        team.allianceChoice = "Round 1 Selection";
+                        compressLocalStorage("teamData" + element.round1, team)
+                    }
+                    if (element.round2 !== null) {
+                        team = decompressLocalStorage("teamData" + element.round2);
+                        team.alliance = element.number;
+                        team.allianceName = element.name;
+                        team.allianceChoice = "Round 2 Selection";
+                        compressLocalStorage("teamData" + element.round2, team)
+                    }
+                    if (element.round3 !== null) {
+                        team = decompressLocalStorage("teamData" + element.round3);
+                        team.alliance = element.number;
+                        team.allianceName = element.name;
+                        team.allianceChoice = "Round 3 Selection";
+                        compressLocalStorage("teamData" + element.round3, team)
+                    }
+                    if (element.backup !== null) {
+                        team = decompressLocalStorage("teamData" + element.backup);
+                        team.alliance = element.number;
+                        team.allianceName = element.name;
+                        team.allianceChoice = "Backup Robot replacing " + element.backupReplaced;
+                        compressLocalStorage("teamData" + element.backup, team)
+                    }
                 }
             }
+            if (haveSchedule) {
+                announceDisplay()
+            }
+            $("#allianceUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"))
         }
-        if (haveSchedule) {
-            announceDisplay()
-        }
-        $("#allianceUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"))
     });
     if (localStorage.inPlayoffs === "true") {
         req2.send()
@@ -1696,34 +1714,36 @@ function getTeamAwards(teamNumber, year) {
     req.open('GET', apiURL + year + '/awards/' + teamNumber + "/");
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
-        teamLoadProgressBar++;
-        $('#teamloadprogressbar').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
-        $('#teamProgressBarLoading').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
-        var data = JSON.parse(req.responseText);
-        if (data.Awards !== '{"Awards":[]}') {
-            for (var i = 0; i < data.Awards.length; i++) {
-                awardName = data.Awards[i].name;
-                awardHilight = awardsHilight(awardName);
-                var j = 0;
-                awards += '<span class="awardsDepth' + String(j + 1) + '">' + awardHilight.before + String(year - j) + ' <span class="awardsEventName">' + eventNames[String(year - j)][data.Awards[i].eventCode] + '</span><span class="awardsEventCode">' + data.Awards[i].eventCode + '</span>: ' + awardName + awardHilight.after;
-                if (i === data.Awards.length - 1) {
-                    awards += '<span class="lastAward' + String(j + 1) + '"><span class="awardsSeparator1"> || </span><span class="awardsSeparator2"> // </span><span class="awardsSeparator3"><br></span></span></span>'
-                } else {
-                    awards += '<span class="awardsSeparator1"> || </span><span class="awardsSeparator2"> // </span><span class="awardsSeparator3"><br></span></span>'
+        if (req.status === 200) {
+            teamLoadProgressBar++;
+            $('#teamloadprogressbar').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
+            $('#teamProgressBarLoading').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
+            var data = JSON.parse(req.responseText);
+            if (data.Awards !== '{"Awards":[]}') {
+                for (var i = 0; i < data.Awards.length; i++) {
+                    awardName = data.Awards[i].name;
+                    awardHilight = awardsHilight(awardName);
+                    var j = 0;
+                    awards += '<span class="awardsDepth' + String(j + 1) + '">' + awardHilight.before + String(year - j) + ' <span class="awardsEventName">' + eventNames[String(year - j)][data.Awards[i].eventCode] + '</span><span class="awardsEventCode">' + data.Awards[i].eventCode + '</span>: ' + awardName + awardHilight.after;
+                    if (i === data.Awards.length - 1) {
+                        awards += '<span class="lastAward' + String(j + 1) + '"><span class="awardsSeparator1"> || </span><span class="awardsSeparator2"> // </span><span class="awardsSeparator3"><br></span></span></span>'
+                    } else {
+                        awards += '<span class="awardsSeparator1"> || </span><span class="awardsSeparator2"> // </span><span class="awardsSeparator3"><br></span></span>'
+                    }
                 }
             }
-        }
-        teamData.awards = awards;
-        compressLocalStorage("teamData" + teamNumber, teamData);
-        teamAwardCalls--;
-        if ((teamAwardCalls === 0) && (teamUpdateCalls === 0) && (lastSchedulePage)) {
-            $('#teamDataTabPicker').removeClass('alert-danger');
-            $('#teamDataTabPicker').addClass('alert-success');
-            $('#teamloadprogress').hide();
-            $('#teamProgressBar').hide();
-            teamLoadProgressBar = 0;
-            $('#teamloadprogressbar').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
-            $('#teamProgressBarLoading').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%")
+            teamData.awards = awards;
+            compressLocalStorage("teamData" + teamNumber, teamData);
+            teamAwardCalls--;
+            if ((teamAwardCalls === 0) && (teamUpdateCalls === 0) && (lastSchedulePage)) {
+                $('#teamDataTabPicker').removeClass('alert-danger');
+                $('#teamDataTabPicker').addClass('alert-success');
+                $('#teamloadprogress').hide();
+                $('#teamProgressBar').hide();
+                teamLoadProgressBar = 0;
+                $('#teamloadprogressbar').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
+                $('#teamProgressBarLoading').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%")
+            }
         }
     });
     if (teamData.rookieYear <= year) {
@@ -1741,13 +1761,15 @@ function getTeamData(teamList, year) {
             req.open('GET', apiURL + year + '/teamdata/' + team.teamNumber + "/");
             req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
             req.addEventListener('load', function () {
-                if (req.responseText.substr(0, 5) !== '"Team') {
-                    var data = JSON.parse(req.responseText);
-                    if (data.teams.length > 0) {
-                        var teamData = data.teams[0];
-                        $("#teamsTableBody").append(generateTeamTableRow(teamData));
-                        eventTeamList.push(data.teams[0]);
-                        resolve()
+                if (req.status === 200) {
+                    if (req.responseText.substr(0, 5) !== '"Team') {
+                        var data = JSON.parse(req.responseText);
+                        if (data.teams.length > 0) {
+                            var teamData = data.teams[0];
+                            $("#teamsTableBody").append(generateTeamTableRow(teamData));
+                            eventTeamList.push(data.teams[0]);
+                            resolve()
+                        }
                     }
                 }
             });
@@ -1766,24 +1788,26 @@ function scoreDetails(matchNumber, tournamentLevel) {
     req.open('GET', apiURL + localStorage.currentYear + '/scores/' + localStorage.currentEvent + "/" + tournamentLevel + "/" + matchNumber + "/" + matchNumber + "/");
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
-        if (req.responseText.substr(0, 5) !== '"Team') {
-            var data = JSON.parse(req.responseText).MatchScores[0];
-            var redAllianceScores, blueAllianceScores = [];
-            var scoreKeys = Object.keys(data.alliances[0]);
-            $("#scoreDetailsMatchNumber").html(data.matchNumber);
-            $("#scoreDetailsMatchLevel").html(data.matchLevel);
-            if (data.alliances[0].alliance === "Red") {
-                redAllianceScores = Object.values(data.alliances[0]);
-                blueAllianceScores = Object.values(data.alliances[1])
-            } else {
-                redAllianceScores = Object.values(data.alliances[1]);
-                blueAllianceScores = Object.values(data.alliances[0])
+        if (req.status === 200) {
+            if (req.responseText.substr(0, 5) !== '"Team') {
+                var data = JSON.parse(req.responseText).MatchScores[0];
+                var redAllianceScores, blueAllianceScores = [];
+                var scoreKeys = Object.keys(data.alliances[0]);
+                $("#scoreDetailsMatchNumber").html(data.matchNumber);
+                $("#scoreDetailsMatchLevel").html(data.matchLevel);
+                if (data.alliances[0].alliance === "Red") {
+                    redAllianceScores = Object.values(data.alliances[0]);
+                    blueAllianceScores = Object.values(data.alliances[1])
+                } else {
+                    redAllianceScores = Object.values(data.alliances[1]);
+                    blueAllianceScores = Object.values(data.alliances[0])
+                }
+                $("#scoreTableBody").empty();
+                for (var i = 0; i < scoreKeys.length; i++) {
+                    $("#scoreTableBody").append("<tr><td>" + scoreKeys[i] + " : " + redAllianceScores[i] + "</td><td>" + scoreKeys[i] + " : " + blueAllianceScores[i] + "</td></tr")
+                }
+                openTab(event, 'scoreDetails')
             }
-            $("#scoreTableBody").empty();
-            for (var i = 0; i < scoreKeys.length; i++) {
-                $("#scoreTableBody").append("<tr><td>" + scoreKeys[i] + " : " + redAllianceScores[i] + "</td><td>" + scoreKeys[i] + " : " + blueAllianceScores[i] + "</td></tr")
-            }
-            openTab(event, 'scoreDetails')
         }
     });
     req.send()

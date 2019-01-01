@@ -367,59 +367,61 @@ function loadEnvironment() {
                 req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
                 req.addEventListener('load', function () {
                     dialogRef.close();
-                    environment = JSON.parse(req.responseText);
-                    var environmentKeys = Object.keys(environment.localStorage);
-                    for (var i = 0; i < environmentKeys.length; i++) {
-                        if (environmentKeys[i].startsWith("teamData")) {
-                            localStorage[environmentKeys[i]] = environment.localStorage[environmentKeys[i]];
-                            compressLocalStorage(environmentKeys[i], JSON.parse(environment.localStorage[environmentKeys[i]]));
-                        } else {
-                            localStorage[environmentKeys[i]] = environment.localStorage[environmentKeys[i]];
-                        }
-                    }
-                    playoffResults = environment.playoffResults;
-                    allianceTeamList = environment.allianceTeamList;
-                    allianceListUnsorted = environment.allianceListUnsorted;
-                    rankingsList = environment.rankingsList;
-                    eventTeamList = environment.eventTeamList;
-                    eventQualsSchedule = environment.eventQualsSchedule;
-                    eventPlayoffSchedule = environment.eventPlayoffSchedule;
-                    currentAllianceChoice = environment.currentAllianceChoice;
-                    allianceChoices = environment.allianceChoices;
-                    replacementAlliance = environment.replacementAlliance;
-                    allianceChoicesUndo = environment.allianceChoicesUndo;
-                    allianceListUnsortedUndo = environment.allianceListUnsortedUndo;
-                    allianceTeamListUndo = environment.allianceTeamListUndo;
-                    teamNumberUndo = environment.teamNumberUndo;
-                    teamContainerUndo = environment.teamContainerUndo;
-                    lastMatchPlayed = environment.lastMatchPlayed;
-                    allianceSelectionTableUndo = environment.allianceSelectionTableUndo;
-                    currentMatchData = environment.currentMatchData;
-                    teamCountTotal = environment.teamCountTotal;
-                    haveRanks = environment.haveRanks;
-                    highScores = environment.highScores;
-                    currentEventList = environment.currentEventList;
-                    lastRanksUpdate = environment.lastRanksUpdate;
-                    lastQualsUpdate = environment.lastQualsUpdate;
-                    qualsComplete = environment.qualsComplete;
-                    haveSchedule = environment.haveSchedule;
-                    matchCount = environment.matchCount;
-                    allianceSelectionReady = environment.allianceSelectionReady;
-
-                    BootstrapDialog.show({
-                        message: "Environment loaded from gatool Cloud. Your local data has been replaced.",
-                        buttons: [{
-                            icon: 'glyphicon glyphicon-cloud-download',
-                            cssClass: 'btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton',
-                            label: 'OK',
-                            hotkey: 13, // Enter.
-                            title: 'OK',
-                            action: function (dialogRef) {
-                                dialogRef.close();
-                                location.reload();
+                    if (req.status === 200) {
+                        environment = JSON.parse(req.responseText);
+                        var environmentKeys = Object.keys(environment.localStorage);
+                        for (var i = 0; i < environmentKeys.length; i++) {
+                            if (environmentKeys[i].startsWith("teamData")) {
+                                localStorage[environmentKeys[i]] = environment.localStorage[environmentKeys[i]];
+                                compressLocalStorage(environmentKeys[i], JSON.parse(environment.localStorage[environmentKeys[i]]));
+                            } else {
+                                localStorage[environmentKeys[i]] = environment.localStorage[environmentKeys[i]];
                             }
-                        }]
-                    });
+                        }
+                        playoffResults = environment.playoffResults;
+                        allianceTeamList = environment.allianceTeamList;
+                        allianceListUnsorted = environment.allianceListUnsorted;
+                        rankingsList = environment.rankingsList;
+                        eventTeamList = environment.eventTeamList;
+                        eventQualsSchedule = environment.eventQualsSchedule;
+                        eventPlayoffSchedule = environment.eventPlayoffSchedule;
+                        currentAllianceChoice = environment.currentAllianceChoice;
+                        allianceChoices = environment.allianceChoices;
+                        replacementAlliance = environment.replacementAlliance;
+                        allianceChoicesUndo = environment.allianceChoicesUndo;
+                        allianceListUnsortedUndo = environment.allianceListUnsortedUndo;
+                        allianceTeamListUndo = environment.allianceTeamListUndo;
+                        teamNumberUndo = environment.teamNumberUndo;
+                        teamContainerUndo = environment.teamContainerUndo;
+                        lastMatchPlayed = environment.lastMatchPlayed;
+                        allianceSelectionTableUndo = environment.allianceSelectionTableUndo;
+                        currentMatchData = environment.currentMatchData;
+                        teamCountTotal = environment.teamCountTotal;
+                        haveRanks = environment.haveRanks;
+                        highScores = environment.highScores;
+                        currentEventList = environment.currentEventList;
+                        lastRanksUpdate = environment.lastRanksUpdate;
+                        lastQualsUpdate = environment.lastQualsUpdate;
+                        qualsComplete = environment.qualsComplete;
+                        haveSchedule = environment.haveSchedule;
+                        matchCount = environment.matchCount;
+                        allianceSelectionReady = environment.allianceSelectionReady;
+
+                        BootstrapDialog.show({
+                            message: "Environment loaded from gatool Cloud. Your local data has been replaced.",
+                            buttons: [{
+                                icon: 'glyphicon glyphicon-cloud-download',
+                                cssClass: 'btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton',
+                                label: 'OK',
+                                hotkey: 13, // Enter.
+                                title: 'OK',
+                                action: function (dialogRef) {
+                                    dialogRef.close();
+                                    location.reload();
+                                }
+                            }]
+                        });
+                    }
                 });
                 req.send();
 
