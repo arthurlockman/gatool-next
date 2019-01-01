@@ -69,7 +69,7 @@ var webAuth = new auth0.WebAuth({
     clientID: 'afsE1dlAGS609U32NjmvNMaYSQmtO3NT',
     responseType: 'token id_token',
     audience: 'https://gatool.auth0.com/userinfo',
-    scope: 'openid',
+    scope: 'openid email profile',
     redirectUri: window.location.href
 });
 

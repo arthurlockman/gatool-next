@@ -22,7 +22,7 @@ function getTeamUpdates(teamNumber, singleton) {
             teamData.teamNotesLocal = teamUpdates.teamNotesLocal;
             //localStorage["teamData" + teamNumber] = JSON.stringify(teamData);
             compressLocalStorage("teamData" + teamNumber, teamData);
-            
+
         }
         teamUpdateCalls--;
         if ((teamAwardCalls === 0) && (teamUpdateCalls === 0) && (lastSchedulePage)) {
@@ -88,7 +88,7 @@ function sendTeamUpdates(teamNumber, singleton) {
     teamUpdates.awardsLocal = teamData.awardsLocal;
     teamUpdates.teamMottoLocal = teamData.teamMottoLocal;
     teamUpdates.teamNotesLocal = teamData.teamNotesLocal;
-    teamUpdates.source = getCookie("loggedin");
+    teamUpdates.source = parseJwt(localStorage.getItem("token")).email;
     req.open('PUT', apiURL + 'team/' + teamNumber + '/updates');
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
