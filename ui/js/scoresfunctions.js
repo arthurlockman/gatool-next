@@ -24,7 +24,11 @@ function getEventScores(eventCode, type, year, tlevel) {
         req.open('GET', apiURL + year + '/schedule/' + eventCode + "/" + tlevel + "?returnschedule=false");
         req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
         req.addEventListener('load', function () {
-            resolve(JSON.parse(req.responseText));
+            if (req.status === 200) {
+                resolve(JSON.parse(req.responseText));
+            } else {
+                reject(req.statusText);
+            }
         });
         req.send();
     });

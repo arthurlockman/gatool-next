@@ -716,10 +716,11 @@ function getRegularSeasonSchedule() {
                 }
                 $('#scheduleTabPicker').removeClass('alert-danger');
                 $('#scheduleTabPicker').addClass('alert-success');
-                matchCount = parseInt(Number(JSON.parse(localStorage.qualsList).Schedule.length) * 6 / Number(JSON.parse(localStorage.teamList).length))
+                matchCount = parseInt(Number(JSON.parse(localStorage.qualsList).Schedule.length) * 6 / Number(JSON.parse(localStorage.teamList).length));
+                $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a") + "... and looking for Playoff schedule...");
+                req1.send()
             }
-            $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a") + "... and looking for Playoff schedule...");
-            req1.send()
+
         }
     });
     var req1 = new XMLHttpRequest();
