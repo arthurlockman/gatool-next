@@ -117,6 +117,7 @@ const GetTeamAvatar: Handler = (event: APIGatewayEvent, context: Context, callba
     });
 };
 
+// noinspection JSUnusedGlobalSymbols
 const GetEventHighScores: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
     return GetDataFromFIRST(`${event.pathParameters.year}/events/`).then( (eventList) => {
         const evtList = eventList.Events.filter(evt => evt.code === event.pathParameters.eventCode);

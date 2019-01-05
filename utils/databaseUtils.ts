@@ -9,7 +9,7 @@ const DynamoDB = new AWS.DynamoDB.DocumentClient({region: process.env.SERVICE_AW
  * @param level The competition level (qual or playoff)
  * @param match The match to store
  */
-function StoreHighScore(year: string, type: string, level: string, match: MatchWithHighScoreDetails): Promise<any> {
+const StoreHighScore = (year: string, type: string, level: string, match: MatchWithHighScoreDetails): Promise<any> => {
     const params = {
         TableName: 'HighScoresTable',
         Item: {
@@ -28,23 +28,23 @@ function StoreHighScore(year: string, type: string, level: string, match: MatchW
             return Promise.resolve();
         }
     }).promise();
-}
+};
 
 /**
  * Get all high scores from the database.
  */
-function GetHighScoresFromDb(): Promise<any> {
+const GetHighScoresFromDb = (): Promise<any> => {
     const params = {
         TableName: 'HighScoresTable'
     };
     return DynamoDB.scan(params).promise();
-}
+};
 
 /**
  * Get the team updates for a particular team.
  * @param teamNumber The team number to retrieve.
  */
-function GetTeamUpdatesForTeam(teamNumber: string): Promise<any> {
+const GetTeamUpdatesForTeam = (teamNumber: string): Promise<any> => {
     const params = {
         TableName: 'TeamUpdatesTable',
         Key: {
@@ -52,14 +52,14 @@ function GetTeamUpdatesForTeam(teamNumber: string): Promise<any> {
         }
     };
     return DynamoDB.get(params).promise();
-}
+};
 
 /**
  * Store the team update for a particular team.
  * @param teamNumber The team number.
  * @param updateData The update data to store.
  */
-function StoreTeamUpdateForTeam(teamNumber: string, updateData: any): Promise<any> {
+const StoreTeamUpdateForTeam = (teamNumber: string, updateData: any): Promise<any> => {
     const params = {
         TableName: 'TeamUpdatesTable',
         Item: {
@@ -75,6 +75,6 @@ function StoreTeamUpdateForTeam(teamNumber: string, updateData: any): Promise<an
             return Promise.resolve();
         }
     }).promise();
-}
+};
 
 export {StoreHighScore, GetHighScoresFromDb, GetTeamUpdatesForTeam, StoreTeamUpdateForTeam}
