@@ -207,6 +207,9 @@ color: black;
 	border: 1px solid #ccc;
 	background-color: white
 }
+.gatool-sponsors {
+    margin-top: 30px
+}
 .gatool-footer {
 	/*position: fixed;
     left: 0;
