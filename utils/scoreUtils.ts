@@ -4,7 +4,7 @@ import {MatchWithEventDetails, MatchWithHighScoreDetails} from '../model/match';
  * Finds the highest score of a list of matches
  * @param matches Matches to find the highest score of
  */
-function FindHighestScore(matches: MatchWithEventDetails[]): MatchWithHighScoreDetails {
+const FindHighestScore = (matches: MatchWithEventDetails[]): MatchWithHighScoreDetails => {
     let highScore = 0;
     let alliance = '';
     let _match: MatchWithEventDetails;
@@ -25,6 +25,6 @@ function FindHighestScore(matches: MatchWithEventDetails[]): MatchWithHighScoreD
         highScoreAlliance: alliance,
         match: _match.match
     };
-}
+};
 
 export {FindHighestScore}

@@ -7,7 +7,7 @@ service: GAToolBackend
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   region: us-east-1
   role: arn:aws:iam::336977810532:role/service-role/GAToolRole
   stage: production
@@ -16,7 +16,7 @@ provider:
     FRC_API_KEY: ${ssm:frc-api-key~true}
     TBA_API_HEADER: ${ssm:tba-api-header~true}
     TBA_API_KEY: ${ssm:tba-api-token~true}
-    FRC_CURRENT_SEASON: 2018
+    FRC_CURRENT_SEASON: 2019
     HIGH_SCORES_TABLE_NAME: HighScoresTable
     TEAM_UPDATES_TABLE_NAME: TeamUpdatesTable
     WEBSITE_BUCKET: gatoolwebsite

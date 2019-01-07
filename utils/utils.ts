@@ -8,20 +8,20 @@ const rp = require('request-promise');
  * @param path The path on the FIRST API to call
  * @param callback The lambda callback to return the data
  */
-function GetDataFromFIRSTAndReturn(path: string, callback: any) {
+const GetDataFromFIRSTAndReturn = (path: string, callback: any) => {
     return GetDataFromFIRST(path).then((body) => {
         console.log(body);
         ReturnJsonWithCode(200, body, callback);
     }).catch(rejection => {
         ReturnJsonWithCode(parseInt(rejection.response.statusCode, 10), rejection.response.body, callback);
     });
-}
+};
 
 /**
  * Get data from FIRST and return a promise
  * @param path The path to GET data from
  */
-function GetDataFromFIRST(path: string): Promise<any> {
+const GetDataFromFIRST = (path: string): Promise<any> => {
     try {
         const options = {
             method: 'GET',
@@ -36,7 +36,7 @@ function GetDataFromFIRST(path: string): Promise<any> {
     } catch (err) {
         return Promise.reject(err);
     }
-}
+};
 
 /**
  * Get data from FIRST for team avatars
@@ -68,7 +68,7 @@ const GetAvatarData = (year: string, eventCode: string, page?: number): Promise<
  * @param body The body data (JSON) to return
  * @param callback The lambda callback function
  */
-function ReturnJsonWithCode(statusCode: number, body: any, callback: any) {
+const ReturnJsonWithCode = (statusCode: number, body: any, callback: any) => {
     return callback(null, {
         statusCode: statusCode,
         body: JSON.stringify(body),
@@ -80,7 +80,7 @@ function ReturnJsonWithCode(statusCode: number, body: any, callback: any) {
         },
         isBase64Encoded: false
     });
-}
+};
 
 /**
  * Build a JSON object for a high score
