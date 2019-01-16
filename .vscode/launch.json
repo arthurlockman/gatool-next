@@ -5,7 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-         "name": "Debug",
+            "name": "Debug Website",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:63342/gatool-next/ui/index.html",
+            "webRoot": "${workspaceFolder}/ui"
+        },
+        {
+         "name": "Serverless Debug",
          "type": "node",
          "request": "launch",
          "cwd": "${workspaceRoot}",
@@ -16,5 +23,5 @@
          ],
          "port": 9229
         }
-       ]
+    ]
 }
