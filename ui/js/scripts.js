@@ -1130,7 +1130,7 @@ function getAvatars() {
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         if (req.status === 200) {
-            console.log(req.responseText);
+
             var data = JSON.parse(req.responseText);
             var teamData = {};
             for (var i = 0; i < data.teams.length; i++) {
@@ -1805,6 +1805,7 @@ function getTeamAwards(teamNumber, year) {
     var awards = "";
     var eventNames = [];
     eventNames[String(year)] = JSON.parse(localStorage.events);
+    eventNames["2018"] = events2018;
     eventNames["2017"] = events2017;
     eventNames["2016"] = events2016;
     eventNames["2015"] = events2015;
@@ -2036,7 +2037,7 @@ function updateTeamTableRow(teamData) {
     var returnData = '<tr class="teamsTableRow"><td class = "btn-default" id="teamTableNumber' + teamData.teamNumber + '" onclick="updateTeamInfo(' + teamData.teamNumber + ')"><span class="teamDataNumber">' + teamData.teamNumber + '</span><br><span id="lastVisit' + teamData.teamNumber + '" teamNumber = "' + teamData.teamNumber + '"  lastvisit = "' + teamInfo.lastVisit + '">' + lastVisit + '</span></td>';
     returnData += '<td id="teamTableRank' + teamData.teamNumber + '" class="rank0"></td>';
     if ((teamInfo.avatar !== "null") && (Number(localStorage.currentYear) >= 2018 && (typeof teamInfo !== "undefined"))) {
-        avatar = '<img src="' + teamInfo.avatar + '">&nbsp;'
+        avatar = '<img src="https://www.gatool.org/' + teamInfo.avatar + '">&nbsp;'
     }
     if (teamInfo.nameShortLocal === "") {
         returnData += '<td id="teamTableName' + teamData.teamNumber + '">' + '<span id="avatar' + teamData.teamNumber + '">' + avatar + '</span><span class="teamTableName">' + teamInfo.nameShort + '</span></td>'
@@ -2044,9 +2045,9 @@ function updateTeamTableRow(teamData) {
         returnData += '<td  class="bg-success" id="teamTableName' + teamData.teamNumber + '">' + '<span id="avatar' + teamData.teamNumber + '">' + avatar + '</span><span class="teamTableName">' + teamInfo.nameShortLocal + '</span></td>'
     }
     if (teamInfo.cityStateLocal === "") {
-        returnData += '<td id="teamTableCityState' + teamData.teamNumber + '">' + teamInfo.cityState + '</td>'
+        returnData += '<td id="teamTableCityState' + teamData.teamNumber + '">' + teamInfo.cityState + '<span class="cityStateSort">' + teamInfo.cityStateSort + '</span></td>'
     } else {
-        returnData += '<td  class="bg-success" id="teamTableCityState' + teamData.teamNumber + '">' + teamInfo.cityStateLocal + '</td>'
+        returnData += '<td  class="bg-success" id="teamTableCityState' + teamData.teamNumber + '">' + teamInfo.cityStateLocal + '<span class="cityStateSort">' + teamInfo.cityStateSort + '</span></td>'
     }
     if (teamInfo.topSponsorsLocal === "") {
         returnData += '<td id="teamTableNameFull' + teamData.teamNumber + '">' + teamInfo.topSponsors + '</td>'
@@ -2068,6 +2069,7 @@ function updateTeamTableRow(teamData) {
             returnData += '<td  class="bg-success" id="teamTableRobotName' + teamData.teamNumber + '">' + teamInfo.robotNameLocal + '</td>'
         }
     }
+    returnData += '<td class = "cityStateSort">' + teamInfo.cityStateSort + '</td>';
     return returnData + '</tr>'
 }
 
@@ -2183,7 +2185,7 @@ function generateTeamTableRow(teamData) {
     returnData += '<tr class="teamsTableRow"><td class = "btn-default" id="teamTableNumber' + teamData.teamNumber + '" onclick="updateTeamInfo(' + teamData.teamNumber + ')"><span class="teamDataNumber">' + teamData.teamNumber + '</span><br><span id="lastVisit' + teamData.teamNumber + '" teamNumber = "' + teamData.teamNumber + '" lastvisit = "' + teamInfo.lastVisit + '">' + lastVisit + '</span></td>';
     returnData += '<td id="teamTableRank' + teamData.teamNumber + '" class="rank0"></td>';
     if ((teamInfo.avatar !== "null") && (Number(localStorage.currentYear) >= 2018)) {
-        avatar = '<img src="' + teamInfo.avatar + '">&nbsp;'
+        avatar = '<img src="https://www.gatool.org/' + teamInfo.avatar + '">&nbsp;'
     }
     if (teamInfo.nameShortLocal === "") {
         returnData += '<td id="teamTableName' + teamData.teamNumber + '">' + '<span id="avatar' + teamData.teamNumber + '">' + avatar + '</span><span class="teamTableName">' + teamInfo.nameShort + '</span></td>'
@@ -2191,9 +2193,9 @@ function generateTeamTableRow(teamData) {
         returnData += '<td  class="bg-success" id="teamTableName' + teamData.teamNumber + '">' + '<span id="avatar' + teamData.teamNumber + '">' + avatar + '</span><span class="teamTableName">' + teamInfo.nameShortLocal + '</span></td>'
     }
     if (teamInfo.cityStateLocal === "") {
-        returnData += '<td id="teamTableCityState' + teamData.teamNumber + '">' + teamData.city + ", " + teamData.stateProv + '</td>'
+        returnData += '<td id="teamTableCityState' + teamData.teamNumber + '">' + teamData.city + ", " + teamData.stateProv + '<span class="cityStateSort">' + teamInfo.cityStateSort + '</span></td>'
     } else {
-        returnData += '<td  class="bg-success" id="teamTableCityState' + teamData.teamNumber + '">' + teamInfo.cityStateLocal + '</td>'
+        returnData += '<td  class="bg-success" id="teamTableCityState' + teamData.teamNumber + '">' + teamInfo.cityStateLocal + '<span class="cityStateSort">' + teamInfo.cityStateSort + '</span></td>'
     }
     if (teamInfo.topSponsorsLocal === "") {
         returnData += '<td id="teamTableNameFull' + teamData.teamNumber + '">' + topSponsors + '</td>'
