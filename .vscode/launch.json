@@ -1,27 +1,27 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Debug Website",
-            "type": "chrome",
-            "request": "launch",
-            "url": "http://localhost:63342/gatool-next/ui/index.html",
-            "webRoot": "${workspaceFolder}/ui"
-        },
-        {
-         "name": "Serverless Debug",
-         "type": "node",
-         "request": "launch",
-         "cwd": "${workspaceRoot}",
-         "runtimeExecutable": "npm",
-         "runtimeArgs": [
-          "run-script",
-          "debug"
-         ],
-         "port": 9229
-        }
-    ]
-}
+        // Use IntelliSense to learn about possible attributes.
+        // Hover to view descriptions of existing attributes.
+        // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Debug Website",
+                "type": "chrome",
+                "request": "launch",
+                "url": "https://gatool:63342",
+                "webRoot": "${workspaceFolder}/ui"
+            },
+            {
+             "name": "Serverless Debug",
+             "type": "node",
+             "request": "launch",
+             "cwd": "${workspaceRoot}",
+             "runtimeExecutable": "npm",
+             "runtimeArgs": [
+              "run-script",
+              "debug"
+             ],
+             "port": 9229
+            }
+        ]
+    }

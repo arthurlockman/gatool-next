@@ -1,3 +1,9 @@
+/*global moment */
+/*global BootstrapDialog */
+/*global Base64 */
+
+//Create the localStorage variables if they don't exist
+
 if (!localStorage.currentMatch) {
     localStorage.currentMatch = 1
 }
@@ -55,15 +61,28 @@ if (!localStorage.currentEventList) {
 if (!localStorage.autoAdvance) {
     localStorage.autoAdvance = "true"
 }
+
+// reset some of those variables, which will be adjusted later.
 localStorage.clock = "ready";
 localStorage.matchHighScore = 0;
 localStorage.highScoreDetails = "{}";
+
+//This heartbeat performs a number of functions related to clocks. See the timer() function for details.
 var matchTimer = setInterval(function () {
     "use strict";
     timer()
 }, 1000);
+
+//this heartbeat checks the world high scores every 5 minutes.
+//var highScoresTimer = setInterval(function () {
+//    "use strict";
+//    getSeasonHighScores(2018);
+//}, 300000);
+
+//The apiURL determines the endpoint for API calls. 
 var apiURL = "https://www.gatool.org/api/";
 
+//Now that we have the variables all set up and all of the necessary JS and CSS are loaded, we can run the app.
 var webAuth = new auth0.WebAuth({
     domain: 'gatool.auth0.com',
     clientID: 'afsE1dlAGS609U32NjmvNMaYSQmtO3NT',
@@ -90,12 +109,26 @@ function handleAuthentication() {
 window.onload = function () {
     "use strict";
     login();
+
+    //hide the schedule progress bar. We'll show it if we need it.
     $('#scheduleProgressBar').hide();
+
+    //hide the EI and RIA portion of the Awards Screen until we need it.
+    $("#districtChampsAwards").hide();
+
+    //change the Select Picker behavior to support Mobile browsers with native controls
+	//if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
+	//        $('.selectpicker').selectpicker('mobile');
+	//    }
     $("#loadingFeedback").html("Restoring settings...");
+    //Set the controls to the previous selected values
+	//Set currentYear value
     if (localStorage.currentYear) {
         document.getElementById("yearPicker" + localStorage.currentYear).selected = !0;
         $("#yearPicker").selectpicker('refresh')
     }
+
+    //Set awardSeparator value
     if (localStorage.awardSeparator === " || ") {
         document.getElementById("awardSeparator1").selected = !0
     } else if (localStorage.awardSeparator === " // ") {
@@ -107,18 +140,29 @@ window.onload = function () {
         document.getElementById("awardSeparator3").selected = !0
     }
     $("#awardSeparatorPicker").selectpicker('refresh');
+
+    //Set awardDepth value
     $("#awardDepthPicker").selectpicker('val', localStorage.awardDepth);
+
+    //Set Event Filter values
     $("#eventFilters").selectpicker('val', JSON.parse(localStorage.eventFilters));
+
     $("#loadingFeedback").html("Enabling controls...");
+
+    //Configure the yearPicker function
     document.getElementById('yearPicker').onchange = function () {
         localStorage.currentYear = $("#yearPicker").val();
         localStorage.removeItem("eventSelector");
         loadEventsList();
         initEnvironment()
     };
+
+    //configure the Event Selector function
     document.getElementById('eventSelector').onchange = function () {
         handleEventSelection()
     };
+
+    //Setup the switches on the Setup Screen
     $("[name='showSponsors']").bootstrapSwitch('state', (localStorage.showSponsors === "true"));
     $("[name='showAwards']").bootstrapSwitch('state', (localStorage.showAwards === "true"));
     $("[name='showNotes']").bootstrapSwitch('state', (localStorage.showNotes === "true"));
@@ -126,36 +170,51 @@ window.onload = function () {
     $("[name='showEventNames']").bootstrapSwitch('state', (localStorage.showEventNames === "true"));
     $("[name='autoAdvance']").bootstrapSwitch('state', (localStorage.autoAdvance === "true"));
     $("[name='offseason']").bootstrapSwitch('state', (localStorage.offseason === "true"));
+
+    //Ensure that the switch values are honored.
+	// Handle Sponsors toggle during loading.
     if ($("#showSponsors").bootstrapSwitch('state')) {
         $(".sponsors").show()
     } else {
         $(".sponsors").hide()
     }
+
+    // Handle Awards toggle during loading.
     if ($("#showAwards").bootstrapSwitch('state')) {
         $(".awards").show()
     } else {
         $(".awards").hide()
     }
+
+    // Handle Notes toggle during loading.
     if ($("#showNotes").bootstrapSwitch('state')) {
         $(".notes").show()
     } else {
         $(".notes").hide()
     }
+
+    // Handle Mottoes toggle during loading.
     if ($("#showMottoes").bootstrapSwitch('state')) {
         $(".mottoes").show()
     } else {
         $(".mottoes").hide()
     }
+
+    // Handle Event Names toggle during loading.
     if ($("#showEventNames").bootstrapSwitch('state')) {
         localStorage.showEventNames = "true"
     } else {
         localStorage.showEventNames = "false"
     }
+
+    // Handle Auto Advance toggle during loading.
     if ($("#autoAdvance").bootstrapSwitch('state')) {
         localStorage.autoAdvance = "true"
     } else {
         localStorage.autoAdvance = "false"
     }
+
+    // Handle Offseason toggle during loading. Hide and show offseason annotations in the Setup/Schedule display.
     if ($("#offseason").bootstrapSwitch('state')) {
         $(".offseason").show();
         $(".regularseason").hide()
@@ -163,6 +222,8 @@ window.onload = function () {
         $(".offseason").hide();
         $(".regularseason").show()
     }
+
+    // Handle Sponsors toggle. Hide and show sponsors in the announce/PBP display.
     document.getElementById("showSponsors").onchange = function () {
         localStorage.showSponsors = $("#showSponsors").bootstrapSwitch('state');
         if ($("#showSponsors").bootstrapSwitch('state')) {
@@ -171,6 +232,8 @@ window.onload = function () {
             $(".sponsors").hide()
         }
     };
+
+	// Handle Awards toggle. Hide and show awards in the announce/PBP display.
     document.getElementById("showAwards").onchange = function () {
         localStorage.showAwards = $("#showAwards").bootstrapSwitch('state');
         if ($("#showAwards").bootstrapSwitch('state')) {
@@ -179,6 +242,8 @@ window.onload = function () {
             $(".awards").hide()
         }
     };
+
+	// Handle Notes toggle. Hide and show Notes in the announce/PBP display.
     document.getElementById("showNotes").onchange = function () {
         localStorage.showNotes = $("#showNotes").bootstrapSwitch('state');
         if ($("#showNotes").bootstrapSwitch('state')) {
@@ -187,6 +252,7 @@ window.onload = function () {
             $(".notes").hide()
         }
     };
+	// Handle Mottoes toggle. Hide and show mottoes in the announce/PBP display.
     document.getElementById("showMottoes").onchange = function () {
         localStorage.showMottoes = $("#showMottoes").bootstrapSwitch('state');
         if ($("#showMottoes").bootstrapSwitch('state')) {
@@ -195,6 +261,8 @@ window.onload = function () {
             $(".mottoes").hide()
         }
     };
+
+	//Handle offseason toggle. Hide and show regular season items and offseason items, accordingly.
     document.getElementById("offseason").onchange = function () {
         localStorage.offseason = $("#offseason").bootstrapSwitch('state');
         if ($("#offseason").bootstrapSwitch('state')) {
@@ -207,10 +275,14 @@ window.onload = function () {
         localStorage.removeItem("eventSelector");
         loadEventsList()
     };
+
+	//Handle a change in awards depth
     document.getElementById('awardDepthPicker').onchange = function () {
         localStorage.awardDepth = $("#awardDepthPicker").val();
         displayAwards()
     };
+
+	//Handle a change in awards separator
     document.getElementById('awardSeparatorPicker').onchange = function () {
         if ($("#awardSeparatorPicker").val() === "||") {
             localStorage.awardSeparator = " || "
@@ -221,6 +293,8 @@ window.onload = function () {
         }
         displayAwards()
     };
+
+	//Handle a change in Event Name Display
     document.getElementById('showEventNames').onchange = function () {
         if ($("#showEventNames").bootstrapSwitch('state')) {
             localStorage.showEventNames = "true"
@@ -229,6 +303,8 @@ window.onload = function () {
         }
         displayAwards()
     };
+
+	//Handle a change in autoAdvance
     document.getElementById('autoAdvance').onchange = function () {
         if ($("#autoAdvance").bootstrapSwitch('state')) {
             localStorage.autoAdvance = "true"
@@ -236,30 +312,45 @@ window.onload = function () {
             localStorage.autoAdvance = "false"
         }
     };
+
+	//Handle Event Filter change
     document.getElementById('eventFilters').onchange = function () {
         filterEvents()
     };
+
     $("#loadingFeedback").html("Setting up offseason mode...");
+    
+    //Setup the Offseason schedule upload and reset buttons. See their respective fuctions for details.
     document.getElementById("QualsFiles").addEventListener('change', handleQualsFiles, !1);
     document.getElementById("PlayoffFiles").addEventListener('change', handlePlayoffFiles, !1);
     document.getElementById("QualsFilesReset").addEventListener('click', handleQualsFilesReset, !1);
     document.getElementById("PlayoffFilesReset").addEventListener('click', handlePlayoffFilesReset, !1);
+
+	//setup the Offseason Tab
     $('#offseasonTeamListToJSON').click(function () {
+        //Example: var parseOutput = CSVParser.parse(this.inputText, this.headersProvided, this.delimiter, this.downcaseHeaders, this.upcaseHeaders);
+		//console.log("starting conversion");
         var inbound = $("#offSeasonTeamListInput").val();
         var outbound = CSVParser.parse(inbound, !0, "auto", !1, !1);
         if (outbound.errors) {
             alert("Errors in the input:\n" + outbound.errors)
         } else {
+			//Example: jsonResult = JSON.parse(toJSON(outbound.dataGrid,outbound.headerNames,outbound.headerTypes,""));
             localStorage.teamList = toJSON(outbound.dataGrid, outbound.headerNames, outbound.headerTypes, "");
             eventTeamList = JSON.parse(localStorage.teamList);
             alert("Converted Result:\n" + localStorage.teamList);
             updateTeamTable()
         }
     });
-    $('#cheatSheetImage').html('<img src="images/Power-Up-Cheatsheet-gatool.png" width="100%" alt="Steamworks Cheatsheet">');
+
+    //Add the image to the cheat sheet. We do this late so that other items will load first.
+    $('#cheatSheetImage').html('<img src="images/Power-Up-Cheatsheet-gatool.png" width="100%" alt="Cheatsheet">');
     $('#allianceSelectionTable').hide();
     $('#allianceUndoButton').hide();
+
+	//Load the events list based on the restored values
     loadEventsList();
+
     scaleRows();
     document.getElementById('setupTabPicker').click();
     $("#loadingFeedback").html("gatool ready to play!");
@@ -326,6 +417,7 @@ function logout() {
 
 function displayAwards() {
     "use strict";
+    //Handle awardSeparator value
     $(".awardsSeparator1,.awardsSeparator2,.awardsSeparator3").hide();
     if (localStorage.awardSeparator === " || ") {
         $(".awardsSeparator1").show()
@@ -336,6 +428,8 @@ function displayAwards() {
     } else {
         $(".awardsSeparator3").show()
     }
+
+    //Handle awardDepth value
     $(".awardsDepth1,.awardsDepth2,.awardsDepth3").show();
     $(".lastAward1,.lastAward2,.lastAward3").hide();
     if (localStorage.awardDepth === "1") {
@@ -346,6 +440,8 @@ function displayAwards() {
     } else {
         $(".lastAward1,.lastAward2").show()
     }
+
+    //Handle Event Names switch
     if (localStorage.showEventNames === "true") {
         $(".awardsEventName").show();
         $(".awardsEventCode").hide()
@@ -421,6 +517,7 @@ function handleEventSelection() {
     clearFileInput("PlayoffFiles");
     document.getElementById("QualsFiles").addEventListener('change', handleQualsFiles, !1);
     document.getElementById("PlayoffFiles").addEventListener('change', handlePlayoffFiles, !1);
+
     eventTeamList = [];
     haveRanks = !1;
     haveSchedule = !1;
@@ -441,10 +538,12 @@ function handleEventSelection() {
     lastMatchPlayed = 0;
     teamUpdateCalls = 0;
     teamAwardCalls = 0;
+
     var e = document.getElementById('eventSelector');
     var data = JSON.parse(e.value);
     localStorage.eventSelector = data.code;
     localStorage.currentEvent = data.code;
+
     $('#eventCodeContainer').html(data.code);
     $('#eventLocationContainer').html(data.venue + "" + " in " + data.city + ", " + data.stateprov + " " + data.country);
     var startDate = moment(data.dateStart, 'YYYY-MM-DDTHH:mm:ss').format('dddd, MMMM Do');
@@ -955,7 +1054,7 @@ function getTeamList(year, pageNumber) {
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         if (req.status === 200) {
-            var data = "";
+            var data = {};
             $('#teamloadprogress').show();
             $('#teamProgressBar').show();
             if (pageNumber === 1) {
@@ -970,7 +1069,7 @@ function getTeamList(year, pageNumber) {
                 $('#teamsTableEventName').html('Event team list unavailable.');
                 $("#eventTeamCount").html(data.teamCountTotal);
                 teamCountTotal = data.teamCountTotal;
-                localStorage.teamList = ""
+                localStorage.teamList = "[]"
             } else {
                 if (pageNumber === 1) {
                     $("#eventTeamCount").html(data.teamCountTotal);
@@ -1031,6 +1130,7 @@ function getAvatars() {
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         if (req.status === 200) {
+            console.log(req.responseText);
             var data = JSON.parse(req.responseText);
             var teamData = {};
             for (var i = 0; i < data.teams.length; i++) {
@@ -1038,7 +1138,7 @@ function getAvatars() {
                     teamData = decompressLocalStorage("teamData" + data.teams[i].teamNumber);
                     if (data.teams[i].encodedAvatar !== null) {
                         teamData.avatar = data.teams[i].encodedAvatar;
-                        $("#avatar" + data.teams[i].teamNumber).html('<img src="' + data.teams[i].encodedAvatar + '">&nbsp;')
+                        $("#avatar" + data.teams[i].teamNumber).html('<img src="https://www.gatool.org/' + data.teams[i].encodedAvatar + '">&nbsp;')
                     } else {
                         teamData.avatar = "null";
                         $("#avatar" + data.teams[i].teamNumber).html("")
