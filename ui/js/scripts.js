@@ -344,7 +344,7 @@ window.onload = function () {
     });
 
     //Add the image to the cheat sheet. We do this late so that other items will load first.
-    $('#cheatSheetImage').html('<img src="images/Power-Up-Cheatsheet-gatool.png" width="100%" alt="Cheatsheet">');
+    $('#cheatSheetImage').html('<img src="images/deep_space_cheat_sheet.png" width="100%" alt="Cheatsheet">');
     $('#allianceSelectionTable').hide();
     $('#allianceUndoButton').hide();
 
