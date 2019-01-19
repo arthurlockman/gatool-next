@@ -49,7 +49,9 @@ const GetHistoricTeamAwards: Handler = (event: APIGatewayEvent, context: Context
                 ReturnJsonWithCode(200, awardList, callback);
             });
         }).catch(err => {
-            ReturnJsonWithCode(200, currentYearAwards, callback);
+            const awardList = {};
+            awardList[`${currentSeason}`] = currentYearAwards;
+            ReturnJsonWithCode(200, awardList, callback);
         });
     });
 };
