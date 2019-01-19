@@ -32,6 +32,29 @@ const GetTeamAwards: Handler = (event: APIGatewayEvent, context: Context, callba
 };
 
 // noinspection JSUnusedGlobalSymbols
+const GetHistoricTeamAwards: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+    const currentSeason = parseInt(process.env.FRC_CURRENT_SEASON, 10);
+    GetDataFromFIRST(`${currentSeason}/awards/${event.pathParameters.teamNumber}`).then(currentYearAwards => {
+        GetDataFromFIRST(`${currentSeason - 1}/awards/${event.pathParameters.teamNumber}`).then(pastYearAwards => {
+            GetDataFromFIRST(`${currentSeason - 2}/awards/${event.pathParameters.teamNumber}`).then(secondYearAwards => {
+                const awardList = {};
+                awardList[`${currentSeason}`] = currentYearAwards;
+                awardList[`${currentSeason - 1}`] = pastYearAwards;
+                awardList[`${currentSeason - 2}`] = secondYearAwards;
+                ReturnJsonWithCode(200, awardList, callback);
+            }).catch(err => {
+                const awardList = {};
+                awardList[`${currentSeason}`] = currentYearAwards;
+                awardList[`${currentSeason - 1}`] = pastYearAwards;
+                ReturnJsonWithCode(200, awardList, callback);
+            });
+        }).catch(err => {
+            ReturnJsonWithCode(200, currentYearAwards, callback);
+        });
+    });
+};
+
+// noinspection JSUnusedGlobalSymbols
 const GetEventScores: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
     const range = (event.pathParameters.start === event.pathParameters.end) ?
         '?matchNumber=' + event.pathParameters.start :
@@ -394,7 +417,7 @@ const Authorize: Handler = (event: CustomAuthorizerEvent, context: Context, call
 export {GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedule, GetEventAvatars,
     UpdateHighScores, GetHighScores, GetOffseasonEvents, GetEventAlliances, GetEventRankings,
     Authorize, GetTeamAvatar, GetEventHighScores, GetTeamUpdates, PutTeamUpdates, GetUserPreferences,
-    PutUserPreferences}
+    PutUserPreferences, GetHistoricTeamAwards}
 
 // Handle unexpected application errors
 process.on('unhandledRejection', (reason, p) => {
