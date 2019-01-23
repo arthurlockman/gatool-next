@@ -117,12 +117,12 @@ window.onload = function () {
     $("#districtChampsAwards").hide();
 
     //change the Select Picker behavior to support Mobile browsers with native controls
-	//if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
-	//        $('.selectpicker').selectpicker('mobile');
-	//    }
+    //if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
+    //        $('.selectpicker').selectpicker('mobile');
+    //    }
     $("#loadingFeedback").html("Restoring settings...");
     //Set the controls to the previous selected values
-	//Set currentYear value
+    //Set currentYear value
     if (localStorage.currentYear) {
         document.getElementById("yearPicker" + localStorage.currentYear).selected = !0;
         $("#yearPicker").selectpicker('refresh')
@@ -172,7 +172,7 @@ window.onload = function () {
     $("[name='offseason']").bootstrapSwitch('state', (localStorage.offseason === "true"));
 
     //Ensure that the switch values are honored.
-	// Handle Sponsors toggle during loading.
+    // Handle Sponsors toggle during loading.
     if ($("#showSponsors").bootstrapSwitch('state')) {
         $(".sponsors").show()
     } else {
@@ -233,7 +233,7 @@ window.onload = function () {
         }
     };
 
-	// Handle Awards toggle. Hide and show awards in the announce/PBP display.
+    // Handle Awards toggle. Hide and show awards in the announce/PBP display.
     document.getElementById("showAwards").onchange = function () {
         localStorage.showAwards = $("#showAwards").bootstrapSwitch('state');
         if ($("#showAwards").bootstrapSwitch('state')) {
@@ -243,7 +243,7 @@ window.onload = function () {
         }
     };
 
-	// Handle Notes toggle. Hide and show Notes in the announce/PBP display.
+    // Handle Notes toggle. Hide and show Notes in the announce/PBP display.
     document.getElementById("showNotes").onchange = function () {
         localStorage.showNotes = $("#showNotes").bootstrapSwitch('state');
         if ($("#showNotes").bootstrapSwitch('state')) {
@@ -252,7 +252,7 @@ window.onload = function () {
             $(".notes").hide()
         }
     };
-	// Handle Mottoes toggle. Hide and show mottoes in the announce/PBP display.
+    // Handle Mottoes toggle. Hide and show mottoes in the announce/PBP display.
     document.getElementById("showMottoes").onchange = function () {
         localStorage.showMottoes = $("#showMottoes").bootstrapSwitch('state');
         if ($("#showMottoes").bootstrapSwitch('state')) {
@@ -262,7 +262,7 @@ window.onload = function () {
         }
     };
 
-	//Handle offseason toggle. Hide and show regular season items and offseason items, accordingly.
+    //Handle offseason toggle. Hide and show regular season items and offseason items, accordingly.
     document.getElementById("offseason").onchange = function () {
         localStorage.offseason = $("#offseason").bootstrapSwitch('state');
         if ($("#offseason").bootstrapSwitch('state')) {
@@ -276,13 +276,13 @@ window.onload = function () {
         loadEventsList()
     };
 
-	//Handle a change in awards depth
+    //Handle a change in awards depth
     document.getElementById('awardDepthPicker').onchange = function () {
         localStorage.awardDepth = $("#awardDepthPicker").val();
         displayAwards()
     };
 
-	//Handle a change in awards separator
+    //Handle a change in awards separator
     document.getElementById('awardSeparatorPicker').onchange = function () {
         if ($("#awardSeparatorPicker").val() === "||") {
             localStorage.awardSeparator = " || "
@@ -294,7 +294,7 @@ window.onload = function () {
         displayAwards()
     };
 
-	//Handle a change in Event Name Display
+    //Handle a change in Event Name Display
     document.getElementById('showEventNames').onchange = function () {
         if ($("#showEventNames").bootstrapSwitch('state')) {
             localStorage.showEventNames = "true"
@@ -304,7 +304,7 @@ window.onload = function () {
         displayAwards()
     };
 
-	//Handle a change in autoAdvance
+    //Handle a change in autoAdvance
     document.getElementById('autoAdvance').onchange = function () {
         if ($("#autoAdvance").bootstrapSwitch('state')) {
             localStorage.autoAdvance = "true"
@@ -313,29 +313,29 @@ window.onload = function () {
         }
     };
 
-	//Handle Event Filter change
+    //Handle Event Filter change
     document.getElementById('eventFilters').onchange = function () {
         filterEvents()
     };
 
     $("#loadingFeedback").html("Setting up offseason mode...");
-    
+
     //Setup the Offseason schedule upload and reset buttons. See their respective fuctions for details.
     document.getElementById("QualsFiles").addEventListener('change', handleQualsFiles, !1);
     document.getElementById("PlayoffFiles").addEventListener('change', handlePlayoffFiles, !1);
     document.getElementById("QualsFilesReset").addEventListener('click', handleQualsFilesReset, !1);
     document.getElementById("PlayoffFilesReset").addEventListener('click', handlePlayoffFilesReset, !1);
 
-	//setup the Offseason Tab
+    //setup the Offseason Tab
     $('#offseasonTeamListToJSON').click(function () {
         //Example: var parseOutput = CSVParser.parse(this.inputText, this.headersProvided, this.delimiter, this.downcaseHeaders, this.upcaseHeaders);
-		//console.log("starting conversion");
+        //console.log("starting conversion");
         var inbound = $("#offSeasonTeamListInput").val();
         var outbound = CSVParser.parse(inbound, !0, "auto", !1, !1);
         if (outbound.errors) {
             alert("Errors in the input:\n" + outbound.errors)
         } else {
-			//Example: jsonResult = JSON.parse(toJSON(outbound.dataGrid,outbound.headerNames,outbound.headerTypes,""));
+            //Example: jsonResult = JSON.parse(toJSON(outbound.dataGrid,outbound.headerNames,outbound.headerTypes,""));
             localStorage.teamList = toJSON(outbound.dataGrid, outbound.headerNames, outbound.headerTypes, "");
             eventTeamList = JSON.parse(localStorage.teamList);
             alert("Converted Result:\n" + localStorage.teamList);
@@ -348,7 +348,7 @@ window.onload = function () {
     $('#allianceSelectionTable').hide();
     $('#allianceUndoButton').hide();
 
-	//Load the events list based on the restored values
+    //Load the events list based on the restored values
     loadEventsList();
 
     scaleRows();
@@ -1797,6 +1797,24 @@ function chosenAllianceAlert(teamContainer) {
         }]
     })
 }
+function asyncAPICall(apiEndpoint, year, service, teamOrEvent) {
+    return new Promise(function (resolve, reject) {
+        var req = new XMLHttpRequest();
+        var data = {};
+        req.open('GET', apiEndpoint + year + '/' + service + '/' + teamOrEvent + "/");
+        req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+        req.addEventListener('load', function () {
+            if (req.status === 200) {
+                data = JSON.parse(req.responseText);
+                data.year = year;
+                resolve(JSON.stringify(data));
+            } else {
+                resolve(null);
+            }
+        });
+        req.send();
+    });
+};
 
 function getTeamAwards(teamNumber, year) {
     "use strict";
@@ -1804,6 +1822,7 @@ function getTeamAwards(teamNumber, year) {
     $('#teamDataTabPicker').addClass('alert-danger');
     var awards = "";
     var eventNames = [];
+    var data = {};
     eventNames[String(year)] = JSON.parse(localStorage.events);
     eventNames["2018"] = events2018;
     eventNames["2017"] = events2017;
@@ -1812,45 +1831,59 @@ function getTeamAwards(teamNumber, year) {
     var teamData = decompressLocalStorage("teamData" + teamNumber);
     var awardHilight = { "before": "<b>", "after": "</b>" };
     var awardName = "";
-    var req = new XMLHttpRequest();
-    req.open('GET', apiURL + year + '/awards/' + teamNumber + "/");
-    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
-    req.addEventListener('load', function () {
-        if (req.status === 200) {
-            teamLoadProgressBar++;
-            $('#teamloadprogressbar').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
-            $('#teamProgressBarLoading').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
-            var data = JSON.parse(req.responseText);
-            if (data.Awards !== '{"Awards":[]}') {
-                for (var i = 0; i < data.Awards.length; i++) {
-                    awardName = data.Awards[i].name;
-                    awardHilight = awardsHilight(awardName);
-                    var j = 0;
-                    awards += '<span class="awardsDepth' + String(j + 1) + '">' + awardHilight.before + String(year - j) + ' <span class="awardsEventName">' + eventNames[String(year - j)][data.Awards[i].eventCode] + '</span><span class="awardsEventCode">' + data.Awards[i].eventCode + '</span>: ' + awardName + awardHilight.after;
-                    if (i === data.Awards.length - 1) {
-                        awards += '<span class="lastAward' + String(j + 1) + '"><span class="awardsSeparator1"> || </span><span class="awardsSeparator2"> // </span><span class="awardsSeparator3"><br></span></span></span>'
-                    } else {
-                        awards += '<span class="awardsSeparator1"> || </span><span class="awardsSeparator2"> // </span><span class="awardsSeparator3"><br></span></span>'
+    var promisesArray = [];
+    if (teamData.rookieYear <= year) {
+        promisesArray.push(asyncAPICall(apiURL, year, "awards", teamNumber));
+    }
+    if (teamData.rookieYear <= Number(year) - 1) {
+        promisesArray.push(asyncAPICall(apiURL, (year - 1).toString(), "awards", teamNumber));
+    }
+    if (teamData.rookieYear <= Number(year) - 2) {
+        promisesArray.push(asyncAPICall(apiURL, (year - 2).toString(), "awards", teamNumber));
+    }
+    teamLoadProgressBar++;
+    $('#teamloadprogressbar').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
+    $('#teamProgressBarLoading').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
+    var handleAllPromises = Promise.all(promisesArray);
+
+    handleAllPromises.then(function (values) {
+        for (var j = 0; j < values.length; j++) {
+            if (values[j] !== null) {
+                data = JSON.parse(values[j]);
+                if (data.Awards !== '{"Awards":[]}') {
+                    for (var i = 0; i < data.Awards.length; i++) {
+                        awardName = data.Awards[i].name;
+                        awardHilight = awardsHilight(awardName);
+                        awards += '<span class="awardsDepth' + String(j + 1) + '">' + awardHilight.before + data.year + ' <span class="awardsEventName">' + eventNames[data.year][data.Awards[i].eventCode] + '</span><span class="awardsEventCode">' + data.Awards[i].eventCode + '</span>: ' + awardName + awardHilight.after;
+                        if (i === data.Awards.length - 1) {
+                            awards += '<span class="lastAward' + String(j + 1) + '"><span class="awardsSeparator1"> || </span><span class="awardsSeparator2"> // </span><span class="awardsSeparator3"><br></span></span></span>';
+                        } else {
+                            awards += '<span class="awardsSeparator1"> || </span><span class="awardsSeparator2"> // </span><span class="awardsSeparator3"><br></span></span>';
+                        }
                     }
                 }
+
             }
-            teamData.awards = awards;
-            compressLocalStorage("teamData" + teamNumber, teamData);
-            teamAwardCalls--;
-            if ((teamAwardCalls === 0) && (teamUpdateCalls === 0) && (lastSchedulePage)) {
-                $('#teamDataTabPicker').removeClass('alert-danger');
-                $('#teamDataTabPicker').addClass('alert-success');
-                $('#teamloadprogress').hide();
-                $('#teamProgressBar').hide();
-                teamLoadProgressBar = 0;
-                $('#teamloadprogressbar').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
-                $('#teamProgressBarLoading').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%")
-            }
+
         }
+        teamData.awards = awards;
+        compressLocalStorage("teamData" + teamNumber, teamData);
+        teamAwardCalls--;
+        if ((teamAwardCalls === 0) && (teamUpdateCalls === 0) && (lastSchedulePage)) {
+            $('#teamDataTabPicker').removeClass('alert-danger');
+            $('#teamDataTabPicker').addClass('alert-success');
+            $('#teamloadprogress').hide();
+            $('#teamProgressBar').hide();
+            teamLoadProgressBar = 0;
+            $('#teamloadprogressbar').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
+            $('#teamProgressBarLoading').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%")
+        }
+
+
     });
-    if (teamData.rookieYear <= year) {
-        req.send()
-    }
+
+
+
 }
 
 function getTeamData(teamList, year) {
