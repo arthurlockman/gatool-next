@@ -27,6 +27,13 @@ const GetEventTeams: Handler = (event: APIGatewayEvent, context: Context, callba
 };
 
 // noinspection JSUnusedGlobalSymbols
+const GetDistrictTeams: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+    // TODO: remove pagination from this API
+    return GetDataFromFIRSTAndReturn(event.pathParameters.year + '/teams?districtCode='
+        + event.pathParameters.districtCode + '&page=' + event.pathParameters.page, callback);
+};
+
+// noinspection JSUnusedGlobalSymbols
 const GetTeamAwards: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
     return GetDataFromFIRSTAndReturn(event.pathParameters.year + '/awards/' + event.pathParameters.teamNumber, callback);
 };
@@ -53,6 +60,8 @@ const GetHistoricTeamAwards: Handler = (event: APIGatewayEvent, context: Context
             awardList[`${currentSeason}`] = currentYearAwards;
             ReturnJsonWithCode(200, awardList, callback);
         });
+    }).catch(err => {
+        ReturnJsonWithCode(err.statusCode, err.message, callback);
     });
 };
 
@@ -419,7 +428,7 @@ const Authorize: Handler = (event: CustomAuthorizerEvent, context: Context, call
 export {GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedule, GetEventAvatars,
     UpdateHighScores, GetHighScores, GetOffseasonEvents, GetEventAlliances, GetEventRankings,
     Authorize, GetTeamAvatar, GetEventHighScores, GetTeamUpdates, PutTeamUpdates, GetUserPreferences,
-    PutUserPreferences, GetHistoricTeamAwards}
+    PutUserPreferences, GetHistoricTeamAwards, GetDistrictTeams}
 
 // Handle unexpected application errors
 process.on('unhandledRejection', (reason, p) => {

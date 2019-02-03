@@ -52,6 +52,21 @@ functions:
                 year: true
                 eventCode: true
                 page: true
+  GetDistrictTeams:
+    handler: Handler.GetDistrictTeams
+    description: Get teams for a specified district in a specified year
+    events:
+      - http:
+          path: api/{year}/district/teams/{districtCode}/{page}
+          method: get
+          cors: true
+          authorizer: Authorize
+          request:
+            params:
+              paths:
+                year: true
+                districtCode: true
+                page: true
   GetEventAvatars:
     handler: handler.GetEventAvatars
     description: Get avatars for a specific event for a specific year
