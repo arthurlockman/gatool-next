@@ -20,6 +20,44 @@ const GetEvents: Handler = (event: APIGatewayEvent, context: Context, callback: 
 };
 
 // noinspection JSUnusedGlobalSymbols
+const GetTeams: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+    if (event.queryStringParameters === null) {
+        return ReturnJsonWithCode(400, 'You must supply query parameters.', callback);
+    }
+    const eventCode = event.queryStringParameters.eventCode;
+    const districtCode = event.queryStringParameters.districtCode;
+    const query = [];
+    if (eventCode) {
+        query.push(`eventCode=${eventCode}`);
+    }
+    if (districtCode) {
+        query.push(`districtCode=${districtCode}`);
+    }
+    const initialTeamData = GetDataFromFIRST(`${event.pathParameters.year}/teams?${query.join('&')}&page=1`);
+    initialTeamData.then(teamData => {
+        if (teamData.statusCode) {
+            return ReturnJsonWithCode(teamData.statusCode, teamData.message, callback);
+        }
+        if (teamData.pageTotal === 1) {
+            return ReturnJsonWithCode(200, teamData, callback);
+        } else {
+            const promises: Promise<any>[] = [];
+            for (let i = 2; i <= teamData.pageTotal; i++) {
+                promises.push(GetDataFromFIRST(`${event.pathParameters.year}/teams?${query.join('&')}&page=${i}`));
+            }
+            Promise.all(promises).then(allTeamData => {
+                allTeamData.map(team => {
+                    teamData.teamCountPage += team.teamCountPage;
+                    teamData.teams = teamData.teams.concat(team.teams);
+                });
+                teamData.pageTotal = 1;
+                return ReturnJsonWithCode(200, teamData, callback);
+            });
+        }
+    })
+};
+
+// noinspection JSUnusedGlobalSymbols
 const GetEventTeams: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
     // TODO: remove pagination from this API
     return GetDataFromFIRSTAndReturn(event.pathParameters.year + '/teams?eventcode='
@@ -114,9 +152,9 @@ const GetEventAvatars: Handler = (event: APIGatewayEvent, context: Context, call
             Promise.all(promises).then(allAvatarData => {
                 allAvatarData.map(avatar => {
                     avatarList.teamCountPage += avatar.teamCountPage;
-                    avatarList.teamCountTotal += avatar.teamCountTotal;
                     avatarList.teams = avatarList.teams.concat(avatar.teams);
                 });
+                avatarList.pageTotal = 1;
                 return ReturnJsonWithCode(200, avatarList, callback);
             });
         }
@@ -428,7 +466,7 @@ const Authorize: Handler = (event: CustomAuthorizerEvent, context: Context, call
 export {GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedule, GetEventAvatars,
     UpdateHighScores, GetHighScores, GetOffseasonEvents, GetEventAlliances, GetEventRankings,
     Authorize, GetTeamAvatar, GetEventHighScores, GetTeamUpdates, PutTeamUpdates, GetUserPreferences,
-    PutUserPreferences, GetHistoricTeamAwards, GetDistrictTeams}
+    PutUserPreferences, GetHistoricTeamAwards, GetDistrictTeams, GetTeams}
 
 // Handle unexpected application errors
 process.on('unhandledRejection', (reason, p) => {
