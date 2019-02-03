@@ -137,7 +137,9 @@ const GetEventRankings: Handler = (event: APIGatewayEvent, context: Context, cal
 
 // noinspection JSUnusedGlobalSymbols
 const GetEventAvatars: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
-    const initialAvatarData = GetAvatarData(event.pathParameters.year, event.pathParameters.eventCode);
+    const year = event.pathParameters.year;
+    const eventCode = event.pathParameters.eventCode;
+    const initialAvatarData = GetAvatarData(year, eventCode);
     initialAvatarData.then(avatarList => {
         if (avatarList.statusCode) {
             return ReturnJsonWithCode(avatarList.statusCode, avatarList.message, callback);
@@ -147,7 +149,7 @@ const GetEventAvatars: Handler = (event: APIGatewayEvent, context: Context, call
         } else {
             const promises: Promise<EventAvatars>[] = [];
             for (let i = 2; i <= avatarList.pageTotal; i++) {
-                promises.push(GetAvatarData(event.pathParameters.year, event.pathParameters.eventcode, i));
+                promises.push(GetAvatarData(year, eventCode, i));
             }
             Promise.all(promises).then(allAvatarData => {
                 allAvatarData.map(avatar => {
