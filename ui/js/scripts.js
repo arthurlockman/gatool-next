@@ -314,9 +314,9 @@ window.onload = function () {
     };
 
     //Handle Event Filter change
-    document.getElementById('eventFilters').onchange = function () {
-        filterEvents()
-    };
+    //document.getElementById('eventFilters').onchange = function () {
+    //    filterEvents()
+    //};
 
     $("#loadingFeedback").html("Setting up offseason mode...");
 
@@ -561,7 +561,7 @@ function handleEventSelection() {
     } else {
         allianceSelectionLength = 15
     }
-    getTeamList(localStorage.currentYear, 1);
+    getTeamList(localStorage.currentYear);
     localStorage.matchHighScore = 0;
     localStorage.highScoreDetails = "{}";
     $("#eventName").html("<b>" + JSON.parse(document.getElementById("eventSelector").value).name + "</b>");
@@ -610,7 +610,7 @@ function handleOffseasonEventSelection() {
     } else {
         allianceSelectionLength = 15
     }
-    getTeamList(localStorage.currentYear, 1);
+    getTeamList(localStorage.currentYear);
     localStorage.matchHighScore = 0;
     localStorage.highScoreDetails = "{}";
     $("#eventName").html("<b>" + JSON.parse(document.getElementById("eventSelector").value).name + "</b>");
@@ -635,7 +635,7 @@ function loadEventsList() {
             localStorage.currentEventList = JSON.stringify(JSON.parse(req.responseText).Events);
             currentEventList = JSON.parse(req.responseText).Events;
             createEventMenu();
-            filterEvents()
+            
         }
     });
     req.send()
@@ -668,10 +668,9 @@ function filterEvents() {
                     filterClasses += ".filters" + filters[i]
                 }
             }
-            $("#eventFilters").selectpicker('val', filters);
             $(filterClasses).show()
         }
-        localStorage.eventFilters = JSON.stringify($("#eventFilters").selectpicker('val'))
+        localStorage.eventFilters = JSON.stringify(filters);
     }
 }
 
@@ -737,6 +736,9 @@ function createEventMenu() {
         sel.selectpicker('refresh')
     }
     localStorage.events = JSON.stringify(events);
+    var previousFilters = JSON.parse(localStorage.eventFilters);
+    $("#eventFilters").selectpicker('val',previousFilters);
+    //filterEvents();
     handleEventSelection();
     $("#eventUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"))
 }
@@ -1041,41 +1043,37 @@ function updateTeamTable() {
     }
 }
 
-function getTeamList(year, pageNumber) {
+function getTeamList(year) {
     "use strict";
     $("#teamDataTabPicker").addClass("alert-danger");
     $("#teamUpdateContainer").html("Loading team data...");
     var req = new XMLHttpRequest();
-    var endpoint = "/teams/";
-    if (localStorage.offseason === "true") {
-        endpoint = "/offseasonteams/"
-    }
-    req.open('GET', apiURL + year + endpoint + localStorage.currentEvent + '/' + pageNumber);
+    var endpoint = "/teams?eventCode=";
+    req.open('GET', apiURL + year + endpoint + localStorage.currentEvent);
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         if (req.status === 200) {
             var data = {};
             $('#teamloadprogress').show();
             $('#teamProgressBar').show();
-            if (pageNumber === 1) {
-                $("#teamsTableBody").empty()
-            }
+            $("#teamsTableBody").empty()
+
             if (req.responseText.includes('"teams":')) {
                 data = JSON.parse(req.responseText)
             } else {
                 data = JSON.parse('{"teams":[],"teamCountTotal":0,"teamCountPage":0,"pageCurrent":0,"pageTotal":0}')
             }
-            if (data.teams.length === 0 && pageNumber === 1) {
+            if (data.teams.length === 0) {
                 $('#teamsTableEventName').html('Event team list unavailable.');
                 $("#eventTeamCount").html(data.teamCountTotal);
                 teamCountTotal = data.teamCountTotal;
                 localStorage.teamList = "[]"
             } else {
-                if (pageNumber === 1) {
-                    $("#eventTeamCount").html(data.teamCountTotal);
-                    teamCountTotal = data.teamCountTotal;
-                    $('#teamsTableEventName').html(localStorage.eventName)
-                }
+
+                $("#eventTeamCount").html(data.teamCountTotal);
+                teamCountTotal = data.teamCountTotal;
+                $('#teamsTableEventName').html(localStorage.eventName)
+
                 for (var i = 0; i < data.teams.length; i++) {
                     var element = data.teams[i];
                     $('#teamsTableBody').append(generateTeamTableRow(element));
@@ -1103,19 +1101,16 @@ function getTeamList(year, pageNumber) {
                     highScores['"' + eventTeamList[j].teamNumber + '.score"'] = 0;
                     highScores['"' + eventTeamList[j].teamNumber + '.description"'] = ""
                 }
-                if (data.pageCurrent < data.pageTotal) {
-                    lastSchedulePage = !1;
-                    getTeamList(year, parseInt(pageNumber) + 1)
-                } else {
-                    localStorage.teamList = JSON.stringify(eventTeamList);
-                    getTeamAwardsAsync(eventTeamList, year);
-                    if (Number(localStorage.currentYear) >= 2018) {
-                        getAvatars()
-                    }
-                    getHybridSchedule();
-                    displayAwardsTeams();
-                    lastSchedulePage = !0
+
+                localStorage.teamList = JSON.stringify(eventTeamList);
+                getTeamAwardsAsync(eventTeamList, year);
+                if (Number(localStorage.currentYear) >= 2018) {
+                    getAvatars()
                 }
+                getHybridSchedule();
+                displayAwardsTeams();
+                lastSchedulePage = !0
+
             }
             $("#teamUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"))
         }
@@ -1808,6 +1803,25 @@ function asyncAPICall(apiEndpoint, year, service, teamOrEvent) {
                 data = JSON.parse(req.responseText);
                 data.year = year;
                 resolve(JSON.stringify(data));
+            } else {
+                resolve(null);
+            }
+        });
+        req.send();
+    });
+};
+
+function pagedAsyncAPICall(apiEndpoint, year, service, teamOrEvent, pageNumber) {
+    return new Promise(function (resolve, reject) {
+        var req = new XMLHttpRequest();
+        var data = {};
+        req.open('GET', apiEndpoint + year + '/' + service + '/' + teamOrEvent + '/' + pageNumber);
+        req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+        req.addEventListener('load', function () {
+            if (req.status === 200) {
+                data = JSON.parse(req.responseText);
+                data.year = year;
+                resolve(data);
             } else {
                 resolve(null);
             }
