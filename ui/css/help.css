@@ -28,35 +28,35 @@ body {
     -moz-column-gap: 40px; /* Firefox */
     column-gap: 40px;
 }
-    .nav li a{
+.nav li a {
         padding-left: 10px;
         padding-right: 10px;
     }
 
-@media screen and (min-width:992px) and (max-width:1199px){
-    .nav li a{
-        padding-left: 10px;
-        padding-right: 10px;
-    }
+@media screen and (min-width:1080px) and (max-width:1380px){
     .navbar-brand {
-        padding-left: 10px;
-        padding-right: 10px;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+    .nav li a {
+        padding-left: 8px;
+        padding-right: 8px;
     }
     .smallShow {
     display: block;
 }
 .smallHide {display: none;}
 }
-@media screen and (min-width:768px) and (max-width:991px){
+@media screen and (min-width:880px) and (max-width:1080px){
     .nav li a{
         font-size: 12px;
-        padding-left: 8px;
-        padding-right: 8px;
+        padding-left: 5px;
+        padding-right: 5px;
     }
     .navbar-brand {
         font-size: 14px;
-        padding-left: 8px;
-        padding-right: 8px;
+        padding-left: 3px;
+        padding-right: 3px;
     }
     .smallShow {
     display: block;
