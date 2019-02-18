@@ -635,7 +635,7 @@ function loadEventsList() {
             localStorage.currentEventList = JSON.stringify(JSON.parse(req.responseText).Events);
             currentEventList = JSON.parse(req.responseText).Events;
             createEventMenu();
-            
+
         }
     });
     req.send()
@@ -737,7 +737,7 @@ function createEventMenu() {
     }
     localStorage.events = JSON.stringify(events);
     var previousFilters = JSON.parse(localStorage.eventFilters);
-    $("#eventFilters").selectpicker('val',previousFilters);
+    $("#eventFilters").selectpicker('val', previousFilters);
     //filterEvents();
     handleEventSelection();
     $("#eventUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"))
@@ -1347,7 +1347,7 @@ function announceDisplay() {
                 $('#' + stationList[ii] + 'TeamNumber').html("<b>" + replacementAlliance[stationList[ii]] + "</b>");
                 $('#' + stationList[ii] + 'PlaybyPlayteamNumber').html(replacementAlliance[stationList[ii]])
             }
-            $('#' + stationList[ii] + 'RookieYear').html(rookieYearDisplay(teamData.rookieYear));
+            $('#' + stationList[ii] + 'RookieYear').html(rookieYearDisplay(teamData.rookieYear, teamData.teamYearsNoCompeteLocal));
             if ((localStorage.currentMatch > JSON.parse(localStorage.qualsList).Schedule.length) || inChamps() || (inMiChamps() && (localStorage.currentYear >= 2017))) {
                 $('#' + stationList[ii] + 'Alliance').html(teamData.allianceName + "<br>" + teamData.allianceChoice);
                 $('#' + stationList[ii] + 'PlayByPlayAlliance').html("<p><b>" + teamData.allianceName + "<br>" + teamData.allianceChoice + "<b></p>")
@@ -1718,7 +1718,7 @@ function awardsAlert(teamContainer) {
     var captain = teamContainer.getAttribute("captain");
     var currentTeamInfo = decompressLocalStorage("teamData" + teamNumber);
     var selectedTeamInfo = "<span class = 'allianceAnnounceDialog'>Team " + teamNumber + " ";
-    var rookieTag = rookieYearDisplay(currentTeamInfo.rookieYear).trim();
+    var rookieTag = rookieYearDisplay(currentTeamInfo.rookieYear, currentTeamInfo.teamYearsNoCompeteLocal).trim();
     rookieTag = rookieTag.substring(6, rookieTag.length - 1);
     if (currentTeamInfo.nameShortLocal === "") {
         selectedTeamInfo += currentTeamInfo.nameShort
@@ -1760,7 +1760,7 @@ function chosenAllianceAlert(teamContainer) {
     var captain = teamContainer.getAttribute("captain");
     var currentTeamInfo = decompressLocalStorage("teamData" + teamNumber);
     var selectedTeamInfo = "<span class = 'allianceAnnounceDialog'>Team " + teamNumber + " ";
-    var rookieTag = rookieYearDisplay(currentTeamInfo.rookieYear).trim();
+    var rookieTag = rookieYearDisplay(currentTeamInfo.rookieYear, currentTeamInfo.teamYearsNoCompeteLocal).trim();
     rookieTag = rookieTag.substring(6, rookieTag.length - 1);
     if (currentTeamInfo.nameShortLocal === "") {
         selectedTeamInfo += currentTeamInfo.nameShort
@@ -2106,7 +2106,12 @@ function updateTeamTableRow(teamData) {
     } else {
         returnData += '<td class="bg-success" id="teamTableNameOrganization' + teamData.teamNumber + '">' + teamInfo.organizationLocal + '</td>'
     }
-    returnData += '<td id="teamTableRookieYear' + teamData.teamNumber + '">' + rookieYearDisplay(teamInfo.rookieYear) + '</td>';
+    if (Number(teamInfo.teamYearsNoCompeteLocal) > 0) {
+        returnData += '<td class="bg-success"  id="teamTableRookieYear' + teamData.teamNumber + '">' + rookieYearDisplay(teamData.rookieYear, teamInfo.teamYearsNoCompeteLocal) + '</td>';
+    }
+    else {
+        returnData += '<td id="teamTableRookieYear' + teamData.teamNumber + '">' + rookieYearDisplay(teamData.rookieYear, teamInfo.teamYearsNoCompeteLocal) + '</td>';
+    }
     if ((teamInfo.robotName === null) && (teamInfo.robotNameLocal === "")) {
         returnData += '<td id="teamTableRobotName' + teamData.teamNumber + '">' + "No robot name reported" + '</td>'
     } else {
@@ -2128,6 +2133,9 @@ function generateTeamTableRow(teamData) {
         teamInfo = decompressLocalStorage("teamData" + teamData.teamNumber);
         if (typeof teamInfo.cityStateSort === "undefined") {
             teamInfo.cityStateSort = teamData.country + ":" + teamData.stateProv + ":" + teamData.city
+        }
+        if (typeof teamInfo.teamYearsNoCompeteLocal === "undefined") {
+            teamInfo.teamYearsNoCompeteLocal = ""
         }
     } else {
         teamInfo = {
@@ -2167,7 +2175,8 @@ function generateTeamTableRow(teamData) {
             "teamMottoLocal": "",
             "teamNotesLocal": "",
             "avatar": "null",
-            "lastVisit": "No recent visit"
+            "lastVisit": "No recent visit",
+            "teamYearsNoCompeteLocal": ""
         }
     }
     var returnData = "";
@@ -2254,7 +2263,12 @@ function generateTeamTableRow(teamData) {
     } else {
         returnData += '<td  class="bg-success" id="teamTableNameOrganization' + teamData.teamNumber + '">' + teamInfo.organizationLocal + '</td>'
     }
-    returnData += '<td id="teamTableRookieYear' + teamData.teamNumber + '">' + rookieYearDisplay(teamData.rookieYear) + '</td>';
+    if (Number(teamInfo.teamYearsNoCompeteLocal) > 0) {
+        returnData += '<td class="bg-success"  id="teamTableRookieYear' + teamData.teamNumber + '">' + rookieYearDisplay(teamData.rookieYear, teamInfo.teamYearsNoCompeteLocal) + '</td>';
+    }
+    else {
+        returnData += '<td id="teamTableRookieYear' + teamData.teamNumber + '">' + rookieYearDisplay(teamData.rookieYear, teamInfo.teamYearsNoCompeteLocal) + '</td>';
+    }
     if ((teamData.robotName === null) && (teamInfo.robotNameLocal === "")) {
         returnData += '<td id="teamTableRobotName' + teamData.teamNumber + '">' + "No robot name reported" + '</td>'
     } else {
@@ -2377,10 +2391,28 @@ function updateTeamInfo(teamNumber) {
         $("#awardsUpdate").html(teamData.awardsLocal);
         $("#awardsUpdateLabel").addClass("bg-success")
     }
+    if (teamData.teamYearsNoCompeteLocal) {
+        $("#teamYearsNoCompeteUpdate").val(teamData.teamYearsNoCompeteLocal);
+        $("#teamYearsNoCompeteUpdateLabel").addClass("bg-success");       
+    } else {
+        $("#teamYearsNoCompeteUpdate").val("")
+        $("#teamYearsNoCompeteUpdateLabel").removeClass("bg-success");
+    }
+if (teamData.teamMottoLocal) {
     $("#teamMottoUpdate").val(teamData.teamMottoLocal);
     $("#teamMottoUpdateLabel").addClass("bg-success");
-    $("#teamNotesUpdate").val(teamData.teamNotesLocal);
-    $("#teamNotesUpdateLabel").addClass("bg-success");
+} else {
+    $("#teamMottoUpdate").val("");
+    $("#teamMottoUpdateLabel").removeClass("bg-success");
+}
+    if(teamData.teamNotesLocal) {
+        $("#teamNotesUpdate").val(teamData.teamNotesLocal);
+        $("#teamNotesUpdateLabel").addClass("bg-success");
+    } else {
+        $("#teamNotesUpdate").val("");
+        $("#teamNotesUpdateLabel").removeClass("bg-success");
+    }
+   
     $(".tabcontent").hide();
     $("#teamDataEntry").show()
 }
@@ -2447,10 +2479,13 @@ function updateTeamInfoDone(cloudSave) {
     if (teamData.teamMottoLocal !== $("#teamMottoUpdate").val()) {
         teamData.teamMottoLocal = $("#teamMottoUpdate").val()
     }
+    if (teamData.teamYearsNoCompeteLocal !== $("#teamYearsNoCompeteUpdate").val()) {
+        teamData.teamYearsNoCompeteLocal = $("#teamYearsNoCompeteUpdate").val()
+    }
     teamData.lastVisit = moment().format();
     compressLocalStorage("teamData" + teamNumber, teamData);
     console.log(typeof cloudSave + " cloudSave value " + cloudSave);
-    if (cloudSave) {
+    if (cloudSave === "true") {
         teamUpdateCalls++;
         sendTeamUpdates(teamNumber, !0)
     }
@@ -2460,10 +2495,15 @@ function updateTeamInfoDone(cloudSave) {
     document.getElementById('teamDataTabPicker').click()
 }
 
-function rookieYearDisplay(year) {
+function rookieYearDisplay(year, offset) {
     "use strict";
     var currrentYear = localStorage.currentYear;
-    var years = currrentYear - year + 1;
+    if (typeof offset === "undefined") {
+        offset = 0;
+    } else {
+        offset = Number(offset);
+    }
+    var years = currrentYear - year + 1 - offset;
     var yearTest = years.toString().slice(-1);
     var tag = "";
     switch (years) {
@@ -2491,7 +2531,7 @@ function rookieYearDisplay(year) {
             } else {
                 tag = "th"
             }
-            return year + " (" + parseInt(currrentYear - year + 1) + tag + " season)"
+            return year + " (" + parseInt(currrentYear - year + 1 - offset) + tag + " season)"
     }
 }
 

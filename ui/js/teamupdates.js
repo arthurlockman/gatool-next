@@ -20,6 +20,7 @@ function getTeamUpdates(teamNumber, singleton) {
             teamData.awardsLocal = teamUpdates.awardsLocal;
             teamData.teamMottoLocal = teamUpdates.teamMottoLocal;
             teamData.teamNotesLocal = teamUpdates.teamNotesLocal;
+            teamData.teamYearsNoCompeteLocal = teamUpdates.teamYearsNoCompeteLocal;
             //localStorage["teamData" + teamNumber] = JSON.stringify(teamData);
             compressLocalStorage("teamData" + teamNumber, teamData);
 
@@ -88,6 +89,7 @@ function sendTeamUpdates(teamNumber, singleton) {
     teamUpdates.awardsLocal = teamData.awardsLocal;
     teamUpdates.teamMottoLocal = teamData.teamMottoLocal;
     teamUpdates.teamNotesLocal = teamData.teamNotesLocal;
+    teamUpdates.teamYearsNoCompeteLocal = teamData.teamYearsNoCompeteLocal;
     teamUpdates.source = parseJwt(localStorage.getItem("token")).email;
     req.open('PUT', apiURL + 'team/' + teamNumber + '/updates');
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
