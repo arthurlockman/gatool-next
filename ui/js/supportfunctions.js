@@ -581,3 +581,28 @@ function inMiDivision() {
     }
 }
 
+function eventWeek(event) {
+    if (moment(event.dateStart).isBefore(moment(eventWeeks[localStorage.currentYear].Week0), 'day')) {
+        return "filtersweek0";
+    } else if (moment(event.dateStart).isBefore(moment(eventWeeks[localStorage.currentYear].Week1), 'day')) {
+        return "filtersweek1";
+    } else if (moment(event.dateStart).isBefore(moment(eventWeeks[localStorage.currentYear].Week2), 'day')) {
+        return "filtersweek2";
+    } else if (moment(event.dateStart).isBefore(moment(eventWeeks[localStorage.currentYear].Week3), 'day')) {
+        return "filtersweek3";
+    } else if (moment(event.dateStart).isBefore(moment(eventWeeks[localStorage.currentYear].Week4), 'day')) {
+        return "filtersweek4";
+    } else if (moment(event.dateStart).isBefore(moment(eventWeeks[localStorage.currentYear].Week5), 'day')) {
+        return "filtersweek5";
+    } else if (moment(event.dateStart).isBefore(moment(eventWeeks[localStorage.currentYear].Week6), 'day')) {
+        return "filtersweek6";
+    } else if (moment(event.dateStart).isBefore(moment(eventWeeks[localStorage.currentYear].Week7), 'day')) {
+        return "filtersweek7";
+    } else if (moment(event.dateStart).isBefore(moment(eventWeeks[localStorage.currentYear].Houston), 'day')) {
+        return "filtershouston";
+    } else if (moment(event.dateStart).isBefore(moment(eventWeeks[localStorage.currentYear].Detroit), 'day')) {
+        return "filtersdetroit";
+    } else {
+        return "";
+    }
+}

@@ -56,6 +56,45 @@ var champs = ["CMP", "CMPTX", "CMPMO", "CMPMI"];
 var miDivisions = ["MICMP1", "MICMP2", "MICMP3", "MICMP4"];
 var miChamps = ["MICMP"];
 
+//This section defines the week boundaries for filtering.
+
+var eventWeeks = [];
+eventWeeks["2019"] = {
+    "Week0" : "February 27, 2019",
+    "Week1" : "March 6, 2019",
+    "Week2" : "March 13, 2019",
+    "Week3" : "March 20, 2019",
+    "Week4" : "March 27, 2019",
+    "Week5" : "April 3, 2019",
+    "Week6" : "April 10, 2019",
+    "Week7" : "April 17, 2019",
+    "Houston" : "April 24,2019",
+    "Detroit" : "April 28, 2019"
+};
+eventWeeks["2018"] = {
+    "Week0" : "February 28, 2018",
+    "Week1" : "March 7, 2018",
+    "Week2" : "March 14, 2018",
+    "Week3" : "March 21, 2018",
+    "Week4" : "March 28, 2018",
+    "Week5" : "April 4, 2018",
+    "Week6" : "April 11, 2018",
+    "Week7" : "April 18, 2018",
+    "Houston" : "April 25,2018",
+    "Detroit" : "April 29, 2018"
+};
+eventWeeks["2017"] = {
+    "Week0" : "March 1, 2017",
+    "Week1" : "March 8, 2017",
+    "Week2" : "March 15, 2017",
+    "Week3" : "March 22, 2017",
+    "Week4" : "March 29, 2017",
+    "Week5" : "April 5, 2017",
+    "Week6" : "April 12, 2017",
+    "Week7" : "April 22, 2017",
+    "Houston" : "April 26,2017",
+    "Detroit" : "April 30, 2017"
+};
 // Cache the prior years events to reduce server calls.
 
 var events2015 = {

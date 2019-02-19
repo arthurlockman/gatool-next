@@ -721,6 +721,7 @@ function createEventMenu() {
         } else {
             optionFilter += " filterspast"
         }
+        optionFilter += " " + eventWeek(option.value);
         sel.append($('<option></option>').attr({
             'value': JSON.stringify(option.value),
             'class': optionClass + optionFilter,
