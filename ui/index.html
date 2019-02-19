@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>gatool</title>
-    
+
     <script src="https://cdn.auth0.com/js/auth0/9.5.1/auth0.min.js"></script>
     <script
         src="//assets.adobedtm.com/891488d05e8283e97bb06b44e9966042e797cd5f/satelliteLib-4936a62cbdd3238d6fe686612810de778ab0d05e.js"></script>
@@ -28,7 +28,7 @@
         integrity="sha256-wstTM1F5dOf7cgnlRHIW3bmoRAAGh6jL7tMIvqTuFZE=" crossorigin="anonymous" />
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
-        <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/style.css" />
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
@@ -36,12 +36,12 @@
         integrity="sha256-AKUJYz2DyEoZYHh2/+zPHm1tTdYb4cmG8HC2ydmTzM4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/js/bootstrap-dialog.min.js"
         integrity="sha256-IpgnbT7iaNM6j9WjtXKI8VMJ272WM9VvFYkZdu1umOA=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"
-        integrity="sha256-CutOzxCRucUsn6C6TcEYsauvvYilEniTXldPa6/wu0k=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
+        integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Base64/1.0.1/base64.min.js"
         integrity="sha256-TIM6MO3yNF4Lvw+A1XLEyy/qiHW4MAjQCjJIqIhHKyY=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.0/xlsx.full.min.js"
-        integrity="sha256-WKeaKrYDX2B8QMunVAikEAbMUyCcI1bHKQbbk5rTeVg=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.1/xlsx.full.min.js"
+        integrity="sha256-vzSR+lySv0KEag7JZGIt59p04tPZekm9/N/Se/5s08w=" crossorigin="anonymous"></script>
     <script language="javascript" src="//use.edgefonts.net/bebas-neue.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
     <script src="js/w3.js"></script>
@@ -210,8 +210,10 @@
                         <br>Use when your event does not appear in the Events dropdown under the Season selector.
                     </div>
                     <div id="offseasonSetup" class="alert-info offseason">You can upload schedules in the Match
-                        Schedule Screen. You will need a Quals Schedule and Playoff Schedule, provided by your FTA as an XLSX
-                        export from FMS. On a tablet, use DropBox or a similar service to get the file on the device, and then
+                        Schedule Screen. You will need a Quals Schedule and Playoff Schedule, provided by your FTA as an
+                        XLSX
+                        export from FMS. On a tablet, use DropBox or a similar service to get the file on the device,
+                        and then
                         select it from DrobBox using the button on the Match Schedule Screen.
                     </div>
                 </div>
@@ -948,16 +950,20 @@
                         (<span id="organizationUpdateTIMS">xxx</span> in TIMS)</label> <input type="text"
                         class="form-control" id="organizationUpdate" placeholder="Enter an Organization or School Name">
                 </div>
-                <div id="robotNameUpdateLabel" class="form-group"><label for="robotNameUpdate">Robot Name (<span id="robotNameUpdateTIMS">xxx</span> in TIMS)</label> <input type="text" class="form-control" id="robotNameUpdate" placeholder="Enter a Robot Name"></div>
-                <div id="teamMottoUpdateLabel" class="form-group"><label for="teamMottoUpdate">Team Motto (Team mottoes are local and do not come from FIRST)</label> <input type="text" class="form-control"
+                <div id="robotNameUpdateLabel" class="form-group"><label for="robotNameUpdate">Robot Name (<span
+                            id="robotNameUpdateTIMS">xxx</span> in TIMS)</label> <input type="text" class="form-control"
+                        id="robotNameUpdate" placeholder="Enter a Robot Name"></div>
+                <div id="teamMottoUpdateLabel" class="form-group"><label for="teamMottoUpdate">Team Motto (Team mottoes
+                        are local and do not come from FIRST)</label> <input type="text" class="form-control"
                         id="teamMottoUpdate" placeholder="Enter a Team Motto"></div>
                 <div id="cityStateUpdateLabel" class="form-group"><label for="cityStateUpdate">City, State (<span
                             id="cityStateUpdateTIMS">xxx</span>
                         in TIMS)</label> <input type="text" class="form-control" id="cityStateUpdate"
                         placeholder="Enter a city and state">
                 </div>
-                <div id="teamYearsNoCompeteUpdateLabel" class="form-group"><label for="teamYearsNoCompeteUpdate">Years NOT competing with FIRST (will be used in calculating Nth season)</label> <input type="text" class="form-control"
-                        id="teamYearsNoCompeteUpdate"
+                <div id="teamYearsNoCompeteUpdateLabel" class="form-group"><label for="teamYearsNoCompeteUpdate">Years
+                        NOT competing with FIRST (will be used in calculating Nth season)</label> <input type="text"
+                        class="form-control" id="teamYearsNoCompeteUpdate"
                         placeholder="Enter the number of years this team has NOT competed since their founding">
                 </div>
                 <div id="teamNotesUpdateLabel" class="form-group"><label for="teamNotesUpdate">Team Notes (These notes
