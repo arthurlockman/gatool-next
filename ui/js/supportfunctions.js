@@ -6,23 +6,23 @@ function timer() {
         // Update the count down every 1 second
 
         // Get todays date and time
-        localStorage.matchTimer -= 1;
-        if (localStorage.matchTimer >= 0) {
-            if ((matchLength - localStorage.matchTimer) <= autoLength) {
+        var matchRunningTime = moment().diff(matchStartTime,'seconds')
+        if (matchRunningTime <= matchLength) {
+            if ((matchRunningTime) <= autoLength) {
                 $("#timer").css({
                     "background-color": "orange",
                     "color": "black"
                 });
-                $("#clock").html(localStorage.matchTimer + " AUTO (" + (autoLength - (matchLength - localStorage.matchTimer)) + ")");
+                $("#clock").html((matchLength - matchRunningTime) + " AUTO (" + (autoLength - (matchRunningTime)) + ")");
             }
-            if ((matchLength - localStorage.matchTimer) > autoLength && (localStorage.matchTimer > endGame)) {
+            if ((matchRunningTime) > autoLength && ((matchLength - matchRunningTime) > endGame)) {
                 $("#timer").css({
                     "background-color": "green",
                     "color": "white"
                 });
-                $("#clock").html(localStorage.matchTimer + " TELEOP");
+                $("#clock").html((matchLength - matchRunningTime) + " TELEOP");
             }
-            if (localStorage.matchTimer <= endGame) {
+            if ((matchLength - matchRunningTime) <= endGame) {
                 $("#timer").css({
                     "background-color": "red",
                     "animation-delay": "20s",
@@ -31,7 +31,7 @@ function timer() {
                     "animation-iteration-count": "10",
                     "color": "white"
                 });
-                $("#clock").html(localStorage.matchTimer + " ENDGAME");
+                $("#clock").html((matchLength - matchRunningTime) + " ENDGAME");
             }
         } else {
             resetTimer();
@@ -199,6 +199,7 @@ function startTimer() {
         resetTimer();
     } else {
         localStorage.clock = "running";
+        matchStartTime = moment();
     }
 }
 

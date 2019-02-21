@@ -6,6 +6,7 @@ var matchLength = 150;
 var autoLength = 15;
 var endGame = 30;
 localStorage.matchTimer = matchLength;
+var matchStartTime = moment();
 var allianceTeamList = [];
 var allianceListUnsorted = [];
 var allianceSelectionLength = 15;
@@ -41,6 +42,7 @@ var rankQualThreshold = 15;
 var matchCount = 0;
 var allianceSelectionReady = false;
 var environment = {};
+
 
 for (var i = 1; i < 9; i++) {
     allianceChoices['Alliance' + i + 'Captain'] = "";
