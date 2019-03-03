@@ -1371,6 +1371,11 @@ function announceDisplay() {
             } else {
                 $("#" + stationList[ii] + "RobotName").html(teamData.robotNameLocal)
             }
+            if (teamData.teamMottoLocal === "") {
+                $("#" + stationList[ii] + "Motto").html("")
+            } else {
+                $("#" + stationList[ii] + "Motto").html('<b>Motto: "' + teamData.teamMottoLocal + '"</b>')
+            }
             if (teamData.organizationLocal === "") {
                 $("#" + stationList[ii] + "Organization").html(teamData.organization)
             } else {
