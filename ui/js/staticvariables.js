@@ -6276,4 +6276,23 @@ var hallOfFame = [{
     "Winner3": 862,
     "Winner4": 1676,
     "Winner5": null
+}, {
+    "Year": 2018,
+    "Chairmans": 1311,
+    "Challenge": "PowerUP! Houston",
+    "Winner1": 254,
+    "Winner2": 148,
+    "Winner3": 2976,
+    "Winner4": 3075,
+    "Winner5": null
+}, {
+    "Year": 2018,
+    "Chairmans": 2834,
+    "Challenge": "PowerUP! Detroit",
+    "Winner1": 2767,
+    "Winner2": 27,
+    "Winner3": 4027,
+    "Winner4": 2708,
+    "Winner5": null
 }];
+var originalAndSustaining = [20, 45, 126, 148, 151, 157, 190, 191, 250]
