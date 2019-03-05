@@ -9,7 +9,6 @@ function getTeamUpdates(teamNumber, singleton) {
     req.addEventListener('load', function () {
         if (req.status !== 204) {
             var teamUpdates = JSON.parse(req.responseText);
-            //var teamData = JSON.parse(localStorage["teamData" + teamNumber]);
             var teamData = decompressLocalStorage("teamData" + teamNumber);
             teamData.nameShortLocal = teamUpdates.nameShortLocal;
             teamData.cityStateLocal = teamUpdates.cityStateLocal;
@@ -21,7 +20,7 @@ function getTeamUpdates(teamNumber, singleton) {
             teamData.teamMottoLocal = teamUpdates.teamMottoLocal;
             teamData.teamNotesLocal = teamUpdates.teamNotesLocal;
             teamData.teamYearsNoCompeteLocal = teamUpdates.teamYearsNoCompeteLocal;
-            //localStorage["teamData" + teamNumber] = JSON.stringify(teamData);
+            teamData.showRobotName = teamUpdates.showRobotName;
             compressLocalStorage("teamData" + teamNumber, teamData);
 
         }
@@ -46,7 +45,7 @@ function getTeamUpdates(teamNumber, singleton) {
                         action: function (dialogRef) {
                             dialogRef.close();
                             updateTeamTable();
-                            updateTeamInfo(currentTeam);
+                            updateTeamInfo(teamNumber);
                         }
                     }]
                 });
@@ -90,6 +89,7 @@ function sendTeamUpdates(teamNumber, singleton) {
     teamUpdates.teamMottoLocal = teamData.teamMottoLocal;
     teamUpdates.teamNotesLocal = teamData.teamNotesLocal;
     teamUpdates.teamYearsNoCompeteLocal = teamData.teamYearsNoCompeteLocal;
+    teamUpdates.showRobotName = teamData.showRobotName;
     teamUpdates.source = parseJwt(localStorage.getItem("token")).email;
     req.open('PUT', apiURL + 'team/' + teamNumber + '/updates');
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));

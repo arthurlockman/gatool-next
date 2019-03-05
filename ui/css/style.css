@@ -498,6 +498,9 @@ color: black;
 	font-family: "alternate-gothic-no-1-d",sans-serif;
 	line-height: 50%
 }
+.bootstrap-dialog-footer-buttons {
+	text-align: center
+}
 
 @media (max-width: 768px) {
 p {

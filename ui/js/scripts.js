@@ -170,6 +170,10 @@ window.onload = function () {
     $("[name='showEventNames']").bootstrapSwitch('state', (localStorage.showEventNames === "true"));
     $("[name='autoAdvance']").bootstrapSwitch('state', (localStorage.autoAdvance === "true"));
     $("[name='offseason']").bootstrapSwitch('state', (localStorage.offseason === "true"));
+    $("[name='showRobotName']").bootstrapSwitch('state', true);
+    $("[name='showRobotName']").bootstrapSwitch('size', 'mini');
+    $("[name='showRobotName']").bootstrapSwitch('onText', 'Shown');
+    $("[name='showRobotName']").bootstrapSwitch('offText', 'Hidden');
 
     //Ensure that the switch values are honored.
     // Handle Sponsors toggle during loading.
@@ -760,11 +764,53 @@ function ranksQualsCompare() {
         $('#allianceSelectionTabPicker').removeClass('alert-danger');
         $('#allianceSelectionTabPicker').addClass('alert-success')
     } else {
-        $("#allianceSelectionWarning").html('<p class="alert alert-danger" onclick="announceDisplay();"><strong>Do not proceed with Alliance Selection until you confirm that the rank order below agrees with the rank order in FMS. Tap this alert to see if we can get a more current schedule and rankings.</strong></p>');
+        $("#allianceSelectionWarning").html('<p class="alert alert-danger" onclick="announceDisplay();"><strong>Do not proceed with Alliance Selection until you confirm that the rank order below agrees with the rank order in FMS. Tap this alert to see if we can get a more current schedule and rankings.</strong></p><p class="alert alert-warning" onclick="showAllianceSelection();">If your event shortens the Qualification Match schedule and you need to move to Alliance Selection, tap here to show Alliance Selection.</p>');
         $('#allianceSelectionTabPicker').addClass('alert-danger');
         $('#allianceSelectionTabPicker').removeClass('alert-success')
     }
 }
+
+function showAllianceSelection() {
+    "use strict";
+    BootstrapDialog.show({
+        type: 'type-danger',
+        title: '<b>Show Alliance Selection</b>',
+        message: 'You are about to show the Alliance Selection, but according to FMS, your event has not completed. Do you agree to the following:<br><ul style="list-style-type:square"><li>The event has reduced the qual schedule due to time, inclement weather or other factors</li><li>I have reviewed the rankings in gatool with the scorekeeper and we are in agreement</li><li>My FTA has agreed that we can continue to Alliance Selection with a shortened schedule</li></ul>',
+        buttons: [{
+            icon: 'glyphicon glyphicon-check',
+            label: "No, don't show Alliance Selection.",
+            hotkey: 78, // "N".
+            cssClass: "btn btn-success alertButton",
+            action: function (dialogRef) {
+                dialogRef.close();
+            }
+        }, {
+            icon: 'glyphicon glyphicon-refresh',
+            label: 'Yes, I do want to show Alliance Selection now.<br>I understand that I am responsible for the accuracy of Alliance Selection.',
+            hotkey: 13, // Enter.
+            cssClass: 'btn btn-danger alertButton',
+            action: function (dialogRef) {
+                dialogRef.close();
+                $("#allianceSelectionTable").show();
+                $("#allianceSelectionWarning").hide();
+                BootstrapDialog.show({
+                    message: "Alliance Selection is now visible. Please ensure the accuracy of your rankings prior to starting Alliance Selection.",
+                    buttons: [{
+                        icon: 'glyphicon glyphicon-refresh',
+                        label: 'OK',
+                        hotkey: 13, // Enter.
+                        title: 'OK',
+                        action: function (dialogRef) {
+                            dialogRef.close();
+                        }
+                    }]
+                });
+
+            }
+        }]
+    });
+}
+
 
 function getRegularSeasonSchedule() {
     "use strict";
@@ -1366,10 +1412,17 @@ function announceDisplay() {
             } else {
                 $("#" + stationList[ii] + "CityState").html(teamData.cityStateLocal)
             }
-            if (teamData.robotNameLocal === "") {
-                $("#" + stationList[ii] + "RobotName").html(teamData.robotName)
+            if ((typeof teamData.showRobotName) === "undefined") {
+                teamData.showRobotName = true;
+            }
+            if (teamData.showRobotName === true) {
+                if (teamData.robotNameLocal === "") {
+                    $("#" + stationList[ii] + "RobotName").html(teamData.robotName)
+                } else {
+                    $("#" + stationList[ii] + "RobotName").html(teamData.robotNameLocal)
+                }
             } else {
-                $("#" + stationList[ii] + "RobotName").html(teamData.robotNameLocal)
+                $("#" + stationList[ii] + "RobotName").html("")
             }
             if (teamData.teamMottoLocal === "") {
                 $("#" + stationList[ii] + "Motto").html("")
@@ -1406,10 +1459,13 @@ function announceDisplay() {
             } else {
                 $('#' + stationList[ii] + 'PlaybyPlayTeamName').html(teamData.nameShortLocal)
             }
+            if (teamData.showRobotName === true) {            
             if (teamData.robotNameLocal === "") {
                 $('#' + stationList[ii] + 'PlaybyPlayRobotName').html(teamData.robotName)
             } else {
                 $('#' + stationList[ii] + 'PlaybyPlayRobotName').html(teamData.robotNameLocal)
+            }} else {
+                $('#' + stationList[ii] + 'PlaybyPlayRobotName').html("")
             }
             if (teamData.cityStateLocal === "") {
                 $("#" + stationList[ii] + "PlayByPlayCity").html(teamData.cityState)
@@ -2143,6 +2199,9 @@ function generateTeamTableRow(teamData) {
         if (typeof teamInfo.teamYearsNoCompeteLocal === "undefined") {
             teamInfo.teamYearsNoCompeteLocal = ""
         }
+        if (typeof teamInfo.showRobotName === "undefined") {
+            teamInfo.showRobotName = true
+        }
     } else {
         teamInfo = {
             "nameShort": teamData.nameShort,
@@ -2364,6 +2423,14 @@ function updateTeamInfo(teamNumber) {
         $("#robotNameUpdate").val(teamData.robotNameLocal);
         $("#robotNameUpdateLabel").addClass("bg-success")
     }
+    if ((typeof teamData.showRobotName) !== "boolean") {
+        teamData.showRobotName = true;
+    }
+    if (teamData.showRobotName === true) {
+        $("#showRobotName").bootstrapSwitch('state', true)
+    } else {
+        $("#showRobotName").bootstrapSwitch('state', false);
+    }
     if (teamData.cityState) {
         $("#cityStateUpdateTIMS").html(teamData.cityState)
     } else {
@@ -2399,26 +2466,26 @@ function updateTeamInfo(teamNumber) {
     }
     if (teamData.teamYearsNoCompeteLocal) {
         $("#teamYearsNoCompeteUpdate").val(teamData.teamYearsNoCompeteLocal);
-        $("#teamYearsNoCompeteUpdateLabel").addClass("bg-success");       
+        $("#teamYearsNoCompeteUpdateLabel").addClass("bg-success");
     } else {
         $("#teamYearsNoCompeteUpdate").val("")
         $("#teamYearsNoCompeteUpdateLabel").removeClass("bg-success");
     }
-if (teamData.teamMottoLocal) {
-    $("#teamMottoUpdate").val(teamData.teamMottoLocal);
-    $("#teamMottoUpdateLabel").addClass("bg-success");
-} else {
-    $("#teamMottoUpdate").val("");
-    $("#teamMottoUpdateLabel").removeClass("bg-success");
-}
-    if(teamData.teamNotesLocal) {
+    if (teamData.teamMottoLocal) {
+        $("#teamMottoUpdate").val(teamData.teamMottoLocal);
+        $("#teamMottoUpdateLabel").addClass("bg-success");
+    } else {
+        $("#teamMottoUpdate").val("");
+        $("#teamMottoUpdateLabel").removeClass("bg-success");
+    }
+    if (teamData.teamNotesLocal) {
         $("#teamNotesUpdate").val(teamData.teamNotesLocal);
         $("#teamNotesUpdateLabel").addClass("bg-success");
     } else {
         $("#teamNotesUpdate").val("");
         $("#teamNotesUpdateLabel").removeClass("bg-success");
     }
-   
+
     $(".tabcontent").hide();
     $("#teamDataEntry").show()
 }
@@ -2488,6 +2555,7 @@ function updateTeamInfoDone(cloudSave) {
     if (teamData.teamYearsNoCompeteLocal !== $("#teamYearsNoCompeteUpdate").val()) {
         teamData.teamYearsNoCompeteLocal = $("#teamYearsNoCompeteUpdate").val()
     }
+    teamData.showRobotName = $("#showRobotName").bootstrapSwitch('state');
     teamData.lastVisit = moment().format();
     compressLocalStorage("teamData" + teamNumber, teamData);
     console.log(typeof cloudSave + " cloudSave value " + cloudSave);
