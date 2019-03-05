@@ -542,6 +542,7 @@ function handleEventSelection() {
     lastMatchPlayed = 0;
     teamUpdateCalls = 0;
     teamAwardCalls = 0;
+    showAllianceSelectionOverride = false;
 
     var e = document.getElementById('eventSelector');
     var data = JSON.parse(e.value);
@@ -764,7 +765,9 @@ function ranksQualsCompare() {
         $('#allianceSelectionTabPicker').removeClass('alert-danger');
         $('#allianceSelectionTabPicker').addClass('alert-success')
     } else {
-        $("#allianceSelectionWarning").html('<p class="alert alert-danger" onclick="announceDisplay();"><strong>Do not proceed with Alliance Selection until you confirm that the rank order below agrees with the rank order in FMS. Tap this alert to see if we can get a more current schedule and rankings.</strong></p><p class="alert alert-warning" onclick="showAllianceSelection();">If your event shortens the Qualification Match schedule and you need to move to Alliance Selection, tap here to show Alliance Selection.</p>');
+        var allianceSelectionMessage = '<p class="alert alert-danger" onclick="announceDisplay();"><strong>Do not proceed with Alliance Selection until you confirm that the rank order below agrees with the rank order in FMS. Tap this alert to see if we can get a more current schedule and rankings.</strong></p>';
+        if (haveRanks && !showAllianceSelectionOverride) allianceSelectionMessage += '<p id="showAllianceSelectionWarning" class="alert alert-warning" onclick="showAllianceSelection();">If your event shortens the Qualification Match schedule and you need to move to Alliance Selection, tap here to show Alliance Selection.</p>';
+        $("#allianceSelectionWarning").html(allianceSelectionMessage);
         $('#allianceSelectionTabPicker').addClass('alert-danger');
         $('#allianceSelectionTabPicker').removeClass('alert-success')
     }
@@ -792,7 +795,8 @@ function showAllianceSelection() {
             action: function (dialogRef) {
                 dialogRef.close();
                 $("#allianceSelectionTable").show();
-                $("#allianceSelectionWarning").hide();
+                showAllianceSelectionOverride = true;
+                $("#showAllianceSelectionWarning").hide();
                 BootstrapDialog.show({
                     message: "Alliance Selection is now visible. Please ensure the accuracy of your rankings prior to starting Alliance Selection.",
                     buttons: [{

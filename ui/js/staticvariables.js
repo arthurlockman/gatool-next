@@ -42,6 +42,7 @@ var rankQualThreshold = 15;
 var matchCount = 0;
 var allianceSelectionReady = false;
 var environment = {};
+var showAllianceSelectionOverride = false;
 
 
 for (var i = 1; i < 9; i++) {
