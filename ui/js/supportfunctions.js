@@ -177,6 +177,9 @@ function inHallOfFame(team, position) {
     "use strict";
     var hofDisplay = "";
     $("#" + position + "HOF").hide();
+    if (originalAndSustaining.indexOf(team.toString())>0){
+        hofDisplay += "Original and Sustaining Team" + localStorage.awardSeparator;
+    }
     for (i = 0; i < hallOfFame.length; i++) {
         if (team === hallOfFame[i].Chairmans) {
             hofDisplay += hallOfFame[i].Year + " " + hallOfFame[i].Challenge + " Chairman's Award" + localStorage.awardSeparator;
@@ -185,6 +188,7 @@ function inHallOfFame(team, position) {
             hofDisplay += hallOfFame[i].Year + " " + hallOfFame[i].Challenge + " Winner" + localStorage.awardSeparator;
         }
     }
+    
     if (hofDisplay !== "") {
         hofDisplay = hofDisplay.slice(0, hofDisplay.length - localStorage.awardSeparator.length);
         $("#" + position + "HOF").html(hofDisplay);

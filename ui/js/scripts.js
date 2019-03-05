@@ -1803,7 +1803,12 @@ function awardsAlert(teamContainer) {
     } else {
         selectedTeamInfo += currentTeamInfo.cityStateLocal + "<br>"
     }
-    selectedTeamInfo += "<br>Founded in " + currentTeamInfo.rookieYear + ", this is their " + rookieTag + " competing with FIRST.</span>";
+    if (originalAndSustaining.indexOf(teamNumber)>0) {
+        selectedTeamInfo += "<br>An Original and Sustaining Team founded in "
+    } else {
+        selectedTeamInfo += "<br>Founded in "
+    }
+    selectedTeamInfo += currentTeamInfo.rookieYear + ", this is their " + rookieTag + " competing with FIRST.</span>";
     BootstrapDialog.show({
         type: 'type-success',
         title: '<b>Awards Announcement</b>',
@@ -1845,7 +1850,12 @@ function chosenAllianceAlert(teamContainer) {
     } else {
         selectedTeamInfo += currentTeamInfo.cityStateLocal + "<br>"
     }
-    selectedTeamInfo += "<br>Founded in " + currentTeamInfo.rookieYear + ", this is their " + rookieTag + " competing with FIRST.</span>";
+    if (originalAndSustaining.indexOf(teamNumber)>0) {
+        selectedTeamInfo += "<br>An Original and Sustaining Team founded in "
+    } else {
+        selectedTeamInfo += "<br>Founded in "
+    }
+    selectedTeamInfo += currentTeamInfo.rookieYear + ", this is their " + rookieTag + " competing with FIRST.</span>";
     BootstrapDialog.show({
         type: 'type-success',
         icon: 'glyphicon glyphicon-tower',

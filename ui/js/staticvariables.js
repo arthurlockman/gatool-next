@@ -6295,4 +6295,4 @@ var hallOfFame = [{
     "Winner4": 2708,
     "Winner5": null
 }];
-var originalAndSustaining = [20, 45, 126, 148, 151, 157, 190, 191, 250]
+var originalAndSustaining = ["20", "45", "126", "148", "151", "157", "190", "191", "250"];
