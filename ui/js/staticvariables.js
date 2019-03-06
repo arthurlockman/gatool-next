@@ -63,40 +63,40 @@ var miChamps = ["MICMP"];
 
 var eventWeeks = [];
 eventWeeks["2019"] = {
-    "Week0" : "February 27, 2019",
-    "Week1" : "March 6, 2019",
-    "Week2" : "March 13, 2019",
-    "Week3" : "March 20, 2019",
-    "Week4" : "March 27, 2019",
-    "Week5" : "April 3, 2019",
-    "Week6" : "April 10, 2019",
-    "Week7" : "April 17, 2019",
-    "Houston" : "April 24,2019",
-    "Detroit" : "April 28, 2019"
+    "Week0": "February 27, 2019",
+    "Week1": "March 6, 2019",
+    "Week2": "March 13, 2019",
+    "Week3": "March 20, 2019",
+    "Week4": "March 27, 2019",
+    "Week5": "April 3, 2019",
+    "Week6": "April 10, 2019",
+    "Week7": "April 17, 2019",
+    "Houston": "April 24,2019",
+    "Detroit": "April 28, 2019"
 };
 eventWeeks["2018"] = {
-    "Week0" : "February 28, 2018",
-    "Week1" : "March 7, 2018",
-    "Week2" : "March 14, 2018",
-    "Week3" : "March 21, 2018",
-    "Week4" : "March 28, 2018",
-    "Week5" : "April 4, 2018",
-    "Week6" : "April 11, 2018",
-    "Week7" : "April 18, 2018",
-    "Houston" : "April 25,2018",
-    "Detroit" : "April 29, 2018"
+    "Week0": "February 28, 2018",
+    "Week1": "March 7, 2018",
+    "Week2": "March 14, 2018",
+    "Week3": "March 21, 2018",
+    "Week4": "March 28, 2018",
+    "Week5": "April 4, 2018",
+    "Week6": "April 11, 2018",
+    "Week7": "April 18, 2018",
+    "Houston": "April 25,2018",
+    "Detroit": "April 29, 2018"
 };
 eventWeeks["2017"] = {
-    "Week0" : "March 1, 2017",
-    "Week1" : "March 8, 2017",
-    "Week2" : "March 15, 2017",
-    "Week3" : "March 22, 2017",
-    "Week4" : "March 29, 2017",
-    "Week5" : "April 5, 2017",
-    "Week6" : "April 12, 2017",
-    "Week7" : "April 22, 2017",
-    "Houston" : "April 26,2017",
-    "Detroit" : "April 30, 2017"
+    "Week0": "March 1, 2017",
+    "Week1": "March 8, 2017",
+    "Week2": "March 15, 2017",
+    "Week3": "March 22, 2017",
+    "Week4": "March 29, 2017",
+    "Week5": "April 5, 2017",
+    "Week6": "April 12, 2017",
+    "Week7": "April 22, 2017",
+    "Houston": "April 26,2017",
+    "Detroit": "April 30, 2017"
 };
 // Cache the prior years events to reduce server calls.
 
@@ -570,7 +570,7 @@ var events2017 = {
     "WIMI": "Wisconsin Regional"
 };
 
-var events2018 = {"ABCA":"Canadian Rockies Regional","ALHU":"Rocket City Regional","ARCHIMEDES":"FIRST Championship - Detroit - Archimedes Subdivision","ARDA":"FIRST Championship - Detroit - ARDA Division","ARLI":"Arkansas Rock City Regional","AUSC":"Southern Cross Regional","AUSP":"South Pacific Regional","AZFL":"Arizona North Regional","AZPX":"Arizona West Regional","AZTEM":"Sanghi Foundation FIRST Robotics Competition Arizona State Championship","BC19":"BattleCry 19","BCVI":"Canadian Pacific Regional","CAAV":"Aerospace Valley Regional","CADA":"Sacramento Regional","CAFR":"Central Valley Regional","CAIR":"Orange County Regional","CANE":"FIRST Championship - Houston - CANE Division","CAPO":"Los Angeles Regional","CARSON":"FIRST Championship - Detroit - Carson Subdivision","CARVER":"FIRST Championship - Houston - Carver Subdivision","CASD":"San Diego Regional presented by Qualcomm","CASF":"San Francisco Regional","CASJ":"Silicon Valley Regional","CATE":"FIRST Championship - Detroit - CATE Division","CAVE":"Ventura Regional","CHCMP":"FIRST Chesapeake District Championship","CMPMI":"FIRST Championship - Detroit","CMPTX":"FIRST Championship - Houston","CODE":"Colorado Regional","CTHAR":"NE District Hartford Event","CTSCT":"NE District Southern CT Event","CTWAT":"NE District Waterbury Event","CUDA":"FIRST Championship - Detroit - CUDA Division","CURIE":"FIRST Championship - Detroit - Curie Subdivision","DALY":"FIRST Championship - Detroit - Daly Subdivision","DARWIN":"FIRST Championship - Detroit - Darwin Subdivision","FLOR":"Orlando Regional","FLWP":"South Florida Regional ","GAALB":"PCH District Albany Event","GACMP":"Peachtree District State Championship","GACOL":"PCH District Columbus Event","GADAL":"PCH District Dalton Event","GADUL":"PCH District Duluth Event","GAGAI":"PCH District Gainesville Event","GALILEO":"FIRST Championship - Houston - Galileo Subdivision","GARO":"FIRST Championship - Houston - GARO Division","GAROS":"GRITS 2018","GUSH":"Shenzhen Regional","HIHO":"Hawaii Regional","HOPPER":"FIRST Championship - Houston - Hopper Subdivision","HOTU":"FIRST Championship - Houston - HOTU Division","IACF":"Iowa Regional","IDBO":"Idaho Regional","ILCH":"Midwest Regional","ILPE":"Central Illinois Regional","ILROC":"Rock River Offseason Competition","INCMP":"Indiana State Championship","INMIS":"IN District St. Joseph Event","INPLA":"IN District Plainfield Event sponsored by Toyota","INWES":"Boiler Bot Battle","INWLA":"IN District Tippecanoe Event","IRI":"Indiana Robotics Invitational","ISCMP":"FIRST Israel District Championship","ISDE1":"ISR District Event #1","ISDE2":"ISR District Event #2","ISDE3":"ISR District Event #3","ISDE4":"ISR District Event #4","LAKE":"Bayou Regional","MABOS":"NE District Greater Boston Event","MABRI":"NE District SE Mass Event","MAREA":"NE District North Shore Event","MAWOR":"NE District Worcester Polytechnic Institute Event","MDEDG":"CHS District Central Maryland Event sponsored by Leidos","MDOWI":"Battle O’ Baltimore","MDOXO":"CHS District Southern Maryland Event","MELEW":"NE District Pine Tree Event","MESOU":"Summer Heat","MIALP":"FIM District Alpena Event","MIBEL":"FIM District Belleville Event","MIBIG":"FSU Roboday","MICEN":"FIM District Center Line Event","MICMP":"Michigan State Championship","MICMP1":"Michigan State Championship - DTE Energy Foundation Division","MICMP2":"Michigan State Championship - Consumers Energy Division","MICMP3":"Michigan State Championship - Ford Division","MICMP4":"Michigan State Championship - Dow Division","MIESC":"FIM District Escanaba Event","MIFOR":"FIM District Forest Hills Event","MIGAY":"FIM District Gaylord Event","MIGIB":"FIM District Gibraltar Event","MIGUL":"FIM District Gull Lake Event","MIKE2":"FIM District Kettering University Event #2","MIKEN":"FIM District East Kentwood Event","MIKET":"FIM District Kettering University Event #1","MILAK":"FIM District Lakeview Event","MILAN":"FIM District Lansing Event","MILIN":"FIM District Lincoln Event","MILIV":"FIM District Livonia Event","MILSU":"FIM District Lake Superior State University Event","MIMAR":"FIM District Marysville Event","MIMID":"FIM District Midland Event","MIMID2":"Great Lakes Bay Bot Bash","MIMIL":"FIM District Milford Event","MISHE":"FIM District Shepherd Event","MISJO":"FIM District St. Joseph Event","MISOU":"FIM District Southfield Event","MITRY":"FIM District Troy Event","MITVC":"FIM District Traverse City Event","MIWAT":"FIM District Waterford Event","MIWMI":"FIM District West Michigan Event","MNBEM":"NMRC Championship","MNCMP":"MSHSL FIRST State Robotics Championship","MNDU":"Lake Superior Regional","MNDU2":"Northern Lights Regional","MNMI":"Medtronic Foundation Regional","MNMI2":"Minnesota North Star Regional","MNROS":"Minnesota Robotics Invitational","MNWOO":"EMCC","MOKC":"Greater Kansas City Regional","MOKC2":"Heartland Regional","MOLEE":"Cow Town ThrowDown","MOSL":"St. Louis Regional","MOSTC":"Gateway Robotics Challenge","MRCMP":"FIRST Mid-Atlantic District Championship","MXMO":"Monterrey Regional","MXTO":"Laguna Regional","NCASH":"NC District UNC Asheville Event","NCCHA":"Thundering Herd of Robots (THOR)","NCCMP":"FIRST North Carolina State Championship","NCGRE":"NC District Pitt County Event","NCPEM":"NC District UNC Pembroke Event","NCWIN":"NC District Forsyth County Event","NDGF":"Great Northern Regional","NECMP":"New England District Championship","NEWTON":"FIRST Championship - Houston - Newton Subdivision","NHALT":"Battle Of the Bay 5","NHDUR":"NE District UNH Event","NHGRS":"NE District Granite State Event","NHHOL":"Governor's Cup","NHMAN":"RiverRage 22","NJBRI":"MAR District Bridgewater-Raritan Event","NJFLA":"MAR District Mount Olive Event","NJNOR":"Brunswick Eruption 2018","NJSKI":"MAR District Montgomery Event","NJTAB":"MAR District Seneca Event","NVLV":"Las Vegas Regional","NYDIX":"Half Hollow Hills Invitational","NYLI":"SBPLI Long Island Regional #1","NYLI2":"SBPLI Long Island Regional #2","NYNY":"New York City Regional","NYRO":"Finger Lakes Regional ","NYSU":"Hudson Valley Regional","NYTR":"New York Tech Valley Regional","NYUT":"Central New York Regional","OHAUS":"Mahoning Valley Robotics Challenge","OHCL":"Buckeye Regional","OHCOL":"2018 CORI Invitational","OHMV":"Miami Valley Regional","OHWE":"WOW Alliance District Championship","OKOK":"Oklahoma Regional ","ONBAR":"ONT District Georgian College Event","ONCMP":"FIRST Ontario Provincial Championship","ONCMP1":"FIRST Ontario Provincial Championship - Science Division","ONCMP2":"FIRST Ontario Provincial Championship - Technology Division","ONHAM":"ONT District McMaster University Event","ONLON":"ONT District Western University, Western Engineering Event","ONNOB":"ONT District North Bay Event","ONNYO":"ONT District York University Event","ONOSH":"ONT District Durham College Event","ONTO1":"ONT District Ryerson University Event","ONTOR":"Robots@CNE","ONWAT":"ONT District University of Waterloo Event","ONWIN":"ONT District Windsor Essex Great Lakes Event","ORLAK":"PNW District Lake Oswego Event","ORORE":"PNW District Clackamas Academy Event","ORWIL":"PNW District Wilsonville Event","PACA":"Greater Pittsburgh Regional","PAHAT":"MAR District Hatboro-Horsham Event","PAPHI":"MAR District Springside Chestnut Hill Academy Event","PAWCH":"MAR District Westtown Event","PNCMP":"Pacific Northwest District Championship","QCMO":"Festival de Robotique - Montreal Regional","RISMI":"NE District Rhode Island Event","ROEBLING":"FIRST Championship - Houston - Roebling Subdivision","SCCOL":"South Carolina Robotics Invitational & Workshops VIII","SCMB":"Palmetto Regional","SHMI":"Shanghai Regional","TESLA":"FIRST Championship - Detroit - Tesla Subdivision","TNKN":"Smoky Mountains Regional","TUIS":"Istanbul Regional","TURING":"FIRST Championship - Houston - Turing Subdivision","TXCMP":"Texas UIL State Championship","TXDA":"Dallas Regional","TXEL":"El Paso Regional","TXHO":"Lone Star Central Regional","TXLU":"Hub City Regional","TXPA":"Lone Star South Regional","TXRI":"Texas Robotics Invitational","TXSA":"Alamo Regional","UTWV":"Utah Regional","VABLA":"CHS District Southwest Virginia Event sponsored by Anton Paar","VAGDC":"CHS District Greater DC Event co-sponsored by Micron","VAGLE":"CHS District Central Virginia Event sponsored by Dominion Energy","VAHAY":"CHS District Northern Virginia Event","VAHAY2":"IROC","VAPOR":"CHS District Hampton Roads Event sponsored by Newport News Shipbuilding","WAAHS":"PNW District Auburn Event","WAAMV":"PNW District Auburn Mountainview Event","WAMAP":"Washington Girls' Generation 2018","WAMOU":"PNW District Mount Vernon Event","WAPP":"Peak Performance","WASNO":"PNW District Glacier Peak Event","WASPO":"PNW District West Valley Event","WAYAK":"PNW District SunDome Event","WEEK0":"Week 0","WILA":"Seven Rivers Regional","WIMI":"Wisconsin Regional"}
+var events2018 = { "ABCA": "Canadian Rockies Regional", "ALHU": "Rocket City Regional", "ARCHIMEDES": "FIRST Championship - Detroit - Archimedes Subdivision", "ARDA": "FIRST Championship - Detroit - ARDA Division", "ARLI": "Arkansas Rock City Regional", "AUSC": "Southern Cross Regional", "AUSP": "South Pacific Regional", "AZFL": "Arizona North Regional", "AZPX": "Arizona West Regional", "AZTEM": "Sanghi Foundation FIRST Robotics Competition Arizona State Championship", "BC19": "BattleCry 19", "BCVI": "Canadian Pacific Regional", "CAAV": "Aerospace Valley Regional", "CADA": "Sacramento Regional", "CAFR": "Central Valley Regional", "CAIR": "Orange County Regional", "CANE": "FIRST Championship - Houston - CANE Division", "CAPO": "Los Angeles Regional", "CARSON": "FIRST Championship - Detroit - Carson Subdivision", "CARVER": "FIRST Championship - Houston - Carver Subdivision", "CASD": "San Diego Regional presented by Qualcomm", "CASF": "San Francisco Regional", "CASJ": "Silicon Valley Regional", "CATE": "FIRST Championship - Detroit - CATE Division", "CAVE": "Ventura Regional", "CHCMP": "FIRST Chesapeake District Championship", "CMPMI": "FIRST Championship - Detroit", "CMPTX": "FIRST Championship - Houston", "CODE": "Colorado Regional", "CTHAR": "NE District Hartford Event", "CTSCT": "NE District Southern CT Event", "CTWAT": "NE District Waterbury Event", "CUDA": "FIRST Championship - Detroit - CUDA Division", "CURIE": "FIRST Championship - Detroit - Curie Subdivision", "DALY": "FIRST Championship - Detroit - Daly Subdivision", "DARWIN": "FIRST Championship - Detroit - Darwin Subdivision", "FLOR": "Orlando Regional", "FLWP": "South Florida Regional ", "GAALB": "PCH District Albany Event", "GACMP": "Peachtree District State Championship", "GACOL": "PCH District Columbus Event", "GADAL": "PCH District Dalton Event", "GADUL": "PCH District Duluth Event", "GAGAI": "PCH District Gainesville Event", "GALILEO": "FIRST Championship - Houston - Galileo Subdivision", "GARO": "FIRST Championship - Houston - GARO Division", "GAROS": "GRITS 2018", "GUSH": "Shenzhen Regional", "HIHO": "Hawaii Regional", "HOPPER": "FIRST Championship - Houston - Hopper Subdivision", "HOTU": "FIRST Championship - Houston - HOTU Division", "IACF": "Iowa Regional", "IDBO": "Idaho Regional", "ILCH": "Midwest Regional", "ILPE": "Central Illinois Regional", "ILROC": "Rock River Offseason Competition", "INCMP": "Indiana State Championship", "INMIS": "IN District St. Joseph Event", "INPLA": "IN District Plainfield Event sponsored by Toyota", "INWES": "Boiler Bot Battle", "INWLA": "IN District Tippecanoe Event", "IRI": "Indiana Robotics Invitational", "ISCMP": "FIRST Israel District Championship", "ISDE1": "ISR District Event #1", "ISDE2": "ISR District Event #2", "ISDE3": "ISR District Event #3", "ISDE4": "ISR District Event #4", "LAKE": "Bayou Regional", "MABOS": "NE District Greater Boston Event", "MABRI": "NE District SE Mass Event", "MAREA": "NE District North Shore Event", "MAWOR": "NE District Worcester Polytechnic Institute Event", "MDEDG": "CHS District Central Maryland Event sponsored by Leidos", "MDOWI": "Battle O’ Baltimore", "MDOXO": "CHS District Southern Maryland Event", "MELEW": "NE District Pine Tree Event", "MESOU": "Summer Heat", "MIALP": "FIM District Alpena Event", "MIBEL": "FIM District Belleville Event", "MIBIG": "FSU Roboday", "MICEN": "FIM District Center Line Event", "MICMP": "Michigan State Championship", "MICMP1": "Michigan State Championship - DTE Energy Foundation Division", "MICMP2": "Michigan State Championship - Consumers Energy Division", "MICMP3": "Michigan State Championship - Ford Division", "MICMP4": "Michigan State Championship - Dow Division", "MIESC": "FIM District Escanaba Event", "MIFOR": "FIM District Forest Hills Event", "MIGAY": "FIM District Gaylord Event", "MIGIB": "FIM District Gibraltar Event", "MIGUL": "FIM District Gull Lake Event", "MIKE2": "FIM District Kettering University Event #2", "MIKEN": "FIM District East Kentwood Event", "MIKET": "FIM District Kettering University Event #1", "MILAK": "FIM District Lakeview Event", "MILAN": "FIM District Lansing Event", "MILIN": "FIM District Lincoln Event", "MILIV": "FIM District Livonia Event", "MILSU": "FIM District Lake Superior State University Event", "MIMAR": "FIM District Marysville Event", "MIMID": "FIM District Midland Event", "MIMID2": "Great Lakes Bay Bot Bash", "MIMIL": "FIM District Milford Event", "MISHE": "FIM District Shepherd Event", "MISJO": "FIM District St. Joseph Event", "MISOU": "FIM District Southfield Event", "MITRY": "FIM District Troy Event", "MITVC": "FIM District Traverse City Event", "MIWAT": "FIM District Waterford Event", "MIWMI": "FIM District West Michigan Event", "MNBEM": "NMRC Championship", "MNCMP": "MSHSL FIRST State Robotics Championship", "MNDU": "Lake Superior Regional", "MNDU2": "Northern Lights Regional", "MNMI": "Medtronic Foundation Regional", "MNMI2": "Minnesota North Star Regional", "MNROS": "Minnesota Robotics Invitational", "MNWOO": "EMCC", "MOKC": "Greater Kansas City Regional", "MOKC2": "Heartland Regional", "MOLEE": "Cow Town ThrowDown", "MOSL": "St. Louis Regional", "MOSTC": "Gateway Robotics Challenge", "MRCMP": "FIRST Mid-Atlantic District Championship", "MXMO": "Monterrey Regional", "MXTO": "Laguna Regional", "NCASH": "NC District UNC Asheville Event", "NCCHA": "Thundering Herd of Robots (THOR)", "NCCMP": "FIRST North Carolina State Championship", "NCGRE": "NC District Pitt County Event", "NCPEM": "NC District UNC Pembroke Event", "NCWIN": "NC District Forsyth County Event", "NDGF": "Great Northern Regional", "NECMP": "New England District Championship", "NEWTON": "FIRST Championship - Houston - Newton Subdivision", "NHALT": "Battle Of the Bay 5", "NHDUR": "NE District UNH Event", "NHGRS": "NE District Granite State Event", "NHHOL": "Governor's Cup", "NHMAN": "RiverRage 22", "NJBRI": "MAR District Bridgewater-Raritan Event", "NJFLA": "MAR District Mount Olive Event", "NJNOR": "Brunswick Eruption 2018", "NJSKI": "MAR District Montgomery Event", "NJTAB": "MAR District Seneca Event", "NVLV": "Las Vegas Regional", "NYDIX": "Half Hollow Hills Invitational", "NYLI": "SBPLI Long Island Regional #1", "NYLI2": "SBPLI Long Island Regional #2", "NYNY": "New York City Regional", "NYRO": "Finger Lakes Regional ", "NYSU": "Hudson Valley Regional", "NYTR": "New York Tech Valley Regional", "NYUT": "Central New York Regional", "OHAUS": "Mahoning Valley Robotics Challenge", "OHCL": "Buckeye Regional", "OHCOL": "2018 CORI Invitational", "OHMV": "Miami Valley Regional", "OHWE": "WOW Alliance District Championship", "OKOK": "Oklahoma Regional ", "ONBAR": "ONT District Georgian College Event", "ONCMP": "FIRST Ontario Provincial Championship", "ONCMP1": "FIRST Ontario Provincial Championship - Science Division", "ONCMP2": "FIRST Ontario Provincial Championship - Technology Division", "ONHAM": "ONT District McMaster University Event", "ONLON": "ONT District Western University, Western Engineering Event", "ONNOB": "ONT District North Bay Event", "ONNYO": "ONT District York University Event", "ONOSH": "ONT District Durham College Event", "ONTO1": "ONT District Ryerson University Event", "ONTOR": "Robots@CNE", "ONWAT": "ONT District University of Waterloo Event", "ONWIN": "ONT District Windsor Essex Great Lakes Event", "ORLAK": "PNW District Lake Oswego Event", "ORORE": "PNW District Clackamas Academy Event", "ORWIL": "PNW District Wilsonville Event", "PACA": "Greater Pittsburgh Regional", "PAHAT": "MAR District Hatboro-Horsham Event", "PAPHI": "MAR District Springside Chestnut Hill Academy Event", "PAWCH": "MAR District Westtown Event", "PNCMP": "Pacific Northwest District Championship", "QCMO": "Festival de Robotique - Montreal Regional", "RISMI": "NE District Rhode Island Event", "ROEBLING": "FIRST Championship - Houston - Roebling Subdivision", "SCCOL": "South Carolina Robotics Invitational & Workshops VIII", "SCMB": "Palmetto Regional", "SHMI": "Shanghai Regional", "TESLA": "FIRST Championship - Detroit - Tesla Subdivision", "TNKN": "Smoky Mountains Regional", "TUIS": "Istanbul Regional", "TURING": "FIRST Championship - Houston - Turing Subdivision", "TXCMP": "Texas UIL State Championship", "TXDA": "Dallas Regional", "TXEL": "El Paso Regional", "TXHO": "Lone Star Central Regional", "TXLU": "Hub City Regional", "TXPA": "Lone Star South Regional", "TXRI": "Texas Robotics Invitational", "TXSA": "Alamo Regional", "UTWV": "Utah Regional", "VABLA": "CHS District Southwest Virginia Event sponsored by Anton Paar", "VAGDC": "CHS District Greater DC Event co-sponsored by Micron", "VAGLE": "CHS District Central Virginia Event sponsored by Dominion Energy", "VAHAY": "CHS District Northern Virginia Event", "VAHAY2": "IROC", "VAPOR": "CHS District Hampton Roads Event sponsored by Newport News Shipbuilding", "WAAHS": "PNW District Auburn Event", "WAAMV": "PNW District Auburn Mountainview Event", "WAMAP": "Washington Girls' Generation 2018", "WAMOU": "PNW District Mount Vernon Event", "WAPP": "Peak Performance", "WASNO": "PNW District Glacier Peak Event", "WASPO": "PNW District West Valley Event", "WAYAK": "PNW District SunDome Event", "WEEK0": "Week 0", "WILA": "Seven Rivers Regional", "WIMI": "Wisconsin Regional" }
 
 var allianceShortNames = {
     "Archimedes": "Arch",
@@ -6025,229 +6025,22 @@ var events2017Data = {
     "eventCount": 196
 };
 var hallOfFame = [{
-    "Year": 1992,
-    "Chairmans": 191,
-    "Challenge": "Maize Craize",
-    "Winner1": 126,
-    "Winner2": null,
-    "Winner3": null,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 1993,
-    "Chairmans": 7,
-    "Challenge": "Rug Rage",
-    "Winner1": 148,
-    "Winner2": null,
-    "Winner3": null,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 1994,
-    "Chairmans": 191,
-    "Challenge": "Tower Power ",
-    "Winner1": 144,
-    "Winner2": null,
-    "Winner3": null,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 1995,
-    "Chairmans": 151,
-    "Challenge": "Ramp-n-Roll",
-    "Winner1": 100,
-    "Winner2": null,
-    "Winner3": null,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 1996,
-    "Chairmans": 144,
-    "Challenge": "Hexagon Havoc",
-    "Winner1": 73,
-    "Winner2": null,
-    "Winner3": null,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 1997,
-    "Chairmans": 47,
-    "Challenge": "Toroid Terror",
-    "Winner1": 71,
-    "Winner2": null,
-    "Winner3": null,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 1998,
-    "Chairmans": 23,
-    "Challenge": "Ladder Logic",
-    "Winner1": 45,
-    "Winner2": null,
-    "Winner3": null,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 1999,
-    "Chairmans": 120,
-    "Challenge": "Double Trouble",
-    "Winner1": 1,
-    "Winner2": 48,
-    "Winner3": 176,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 2000,
-    "Chairmans": 16,
-    "Challenge": "Co-Opertition FIRST",
-    "Winner1": 25,
-    "Winner2": 232,
-    "Winner3": 255,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 2001,
-    "Chairmans": 22,
-    "Challenge": "Diabolical Dynamics",
-    "Winner1": 71,
-    "Winner2": 125,
-    "Winner3": 279,
-    "Winner4": 294,
-    "Winner5": 365
-}, {
-    "Year": 2002,
-    "Chairmans": 175,
-    "Challenge": "Zone Zeal",
-    "Winner1": 66,
-    "Winner2": 71,
-    "Winner3": 173,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 2003,
-    "Chairmans": 103,
-    "Challenge": "Stack Attack",
-    "Winner1": 65,
-    "Winner2": 111,
-    "Winner3": 469,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 2004,
-    "Chairmans": 254,
-    "Challenge": "FIRST Frenzy - Raising the Bar",
-    "Winner1": 71,
-    "Winner2": 435,
-    "Winner3": 494,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 2005,
-    "Chairmans": 67,
-    "Challenge": "Triple Play",
-    "Winner1": 330,
-    "Winner2": 67,
-    "Winner3": 503,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 2006,
-    "Chairmans": 111,
-    "Challenge": "Aim High",
-    "Winner1": 217,
-    "Winner2": 296,
-    "Winner3": 522,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 2007,
-    "Chairmans": 365,
-    "Challenge": "Rack-n-Roll",
-    "Winner1": 177,
-    "Winner2": 190,
-    "Winner3": 987,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 2008,
-    "Chairmans": 842,
-    "Challenge": "FIRST Overdrive",
-    "Winner1": 1114,
-    "Winner2": 217,
-    "Winner3": 148,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 2009,
-    "Chairmans": 236,
-    "Challenge": "Lunacy",
-    "Winner1": 111,
-    "Winner2": 67,
-    "Winner3": 971,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 2010,
-    "Chairmans": 341,
-    "Challenge": "Breakaway!",
-    "Winner1": 294,
-    "Winner2": 67,
-    "Winner3": 177,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 2011,
-    "Chairmans": 359,
-    "Challenge": "LogoMotion",
+    "Year": 2018,
+    "Chairmans": 1311,
+    "Challenge": "PowerUP! Houston",
     "Winner1": 254,
-    "Winner2": 111,
-    "Winner3": 973,
-    "Winner4": null,
+    "Winner2": 148,
+    "Winner3": 2976,
+    "Winner4": 3075,
     "Winner5": null
 }, {
-    "Year": 2012,
-    "Chairmans": 1114,
-    "Challenge": "Rebound Rumble",
-    "Winner1": 180,
-    "Winner2": 16,
-    "Winner3": 25,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 2013,
-    "Chairmans": 1538,
-    "Challenge": "ULTIMATE ASCENT",
-    "Winner1": 1241,
-    "Winner2": 1477,
-    "Winner3": 610,
-    "Winner4": null,
-    "Winner5": null
-}, {
-    "Year": 2014,
-    "Chairmans": 27,
-    "Challenge": "Arial Assist",
-    "Winner1": 254,
-    "Winner2": 469,
-    "Winner3": 2848,
-    "Winner4": 74,
-    "Winner5": null
-}, {
-    "Year": 2015,
-    "Chairmans": 597,
-    "Challenge": "Recycle Rush",
-    "Winner1": 118,
-    "Winner2": 1671,
-    "Winner3": 1678,
-    "Winner4": 5012,
-    "Winner5": null
-}, {
-    "Year": 2016,
-    "Chairmans": 987,
-    "Challenge": "FIRST Stronghold",
-    "Winner1": 330,
-    "Winner2": 2481,
-    "Winner3": 120,
-    "Winner4": 1086,
+    "Year": 2018,
+    "Chairmans": 2834,
+    "Challenge": "PowerUP! Detroit",
+    "Winner1": 2767,
+    "Winner2": 27,
+    "Winner3": 4027,
+    "Winner4": 2708,
     "Winner5": null
 }, {
     "Year": 2017,
@@ -6277,22 +6070,229 @@ var hallOfFame = [{
     "Winner4": 1676,
     "Winner5": null
 }, {
-    "Year": 2018,
-    "Chairmans": 1311,
-    "Challenge": "PowerUP! Houston",
-    "Winner1": 254,
-    "Winner2": 148,
-    "Winner3": 2976,
-    "Winner4": 3075,
+    "Year": 2016,
+    "Chairmans": 987,
+    "Challenge": "FIRST Stronghold",
+    "Winner1": 330,
+    "Winner2": 2481,
+    "Winner3": 120,
+    "Winner4": 1086,
     "Winner5": null
 }, {
-    "Year": 2018,
-    "Chairmans": 2834,
-    "Challenge": "PowerUP! Detroit",
-    "Winner1": 2767,
-    "Winner2": 27,
-    "Winner3": 4027,
-    "Winner4": 2708,
+    "Year": 2015,
+    "Chairmans": 597,
+    "Challenge": "Recycle Rush",
+    "Winner1": 118,
+    "Winner2": 1671,
+    "Winner3": 1678,
+    "Winner4": 5012,
+    "Winner5": null
+}, {
+    "Year": 2014,
+    "Chairmans": 27,
+    "Challenge": "Arial Assist",
+    "Winner1": 254,
+    "Winner2": 469,
+    "Winner3": 2848,
+    "Winner4": 74,
+    "Winner5": null
+}, {
+    "Year": 2013,
+    "Chairmans": 1538,
+    "Challenge": "ULTIMATE ASCENT",
+    "Winner1": 1241,
+    "Winner2": 1477,
+    "Winner3": 610,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 2012,
+    "Chairmans": 1114,
+    "Challenge": "Rebound Rumble",
+    "Winner1": 180,
+    "Winner2": 16,
+    "Winner3": 25,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 2011,
+    "Chairmans": 359,
+    "Challenge": "LogoMotion",
+    "Winner1": 254,
+    "Winner2": 111,
+    "Winner3": 973,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 2010,
+    "Chairmans": 341,
+    "Challenge": "Breakaway!",
+    "Winner1": 294,
+    "Winner2": 67,
+    "Winner3": 177,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 2009,
+    "Chairmans": 236,
+    "Challenge": "Lunacy",
+    "Winner1": 111,
+    "Winner2": 67,
+    "Winner3": 971,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 2008,
+    "Chairmans": 842,
+    "Challenge": "FIRST Overdrive",
+    "Winner1": 1114,
+    "Winner2": 217,
+    "Winner3": 148,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 2007,
+    "Chairmans": 365,
+    "Challenge": "Rack-n-Roll",
+    "Winner1": 177,
+    "Winner2": 190,
+    "Winner3": 987,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 2006,
+    "Chairmans": 111,
+    "Challenge": "Aim High",
+    "Winner1": 217,
+    "Winner2": 296,
+    "Winner3": 522,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 2005,
+    "Chairmans": 67,
+    "Challenge": "Triple Play",
+    "Winner1": 330,
+    "Winner2": 67,
+    "Winner3": 503,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 2004,
+    "Chairmans": 254,
+    "Challenge": "FIRST Frenzy - Raising the Bar",
+    "Winner1": 71,
+    "Winner2": 435,
+    "Winner3": 494,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 2003,
+    "Chairmans": 103,
+    "Challenge": "Stack Attack",
+    "Winner1": 65,
+    "Winner2": 111,
+    "Winner3": 469,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 2002,
+    "Chairmans": 175,
+    "Challenge": "Zone Zeal",
+    "Winner1": 66,
+    "Winner2": 71,
+    "Winner3": 173,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 2001,
+    "Chairmans": 22,
+    "Challenge": "Diabolical Dynamics",
+    "Winner1": 71,
+    "Winner2": 125,
+    "Winner3": 279,
+    "Winner4": 294,
+    "Winner5": 365
+}, {
+    "Year": 2000,
+    "Chairmans": 16,
+    "Challenge": "Co-Opertition FIRST",
+    "Winner1": 25,
+    "Winner2": 232,
+    "Winner3": 255,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 1999,
+    "Chairmans": 120,
+    "Challenge": "Double Trouble",
+    "Winner1": 1,
+    "Winner2": 48,
+    "Winner3": 176,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 1998,
+    "Chairmans": 23,
+    "Challenge": "Ladder Logic",
+    "Winner1": 45,
+    "Winner2": null,
+    "Winner3": null,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 1997,
+    "Chairmans": 47,
+    "Challenge": "Toroid Terror",
+    "Winner1": 71,
+    "Winner2": null,
+    "Winner3": null,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 1996,
+    "Chairmans": 144,
+    "Challenge": "Hexagon Havoc",
+    "Winner1": 73,
+    "Winner2": null,
+    "Winner3": null,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 1995,
+    "Chairmans": 151,
+    "Challenge": "Ramp-n-Roll",
+    "Winner1": 100,
+    "Winner2": null,
+    "Winner3": null,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 1994,
+    "Chairmans": 191,
+    "Challenge": "Tower Power ",
+    "Winner1": 144,
+    "Winner2": null,
+    "Winner3": null,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 1993,
+    "Chairmans": 7,
+    "Challenge": "Rug Rage",
+    "Winner1": 148,
+    "Winner2": null,
+    "Winner3": null,
+    "Winner4": null,
+    "Winner5": null
+}, {
+    "Year": 1992,
+    "Chairmans": 191,
+    "Challenge": "Maize Craize",
+    "Winner1": 126,
+    "Winner2": null,
+    "Winner3": null,
+    "Winner4": null,
     "Winner5": null
 }];
 var originalAndSustaining = ["20", "45", "126", "148", "151", "157", "190", "191", "250"];
