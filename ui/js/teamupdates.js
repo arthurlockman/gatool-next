@@ -194,6 +194,37 @@ function saveTeamUpdates() {
     });
 }
 
+function resetThisAward() {
+    //This function saves the team stored in localStorage.currentTeam's data to gatool Cloud.
+    "use strict";
+    BootstrapDialog.show({
+        type: 'type-info',
+        title: '<b>Reset Team ' + localStorage.currentTeam + "'s Awards to TIMS values</b>",
+        message: "<b>You are about to reset the awards for this team to the values provided by FIRST.<br><b>Are you sure you want to do this?</b>",
+        buttons: [{
+            icon: 'glyphicon glyphicon-check',
+            label: "No, don't save this reset now.",
+            hotkey: 78, // "N".
+            cssClass: "btn btn-info col-md-5 col-xs-12 col-sm-12 alertButton",
+            action: function (dialogRef) {
+                dialogRef.close();
+            }
+        }, {
+            icon: 'glyphicon glyphicon-cloud-upload',
+            label: 'Yes, reset the awards now.',
+            hotkey: 13, // Enter.
+            cssClass: 'bth btn-success col-md-5 col-xs-12 col-sm-12 alertButton',
+            action: function (dialogRef) {
+                dialogRef.close();
+                var teamData = decompressLocalStorage("teamData" + localStorage.currentTeam);
+                $("#awardsUpdate").html(teamData.awards);
+                $("#awardsUpdateLabel").removeClass("bg-success");
+                
+            }
+        }]
+    });
+}
+
 function saveTeamUpdate() {
     //This function saves the team stored in localStorage.currentTeam's data to gatool Cloud.
     "use strict";
