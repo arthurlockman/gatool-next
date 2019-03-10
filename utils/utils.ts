@@ -85,7 +85,8 @@ const ReturnJsonWithCode = (statusCode: number, body: any, callback: any, header
         'Access-Control-Allow-Origin': '*', // Required for CORS support to work
         'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS
         'Content-Type': 'application/json',
-        'charset': 'utf-8'
+        'charset': 'utf-8',
+        'Cache-Control': 'no-cache'
     };
     if (headers && headers['last-modified']) {
         responseHeaders['Last-Modified'] = headers['last-modified'];
