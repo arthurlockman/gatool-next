@@ -386,6 +386,10 @@ function loadEnvironment() {
                         playoffResults = environment.playoffResults;
                         allianceTeamList = environment.allianceTeamList;
                         allianceListUnsorted = environment.allianceListUnsorted;
+                        declinedList = environment.declinedList;
+                        declinedListUndo = environment.declinedListUndo;
+                        backupAllianceList = environment.backupAllianceList;
+                        backupAllianceListUndo = environment.backupAllianceList;
                         rankingsList = environment.rankingsList;
                         eventTeamList = environment.eventTeamList;
                         eventQualsSchedule = environment.eventQualsSchedule;
@@ -470,6 +474,10 @@ function saveEnvironment() {
                 environment.playoffResults = playoffResults;
                 environment.allianceTeamList = allianceTeamList;
                 environment.allianceListUnsorted = allianceListUnsorted;
+                environment.declinedList = declinedList;
+                envoronment.backupAllianceList = backupAllianceList;
+                environment.backupAllianceListUndo = backupAllianceListUndo;
+                environment.declinedListUndo = declinedListUndo;
                 environment.rankingsList = rankingsList;
                 environment.eventTeamList = eventTeamList;
                 environment.eventQualsSchedule = eventQualsSchedule;

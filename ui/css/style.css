@@ -415,6 +415,9 @@ color: black;
 .allianceCaptain {
 	background: rgba(251,255,135,1.00)
 }
+.allianceDeclined {
+	background: rgba(255, 0, 0,1.00)
+}
 .allianceAnnounce {
 	font-size: 18px;
 	align-content: center;

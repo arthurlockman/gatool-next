@@ -192,7 +192,6 @@ function getTeamRanks() {
 
                     //team = JSON.parse(localStorage["teamData" + data.Rankings[i].teamNumber]);
                     team = decompressLocalStorage("teamData" + data.Rankings[i].teamNumber);
-
                     team.rank = data.Rankings[i].rank;
                     allianceTeamList[i] = data.Rankings[i].teamNumber;
                     allianceListUnsorted[i] = data.Rankings[i].teamNumber;
@@ -260,6 +259,7 @@ function getTeamRanks() {
 
                 $("#rankUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"));
             }
+            backupAllianceList = allianceListUnsorted.slice(8);
         }
     });
     if (localStorage.offseason !== "true") {

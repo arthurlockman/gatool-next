@@ -59,7 +59,7 @@ if (!localStorage.currentEventList) {
     localStorage.currentEventList = []
 }
 if (!localStorage.autoAdvance) {
-    localStorage.autoAdvance = "true"
+    localStorage.autoAdvance = "false"
 }
 
 // reset some of those variables, which will be adjusted later.
@@ -472,6 +472,11 @@ function initEnvironment() {
     playoffResults = {};
     allianceTeamList = [];
     allianceListUnsorted = [];
+    declinedList = [];
+    backupAllianceList = [];
+    declinedListUndo = [];
+    backupAllianceListUndo = [];
+    undoCounter = [];
     allianceSelectionLength = 15;
     rankingsList = [];
     currentAllianceChoice = 0;
@@ -494,6 +499,11 @@ function prepareAllianceSelection() {
     "use strict";
     allianceTeamList = [];
     allianceListUnsorted = [];
+    declinedList = [];
+    backupAllianceList = [];
+    declinedListUndo = [];
+    backupAllianceListUndo = [];
+    undoCounter=[];
     rankingsList = [];
     currentAllianceChoice = 0;
     $("#allianceSelectionTable").html('<table> <tr> <td><table class="availableTeams"> <tr> <td colspan="5"><strong>Teams for Alliance Selection</strong></td></tr><tr> <td id="allianceTeamList1" class="col1"><div class="allianceTeam">List of teams</div></td><td id="allianceTeamList2" class="col1"><div class="allianceTeam">List of teams</div></td><td id="allianceTeamList3" class="col1"><div class="allianceTeam">List of teams</div></td><td id="allianceTeamList4" class="col1"><div class="allianceTeam">List of teams</div></td><td id="allianceTeamList5" class="col1"><div class="allianceTeam allianceCaptain">List of teams</div></td></tr></table></td><td class="col1"><table id="backupTeamsTable" class="backupAlliancesTable"> <tr> <td><p><strong>Backup Alliances</strong><br>(Initially rank 9 to 16 top to bottom)</p></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam1">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam2">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam3">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam4">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam5">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam6">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam7">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam8">List of teams</div></td></tr></table></td><td><table class="alliancesTeamsTable"> <tr class="col6"> <td id="Alliance1" class="col3 dropzone"><div class="alliancedrop" id="Alliance1Captain">Alliance 1 Captain</div><div class="alliancedrop nextAllianceChoice" id="Alliance1Round1" >Alliance 1 first choice</div><div class="alliancedrop" id="Alliance1Round2" >Alliance 1 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance1Round3" >Alliance 1 third choice</div></td><td id="Alliance8" class="col3"><div class="alliancedrop" id="Alliance8Captain" >Alliance 8 Captain</div><div class="alliancedrop" id="Alliance8Round1" >Alliance 8 first choice</div><div class="alliancedrop" id="Alliance8Round2" >Alliance 8 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance8Round3" >Alliance 8 third choice</div></td></tr><tr class="col6"> <td id="Alliance2" class="col3"><div class="alliancedrop" id="Alliance2Captain" >Alliance 2 Captain</div><div class="alliancedrop" id="Alliance2Round1" >Alliance 2 first choice</div><div class="alliancedrop" id="Alliance2Round2" >Alliance 2 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance2Round3" >Alliance 2 third choice</div></td><td id="Alliance7" class="col3"><div class="alliancedrop" id="Alliance7Captain" >Alliance 7 Captain</div><div class="alliancedrop" id="Alliance7Round1" >Alliance 7 first choice</div><div class="alliancedrop" id="Alliance7Round2" >Alliance 7 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance7Round3" >Alliance 7 third choice</div></td></tr><tr class="col6"> <td id="Alliance3" class="col3"><div class="alliancedrop" id="Alliance3Captain" >Alliance 3 Captain</div><div class="alliancedrop" id="Alliance3Round1" >Alliance 3 first choice</div><div class="alliancedrop" id="Alliance3Round2" >Alliance 3 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance3Round3" >Alliance 3 third choice</div></td><td id="Alliance6" class="col3"><div class="alliancedrop" id="Alliance6Captain" >Alliance 6 Captain</div><div class="alliancedrop" id="Alliance6Round1" >Alliance 6 first choice</div><div class="alliancedrop" id="Alliance6Round2" >Alliance 6 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance6Round3" >Alliance 6 third choice</div></td></tr><tr class="col6"> <td id="Alliance4" class="col3"><div class="alliancedrop" id="Alliance4Captain" >Alliance 4 Captain</div><div class="alliancedrop" id="Alliance4Round1" >Alliance 4 first choice</div><div class="alliancedrop" id="Alliance4Round2" >Alliance 4 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance4Round3" >Alliance 4 third choice</div></td><td id="Alliance5" class="col3"><div class="alliancedrop" id="Alliance5Captain" >Alliance 5 Captain</div><div class="alliancedrop" id="Alliance5Round1" >Alliance 5 first choice</div><div class="alliancedrop" id="Alliance5Round2" >Alliance 5 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance5Round3" >Alliance 5 third choice</div></td></tr></table></td></tr></table>')
@@ -1463,12 +1473,13 @@ function announceDisplay() {
             } else {
                 $('#' + stationList[ii] + 'PlaybyPlayTeamName').html(teamData.nameShortLocal)
             }
-            if (teamData.showRobotName === true) {            
-            if (teamData.robotNameLocal === "") {
-                $('#' + stationList[ii] + 'PlaybyPlayRobotName').html(teamData.robotName)
+            if (teamData.showRobotName === true) {
+                if (teamData.robotNameLocal === "") {
+                    $('#' + stationList[ii] + 'PlaybyPlayRobotName').html(teamData.robotName)
+                } else {
+                    $('#' + stationList[ii] + 'PlaybyPlayRobotName').html(teamData.robotNameLocal)
+                }
             } else {
-                $('#' + stationList[ii] + 'PlaybyPlayRobotName').html(teamData.robotNameLocal)
-            }} else {
                 $('#' + stationList[ii] + 'PlaybyPlayRobotName').html("")
             }
             if (teamData.cityStateLocal === "") {
@@ -1505,7 +1516,7 @@ function announceDisplay() {
             $('#davidPriceAlliances').show()
         }
         getTeamRanks();
-        displayAwards()
+        displayAwards();
     }
 }
 
@@ -1590,6 +1601,7 @@ function displayAwardsTeams(teamList) {
 
 function displayAllianceCaptains(startingPosition) {
     "use strict";
+
     for (var i = 1; i <= 8; i++) {
         if (i <= startingPosition + 1) {
             $("#Alliance" + i + "Captain").html("Alliance " + i + " Captain<div class ='allianceTeam allianceCaptain' captain='Alliance" + i + "Captain' teamnumber='" + allianceChoices["Alliance" + i + "Captain"] + "' id='allianceTeam" + allianceChoices["Alliance" + i + "Captain"] + "' onclick='chosenAllianceAlert(this)'>" + allianceChoices["Alliance" + i + "Captain"] + "</div>")
@@ -1597,14 +1609,24 @@ function displayAllianceCaptains(startingPosition) {
             $("#Alliance" + i + "Captain").html("Alliance " + i + " Captain<div class ='allianceTeam allianceCaptain' captain='Alliance" + i + "Captain' teamnumber='" + allianceChoices["Alliance" + i + "Captain"] + "' id='allianceTeam" + allianceChoices["Alliance" + i + "Captain"] + "' onclick='allianceAlert(this)'>" + allianceChoices["Alliance" + i + "Captain"] + "</div>")
         }
     }
-    $("#backupAllianceTeam1").html("<div id='backupAllianceTeamContainer1' class ='allianceTeam' captain='alliance' teamnumber=" + allianceListUnsorted[8] + " onclick='allianceAlert(this)'>" + allianceListUnsorted[8] + "</div>");
-    $("#backupAllianceTeam2").html("<div id='backupAllianceTeamContainer2' class ='allianceTeam' captain='alliance' teamnumber=" + allianceListUnsorted[9] + " onclick='allianceAlert(this)'>" + allianceListUnsorted[9] + "</div>");
-    $("#backupAllianceTeam3").html("<div id='backupAllianceTeamContainer3' class ='allianceTeam' captain='alliance' teamnumber=" + allianceListUnsorted[10] + " onclick='allianceAlert(this)'>" + allianceListUnsorted[10] + "</div>");
-    $("#backupAllianceTeam4").html("<div id='backupAllianceTeamContainer4' class ='allianceTeam' captain='alliance' teamnumber=" + allianceListUnsorted[11] + " onclick='allianceAlert(this)'>" + allianceListUnsorted[11] + "</div>");
-    $("#backupAllianceTeam5").html("<div id='backupAllianceTeamContainer5' class ='allianceTeam' captain='alliance' teamnumber=" + allianceListUnsorted[12] + " onclick='allianceAlert(this)'>" + allianceListUnsorted[12] + "</div>");
-    $("#backupAllianceTeam6").html("<div id='backupAllianceTeamContainer6' class ='allianceTeam' captain='alliance' teamnumber=" + allianceListUnsorted[13] + " onclick='allianceAlert(this)'>" + allianceListUnsorted[13] + "</div>");
-    $("#backupAllianceTeam7").html("<div id='backupAllianceTeamContainer7' class ='allianceTeam' captain='alliance' teamnumber=" + allianceListUnsorted[14] + " onclick='allianceAlert(this)'>" + allianceListUnsorted[14] + "</div>");
-    $("#backupAllianceTeam8").html("<div id='backupAllianceTeamContainer8' class ='allianceTeam' captain='alliance' teamnumber=" + allianceListUnsorted[15] + " onclick='allianceAlert(this)'>" + allianceListUnsorted[15] + "</div>")
+}
+
+function displayBackupAlliances(reason) {
+    var listOffset = 7;
+    if (reason === "accept") {listOffset = 7;}
+    backupAllianceList = allianceListUnsorted.slice(listOffset);
+    for (var i = 0; i < declinedList.length; i++) {
+        if (backupAllianceList.indexOf(Number(declinedList[i])) >= 0) {
+            backupAllianceList.splice(backupAllianceList.indexOf(Number(declinedList[i])), 1);
+        }
+    }
+
+    for (var i = 1; i <= 8; i++) {
+        if (i <= backupAllianceList.length) {
+            $("#backupAllianceTeam" + i).html("<div id='backupAllianceTeamContainer" + i + "' class ='allianceTeam' captain='alliance' teamnumber=" + backupAllianceList[i-1] + " onclick='allianceAlert(this)'>" + backupAllianceList[i-1] + "</div>");
+        }
+
+    }
 }
 
 function sortAllianceTeams(teamList) {
@@ -1632,12 +1654,17 @@ function sortAllianceTeams(teamList) {
         }
         $("#allianceTeamList" + column).append("<div class ='allianceTeam' onclick='allianceAlert(this)' captain='alliance' teamnumber='" + teamList[i] + "' id='allianceTeam" + teamList[i] + "'>" + teamList[i] + "</div></br>")
     }
-    return teamList
+    for (var i = 0; i < declinedList.length; i++) {
+        document.getElementById("allianceTeam" + declinedList[i]).setAttribute("declined", "true");
+        document.getElementById("allianceTeam" + declinedList[i]).classList.add("allianceDeclined");
+    }
+    return teamList;
 }
 
 function allianceAlert(teamContainer) {
     "use strict";
     var teamNumber = teamContainer.getAttribute("teamnumber");
+    var declined = teamContainer.getAttribute("declined");
     var currentTeamInfo = decompressLocalStorage("teamData" + teamNumber);
     var selectedTeamInfo = "<span class = 'allianceAnnounceDialog'>Team " + teamNumber + " ";
     if (currentTeamInfo.nameShortLocal === "") {
@@ -1645,136 +1672,219 @@ function allianceAlert(teamContainer) {
     } else {
         selectedTeamInfo += currentTeamInfo.nameShortLocal
     }
-    selectedTeamInfo += "<br> is from ";
-    if (currentTeamInfo.organizationLocal === "") {
-        selectedTeamInfo += currentTeamInfo.organization
+    if (declined !== "true") {
+        selectedTeamInfo += "<br> is from ";
+        if (currentTeamInfo.organizationLocal === "") {
+            selectedTeamInfo += currentTeamInfo.organization
+        } else {
+            selectedTeamInfo += currentTeamInfo.organizationLocal
+        }
+        selectedTeamInfo += "<br>in ";
+        if (currentTeamInfo.cityStateLocal === "") {
+            selectedTeamInfo += currentTeamInfo.cityState
+        } else {
+            selectedTeamInfo += currentTeamInfo.cityStateLocal
+        }
     } else {
-        selectedTeamInfo += currentTeamInfo.organizationLocal
-    }
-    selectedTeamInfo += "<br>in ";
-    if (currentTeamInfo.cityStateLocal === "") {
-        selectedTeamInfo += currentTeamInfo.cityState
-    } else {
-        selectedTeamInfo += currentTeamInfo.cityStateLocal
+        selectedTeamInfo += "<br>has previously declined an offer, so they are not elegible at this time.";
     }
     selectedTeamInfo += "</span>";
-    BootstrapDialog.show({
-        type: 'type-success',
-        title: '<b>Alliance Choice</b>',
-        message: selectedTeamInfo,
-        buttons: [{
-            icon: 'glyphicon glyphicon-tower',
-            cssClass: "btn btn-primary",
-            label: 'Alliance Captain Announce',
-            hotkey: 65,
-            action: function (dialogRef) {
-                dialogRef.close()
-            }
-        }, {
-            icon: 'glyphicon glyphicon-thumbs-down',
-            cssClass: "btn btn-danger",
-            label: 'Respectfully Decline',
-            hotkey: 68,
-            action: function (dialogRef) {
-                dialogRef.close()
-            }
-        }, {
-            icon: 'glyphicon glyphicon-thumbs-up',
-            cssClass: "btn btn-success",
-            hotkey: 13,
-            label: 'Gratefully Accept',
-            action: function (dialogRef) {
-                dialogRef.close();
-                BootstrapDialog.show({
-                    type: 'type-success',
-                    title: '<b>Are you sure they want to accept?</b>',
-                    message: "<span class = 'allianceAnnounceDialog'>Are you certain that Team " + teamNumber + " accepts the offer?</span>",
-                    buttons: [{
-                        icon: 'glyphicon glyphicon-thumbs-down',
-                        label: 'No, they did not accept.',
-                        hotkey: 78,
-                        cssClass: "btn btn-danger",
-                        action: function (dialogRef) {
-                            dialogRef.close()
+    if (declined === "true") {
+        BootstrapDialog.show({
+            type: 'type-warning',
+            title: '<b>Ineligible Team</b>',
+            message: selectedTeamInfo,
+            buttons: [{
+                label: 'OK',
+                icon: 'glyphicon glyphicon-thumbs-down',
+                hotkey: 13,
+                cssClass: "btn btn-success",
+                action: function (dialogRef) {
+                    dialogRef.close()
+                }
+            }]
+        })
+    } else {
+        BootstrapDialog.show({
+            type: 'type-success',
+            title: '<b>Alliance Choice</b>',
+            message: selectedTeamInfo,
+            buttons: [{
+                icon: 'glyphicon glyphicon-tower',
+                cssClass: "btn btn-primary",
+                label: 'Alliance Captain Announce',
+                hotkey: 65,
+                action: function (dialogRef) {
+                    dialogRef.close()
+                }
+            }, {
+                icon: 'glyphicon glyphicon-thumbs-down',
+                cssClass: "btn btn-danger",
+                label: 'Respectfully Decline',
+                hotkey: 68,
+                action: function (dialogRef) {
+                    dialogRef.close();
+                    BootstrapDialog.show({
+                        type: 'type-warning',
+                        title: '<b>Team Declines the offer</b>',
+                        message: "<span class = 'allianceAnnounceDialog'>Team " + teamNumber + " is about to decline an offer to join an alliance. Are you sure?<br>They will become inelegible to be selected by another team or to continue as a backup team in the playoffs.",
+                        buttons: [{
+                            label: "Sorry, they don't decline the offer",
+                            icon: 'glyphicon glyphicon-tower',
+                            hotkey: 13,
+                            cssClass: "btn btn-success",
+                            action: function (dialogRef) {
+                                dialogRef.close();
+                            }},{
+                            label: 'THEY DECLINE THE OFFER',
+                            icon: 'glyphicon glyphicon-thumbs-down',
+                            hotkey: 13,
+                            cssClass: "btn btn-danger",
+                            action: function (dialogRef) {
+                                dialogRef.close();
+                                declinedListUndo.push(JSON.stringify(declinedList));
+                                allianceChoicesUndo.push(JSON.stringify(allianceChoices));
+                                allianceListUnsortedUndo.push(JSON.stringify(allianceListUnsorted));
+                                allianceTeamListUndo.push(JSON.stringify(allianceTeamList));
+                                allianceSelectionTableUndo.push($("#allianceSelectionTable").html());
+                                declinedList.push(teamNumber);
+                                backupAllianceListUndo.push(JSON.stringify(backupAllianceList));
+                                $("#" + teamContainer.getAttribute("id")).addClass("allianceDeclined");
+                                $("#" + teamContainer.getAttribute("id")).attr("declined", "true");
+                                $("#allianceUndoButton").attr("onclick", "undoAllianceSelection()");
+                                $("#allianceUndoButton").show();
+                                sortAllianceTeams(allianceTeamList);
+                                displayBackupAlliances("decline");
+                                undoCounter.push("decline");
+                            }
                         }
-                    }, {
-                        icon: 'glyphicon glyphicon-thumbs-up',
-                        cssClass: "btn btn-success",
-                        label: 'Gratefully Accept',
-                        hotkey: 13,
-                        action: function (dialogRef) {
-                            dialogRef.close();
-                            allianceChoicesUndo.push(JSON.stringify(allianceChoices));
-                            allianceListUnsortedUndo.push(JSON.stringify(allianceListUnsorted));
-                            allianceTeamListUndo.push(JSON.stringify(allianceTeamList));
-                            allianceSelectionTableUndo.push($("#allianceSelectionTable").html());
-                            $("#allianceUndoButton").attr("onclick", "undoAllianceSelection()");
-                            $("#allianceUndoButton").show();
-                            allianceChoices[allianceSelectionOrder[currentAllianceChoice]] = teamNumber;
-                            var index = allianceListUnsorted.indexOf(parseInt(teamNumber));
-                            if (index > -1) {
-                                allianceListUnsorted.splice(index, 1)
+                        ]
+                    })
+                }
+            }, {
+                icon: 'glyphicon glyphicon-thumbs-up',
+                cssClass: "btn btn-success",
+                hotkey: 13,
+                label: 'Gratefully Accept',
+                action: function (dialogRef) {
+                    dialogRef.close();
+                    BootstrapDialog.show({
+                        type: 'type-success',
+                        title: '<b>Are you sure they want to accept?</b>',
+                        message: "<span class = 'allianceAnnounceDialog'>Are you certain that Team " + teamNumber + " accepts the offer?</span>",
+                        buttons: [{
+                            icon: 'glyphicon glyphicon-thumbs-down',
+                            label: 'No, they did not accept.',
+                            hotkey: 78,
+                            cssClass: "btn btn-danger",
+                            action: function (dialogRef) {
+                                dialogRef.close()
                             }
-                            index = allianceTeamList.indexOf(parseInt(teamNumber));
-                            if (index > -1) {
-                                allianceTeamList.splice(index, 1)
-                            }
-                            if (teamContainer.getAttribute("captain") !== "alliance") {
-                                var allianceBackfill = teamContainer.getAttribute("captain");
-                                teamContainer.setAttribute("captain", "alliance");
-                                var nextAlliance = parseInt(allianceBackfill.substr(8, 1));
-                                for (var j = nextAlliance; j < 8; j++) {
-                                    allianceChoices["Alliance" + j + "Captain"] = allianceChoices["Alliance" + (j + 1) + "Captain"]
+                        }, {
+                            icon: 'glyphicon glyphicon-thumbs-up',
+                            cssClass: "btn btn-success",
+                            label: 'Gratefully Accept',
+                            hotkey: 13,
+                            action: function (dialogRef) {
+                                dialogRef.close();
+                                allianceChoicesUndo.push(JSON.stringify(allianceChoices));
+                                allianceListUnsortedUndo.push(JSON.stringify(allianceListUnsorted));
+                                allianceTeamListUndo.push(JSON.stringify(allianceTeamList));
+                                declinedListUndo.push(JSON.stringify(declinedList));
+                                backupAllianceListUndo.push(JSON.stringify(backupAllianceList));
+                                allianceSelectionTableUndo.push($("#allianceSelectionTable").html());
+                                $("#allianceUndoButton").attr("onclick", "undoAllianceSelection()");
+                                $("#allianceUndoButton").show();
+                                allianceChoices[allianceSelectionOrder[currentAllianceChoice]] = teamNumber;
+                                var reducedAllianceListUnsorted = allianceListUnsorted;
+                                
+                                var index = allianceListUnsorted.indexOf(parseInt(teamNumber));
+                                if (index > -1) {
+                                    allianceListUnsorted.splice(index, 1)
                                 }
-                                allianceChoices.Alliance8Captain = allianceListUnsorted[7];
-                                index = allianceTeamList.indexOf(parseInt(allianceChoices.Alliance8Captain));
+                                index = allianceTeamList.indexOf(parseInt(teamNumber));
                                 if (index > -1) {
                                     allianceTeamList.splice(index, 1)
                                 }
-                            }
-                            teamContainer.removeAttribute("onclick");
-                            teamContainer.setAttribute("onclick", "chosenAllianceAlert(this)");
-                            teamContainer.id = "allianceTeam" + teamContainer.getAttribute("teamNumber");
-                            $("#" + teamContainer.getAttribute("id")).removeClass("allianceCaptain");
-                            $("#" + allianceSelectionOrder[currentAllianceChoice]).append(teamContainer);
-                            $("#" + allianceSelectionOrder[currentAllianceChoice].substr(0, 9)).removeClass("dropzone");
-                            $("#" + allianceSelectionOrder[currentAllianceChoice]).removeClass("nextAllianceChoice");
-                            currentAllianceChoice++;
-                            if (currentAllianceChoice <= allianceSelectionLength) {
-                                $("#" + allianceSelectionOrder[currentAllianceChoice].slice(0, 9)).addClass("dropzone");
-                                $("#" + allianceSelectionOrder[currentAllianceChoice]).addClass("nextAllianceChoice")
-                            }
-                            teamContainer.textContent = teamNumber;
-                            displayAllianceCaptains(currentAllianceChoice);
-                            sortAllianceTeams(allianceTeamList);
-                            if (currentAllianceChoice === parseInt((allianceSelectionLength + 1))) {
-                                localStorage.allianceNoChange = "true";
-                                for (var k = 0; k < eventTeamList.length; k++) {
-                                    document.getElementById("allianceTeam" + eventTeamList[k].teamNumber).setAttribute("onclick", "chosenAllianceAlert(this)")
+                                index = backupAllianceList.indexOf(parseInt(teamNumber));
+                                if (index > -1) {
+                                    backupAllianceList.splice(index, 1)
                                 }
-                                for (k = 1; k <= 8; k++) {
-                                    document.getElementById("backupAllianceTeamContainer" + k).setAttribute("onclick", "chosenAllianceAlert(this)")
+                                if (teamContainer.getAttribute("captain") !== "alliance") {
+                                    var allianceBackfill = teamContainer.getAttribute("captain");
+                                    teamContainer.setAttribute("captain", "alliance");
+                                    var nextAlliance = parseInt(allianceBackfill.substr(8, 1));
+
+                                    for (var j = nextAlliance; j < 8; j++) {
+                                        allianceChoices["Alliance" + j + "Captain"] = allianceChoices["Alliance" + (j + 1) + "Captain"]
+                                    }
+                                    //test for declined team
+                                    //allianceChoices.Alliance8Captain = allianceListUnsorted[7];
+                                    allianceChoices.Alliance8Captain = backupAllianceList[0];
+
+                                    index = allianceTeamList.indexOf(parseInt(allianceChoices.Alliance8Captain));
+                                    if (index > -1) {
+                                        allianceTeamList.splice(index, 1)
+                                    }
+                                    index = backupAllianceList.indexOf(parseInt(allianceChoices.Alliance8Captain));
+                                    if (index > -1) {
+                                        backupAllianceList.splice(index, 1)
+                                    }
+                                    index = allianceListUnsorted.indexOf(parseInt(allianceChoices.Alliance8Captain));
+                                    if (index > -1) {
+                                        allianceListUnsorted.splice(index, 1)
+                                    }
                                 }
+                                teamContainer.removeAttribute("onclick");
+                                teamContainer.setAttribute("onclick", "chosenAllianceAlert(this)");
+                                teamContainer.id = "allianceTeam" + teamContainer.getAttribute("teamNumber");
+                                $("#" + teamContainer.getAttribute("id")).removeClass("allianceCaptain");
+                                $("#" + allianceSelectionOrder[currentAllianceChoice]).append(teamContainer);
+                                $("#" + allianceSelectionOrder[currentAllianceChoice].substr(0, 9)).removeClass("dropzone");
+                                $("#" + allianceSelectionOrder[currentAllianceChoice]).removeClass("nextAllianceChoice");
+                                currentAllianceChoice++;
+                                if (currentAllianceChoice <= allianceSelectionLength) {
+                                    $("#" + allianceSelectionOrder[currentAllianceChoice].slice(0, 9)).addClass("dropzone");
+                                    $("#" + allianceSelectionOrder[currentAllianceChoice]).addClass("nextAllianceChoice")
+                                }
+                                teamContainer.textContent = teamNumber;
+                                displayAllianceCaptains(currentAllianceChoice);
+                                displayBackupAlliances("accept");
+                                sortAllianceTeams(allianceTeamList);
+                                if (currentAllianceChoice === parseInt((allianceSelectionLength + 1))) {
+                                    localStorage.allianceNoChange = "true";
+                                    for (var k = 0; k < eventTeamList.length; k++) {
+                                        document.getElementById("allianceTeam" + eventTeamList[k].teamNumber).setAttribute("onclick", "chosenAllianceAlert(this)")
+                                    }
+                                    for (k = 1; k <= 8; k++) {
+                                        document.getElementById("backupAllianceTeamContainer" + k).setAttribute("onclick", "chosenAllianceAlert(this)")
+                                    }
+                                }
+                                undoCounter.push("accept");
+
                             }
-                        }
-                    }]
-                })
-            }
-        }]
-    })
+                        }]
+                    })
+                }
+            }]
+        })
+    }
 }
 
 function undoAllianceSelection() {
     "use strict";
+    var reason = undoCounter.pop();
+    declinedList = JSON.parse(declinedListUndo.pop());
     allianceChoices = JSON.parse(allianceChoicesUndo.pop());
     allianceListUnsorted = JSON.parse(allianceListUnsortedUndo.pop());
     allianceTeamList = JSON.parse(allianceTeamListUndo.pop());
+    backupAllianceList = JSON.parse(backupAllianceListUndo.pop());
     $("#allianceSelectionTable").html(allianceSelectionTableUndo.pop());
     $("#allianceUndoButton").attr("onclick", "undoAllianceSelection()");
-    currentAllianceChoice = currentAllianceChoice - 1;
-    if (currentAllianceChoice === 0) {
+    if (reason === "accept") {currentAllianceChoice = currentAllianceChoice - 1;}
+    if (undoCounter.length === 0) {
         $("#allianceUndoButton").attr("onclick", "");
-        $("#allianceUndoButton").hide()
+        $("#allianceUndoButton").hide();
     }
 }
 
@@ -1803,7 +1913,7 @@ function awardsAlert(teamContainer) {
     } else {
         selectedTeamInfo += currentTeamInfo.cityStateLocal + "<br>"
     }
-    if (originalAndSustaining.indexOf(teamNumber)>0) {
+    if (originalAndSustaining.indexOf(teamNumber) > 0) {
         selectedTeamInfo += "<br>An Original and Sustaining Team founded in "
     } else {
         selectedTeamInfo += "<br>Founded in "
@@ -1850,7 +1960,7 @@ function chosenAllianceAlert(teamContainer) {
     } else {
         selectedTeamInfo += currentTeamInfo.cityStateLocal + "<br>"
     }
-    if (originalAndSustaining.indexOf(teamNumber)>0) {
+    if (originalAndSustaining.indexOf(teamNumber) > 0) {
         selectedTeamInfo += "<br>An Original and Sustaining Team founded in "
     } else {
         selectedTeamInfo += "<br>Founded in "
@@ -2572,7 +2682,7 @@ function updateTeamInfoDone(cloudSave) {
     teamData.showRobotName = $("#showRobotName").bootstrapSwitch('state');
     teamData.lastVisit = moment().format();
     compressLocalStorage("teamData" + teamNumber, teamData);
-    console.log(typeof cloudSave + " cloudSave value " + cloudSave);
+    //console.log(typeof cloudSave + " cloudSave value " + cloudSave);
     if (cloudSave === "true") {
         teamUpdateCalls++;
         sendTeamUpdates(teamNumber, !0)
