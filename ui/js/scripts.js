@@ -1613,7 +1613,7 @@ function displayAllianceCaptains(startingPosition) {
 
 function displayBackupAlliances(reason) {
     var listOffset = 7;
-    if (reason === "accept") {listOffset = 7;}
+    if ((reason === "decline")&&(undoCounter.length===0)) {listOffset = 8;}
     backupAllianceList = allianceListUnsorted.slice(listOffset);
     for (var i = 0; i < declinedList.length; i++) {
         if (backupAllianceList.indexOf(Number(declinedList[i])) >= 0) {
