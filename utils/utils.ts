@@ -3,15 +3,23 @@ import {MatchWithHighScoreDetails} from '../model/match';
 
 const rp = require('request-promise');
 
+export class ResponseWithHeaders {
+    headers: any;
+    body: any;
+}
+
+const includeHeaders = (body, response, resolveWithFullResponse) => {
+    return {'headers': response.headers, 'body': body};
+};
+
 /**
  * Get and return data from the FIRST API
  * @param path The path on the FIRST API to call
  * @param callback The lambda callback to return the data
  */
 const GetDataFromFIRSTAndReturn = (path: string, callback: any) => {
-    return GetDataFromFIRST(path).then((body) => {
-        console.log(body);
-        ReturnJsonWithCode(200, body, callback);
+    return GetDataFromFIRST(path).then((response) => {
+        ReturnJsonWithCode(200, response.body, callback, response.headers);
     }).catch(rejection => {
         ReturnJsonWithCode(parseInt(rejection.response.statusCode, 10), rejection.response.body, callback);
     });
@@ -21,7 +29,7 @@ const GetDataFromFIRSTAndReturn = (path: string, callback: any) => {
  * Get data from FIRST and return a promise
  * @param path The path to GET data from
  */
-const GetDataFromFIRST = (path: string): Promise<any> => {
+const GetDataFromFIRST = (path: string): Promise<ResponseWithHeaders> => {
     try {
         const options = {
             method: 'GET',
@@ -30,7 +38,8 @@ const GetDataFromFIRST = (path: string): Promise<any> => {
             headers: {
                 'Authorization': process.env.FRC_API_KEY,
                 'Accept': 'application/json'
-            }
+            },
+            transform: includeHeaders
         };
         return rp(options);
     } catch (err) {
@@ -48,7 +57,7 @@ const GetAvatarData = (year: string, eventCode: string, page?: number): Promise<
     const pageString = (page != null) ? `&page=${page}` : '';
     const avatarData = GetDataFromFIRST(`${year}/avatars?eventCode=${eventCode}${pageString}`);
     return avatarData.then(response => {
-        const avatars = response as EventAvatars;
+        const avatars = response.body as EventAvatars;
         avatars.teams = avatars.teams.map(team => {
             team.encodedAvatar = (team.encodedAvatar === null) ? null : `api/${year}/avatars/team/${team.teamNumber}/avatar.png`;
             return team;
@@ -56,8 +65,10 @@ const GetAvatarData = (year: string, eventCode: string, page?: number): Promise<
         return avatars;
     }).catch(rejection => {
         return {
-            statusCode: parseInt(rejection.response.statusCode, 10),
-            message: rejection.response.body
+            body: {
+                statusCode: parseInt(rejection.response.statusCode, 10),
+                message: rejection.response.body
+            }
         };
     });
 };
@@ -67,17 +78,23 @@ const GetAvatarData = (year: string, eventCode: string, page?: number): Promise<
  * @param statusCode The status code to use in the return.
  * @param body The body data (JSON) to return
  * @param callback The lambda callback function
+ * @param headers Additional headers to return with the response
  */
-const ReturnJsonWithCode = (statusCode: number, body: any, callback: any) => {
+const ReturnJsonWithCode = (statusCode: number, body: any, callback: any, headers?: any) => {
+    const responseHeaders = {
+        'Access-Control-Allow-Origin': '*', // Required for CORS support to work
+        'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS
+        'Content-Type': 'application/json',
+        'charset': 'utf-8',
+        'Cache-Control': 'no-cache'
+    };
+    if (headers && headers['last-modified']) {
+        responseHeaders['Last-Modified'] = headers['last-modified'];
+    }
     return callback(null, {
         statusCode: statusCode,
         body: JSON.stringify(body),
-        headers: {
-            'Access-Control-Allow-Origin': '*', // Required for CORS support to work
-            'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS
-            'Content-Type': 'application/json',
-            'charset': 'utf-8'
-        },
+        headers: responseHeaders,
         isBase64Encoded: false
     });
 };

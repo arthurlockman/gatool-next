@@ -1,6 +1,6 @@
 import {APIGatewayEvent, Callback, Context, CustomAuthorizerEvent, Handler} from 'aws-lambda';
 import {MatchWithEventDetails} from './model/match';
-import {EventAvatars, EventSchedule, EventType, TeamAvatar} from './model/event';
+import {EventAvatars, EventSchedule, EventType} from './model/event';
 import {BuildHighScoreJson, GetAvatarData, GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode} from './utils/utils';
 import {
     GetHighScoresFromDb,
@@ -35,23 +35,23 @@ const GetTeams: Handler = (event: APIGatewayEvent, context: Context, callback: C
     }
     const initialTeamData = GetDataFromFIRST(`${event.pathParameters.year}/teams?${query.join('&')}&page=1`);
     initialTeamData.then(teamData => {
-        if (teamData.statusCode) {
-            return ReturnJsonWithCode(teamData.statusCode, teamData.message, callback);
+        if (teamData.body.statusCode) {
+            return ReturnJsonWithCode(teamData.body.statusCode, teamData.body.message, callback);
         }
-        if (teamData.pageTotal === 1) {
-            return ReturnJsonWithCode(200, teamData, callback);
+        if (teamData.body.pageTotal === 1) {
+            return ReturnJsonWithCode(200, teamData.body, callback, teamData.headers);
         } else {
             const promises: Promise<any>[] = [];
-            for (let i = 2; i <= teamData.pageTotal; i++) {
+            for (let i = 2; i <= teamData.body.pageTotal; i++) {
                 promises.push(GetDataFromFIRST(`${event.pathParameters.year}/teams?${query.join('&')}&page=${i}`));
             }
             Promise.all(promises).then(allTeamData => {
                 allTeamData.map(team => {
-                    teamData.teamCountPage += team.teamCountPage;
-                    teamData.teams = teamData.teams.concat(team.teams);
+                    teamData.body.teamCountPage += team.body.teamCountPage;
+                    teamData.body.teams = teamData.body.teams.concat(team.teams);
                 });
-                teamData.pageTotal = 1;
-                return ReturnJsonWithCode(200, teamData, callback);
+                teamData.body.pageTotal = 1;
+                return ReturnJsonWithCode(200, teamData.body, callback, teamData.headers);
             });
         }
     })
@@ -83,19 +83,19 @@ const GetHistoricTeamAwards: Handler = (event: APIGatewayEvent, context: Context
         GetDataFromFIRST(`${currentSeason - 1}/awards/${event.pathParameters.teamNumber}`).then(pastYearAwards => {
             GetDataFromFIRST(`${currentSeason - 2}/awards/${event.pathParameters.teamNumber}`).then(secondYearAwards => {
                 const awardList = {};
-                awardList[`${currentSeason}`] = currentYearAwards;
-                awardList[`${currentSeason - 1}`] = pastYearAwards;
-                awardList[`${currentSeason - 2}`] = secondYearAwards;
+                awardList[`${currentSeason}`] = currentYearAwards.body;
+                awardList[`${currentSeason - 1}`] = pastYearAwards.body;
+                awardList[`${currentSeason - 2}`] = secondYearAwards.body;
                 ReturnJsonWithCode(200, awardList, callback);
             }).catch(err => {
                 const awardList = {};
-                awardList[`${currentSeason}`] = currentYearAwards;
-                awardList[`${currentSeason - 1}`] = pastYearAwards;
+                awardList[`${currentSeason}`] = currentYearAwards.body;
+                awardList[`${currentSeason - 1}`] = pastYearAwards.body;
                 ReturnJsonWithCode(200, awardList, callback);
             });
         }).catch(err => {
             const awardList = {};
-            awardList[`${currentSeason}`] = currentYearAwards;
+            awardList[`${currentSeason}`] = currentYearAwards.body;
             ReturnJsonWithCode(200, awardList, callback);
         });
     }).catch(err => {
@@ -168,7 +168,7 @@ const GetTeamAvatar: Handler = (event: APIGatewayEvent, context: Context, callba
     const avatar = GetDataFromFIRST(
         `${event.pathParameters.year}/avatars?teamNumber=${event.pathParameters.teamNumber}`);
     avatar.then(value => {
-        const allAvatars = value as EventAvatars;
+        const allAvatars = value.body as EventAvatars;
         const teamAvatar = allAvatars.teams[0];
         if (teamAvatar.encodedAvatar == null) {
             throw new Error('Bad request');
@@ -194,7 +194,7 @@ const GetTeamAvatar: Handler = (event: APIGatewayEvent, context: Context, callba
 // noinspection JSUnusedGlobalSymbols
 const GetEventHighScores: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
     return GetDataFromFIRST(`${event.pathParameters.year}/events/`).then( (eventList) => {
-        const evtList = eventList.Events.filter(evt => evt.code === event.pathParameters.eventCode);
+        const evtList = eventList.body.Events.filter(evt => evt.code === event.pathParameters.eventCode);
         if (evtList.length !== 1) {
             return ReturnJsonWithCode(404, 'Event not found.', callback);
         }
@@ -203,9 +203,9 @@ const GetEventHighScores: Handler = (event: APIGatewayEvent, context: Context, c
             .then((qualMatchList) => {
                 return GetDataFromFIRST(`${event.pathParameters.year}/schedule/${event.pathParameters.eventCode}/playoff/hybrid`)
                     .then((playoffMatchList) => {
-                        let matches: MatchWithEventDetails[] = qualMatchList.Schedule
+                        let matches: MatchWithEventDetails[] = qualMatchList.body.Schedule
                             .map(x => {return {event: {eventCode: eventDetails.code, type: 'qual'}, match: x}})
-                                .concat(playoffMatchList.Schedule
+                                .concat(playoffMatchList.body.Schedule
                                     .map(x => {return {event: {eventCode: eventDetails.code, type: 'playoff'}, match: x}}));
                         matches = matches.filter(match => match.match.postResultTime && match.match.postResultTime !== '');
                         const overallHighScorePlayoff: MatchWithEventDetails[] = [];
@@ -336,7 +336,7 @@ const UpdateHighScores: Handler = (event: APIGatewayEvent, context: Context, cal
         const order: EventType[] = [];
         const currentDate = new Date();
         currentDate.setDate(currentDate.getDate() + 1);
-        for (const _event of eventList.Events) {
+        for (const _event of eventList.body.Events) {
             const eventDate = new Date(_event.dateStart);
             if (eventDate < currentDate) {
                 promises.push(GetDataFromFIRST(process.env.FRC_CURRENT_SEASON + '/schedule/' + _event.code + '/qual/hybrid'));
