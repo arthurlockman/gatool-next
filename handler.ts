@@ -48,7 +48,7 @@ const GetTeams: Handler = (event: APIGatewayEvent, context: Context, callback: C
             Promise.all(promises).then(allTeamData => {
                 allTeamData.map(team => {
                     teamData.body.teamCountPage += team.body.teamCountPage;
-                    teamData.body.teams = teamData.body.teams.concat(team.teams);
+                    teamData.body.teams = teamData.body.teams.concat(team.body.teams);
                 });
                 teamData.body.pageTotal = 1;
                 return ReturnJsonWithCode(200, teamData.body, callback, teamData.headers);
