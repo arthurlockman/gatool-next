@@ -25,6 +25,7 @@ const StoreHighScore = (year: string, type: string, level: string, match: MatchW
             console.error(err.message);
             return Promise.reject(err);
         } else {
+            console.log(`Stored high score for ${year} ${type} ${level}: ${match.event.eventCode}`);
             return Promise.resolve();
         }
     }).promise();

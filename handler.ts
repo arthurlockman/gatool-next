@@ -351,7 +351,7 @@ const UpdateHighScores: Handler = (event: APIGatewayEvent, context: Context, cal
                 });
             }
         }
-        Promise.all(promises).then((events) => {
+        return Promise.all(promises).then((events) => {
             const matches: MatchWithEventDetails[] = [];
             const eventBody = events.map(e => e.body) as EventSchedule[];
             for (const _event of eventBody) {
@@ -410,12 +410,15 @@ const UpdateHighScores: Handler = (event: APIGatewayEvent, context: Context, cal
                 FindHighestScore(offsettingPenaltyHighScorePlayoff)));
             highScorePromises.push(StoreHighScore(process.env.FRC_CURRENT_SEASON, 'offsetting', 'qual',
                 FindHighestScore(offsettingPenaltyHighScoreQual)));
-            Promise.all(highScorePromises).then(() => {
+            return Promise.all(highScorePromises).then(() => {
                 callback();
             }, (err) => {
                 console.error(err);
                 callback(err);
             });
+        }).catch(err => {
+            console.error(err);
+            callback(err);
         });
     });
 };
