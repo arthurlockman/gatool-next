@@ -474,7 +474,7 @@ function saveEnvironment() {
                 environment.playoffResults = playoffResults;
                 environment.allianceTeamList = allianceTeamList;
                 environment.allianceListUnsorted = allianceListUnsorted;
-                environment.declinedList = declinedList;
+                environment.declinedList =declinedList;
                 environment.backupAllianceList = backupAllianceList;
                 environment.backupAllianceListUndo = backupAllianceListUndo;
                 environment.declinedListUndo = declinedListUndo;
