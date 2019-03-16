@@ -6,7 +6,7 @@ function timer() {
         // Update the count down every 1 second
 
         // Get todays date and time
-        var matchRunningTime = moment().diff(matchStartTime,'seconds')
+        var matchRunningTime = moment().diff(matchStartTime, 'seconds')
         if (matchRunningTime <= matchLength) {
             if ((matchRunningTime) <= autoLength) {
                 $("#timer").css({
@@ -95,7 +95,7 @@ function timer() {
     $("#allianceselectionlastupdated").html(" (Ranks last updated " + moment(lastRanksUpdate).fromNow() + ")<br>");
     $("#rankstablelastupdated").html("<b>Ranks last updated " + moment(lastRanksUpdate).fromNow() + "</b>");
     //update the warning in the Alliance Selection
-    ranksQualsCompare();
+    if (localStorage.inPlayoffs !== "true") { ranksQualsCompare(); }
 }
 
 function localStorageSpace() {
@@ -177,7 +177,7 @@ function inHallOfFame(team, position) {
     "use strict";
     var hofDisplay = "";
     $("#" + position + "HOF").hide();
-    if (originalAndSustaining.indexOf(team.toString())>0){
+    if (originalAndSustaining.indexOf(team.toString()) > 0) {
         hofDisplay += "Original and Sustaining Team" + localStorage.awardSeparator;
     }
     for (i = 0; i < hallOfFame.length; i++) {
@@ -188,7 +188,7 @@ function inHallOfFame(team, position) {
             hofDisplay += hallOfFame[i].Year + " " + hallOfFame[i].Challenge + " Winner" + localStorage.awardSeparator;
         }
     }
-    
+
     if (hofDisplay !== "") {
         hofDisplay = hofDisplay.slice(0, hofDisplay.length - localStorage.awardSeparator.length);
         $("#" + position + "HOF").html(hofDisplay);
@@ -475,7 +475,7 @@ function saveEnvironment() {
                 environment.allianceTeamList = allianceTeamList;
                 environment.allianceListUnsorted = allianceListUnsorted;
                 environment.declinedList = declinedList;
-                envoronment.backupAllianceList = backupAllianceList;
+                environment.backupAllianceList = backupAllianceList;
                 environment.backupAllianceListUndo = backupAllianceListUndo;
                 environment.declinedListUndo = declinedListUndo;
                 environment.rankingsList = rankingsList;
