@@ -1,7 +1,7 @@
 import {APIGatewayEvent, Callback, Context, CustomAuthorizerEvent, Handler} from 'aws-lambda';
 import {MatchWithEventDetails} from './model/match';
 import {EventAvatars, EventSchedule, EventType} from './model/event';
-import {BuildHighScoreJson, GetAvatarData, GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode} from './utils/utils';
+import {BuildHighScoreJson, GetAvatarData, GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode, ResponseWithHeaders} from './utils/utils';
 import {
     GetHighScoresFromDb,
     GetTeamUpdatesForTeam,
@@ -332,7 +332,7 @@ const PutUserPreferences: Handler = (event: APIGatewayEvent, context: Context, c
 // noinspection JSUnusedGlobalSymbols
 const UpdateHighScores: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
     return GetDataFromFIRST(process.env.FRC_CURRENT_SEASON + '/events').then((eventList) => {
-        const promises = [];
+        const promises: Promise<ResponseWithHeaders>[] = [];
         const order: EventType[] = [];
         const currentDate = new Date();
         currentDate.setDate(currentDate.getDate() + 1);
@@ -353,8 +353,9 @@ const UpdateHighScores: Handler = (event: APIGatewayEvent, context: Context, cal
         }
         Promise.all(promises).then((events) => {
             const matches: MatchWithEventDetails[] = [];
-            for (const _event of (events as EventSchedule[])) {
-                const evt = order[events.indexOf(_event)];
+            const eventBody = events.map(e => e.body) as EventSchedule[];
+            for (const _event of eventBody) {
+                const evt = order[eventBody.indexOf(_event)];
                 if (_event.Schedule[0]) {
                     for (const match of _event.Schedule) {
                         if (match.postResultTime && match.postResultTime !== '') {
