@@ -442,6 +442,21 @@ color: black;
 	color: blue;
 	font-weight: bold
 }
+.tieScore {
+	color: green
+}
+.greyScore {
+	color: rgb(177, 176, 176)
+}
+.bracketLeft {
+	border-radius: 5px 25px 25px 5px
+}
+.bracketRight {
+	border-radius: 25px 5px 5px 25px
+}
+.bracketSpacer {
+	background: rgb(194, 237, 255)
+}
 .danger {
 	color: red
 }
@@ -452,6 +467,45 @@ color: black;
 .availableTeams {
 	text-align: center;
 	background: rgba(255,187,248,1.00)
+}
+.playoffBracket {
+	text-align: center;
+	background: rgb(194, 237, 255);
+	border-radius: 10px;
+	width: 100%
+}
+.playoffBracketHeader {
+	text-align: center;
+	font-weight: bold
+}
+.playoffMatchResult {
+	font-size: 18px;
+	padding: 5px;
+	border: 2px solid black;
+	border-radius: 10px
+}
+.quarterfinalBlue {
+	background: rgb(204, 215, 252)
+}
+.quarterfinalRed {
+	background: rgb(252, 204, 204)
+}
+.semifinalBlue {
+	background: rgb(136, 166, 242)
+}
+.semifinalRed {
+	background: rgb(242, 136, 136)
+}
+.final {
+	background: rgb(34, 109, 238)
+}
+.bracketBlueAlliance {
+	color: blue;
+	font-weight: bold
+}
+.bracketRedAlliance {
+	color: red;
+	font-weight: bold
 }
 .alliancesTeamsTable {
 	text-align: center;

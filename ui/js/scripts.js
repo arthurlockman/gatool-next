@@ -29,7 +29,7 @@ if (!localStorage.eventName) {
     localStorage.eventName = ""
 }
 if (!localStorage.awardSeparator) {
-    localStorage.awardSeparator = " || "
+    localStorage.awardSeparator = "<br>"
 }
 if (!localStorage.awardDepth) {
     localStorage.awardDepth = 3
@@ -492,7 +492,10 @@ function initEnvironment() {
     $('#allianceUndoButton').hide();
     $("#davidPriceNumber").html("No Sched");
     $("#davidPriceAlliances").hide();
-
+    $("#playoffBracket").hide();
+    $(".playoffCells").html("TBD");
+    $(".playoffBadge").removeClass("redScore blueScore tieScore greyScore");
+    $("#allianceBracket").html("Alliance Selection");
 }
 
 function prepareAllianceSelection() {
@@ -503,7 +506,7 @@ function prepareAllianceSelection() {
     backupAllianceList = [];
     declinedListUndo = [];
     backupAllianceListUndo = [];
-    undoCounter=[];
+    undoCounter = [];
     rankingsList = [];
     currentAllianceChoice = 0;
     $("#allianceSelectionTable").html('<table> <tr> <td><table class="availableTeams"> <tr> <td colspan="5"><strong>Teams for Alliance Selection</strong></td></tr><tr> <td id="allianceTeamList1" class="col1"><div class="allianceTeam">List of teams</div></td><td id="allianceTeamList2" class="col1"><div class="allianceTeam">List of teams</div></td><td id="allianceTeamList3" class="col1"><div class="allianceTeam">List of teams</div></td><td id="allianceTeamList4" class="col1"><div class="allianceTeam">List of teams</div></td><td id="allianceTeamList5" class="col1"><div class="allianceTeam allianceCaptain">List of teams</div></td></tr></table></td><td class="col1"><table id="backupTeamsTable" class="backupAlliancesTable"> <tr> <td><p><strong>Backup Alliances</strong><br>(Initially rank 9 to 16 top to bottom)</p></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam1">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam2">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam3">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam4">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam5">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam6">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam7">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam8">List of teams</div></td></tr></table></td><td><table class="alliancesTeamsTable"> <tr class="col6"> <td id="Alliance1" class="col3 dropzone"><div class="alliancedrop" id="Alliance1Captain">Alliance 1 Captain</div><div class="alliancedrop nextAllianceChoice" id="Alliance1Round1" >Alliance 1 first choice</div><div class="alliancedrop" id="Alliance1Round2" >Alliance 1 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance1Round3" >Alliance 1 third choice</div></td><td id="Alliance8" class="col3"><div class="alliancedrop" id="Alliance8Captain" >Alliance 8 Captain</div><div class="alliancedrop" id="Alliance8Round1" >Alliance 8 first choice</div><div class="alliancedrop" id="Alliance8Round2" >Alliance 8 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance8Round3" >Alliance 8 third choice</div></td></tr><tr class="col6"> <td id="Alliance2" class="col3"><div class="alliancedrop" id="Alliance2Captain" >Alliance 2 Captain</div><div class="alliancedrop" id="Alliance2Round1" >Alliance 2 first choice</div><div class="alliancedrop" id="Alliance2Round2" >Alliance 2 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance2Round3" >Alliance 2 third choice</div></td><td id="Alliance7" class="col3"><div class="alliancedrop" id="Alliance7Captain" >Alliance 7 Captain</div><div class="alliancedrop" id="Alliance7Round1" >Alliance 7 first choice</div><div class="alliancedrop" id="Alliance7Round2" >Alliance 7 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance7Round3" >Alliance 7 third choice</div></td></tr><tr class="col6"> <td id="Alliance3" class="col3"><div class="alliancedrop" id="Alliance3Captain" >Alliance 3 Captain</div><div class="alliancedrop" id="Alliance3Round1" >Alliance 3 first choice</div><div class="alliancedrop" id="Alliance3Round2" >Alliance 3 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance3Round3" >Alliance 3 third choice</div></td><td id="Alliance6" class="col3"><div class="alliancedrop" id="Alliance6Captain" >Alliance 6 Captain</div><div class="alliancedrop" id="Alliance6Round1" >Alliance 6 first choice</div><div class="alliancedrop" id="Alliance6Round2" >Alliance 6 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance6Round3" >Alliance 6 third choice</div></td></tr><tr class="col6"> <td id="Alliance4" class="col3"><div class="alliancedrop" id="Alliance4Captain" >Alliance 4 Captain</div><div class="alliancedrop" id="Alliance4Round1" >Alliance 4 first choice</div><div class="alliancedrop" id="Alliance4Round2" >Alliance 4 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance4Round3" >Alliance 4 third choice</div></td><td id="Alliance5" class="col3"><div class="alliancedrop" id="Alliance5Captain" >Alliance 5 Captain</div><div class="alliancedrop" id="Alliance5Round1" >Alliance 5 first choice</div><div class="alliancedrop" id="Alliance5Round2" >Alliance 5 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance5Round3" >Alliance 5 third choice</div></td></tr></table></td></tr></table>')
@@ -517,6 +520,7 @@ function handleEventSelection() {
     $('#ranksProgressBar').hide();
     $('#ranksContainer').html("No Rankings available.");
     $('#teamRanksPicker').addClass('alert-danger');
+    $('#allianceInfo').show();
     $('#allianceSelectionTable').hide();
     $('#allianceUndoButton').hide();
     $("#allianceSelectionTabPicker").addClass("alert-danger");
@@ -527,6 +531,7 @@ function handleEventSelection() {
     $("#PlayoffFilesReset").hide();
     $("#davidPriceNumber").html("No Sched");
     $("#davidPriceAlliances").hide();
+    $("#allianceBracket").html("Alliance Selection");
     clearFileInput("QualsFiles");
     clearFileInput("PlayoffFiles");
     document.getElementById("QualsFiles").addEventListener('change', handleQualsFiles, !1);
@@ -581,7 +586,11 @@ function handleEventSelection() {
     localStorage.highScoreDetails = "{}";
     $("#eventName").html("<b>" + JSON.parse(document.getElementById("eventSelector").value).name + "</b>");
     $("#eventNameAllianceSelection").html("<b>" + localStorage.eventName + " </b>");
+    $("#eventNamePlayoffBracket").html(localStorage.eventName);
     $("#eventNameAwards").html("<b>" + localStorage.eventName + "</b><br>")
+    $("#playoffBracket").hide();
+    $(".playoffCells").html("TBD");
+    $(".playoffBadge").removeClass("redScore blueScore tieScore greyScore");
 }
 
 function handleOffseasonEventSelection() {
@@ -770,6 +779,7 @@ function getHybridSchedule() {
 
 function ranksQualsCompare() {
     "use strict";
+    $("#allianceSelectionWarning").show();
     if (allianceSelectionReady) {
         $("#allianceSelectionWarning").html('<p class="alert alert-success" onclick="announceDisplay();"><strong>Your ranks appear to be current, but you must confirm that the rank order below agrees with the rank order in FMS before proceeding with Alliance Selection</strong> If you see a discrepancy, tap this alert to see if we can get a more current rankings.</p>');
         $('#allianceSelectionTabPicker').removeClass('alert-danger');
@@ -866,7 +876,6 @@ function getRegularSeasonSchedule() {
                 haveSchedule = !0;
                 lastQualsUpdate = req.getResponseHeader("Last-Modified");
                 if (lastMatchPlayed >= data.Schedule.length - 1) {
-                    $("#allianceSelectionPlaceholder").hide();
                     $("#allianceSelectionTable").show();
                     $(".thirdAllianceSelection").hide();
                     $("#backupTeamsTable").show();
@@ -909,10 +918,13 @@ function getRegularSeasonSchedule() {
                     $("#matchPicker").selectpicker('refresh')
                 }
                 if (haveSchedule) {
+                    $("#allianceSelectionWarning").show();
                     announceDisplay()
                 }
             } else {
                 haveSchedule = !0;
+                $(".playoffBadge").removeClass("redScore blueScore tieScore greyScore");
+                $(".playoffBadge").addClass("greyScore");
                 for (var i = 0; i < data.Schedule.length; i++) {
                     var element = data.Schedule[i];
                     var optionClass = "";
@@ -921,25 +933,30 @@ function getRegularSeasonSchedule() {
                         lastMatchPlayed = i + qualScheduleLength + 1
                     }
                     matchSchedule += generateMatchTableRow(element);
-                    matchPicker += '<option id="matchPicker' + parseInt(i + qualScheduleLength + 1) + '"' + optionClass + ' matchNumber="' + parseInt(i + qualScheduleLength + 1) + '" value="' + parseInt(i + qualScheduleLength + 1) + '">' + element.description + '</option>'
+                    matchPicker += '<option id="matchPicker' + parseInt(i + qualScheduleLength + 1) + '"' + optionClass + ' matchNumber="' + parseInt(i + qualScheduleLength + 1) + '" value="' + parseInt(i + qualScheduleLength + 1) + '">' + element.description + '</option>';
+
                 }
                 $("#matchPicker").html(matchPicker);
                 document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
                 $("#matchPicker").selectpicker('refresh');
                 localStorage.inPlayoffs = "true";
+                $("#playoffBracket").show();
+                $("#allianceBracket").html("Playoff Bracket");
+                $('#allianceSelectionTabPicker').removeClass('alert-danger');
+                $('#allianceSelectionTabPicker').addClass('alert-success');
+                $("#allianceSelectionTable").hide();
+                $("#allianceSelectionWarning").hide();
+                $("#allianceInfo").hide();
                 prepareAllianceSelection();
-                $("#allianceSelectionPlaceholder").hide();
-                $("#allianceSelectionTable").show();
-                if (lastMatchPlayed >= data.Schedule.length - 1) {
-                    $("#allianceSelectionPlaceholder").hide();
-                    $("#allianceSelectionTable").show();
-                    $(".thirdAllianceSelection").hide();
-                    $("#backupTeamsTable").show();
-                    if (inChamps() || inSubdivision()) {
-                        $(".thirdAllianceSelection").show();
-                        $("#backupTeamsTable").hide()
-                    }
-                }
+                // if (lastMatchPlayed >= data.Schedule.length - 1) {
+                //     $("#allianceSelectionTable").show();
+                //     $(".thirdAllianceSelection").hide();
+                //     $("#backupTeamsTable").show();
+                //     if (inChamps() || inSubdivision()) {
+                //         $(".thirdAllianceSelection").show();
+                //         $("#backupTeamsTable").hide()
+                //     }
+                // }
                 getAllianceList()
             }
             if (matchSchedule) {
@@ -974,6 +991,8 @@ function getRegularSeasonSchedule() {
                 localStorage.playoffList = '{"Schedule":[]}'
             } else {
                 haveSchedule = !0;
+                $(".playoffBadge").removeClass("redScore blueScore tieScore greyScore");
+                $(".playoffBadge").addClass("greyScore");
                 $("#scheduleContainer").html('<p class = "eventName">' + localStorage.eventName + '</p><table id="scheduleTable" class="table table-bordered table-responsive table-striped"></table>');
                 matchSchedule += '<thead class="thead-default"><tr><td class="col2"><b>Time</b></td><td  class="col2"><b>Description</b></td><td class="col1"><b>Match Number</b></td><td class="col1"><b>Score</b></td><td class="col1"><b>Station 1</b></td><td class="col1"><b>Station 2</b></td><td class="col1"><b>Station 3</b></td></tr></thead><tbody>';
                 qualScheduleLength = data.Schedule.length;
@@ -984,6 +1003,7 @@ function getRegularSeasonSchedule() {
                     if ((element.scoreRedFinal !== null) && (element.scoreBlueFinal !== null)) {
                         lastMatchPlayed = element.matchNumber
                     }
+
                 }
                 localStorage.qualsList = JSON.stringify(data);
                 $("#announceBanner, #playByPlayBanner").hide();
@@ -992,6 +1012,11 @@ function getRegularSeasonSchedule() {
                 document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
                 $("#matchPicker").selectpicker('refresh');
                 localStorage.inPlayoffs = "true";
+                $("#playoffBracket").show();
+                $("#allianceBracket").html("Playoff Bracket");
+                $('#allianceSelectionTabPicker').removeClass('alert-danger');
+                $('#allianceSelectionTabPicker').addClass('alert-success'),
+                    $("#allianceSelectionTable").hide();
                 if (localStorage.autoAdvance === "true") {
                     if (lastMatchPlayed < (qualScheduleLength)) {
                         localStorage.currentMatch = String(lastMatchPlayed + 1)
@@ -1011,7 +1036,7 @@ function getRegularSeasonSchedule() {
                     document.getElementById('scheduleTable').innerHTML += matchSchedule
                 }
                 $('#scheduleProgressBar').hide();
-                localStorage.playoffList = '{"Schedule":[]}';
+                localStorage.playoffList = JSON.stringify(data);
                 $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"));
                 displayAwardsTeams(allianceListUnsorted.slice(0));
                 getAllianceList()
@@ -1023,6 +1048,56 @@ function getRegularSeasonSchedule() {
     } else {
         req.send()
     }
+}
+
+function processPlayoffBracket(matchData) {
+    var bracketDetail = {};
+    bracketDetail.description = matchData.description;
+    if (matchData.description.split(" ")[0] === "Final") {
+        bracketDetail.description = "Final";
+    } else {
+        bracketDetail.description = matchData.description;
+    }
+    bracketDetail.redAlliance = [];
+    bracketDetail.blueAlliance = [];
+    bracketDetail.winner = "grey";
+    bracketDetail.matchName = "bracketMatch" + matchData.matchNumber;
+    $("#" + bracketDetail.matchName + "Result").removeClass("redScore blueScore tieScore greyScore");
+    if (matchData.teams[0].teamNumber !== null) {
+        for (var i = 0; i < matchData.teams.length; i++) {
+            if (matchData.teams[i].station.includes("ed")) {
+                bracketDetail.redAlliance.push(matchData.teams[i].teamNumber);
+            }
+            if (matchData.teams[i].station.includes("ue")) {
+                bracketDetail.blueAlliance.push(matchData.teams[i].teamNumber);
+            }
+        }
+        if (matchData.scoreRedFinal > matchData.scoreBlueFinal) {
+            bracketDetail.winner = "red";
+        } else if (matchData.scoreRedFinal < matchData.scoreBlueFinal) {
+            bracketDetail.winner = "blue";
+        } else if ((matchData.scoreRedFinal === matchData.scoreBlueFinal) && (matchData.scoreRedFinal > 0)) {
+            bracketDetail.winner = "tie"
+        }
+        if (matchData.teams[0].teamNumber !== null) {
+            bracketDetail.redAllianceName = decompressLocalStorage("teamData" + bracketDetail.redAlliance[0]).allianceName;
+        } else {
+            bracketDetail.redAllianceName = "TBD";
+        }
+        if (matchData.teams[4].teamNumber !== null) {
+            bracketDetail.blueAllianceName = decompressLocalStorage("teamData" + bracketDetail.blueAlliance[0]).allianceName;
+        } else {
+            bracketDetail.blueAllianceName = "TBD";
+        }
+        bracketDetail.output = bracketDetail.description + '<br><span class="bracketRedAlliance">' + bracketDetail.redAllianceName + '<br>vs<br><span class="bracketBlueAlliance">' + bracketDetail.blueAllianceName + '<br><br><span class="bracketRedAlliance">' + bracketDetail.redAlliance.join(" ") + '</span><br><span class="bracketBlueAlliance">' + bracketDetail.blueAlliance.join(" ") + '</span><br>';
+
+    } else {
+        bracketDetail.output = "TBD"
+    }
+
+
+    $("#" + bracketDetail.matchName).html(bracketDetail.output);
+    $("#" + bracketDetail.matchName + "Result").addClass(bracketDetail.winner + "Score");
 }
 
 function getOffseasonSchedule() {
@@ -1072,7 +1147,10 @@ function getOffseasonSchedule() {
         $("#matchPicker").html(matchPicker);
         document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
         $("#matchPicker").selectpicker('refresh');
-        localStorage.inPlayoffs = "true"
+        localStorage.inPlayoffs = "true";
+        $("#playoffBracket").hide();
+        $(".playoffCells").html("TBD");
+        $(".playoffBadge").removeClass("redScore blueScore tieScore greyScore");
     }
     if (matchSchedule) {
         document.getElementById('scheduleTable').innerHTML += matchSchedule
@@ -1220,6 +1298,14 @@ function getTeamAwardsAsync(teamList, currentYear) {
     })
 }
 
+function handlePlayoffBracket() {
+    var matchArray = JSON.parse(localStorage.playoffList).Schedule;
+    for (var i = 0; i < matchArray.length; i++) {
+        processPlayoffBracket(matchArray[i]);
+    }
+
+}
+
 function getAllianceList() {
     "use strict";
     $("#allianceUpdateContainer").html("Loading Alliance data...");
@@ -1273,6 +1359,7 @@ function getAllianceList() {
                         compressLocalStorage("teamData" + element.backup, team)
                     }
                 }
+                handlePlayoffBracket();
             }
             if (haveSchedule) {
                 announceDisplay()
@@ -1612,9 +1699,6 @@ function displayAllianceCaptains(startingPosition) {
 }
 
 function displayBackupAlliances(reason) {
-    var listOffset = 7;
-    if ((reason === "decline")&&(undoCounter.length===0)) {listOffset = 8;}
-    backupAllianceList = allianceListUnsorted.slice(listOffset);
     for (var i = 0; i < declinedList.length; i++) {
         if (backupAllianceList.indexOf(Number(declinedList[i])) >= 0) {
             backupAllianceList.splice(backupAllianceList.indexOf(Number(declinedList[i])), 1);
@@ -1623,7 +1707,7 @@ function displayBackupAlliances(reason) {
 
     for (var i = 1; i <= 8; i++) {
         if (i <= backupAllianceList.length) {
-            $("#backupAllianceTeam" + i).html("<div id='backupAllianceTeamContainer" + i + "' class ='allianceTeam' captain='alliance' teamnumber=" + backupAllianceList[i-1] + " onclick='allianceAlert(this)'>" + backupAllianceList[i-1] + "</div>");
+            $("#backupAllianceTeam" + i).html("<div id='backupAllianceTeamContainer" + i + "' class ='allianceTeam' captain='alliance' teamnumber=" + backupAllianceList[i - 1] + " onclick='allianceAlert(this)'>" + backupAllianceList[i - 1] + "</div>");
         }
 
     }
@@ -1735,7 +1819,8 @@ function allianceAlert(teamContainer) {
                             cssClass: "btn btn-success",
                             action: function (dialogRef) {
                                 dialogRef.close();
-                            }},{
+                            }
+                        }, {
                             label: 'THEY DECLINE THE OFFER',
                             icon: 'glyphicon glyphicon-thumbs-down',
                             hotkey: 13,
@@ -1795,9 +1880,9 @@ function allianceAlert(teamContainer) {
                                 allianceSelectionTableUndo.push($("#allianceSelectionTable").html());
                                 $("#allianceUndoButton").attr("onclick", "undoAllianceSelection()");
                                 $("#allianceUndoButton").show();
-                                allianceChoices[allianceSelectionOrder[currentAllianceChoice]] = teamNumber;
+                                allianceChoices[allianceSelectionOrder[currentAllianceChoice]] = Number(teamNumber);
                                 var reducedAllianceListUnsorted = allianceListUnsorted;
-                                
+
                                 var index = allianceListUnsorted.indexOf(parseInt(teamNumber));
                                 if (index > -1) {
                                     allianceListUnsorted.splice(index, 1)
@@ -1816,7 +1901,7 @@ function allianceAlert(teamContainer) {
                                     var nextAlliance = parseInt(allianceBackfill.substr(8, 1));
 
                                     for (var j = nextAlliance; j < 8; j++) {
-                                        allianceChoices["Alliance" + j + "Captain"] = allianceChoices["Alliance" + (j + 1) + "Captain"]
+                                        allianceChoices["Alliance" + j + "Captain"] = Number(allianceChoices["Alliance" + (j + 1) + "Captain"])
                                     }
                                     //test for declined team
                                     //allianceChoices.Alliance8Captain = allianceListUnsorted[7];
@@ -1881,7 +1966,7 @@ function undoAllianceSelection() {
     backupAllianceList = JSON.parse(backupAllianceListUndo.pop());
     $("#allianceSelectionTable").html(allianceSelectionTableUndo.pop());
     $("#allianceUndoButton").attr("onclick", "undoAllianceSelection()");
-    if (reason === "accept") {currentAllianceChoice = currentAllianceChoice - 1;}
+    if (reason === "accept") { currentAllianceChoice = currentAllianceChoice - 1; }
     if (undoCounter.length === 0) {
         $("#allianceUndoButton").attr("onclick", "");
         $("#allianceUndoButton").hide();

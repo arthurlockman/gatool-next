@@ -59,7 +59,7 @@
             <li>
                 <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'playbyplay')" id="playByPlayTabPicker"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span><span class="mobileHide">Play-by-play</span></a></li>
             <li>
-                <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'allianceselection')" id="allianceSelectionTabPicker"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span><span class="mobileHide">Alliance Selection</span></a>
+                <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'allianceselection')" id="allianceSelectionTabPicker"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span><span id="allianceBracket" class="mobileHide">Alliance Selection</span></a>
             </li>
             <li>
                 <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'awards')" id="awardsTabPicker"><span class="glyphicon glyphicon-king" aria-hidden="true"></span> <span class="mobileHide">Awards</span></a>
@@ -637,6 +637,84 @@
                 <p id="allianceUndoButton" class="btn-warning">Undo Alliance Selection Choice<span id="undoAlliance"></span>
                 </p>
             </div>
+            <div id="playoffBracket">
+                <table class="playoffBracket">
+                    <tbody>
+                        <tr class="gatool-button">
+                            <th colspan="5" scope="col" class="playoffBracketHeader"><span id="eventNamePlayoffBracket"></span> Playoff Bracket</th>
+                        </tr>
+                        <tr>
+                            <td rowspan="2" class="col1 quarterfinalRed bracketLeft">
+                                <div class="allianceTeam bracketLeft"><span class="playoffCells" id="bracketMatch1">Quarterfinal 1<br>Alliance 1 vs Alliance 8</span><br>
+                                    <span id="bracketMatch1Result" class="glyphicon glyphicon-certificate playoffBadge"></span>&nbsp;
+                                    <span id="bracketMatch5Result" class="glyphicon glyphicon-certificate playoffBadge"></span>&nbsp;
+                                    <span id="bracketMatch9Result" class="glyphicon glyphicon-certificate playoffBadge"></span>&nbsp;
+                                </div>
+                            </td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td rowspan="2" class="col1 quarterfinalRed bracketRight">
+                                <div class="allianceTeam bracketRight"><span class="playoffCells" id="bracketMatch3">Quarterfinal 3<br>Alliance 2 vs Alliance 7</span><br>
+                                    <span id="bracketMatch3Result" class="glyphicon glyphicon-certificate playoffBadge"></span>
+                                    <span id="bracketMatch7Result" class="glyphicon glyphicon-certificate playoffBadge"></span>
+                                    <span id="bracketMatch11Result" class="glyphicon glyphicon-certificate playoffBadge"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3" class="col1 semifinalRed bracketLeft">
+                                <div class="allianceTeam bracketLeft"><span class="playoffCells" id="bracketMatch13">Semifinal 1<br>Alliances TBD</span><br>
+                                    <span id="bracketMatch13Result" class="glyphicon glyphicon-certificate playoffBadge"></span>
+                                    <span id="bracketMatch15Result" class="glyphicon glyphicon-certificate playoffBadge"></span>
+                                    <span id="bracketMatch17Result" class="glyphicon glyphicon-certificate playoffBadge"></span>
+                                </div>
+                            </td>
+                            <td>&nbsp;</td>
+                            <td rowspan="3" class="col1 semifinalBlue bracketRight">
+                                <div class="allianceTeam bracketRight"><span class="playoffCells" id="bracketMatch14">Semifinal 2<br>Alliances TBD</span><br>
+                                    <span id="bracketMatch14Result" class="glyphicon glyphicon-certificate playoffBadge"></span>
+                                    <span id="bracketMatch16Result" class="glyphicon glyphicon-certificate playoffBadge"></span>
+                                    <span id="bracketMatch18Result" class="glyphicon glyphicon-certificate playoffBadge"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td class="col1 final">
+                                <div class="allianceTeam"><span class="playoffCells" id="bracketMatch19">Final<br>Alliances TBD</span><br>
+                                    <span id="bracketMatch19Result" class="glyphicon glyphicon-certificate playoffBadge"></span>
+                                    <span id="bracketMatch20Result" class="glyphicon glyphicon-certificate playoffBadge"></span>
+                                    <span id="bracketMatch21Result" class="glyphicon glyphicon-certificate playoffBadge"></span>
+                                </div>
+                            </td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2" class="col1 quarterfinalBlue bracketLeft">
+                                <div class="allianceTeam bracketLeft"> <span class="playoffCells" id="bracketMatch2">Quarterfinal 2<br>Alliance 4 vs Alliance 5</span><br>
+                                    <span id="bracketMatch2Result" class="glyphicon glyphicon-certificate playoffBadge"></span>
+                                    <span id="bracketMatch6Result" class="glyphicon glyphicon-certificate playoffBadge"></span>
+                                    <span id="bracketMatch10Result" class="glyphicon glyphicon-certificate playoffBadge"></span>
+                                </div>
+                            </td>
+                            <td>&nbsp;</td>
+                            <td rowspan="2" class="col1 quarterfinalBlue bracketRight ">
+                                <div class="allianceTeam bracketRight"><span class="playoffCells" id="bracketMatch4">Quarterfinal 4<br>Alliance 3 vs Alliance 6</span><br>
+                                    <span id="bracketMatch4Result" class="glyphicon glyphicon-certificate playoffBadge"></span>
+                                    <span id="bracketMatch8Result" class="glyphicon glyphicon-certificate playoffBadge"></span>
+                                    <span id="bracketMatch12Result" class="glyphicon glyphicon-certificate playoffBadge"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <div id="allianceSelectionTable">
                 <table>
                     <tr>
@@ -776,6 +854,7 @@
                     </tr>
                 </table>
             </div>
+
         </div>
         <div id="awards" class="tabcontent container-fluid">
             <div id="awardsInfo" class="allianceAnnounce">

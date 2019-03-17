@@ -95,7 +95,8 @@ function timer() {
     $("#allianceselectionlastupdated").html(" (Ranks last updated " + moment(lastRanksUpdate).fromNow() + ")<br>");
     $("#rankstablelastupdated").html("<b>Ranks last updated " + moment(lastRanksUpdate).fromNow() + "</b>");
     //update the warning in the Alliance Selection
-    if (localStorage.inPlayoffs !== "true") { ranksQualsCompare(); }
+    //if (localStorage.inPlayoffs !== "true") { ranksQualsCompare(); }
+    ranksQualsCompare();
 }
 
 function localStorageSpace() {
@@ -474,7 +475,7 @@ function saveEnvironment() {
                 environment.playoffResults = playoffResults;
                 environment.allianceTeamList = allianceTeamList;
                 environment.allianceListUnsorted = allianceListUnsorted;
-                environment.declinedList =declinedList;
+                environment.declinedList = declinedList;
                 environment.backupAllianceList = backupAllianceList;
                 environment.backupAllianceListUndo = backupAllianceListUndo;
                 environment.declinedListUndo = declinedListUndo;

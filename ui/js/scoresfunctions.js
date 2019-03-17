@@ -150,8 +150,10 @@ function getTeamRanks() {
             var data = JSON.parse(req.responseText);
             if (data.Rankings.length === 0) {
                 $("#rankingDisplay").html('<b>No Rankings available.</b>');
-                $("#allianceSelectionPlaceholder").show();
                 $("#allianceSelectionTable").hide();
+                $("#playoffBracket").hide();
+                $(".playoffCells").html("TBD");
+                $(".playoffBadge").removeClass("redScore blueScore tieScore greyScore");
                 allianceListUnsorted = [];
                 var teamList = JSON.parse(localStorage.teamList);
                 for (var j = 0; j < teamList.length; j++) {
