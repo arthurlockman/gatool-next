@@ -68,27 +68,27 @@ function getHighScores() {
             $("#highscoreyear").html(" " + localStorage.currentYear);
             if (penaltyFreeQual.length > 0) {
                 const data = penaltyFreeQual[0].matchData;
-                $("#highQualsNoFouls").html("Qual (no fouls) " + findHighestScore(data.match) + "<br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
+                $("#highQualsNoFouls").html("Qual <i>(no fouls)</i><br>Score: <b>" + findHighestScore(data.match) + "</b><br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
             }
             if (offsettingQual.length > 0) {
                 const data = offsettingQual[0].matchData;
-                $("#highQualsOffsettingFouls").html("Qual (offsetting fouls) " + findHighestScore(data.match) + "<br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
+                $("#highQualsOffsettingFouls").html("Qual <i>(offsetting fouls)</i><br>Score: <b>" + findHighestScore(data.match) + "</b><br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
             }
             if (overallQual.length > 0) {
                 const data = overallQual[0].matchData;
-                $("#highQuals").html("Qual " + findHighestScore(data.match) + "<br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
+                $("#highQuals").html("Qual <i>(including fouls)</i><br>Score: <b>" + findHighestScore(data.match) + "</b><br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
             }
             if (penaltyFreePlayoff.length > 0) {
                 const data = penaltyFreePlayoff[0].matchData;
-                $("#highPlayoffNoFouls").html("Playoff (no fouls) " + findHighestScore(data.match) + "<br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
+                $("#highPlayoffNoFouls").html("Playoff <i>(no fouls)</i><br>Score: <b>" + findHighestScore(data.match) + "</b><br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
             }
             if (offsettingPlayoff.length > 0) {
                 const data = offsettingPlayoff[0].matchData;
-                $("#highPlayoffOffsettingFouls").html("Playoff (offsetting fouls) " + findHighestScore(data.match) + "<br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
+                $("#highPlayoffOffsettingFouls").html("Playoff <i>(offsetting fouls)</i><br>Score: <b>" + findHighestScore(data.match) + "</b><br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
             }
             if (overallPlayoff.length > 0) {
                 const data = overallPlayoff[0].matchData;
-                $("#highPlayoff").html("Playoff " + findHighestScore(data.match) + "<br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
+                $("#highPlayoff").html("Playoff <i>(including fouls)</i><br>Score: <b>" + findHighestScore(data.match) + "</b><br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
             }
         }
     });
@@ -97,7 +97,7 @@ function getHighScores() {
     req2.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req2.addEventListener('load', function () {
         if (req2.status === 200) {
-            $("#eventhighscorestable").html('<thead><tr><td colspan="2">Event High Scores</td></tr></thead><tr><td id="eventHighQualsNoFouls">Qual (no penalties)<br>No matches meet criteria<br></td><td id="eventHighPlayoffNoFouls">Playoff (no penalties)<br>No matches meet criteria</td></tr><tr> <td id="eventHighQualsOffsettingFouls">Qual (offsetting fouls)<br>No matches meet criteria<br></td><td id="eventHighPlayoffOffsettingFouls">Playoff (offsetting fouls)<br>No matches meet criteria<br></td></tr><tr><td id="eventHighQuals">Qual<br>No matches meet criteria<br></td><td id="eventHighPlayoff">Playoff<br>No matches meet criteria</td></tr>');
+            $("#eventhighscorestable").html('<thead><tr><td colspan="2">Event High Scores: <span id="highscoreevent"></span></td>/tr></thead><tr><td id="eventHighQualsNoFouls">Qual (no penalties)<br>No matches meet criteria<br></td><td id="eventHighPlayoffNoFouls">Playoff (no penalties)<br>No matches meet criteria</td></tr><tr> <td id="eventHighQualsOffsettingFouls">Qual (offsetting fouls)<br>No matches meet criteria<br></td><td id="eventHighPlayoffOffsettingFouls">Playoff (offsetting fouls)<br>No matches meet criteria<br></td></tr><tr><td id="eventHighQuals">Qual<br>No matches meet criteria<br></td><td id="eventHighPlayoff">Playoff<br>No matches meet criteria</td></tr>');
             const data = JSON.parse(req2.responseText);
             const overallQual = data.filter(x => x.yearType.includes("overallqual"));
             const penaltyFreeQual = data.filter(x => x.yearType.includes("penaltyFreequal"));
@@ -105,29 +105,30 @@ function getHighScores() {
             const penaltyFreePlayoff = data.filter(x => x.yearType.includes("penaltyFreeplayoff"));
             const offsettingQual = data.filter(x => x.yearType.includes("offsettingqual"));
             const offsettingPlayoff = data.filter(x => x.yearType.includes("offsettingplayoff"));
+            $("#highscoreevent").html(" " + eventNames[localStorage.currentEvent]);
             if (penaltyFreeQual.length > 0) {
                 const data = penaltyFreeQual[0].matchData;
-                $("#eventHighQualsNoFouls").html("Qual (no fouls) " + findHighestScore(data.match) + "<br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
+                $("#eventHighQualsNoFouls").html("Qual (no fouls)<br>Score: <b>" + findHighestScore(data.match) + "</b><br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
             }
             if (offsettingQual.length > 0) {
                 const data = offsettingQual[0].matchData;
-                $("#eventHighQualsOffsettingFouls").html("Qual (offsetting fouls) " + findHighestScore(data.match) + "<br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
+                $("#eventHighQualsOffsettingFouls").html("Qual <i>(offsetting fouls)</i><br>Score: <b>" + findHighestScore(data.match) + "</b><br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
             }
             if (overallQual.length > 0) {
                 const data = overallQual[0].matchData;
-                $("#eventHighQuals").html("Qual " + findHighestScore(data.match) + "<br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
+                $("#eventHighQuals").html("Qual <i>(including fouls)</i><br>Score: <b>" + findHighestScore(data.match) + "</b><br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
             }
             if (penaltyFreePlayoff.length > 0) {
                 const data = penaltyFreePlayoff[0].matchData;
-                $("#eventHighPlayoffNoFouls").html("Playoff (no fouls) " + findHighestScore(data.match) + "<br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
+                $("#eventHighPlayoffNoFouls").html("Playoff <i>(no fouls)</i><br>Score: <b>" + findHighestScore(data.match) + "</b><br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
             }
             if (offsettingPlayoff.length > 0) {
                 const data = offsettingPlayoff[0].matchData;
-                $("#eventHighPlayoffOffsettingFouls").html("Playoff (offsetting fouls) " + findHighestScore(data.match) + "<br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
+                $("#eventHighPlayoffOffsettingFouls").html("Playoff <i>(offsetting fouls)</i><br>Score: <b>" + findHighestScore(data.match) + "</b><br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
             }
             if (overallPlayoff.length > 0) {
                 const data = overallPlayoff[0].matchData;
-                $("#eventHighPlayoff").html("Playoff " + findHighestScore(data.match) + "<br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
+                $("#eventHighPlayoff").html("Playoff <i>(including fouls)</i><br>Score: <b>" + findHighestScore(data.match) + "</b><br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
             }
         }
     });

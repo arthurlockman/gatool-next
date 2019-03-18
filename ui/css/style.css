@@ -455,8 +455,7 @@ color: black;
 	border-radius: 25px 5px 5px 25px
 }
 .bracketSpacer {
-	background: rgb(194, 237, 255);
-	height: 20%
+	background: rgb(194, 237, 255)
 }
 .danger {
 	color: red
