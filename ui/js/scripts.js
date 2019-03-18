@@ -1098,6 +1098,27 @@ function processPlayoffBracket(matchData) {
 
     $("#" + bracketDetail.matchName).html(bracketDetail.output);
     $("#" + bracketDetail.matchName + "Result").addClass(bracketDetail.winner + "Score");
+    $("#"+ bracketDetail.matchName + "RedScore").removeClass("redScoreWin");
+    $("#"+ bracketDetail.matchName + "BlueScore").removeClass("blueScoreWin");
+    if (matchData.scoreRedFinal !== null) {
+        $("#"+ bracketDetail.matchName + "RedScore").html(matchData.scoreRedFinal);
+        if (bracketDetail.winner === "red") {
+            $("#"+ bracketDetail.matchName + "RedScore").addClass("redScoreWin");
+        }
+    } else {
+        $("#"+ bracketDetail.matchName + "RedScore").html("–");
+    }
+    if (matchData.scoreBlueFinal !== null) {
+        $("#"+ bracketDetail.matchName + "BlueScore").html(matchData.scoreBlueFinal);
+        if (bracketDetail.winner === "blue") {
+            $("#"+ bracketDetail.matchName + "BlueScore").addClass("blueScoreWin");
+        }
+    } else {
+        $("#"+ bracketDetail.matchName + "BlueScore").html("–");
+    }
+    if(matchData.matchNumber>21 && bracketDetail.winner!=="grey") {
+        $("#" + bracketDetail.matchName + "Overtime").show();
+    }
 }
 
 function getOffseasonSchedule() {
@@ -1299,6 +1320,8 @@ function getTeamAwardsAsync(teamList, currentYear) {
 }
 
 function handlePlayoffBracket() {
+    $(".overtime").hide();
+    $(".playoffScore").html("–");
     var matchArray = JSON.parse(localStorage.playoffList).Schedule;
     for (var i = 0; i < matchArray.length; i++) {
         processPlayoffBracket(matchArray[i]);
