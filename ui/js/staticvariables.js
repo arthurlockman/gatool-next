@@ -48,6 +48,9 @@ var matchCount = 0;
 var allianceSelectionReady = false;
 var environment = {};
 var showAllianceSelectionOverride = false;
+var tablist = {};
+tablist.tabs=["setupTabPicker","scheduleTabPicker","teamDataTabPicker","teamRanksPicker","announceTabPicker","playByPlayTabPicker","allianceSelectionTabPicker","awardsTabPicker","statsTabPicker","cheatsheetTabPicker","davidPriceTabPicker"];
+tablist.index=0;
 
 
 for (var i = 1; i < 9; i++) {

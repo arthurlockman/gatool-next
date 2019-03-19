@@ -299,6 +299,22 @@ function openTab(evt, tabID) {
     scaleRows();
 }
 
+function getNextTab() {
+    tablist.index++;
+    if (tablist.index>=tablist.tabs.length) {
+        tablist.index = 0;
+    } 
+    document.getElementById(tablist.tabs[tablist.index]).click();  
+}
+
+function getPreviousTab() {
+    tablist.index--;
+    if (tablist.index<0) {
+        tablist.index = tablist.tabs.length-1;
+    } 
+    document.getElementById(tablist.tabs[tablist.index]).click();
+}
+
 function scaleRows() {
     "use strict";
     var height = window.innerHeight;

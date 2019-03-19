@@ -108,7 +108,7 @@ function getHighScores() {
             $("#highscoreevent").html(" " + eventNames[localStorage.currentEvent]);
             if (penaltyFreeQual.length > 0) {
                 const data = penaltyFreeQual[0].matchData;
-                $("#eventHighQualsNoFouls").html("Qual (no fouls)<br>Score: <b>" + findHighestScore(data.match) + "</b><br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
+                $("#eventHighQualsNoFouls").html("Qual <i>(no fouls)</i><br>Score: <b>" + findHighestScore(data.match) + "</b><br>Match " + data.match.matchNumber + "<br>" + eventNames[data.event.eventCode] + "<br>" + data.highScoreAlliance + " alliance (" + winningAllianceTeams(data) + ")");
             }
             if (offsettingQual.length > 0) {
                 const data = offsettingQual[0].matchData;

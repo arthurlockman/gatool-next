@@ -360,7 +360,28 @@ window.onload = function () {
     $("#loadingFeedback").html("gatool ready to play!");
     $("#loadingFeedback").fadeOut()
 };
+
 window.addEventListener("resize", scaleRows);
+
+document.addEventListener('keyup', function (event) {
+    if (event.defaultPrevented) {
+        return;
+    }
+    var key = event.key || event.keyCode;
+    if (key === 'ArrowRight' || key === 'ArrowRight' || key === 39) {
+        getNextMatch();
+    }
+    if (key === 'ArrowLeft' || key === 'ArrowLeft' || key === 37) {
+        getPreviousMatch();
+    }
+    if (key === 'ArrowUp' || key === 'ArrowUp' || key === 38) {
+        getNextTab();
+    }
+    if (key === 'ArrowDown' || key === 'ArrowDown' || key === 40) {
+        getPreviousTab();
+    }
+
+ });
 
 function login() {
     "use strict";
