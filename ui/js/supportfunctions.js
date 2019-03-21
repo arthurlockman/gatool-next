@@ -287,27 +287,30 @@ function openTab(evt, tabID) {
     $(".tabcontent").hide();
 
     // Get all elements with class="tablinks" and remove the class "active"
-    $(".tablinks").removeClass('active');
+    $(".active").removeClass('active');
 
     // Show the current tab, and add an "active" class to the link that opened the tab
     $("#" + tabID).show();
     //document.getElementById(tabID).style.display = "block";
-    //$("#" + evt.currentTarget).addClass("active");
-    evt.currentTarget.className += " active";
+    $("#" + evt.currentTarget.id).addClass("active");
+    //evt.currentTarget.className += " active";
+    tablist.index = tablist.clicks.indexOf(tabID);
 
     //resize the window
     scaleRows();
 }
 
 function getNextTab() {
+    $(".active").removeClass('active');
     tablist.index++;
     if (tablist.index>=tablist.tabs.length) {
         tablist.index = 0;
     } 
-    document.getElementById(tablist.tabs[tablist.index]).click();  
+    document.getElementById(tablist.tabs[tablist.index]).click();
 }
 
 function getPreviousTab() {
+    $(".active").removeClass('active');
     tablist.index--;
     if (tablist.index<0) {
         tablist.index = tablist.tabs.length-1;

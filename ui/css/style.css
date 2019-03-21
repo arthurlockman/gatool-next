@@ -476,13 +476,26 @@ color: black;
 }
 .playoffBracketHeader {
 	text-align: center;
-	font-weight: bold
+	font-weight: bold;
+		height: 100%
 }
 .playoffMatchResult {
 	font-size: 18px;
 	padding: 5px;
 	border: 2px solid black;
 	border-radius: 10px
+}
+.bracket1 {
+	height:100px;
+}
+.bracket2 {
+	height: 200px;
+}
+.bracket3 {
+	height: 300px;
+}
+.bracket4 {
+	height:400px;
 }
 .quarterfinalBlue {
 	background: rgb(204, 215, 252)

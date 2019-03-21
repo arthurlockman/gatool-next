@@ -368,16 +368,17 @@ document.addEventListener('keyup', function (event) {
         return;
     }
     var key = event.key || event.keyCode;
-    if (key === 'ArrowRight' || key === 'ArrowRight' || key === 39) {
+    console.log(key);
+    if (key === 'ArrowRight' || key === 'd' || key === 39 || key === 68) {
         getNextMatch();
     }
-    if (key === 'ArrowLeft' || key === 'ArrowLeft' || key === 37) {
+    if (key === 'ArrowLeft' || key === 'a' || key === 37 || key === 65) {
         getPreviousMatch();
     }
-    if (key === 'ArrowUp' || key === 'ArrowUp' || key === 38) {
+    if (key === 'ArrowUp' || key === 'w' || key === 38 || key === 87) {
         getNextTab();
     }
-    if (key === 'ArrowDown' || key === 'ArrowDown' || key === 40) {
+    if (key === 'ArrowDown' || key === 's' || key === 40 || key === 83) {
         getPreviousTab();
     }
 
