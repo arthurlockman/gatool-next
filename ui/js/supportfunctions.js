@@ -331,11 +331,13 @@ function scaleRows() {
     var col9width = width / 4 * 3;
     var col10width = width / 6 * 5;
     var verticalDivisions = 3;
+    var bracketDivisions = 5;
     if (inChamps() || (inSubdivision() && (localStorage.currentMatch > JSON.parse(localStorage.qualsList).Schedule.length))) {
         verticalDivisions = 4;
     }
     var announceHeight = Math.round((height - $("#navbar").outerHeight() - $("#appTab").outerHeight() - $("#gameButtonsAnnounce").outerHeight() - $("#footer").outerHeight() - $("#announceTableHeader").outerHeight()) / (verticalDivisions * 2) - 10);
     var playByPlayHeight = Math.round((height - $("#navbar").outerHeight() - $("#appTab").outerHeight() - $("#gameButtonsPlayByPlay").outerHeight() - $("#footer").outerHeight() - $("#announceTableHeader").outerHeight()) / verticalDivisions - 25);
+    var bracketHeight = Math.round((height - $("#navbar").outerHeight()- $("#playoffBracketHeader").outerHeight()) / bracketDivisions - 25);
     $(".redAlliancePlayByPlay,.blueAlliancePlayByPlay").css("height", playByPlayHeight + "px");
     $(".redAlliance,.blueAlliance").css("height", announceHeight + "px");
     $(".col1").css("width", col1width + "px");
@@ -347,6 +349,10 @@ function scaleRows() {
     $(".col9").css("width", col9width + "px");
     $(".col10").css("width", col10width + "px");
     $(".spacer").css("height", ($("#navbar").outerHeight() - 35) + "px");
+    $(".bracket1").css("height", bracketHeight + "px");
+    $(".bracket2").css("height", bracketHeight*2 + "px");
+    $(".bracket3").css("height", bracketHeight*3 + "px");
+    $(".bracket4").css("height", bracketHeight*4 + "px");
 }
 
 function tournamentLevel(tournament) {

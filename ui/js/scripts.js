@@ -369,20 +369,20 @@ document.addEventListener('keyup', function (event) {
     }
     var key = event.key || event.keyCode;
     console.log(key);
-    if (key === 'ArrowRight' || key === 'd' || key === 39 || key === 68) {
+    if (key === 'ArrowRight' || key === 39) {
         getNextMatch();
     }
-    if (key === 'ArrowLeft' || key === 'a' || key === 37 || key === 65) {
+    if (key === 'ArrowLeft' || key === 37) {
         getPreviousMatch();
     }
-    if (key === 'ArrowUp' || key === 'w' || key === 38 || key === 87) {
+    if (key === 'ArrowUp' || key === 38) {
         getNextTab();
     }
-    if (key === 'ArrowDown' || key === 's' || key === 40 || key === 83) {
+    if (key === 'ArrowDown' || key === 40) {
         getPreviousTab();
     }
 
- });
+});
 
 function login() {
     "use strict";
@@ -1120,25 +1120,25 @@ function processPlayoffBracket(matchData) {
 
     $("#" + bracketDetail.matchName).html(bracketDetail.output);
     $("#" + bracketDetail.matchName + "Result").addClass(bracketDetail.winner + "Score");
-    $("#"+ bracketDetail.matchName + "RedScore").removeClass("redScoreWin");
-    $("#"+ bracketDetail.matchName + "BlueScore").removeClass("blueScoreWin");
+    $("#" + bracketDetail.matchName + "RedScore").removeClass("redScoreWin");
+    $("#" + bracketDetail.matchName + "BlueScore").removeClass("blueScoreWin");
     if (matchData.scoreRedFinal !== null) {
-        $("#"+ bracketDetail.matchName + "RedScore").html(matchData.scoreRedFinal);
+        $("#" + bracketDetail.matchName + "RedScore").html(matchData.scoreRedFinal);
         if (bracketDetail.winner === "red") {
-            $("#"+ bracketDetail.matchName + "RedScore").addClass("redScoreWin");
+            $("#" + bracketDetail.matchName + "RedScore").addClass("redScoreWin");
         }
     } else {
-        $("#"+ bracketDetail.matchName + "RedScore").html("–");
+        $("#" + bracketDetail.matchName + "RedScore").html("–");
     }
     if (matchData.scoreBlueFinal !== null) {
-        $("#"+ bracketDetail.matchName + "BlueScore").html(matchData.scoreBlueFinal);
+        $("#" + bracketDetail.matchName + "BlueScore").html(matchData.scoreBlueFinal);
         if (bracketDetail.winner === "blue") {
-            $("#"+ bracketDetail.matchName + "BlueScore").addClass("blueScoreWin");
+            $("#" + bracketDetail.matchName + "BlueScore").addClass("blueScoreWin");
         }
     } else {
-        $("#"+ bracketDetail.matchName + "BlueScore").html("–");
+        $("#" + bracketDetail.matchName + "BlueScore").html("–");
     }
-    if(matchData.matchNumber>21 && bracketDetail.winner!=="grey") {
+    if (matchData.matchNumber > 21 && bracketDetail.winner !== "grey") {
         $("#" + bracketDetail.matchName + "Overtime").show();
     }
 }
