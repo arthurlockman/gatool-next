@@ -359,10 +359,10 @@ window.onload = function () {
 
     document.addEventListener('keyup', handleKeyboardNav);
 
-    $("input").on("focus", deactivateKeys);
-    $("input").on("blur", activateKeys);
-    $("#awardsUpdate").on("focus", deactivateKeys);
-    $("#awardsUpdate").on("blur", activateKeys);
+    $("input, #awardsUpdate, #sponsorsUpdate, #topSponsorsUpdate").on("focus", deactivateKeys);
+    $("input, #awardsUpdate, #sponsorsUpdate, #topSponsorsUpdate").on("blur", activateKeys);
+    //$("#awardsUpdate, #topSponsorsUpdate").on("focus", deactivateKeys);
+    //$("#awardsUpdate, #topSponsorsUpdate").on("blur", activateKeys);
 
     scaleRows();
     document.getElementById('setupTabPicker').click();
