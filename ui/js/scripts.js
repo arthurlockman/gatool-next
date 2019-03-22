@@ -355,34 +355,47 @@ window.onload = function () {
     //Load the events list based on the restored values
     loadEventsList();
 
+    window.addEventListener("resize", scaleRows);
+
+    document.addEventListener('keyup', handleKeyboardNav);
+
+    $("input").on("focus", deactivateKeys);
+    $("input").on("blur", activateKeys);
+    $("#awardsUpdate").on("focus", deactivateKeys);
+    $("#awardsUpdate").on("blur", activateKeys);
+
     scaleRows();
     document.getElementById('setupTabPicker').click();
     $("#loadingFeedback").html("gatool ready to play!");
-    $("#loadingFeedback").fadeOut()
+    $("#loadingFeedback").fadeOut();
 };
 
-window.addEventListener("resize", scaleRows);
+function deactivateKeys(event) {
+    document.removeEventListener('keyup', handleKeyboardNav);
+}
 
-document.addEventListener('keyup', function (event) {
+function activateKeys(event) {
+    document.addEventListener('keyup', handleKeyboardNav);
+}
+function handleKeyboardNav(event) {
     if (event.defaultPrevented) {
         return;
     }
     var key = event.key || event.keyCode;
-    console.log(key);
-    if (key === 'ArrowRight' || key === 39) {
+    if (key === 'ArrowRight' || key === 'd' || key === 39 || key === 68) {
         getNextMatch();
     }
-    if (key === 'ArrowLeft' || key === 37) {
+    if (key === 'ArrowLeft' || key === 'a' || key === 37 || key === 65) {
         getPreviousMatch();
     }
-    if (key === 'ArrowUp' || key === 38) {
+    if (key === 'ArrowUp' || key === 'w' || key === 38 || key === 87) {
         getNextTab();
     }
-    if (key === 'ArrowDown' || key === 40) {
+    if (key === 'ArrowDown' || key === 's' || key === 40 || key === 83) {
         getPreviousTab();
     }
 
-});
+}
 
 function login() {
     "use strict";
