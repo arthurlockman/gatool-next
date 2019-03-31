@@ -1106,7 +1106,7 @@ function processPlayoffBracket(matchData) {
     bracketDetail.winner = "grey";
     bracketDetail.matchName = "bracketMatch" + matchData.matchNumber;
     $("#" + bracketDetail.matchName + "Result").removeClass("redScore blueScore tieScore greyScore");
-    if (matchData.teams[0].teamNumber !== null) {
+    if ((matchData.teams[0].teamNumber !== null) || (matchData.teams[4].teamNumber !== null)) {
         for (var i = 0; i < matchData.teams.length; i++) {
             if (matchData.teams[i].station.includes("ed")) {
                 bracketDetail.redAlliance.push(matchData.teams[i].teamNumber);
