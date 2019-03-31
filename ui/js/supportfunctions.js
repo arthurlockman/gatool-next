@@ -429,6 +429,7 @@ function loadEnvironment() {
                         teamNumberUndo = environment.teamNumberUndo;
                         teamContainerUndo = environment.teamContainerUndo;
                         lastMatchPlayed = environment.lastMatchPlayed;
+                        lastPlayoffMatchPlayed = environment.lastPlayoffMatchPlayed;
                         allianceSelectionTableUndo = environment.allianceSelectionTableUndo;
                         currentMatchData = environment.currentMatchData;
                         teamCountTotal = environment.teamCountTotal;
@@ -517,6 +518,7 @@ function saveEnvironment() {
                 environment.teamNumberUndo = teamNumberUndo;
                 environment.teamContainerUndo = teamContainerUndo;
                 environment.lastMatchPlayed = lastMatchPlayed;
+                environment.lastPlayoffMatchPlayed = lastPlayoffMatchPlayed;
                 environment.allianceSelectionTableUndo = allianceSelectionTableUndo;
                 environment.currentMatchData = currentMatchData;
                 environment.teamCountTotal = teamCountTotal;

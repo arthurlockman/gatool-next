@@ -2,6 +2,7 @@ $("#loadingFeedback").html("Loading constants...");
 
 //Set up the applicatton variables.
 var playoffResults = {};
+var playoffResultsDetails = {};
 var matchLength = 150;
 var autoLength = 15;
 var endGame = 30;
@@ -31,6 +32,7 @@ var teamContainerUndo = [];
 var teamAwardCalls = 0;
 var teamUpdateCalls = 0;
 var lastMatchPlayed = 0;
+var lastPlayoffMatchPlayed = 0;
 var allianceSelectionTableUndo = [];
 var currentMatchData = {};
 var teamCountTotal = 0;
@@ -52,7 +54,18 @@ var tablist = {};
 tablist.tabs=["setupTabPicker","scheduleTabPicker","teamDataTabPicker","teamRanksPicker","announceTabPicker","playByPlayTabPicker","allianceSelectionTabPicker","awardsTabPicker","statsTabPicker","cheatsheetTabPicker","davidPriceTabPicker"];
 tablist.clicks=["setup","schedule","teamdata","teamRanks","announce","playbyplay","allianceselection","awards","stats","cheatsheet","davidPrice"];
 tablist.index=0;
-
+var playoffTiebreakers = {};
+playoffTiebreakers["2019"] = ["foulPoints","cargoPoints","hatchPanelPoints","habClimbPoints","sandStormBonusPoints"];
+playoffTiebreakers["2018"] = ["foulPoints","endgamePoints","autoPoints","autoOwnershipPoints+teleopOwnershipPoints","vaultPoints"];
+var playoffTieBreakerMatches = {};
+playoffTieBreakerMatches["9"] = ["1","5"];
+playoffTieBreakerMatches["10"] = ["2","6"];
+playoffTieBreakerMatches["11"] = ["3","7"]
+playoffTieBreakerMatches["12"] = ["4","8"]
+playoffTieBreakerMatches["17"] = ["13","15"]
+playoffTieBreakerMatches["18"] = ["14","16"];
+playoffTieBreakerMatches["24"] = ["19","20","21","22","23"];
+playoffTieBreakerMatches["list"] = ["9","10","11","12","17","18","24"];
 
 for (var i = 1; i < 9; i++) {
     allianceChoices['Alliance' + i + 'Captain'] = "";

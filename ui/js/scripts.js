@@ -361,8 +361,6 @@ window.onload = function () {
 
     $("input, #awardsUpdate, #sponsorsUpdate, #topSponsorsUpdate").on("focus", deactivateKeys);
     $("input, #awardsUpdate, #sponsorsUpdate, #topSponsorsUpdate").on("blur", activateKeys);
-    //$("#awardsUpdate, #topSponsorsUpdate").on("focus", deactivateKeys);
-    //$("#awardsUpdate, #topSponsorsUpdate").on("blur", activateKeys);
 
     scaleRows();
     document.getElementById('setupTabPicker').click();
@@ -377,6 +375,7 @@ function deactivateKeys(event) {
 function activateKeys(event) {
     document.addEventListener('keyup', handleKeyboardNav);
 }
+
 function handleKeyboardNav(event) {
     if (event.defaultPrevented) {
         return;
@@ -505,6 +504,7 @@ function initEnvironment() {
     localStorage.allianceNoChange = "false";
     localStorage.showEventNames = "true";
     playoffResults = {};
+    playoffResultsDetails = {};
     allianceTeamList = [];
     allianceListUnsorted = [];
     declinedList = [];
@@ -590,9 +590,12 @@ function handleEventSelection() {
     currentMatchData = {};
     allianceSelectionTableUndo = [];
     lastMatchPlayed = 0;
+    lastPlayoffMatchPlayed = 0;
     teamUpdateCalls = 0;
     teamAwardCalls = 0;
     showAllianceSelectionOverride = false;
+    playoffResultsDetails = {};
+    playoffResults = {};
 
     var e = document.getElementById('eventSelector');
     var data = JSON.parse(e.value);
@@ -879,6 +882,7 @@ function getRegularSeasonSchedule() {
     var matchPicker = "";
     var qualScheduleLength = 0;
     lastMatchPlayed = 0;
+    lastPlayoffMatchPlayed = 0;
     var req = new XMLHttpRequest();
     req.open('GET', apiURL + localStorage.currentYear + '/schedule/' + localStorage.currentEvent + '/qual?returnschedule=true');
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
@@ -965,12 +969,14 @@ function getRegularSeasonSchedule() {
                     var optionClass = "";
                     if ((element.scoreRedFinal !== null) && (element.scoreBlueFinal !== null)) {
                         optionClass = ' class="bg-success" ';
-                        lastMatchPlayed = i + qualScheduleLength + 1
+                        lastMatchPlayed = i + qualScheduleLength + 1;
+                        lastPlayoffMatchPlayed = element.matchNumber;
                     }
                     matchSchedule += generateMatchTableRow(element);
                     matchPicker += '<option id="matchPicker' + parseInt(i + qualScheduleLength + 1) + '"' + optionClass + ' matchNumber="' + parseInt(i + qualScheduleLength + 1) + '" value="' + parseInt(i + qualScheduleLength + 1) + '">' + element.description + '</option>';
 
                 }
+                playoffScoreDetails(1, lastPlayoffMatchPlayed, "playoff");
                 $("#matchPicker").html(matchPicker);
                 document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
                 $("#matchPicker").selectpicker('refresh');
@@ -1036,10 +1042,12 @@ function getRegularSeasonSchedule() {
                     matchSchedule += generateMatchTableRow(element);
                     matchPicker += '<option id="matchPicker' + parseInt(i + 1) + '" matchNumber="' + parseInt(i + 1) + '">' + element.description + '</option>';
                     if ((element.scoreRedFinal !== null) && (element.scoreBlueFinal !== null)) {
-                        lastMatchPlayed = element.matchNumber
+                        lastMatchPlayed = element.matchNumber;
+                        lastPlayoffMatchPlayed = element.matchNumber;
                     }
 
                 }
+                playoffScoreDetails(1, lastPlayoffMatchPlayed, "playoff");
                 localStorage.qualsList = JSON.stringify(data);
                 $("#announceBanner, #playByPlayBanner").hide();
                 $("#announceDisplay, #playByPlayDisplay").show();
@@ -1167,6 +1175,7 @@ function getOffseasonSchedule() {
     var element;
     var data;
     lastMatchPlayed = 0;
+    lastPlayoffMatchPlayed = 0;
     data = JSON.parse(localStorage.qualsList);
     if (data.Schedule.length === 0) {
         $('#scheduleContainer').html('<b>No qualification matches have been scheduled for this event.</b>')
@@ -1360,8 +1369,61 @@ function handlePlayoffBracket() {
     var matchArray = JSON.parse(localStorage.playoffList).Schedule;
     for (var i = 0; i < matchArray.length; i++) {
         processPlayoffBracket(matchArray[i]);
-    }
+        if ((i < Object.keys(playoffResultsDetails).length) && (matchArray[i].scoreRedFinal !== null) && (playoffResultsDetails[matchArray[i].matchNumber].winner === "tie") && (matchArray[i].description.split(" ")[0] !== "Final")) {
+            var winner = {};
+            winner.winner = playoffResultsDetails[matchArray[i].matchNumber].tiebreaker;
+            winner.class = "";
+            winner.level = playoffResultsDetails[matchArray[i].matchNumber].tiebreakerLevel;
+            if (winner.winner === "Red") {
+                winner.class = "redScoreWin";
+            } else if (winner.winner === "Blue") {
+                winner.class = "blueScoreWin";
+            }
 
+            $("#bracketMatch" + matchArray[i].matchNumber + winner.winner + "Score").addClass(winner.class);
+            $("#bracketMatch" + matchArray[i].matchNumber + winner.winner + "Score").html($("#bracketMatch" + matchArray[i].matchNumber + winner.winner + "Score").html() + " (L" + winner.level + ")");
+        }
+
+    }
+}
+
+function handlePlayoffBracket2() {
+    $(".overtime").hide();
+    $(".playoffScore").html("–");
+    var matchArray = JSON.parse(localStorage.playoffList).Schedule;
+    for (var i = 0; i < matchArray.length; i++) {
+        processPlayoffBracket(matchArray[i]);
+        if (playoffTieBreakerMatches["list"].includes(String(matchArray[i].matchNumber))) {
+            var winner = {};
+            winner.alliance = "";
+            winner.level = 0;
+            for (matchesToAdd = 0; matchesToAdd < playoffTieBreakerMatches[String(matchArray[i].matchNumber)].length; matchesToAdd++) {
+                winner.red = 0;
+                winner.blue = 0;
+                for (var ii = 0; ii < 5; ii++) {
+                    winner.level = ii + 1;
+                    var criterion = playoffTiebreakers[localStorage.currentYear][ii].split("+");
+                    for (var a = 0; a < criterion.length; a++) {
+                        winner.red += Number(playoffResultsDetails[String(matchArray[i].matchNumber)].alliances[1][criterion[a]])
+                        winner.blue += Number(playoffResultsDetails[String(matchArray[i].matchNumber)].alliances[0][criterion[a]])
+                    }
+                    if (winner.red > winner.blue) {
+                        winner.alliance = "red";
+                        break;
+                    } else if (winner.red < winner.blue) {
+                        winner.alliance = "blue";
+                        break;
+                    }
+                }
+                if (winner.alliance !== "") {
+                    break;
+                }
+            }
+            console.log(matchArray[i].description);
+            console.log(winner);
+        }
+
+    }
 }
 
 function getAllianceList() {
@@ -1417,10 +1479,10 @@ function getAllianceList() {
                         compressLocalStorage("teamData" + element.backup, team)
                     }
                 }
-                handlePlayoffBracket();
             }
             if (haveSchedule) {
-                announceDisplay()
+                announceDisplay();
+                handlePlayoffBracket();
             }
             $("#allianceUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"))
         }
@@ -1471,8 +1533,7 @@ function getPreviousMatch() {
 
 function announceDisplay() {
     "use strict";
-    $("#davidPriceNumber").removeClass("redScore");
-    $("#davidPriceNumber").removeClass("blueScore");
+    $("#davidPriceNumber").removeClass("redScore blueScore tieScore");
     $("#davidPriceAlliances").hide();
     var qualsList = JSON.parse(localStorage.qualsList);
     var currentMatch = localStorage.currentMatch - 1;
@@ -2260,6 +2321,58 @@ function getTeamData(teamList, year) {
     })
 }
 
+function playoffScoreDetails(matchNumber1, matchNumber2, tournamentLevel) {
+    "use strict";
+    var Detail = {};
+    var req = new XMLHttpRequest();
+    req.open('GET', apiURL + localStorage.currentYear + '/scores/' + localStorage.currentEvent + "/" + tournamentLevel + "/" + matchNumber1 + "/" + matchNumber2 + "/");
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+    req.addEventListener('load', function () {
+        if (req.status === 200) {
+            Detail = JSON.parse(req.responseText).MatchScores;
+            for (var i = 0; i < Detail.length; i++) {
+                var winner = {};
+                winner.winner = "";
+                winner.tieWinner = "";
+                winner.level = 0;
+                winner.red = 0;
+                winner.blue = 0;
+                winner.redScore = Detail[i].alliances[1].totalPoints;
+                winner.blueScore = Detail[i].alliances[0].totalPoints;
+                if ((winner.redScore === winner.blueScore) && (winner.redScore !== null)) {
+                    winner.winner = "tie";
+                    for (var ii = 0; ii < 5; ii++) {
+                        winner.level = ii + 1;
+                        var criterion = playoffTiebreakers[localStorage.currentYear][ii].split("+");
+                        for (var a = 0; a < criterion.length; a++) {
+                            winner.red += Number(Detail[i].alliances[1][criterion[a]])
+                            winner.blue += Number(Detail[i].alliances[0][criterion[a]])
+                        }
+                        if (winner.red > winner.blue) {
+                            winner.tieWinner = "Red";
+                            break;
+                        } else if (winner.red < winner.blue) {
+                            winner.tieWinner = "Blue";
+                            break;
+                        }
+                    }
+                } else if (winner.redScore > winner.blueScore) {
+                    winner.winner = "red";
+                } else {
+                    winner.winner = "blue";
+                }
+                Detail[i].winner = winner.winner;
+                Detail[i].tiebreaker = winner.tieWinner;
+                Detail[i].tiebreakerLevel = winner.level;
+
+                playoffResultsDetails[String(Detail[i].matchNumber)] = Detail[i];
+
+            }
+        }
+    });
+    req.send()
+}
+
 function scoreDetails(matchNumber, tournamentLevel) {
     "use strict";
     var req = new XMLHttpRequest();
@@ -2355,6 +2468,7 @@ function generateMatchTableRow(matchData) {
         highScores['"' + getTeamForStation(matchData.teams, 'Red3').teamNumber + '.description"'] = matchData.description
     }
     playoffResults[matchData.description] = matchWinner;
+    playoffResults[String(matchData.matchNumber)] = matchWinner;
     return returnData + '</tr>'
 }
 
@@ -2946,7 +3060,16 @@ function parsePlayoffMatchName(matchName) {
         } else if (playoffResults["Quarterfinal " + (matchArray[1] - 4)] === "No results yet") {
             return "Quarterfinal " + (matchArray[1] - 4) + " Match 2 <br>First match not reported yet"
         } else {
-            return "Quarterfinal " + (matchArray[1] - 4) + " Match 2 <br>First match tied"
+            var tiebreaker = {};
+            tiebreaker.advantage = "No advantage<br>";
+            tiebreaker.tiebreaker = playoffResultsDetails[String(currentMatchData.matchNumber - 4)].tiebreaker;
+            tiebreaker.tiebreakerLevel = playoffResultsDetails[String(currentMatchData.matchNumber - 4)].tiebreakerLevel;
+            if (tiebreaker.tiebreaker === "Red") {
+                tiebreaker.advantage = "<span class='redScoreWin'>Advantage Red (L" + tiebreaker.tiebreakerLevel + ")</span><br>";
+            } else if (tiebreaker.tiebreaker === "Blue") {
+                tiebreaker.advantage = "<span class='blueScoreWin'>Advantage Blue (L" + tiebreaker.tiebreakerLevel + ")</span><br>";
+            }
+            return "Quarterfinal " + (matchArray[1] - 4) + " Match 2 <br>" + tiebreaker.advantage + "First match tied";
         }
     }
     if ((matchArray[0] === "Semifinal") && (matchArray[1] <= 2)) {
@@ -2960,7 +3083,16 @@ function parsePlayoffMatchName(matchName) {
         } else if (playoffResults["Semifinal " + (matchArray[1] - 2)] === "No results yet") {
             return "Semifinal " + (matchArray[1] - 2) + " Match 2<br>First match not reported yet"
         } else {
-            return "Semifinal " + (matchArray[1] - 2) + " Match 2<br>First match tied"
+            var tiebreaker = {};
+            tiebreaker.advantage = "No advantage<br>";
+            tiebreaker.tiebreaker = playoffResultsDetails[String(currentMatchData.matchNumber - 2)].tiebreaker;
+            tiebreaker.tiebreakerLevel = playoffResultsDetails[String(currentMatchData.matchNumber - 2)].tiebreakerLevel;
+            if (tiebreaker.tiebreaker === "Red") {
+                tiebreaker.advantage = "<span class='redScoreWin'>Advantage Red (L" + tiebreaker.tiebreakerLevel + ")</span><br>";
+            } else if (tiebreaker.tiebreaker === "Blue") {
+                tiebreaker.advantage = "<span class='blueScoreWin'>Advantage Blue (L" + tiebreaker.tiebreakerLevel + ")</span><br>";
+            }
+            return "Semifinal " + (matchArray[1] - 2) + " Match 2 <br>" + tiebreaker.advantage + "First match tied";
         }
     }
     if (matchArray[0] === "Tiebreaker") {
@@ -2985,51 +3117,91 @@ function parsePlayoffMatchName(matchName) {
 function davidPriceFormat(priceMatchData) {
     "use strict";
     var matchArray = priceMatchData.description.split(" ");
+    var matchNumber = priceMatchData.matchNumber;
     if ((matchArray[0] === "Qualification")) {
         return matchArray[1]
     }
     if ((matchArray[0] === "Quarterfinal") && (matchArray[1] <= 4)) {
         return "Q" + matchArray[1] + "M1"
     }
-    $("#davidPriceNumber").removeClass("redScore");
-    $("#davidPriceNumber").removeClass("blueScore");
+    $("#davidPriceNumber").removeClass("redScore blueScore tieScore");
     if (inChamps() || inMiChamps()) {
     } else {
     }
-    if ((matchArray[0] === "Quarterfinal") && (matchArray[1] > 4)) {
-        if (playoffResults["Quarterfinal " + (matchArray[1] - 4)] === "Red") {
+    if ((matchNumber > 4) && (matchNumber <= 8)) {
+        if (playoffResults[String(matchNumber - 4)] === "Red") {
             $("#davidPriceNumber").addClass("redScore");
             return "Q" + (matchArray[1] - 4) + "M2"
-        } else if (playoffResults["Quarterfinal " + (matchArray[1] - 4)] === "Blue") {
+        } else if (playoffResults[String(matchNumber - 4)] === "Blue") {
             $("#davidPriceNumber").addClass("blueScore");
             return "Q" + (matchArray[1] - 4) + "M2"
-        } else if (playoffResults["Quarterfinal " + (matchArray[1] - 4)] === "No results yet") {
+        } else if (playoffResults[String(matchNumber - 4)] === "No results yet") {
             return "Q" + (matchArray[1] - 4) + "M2"
         } else {
+            $("#davidPriceNumber").addClass("tieScore");
             return "Q" + (matchArray[1] - 4) + " M2 M1 Tie"
         }
     }
-    if ((matchArray[0] === "Semifinal") && (matchArray[1] <= 2)) {
+    if ((matchNumber > 8) && (matchNumber <= 12)) {
+        if (playoffResults[String(matchNumber - 8)] === "Tie") {
+            if (playoffResults[String(matchNumber - 4)] === "Red") {
+                $("#davidPriceNumber").addClass("redScore");
+            } else if (playoffResults[String(matchNumber - 4)] === "Blue") {
+                $("#davidPriceNumber").addClass("blueScore");
+            } else if (playoffResults[String(matchNumber - 4)] === "Tie") {
+                $("#davidPriceNumber").addClass("tieScore");
+            }
+        }
+        if (playoffResults[String(matchNumber - 4)] === "Tie") {
+            if (playoffResults[String(matchNumber - 8)] === "Red") {
+                $("#davidPriceNumber").addClass("redScore");
+            } else if (playoffResults[String(matchNumber - 8)] === "Blue") {
+                $("#davidPriceNumber").addClass("blueScore");
+            }
+        }
+        return "TB" + (matchArray[1] || "");
+    }
+
+    if ((matchNumber > 12) && (matchNumber <= 14)) {
         return "S" + matchArray[1] + "M1"
     }
-    if ((matchArray[0] === "Semifinal") && (matchArray[1] > 2)) {
-        if (playoffResults["Semifinal " + (matchArray[1] - 2)] === "Red") {
+
+    if (((matchNumber > 14) && (matchNumber <= 16))) {
+        if (playoffResults[String(matchNumber - 2)] === "Red") {
             $("#davidPriceNumber").addClass("redScore");
             return "S" + (matchArray[1] - 2) + "M2"
-        } else if (playoffResults["Semifinal " + (matchArray[1] - 2)] === "Blue") {
+        } else if (playoffResults[String(matchNumber - 2)] === "Blue") {
             $("#davidPriceNumber").addClass("blueScore");
             return "S" + (matchArray[1] - 2) + "M2"
-        } else if (playoffResults["Semifinal " + (matchArray[1] - 2)] === "No results yet") {
+        } else if (playoffResults[String(matchNumber - 2)] === "No results yet") {
             return "S" + (matchArray[1] - 2) + "M2"
         } else {
             return "S" + (matchArray[1] - 2) + "M2 M1 Tie"
         }
     }
-    if (matchArray[0] === "Tiebreaker") {
-        return "TB " + (matchArray[1] || "")
+
+    if ((matchNumber > 16) && (matchNumber <= 18)) {
+        if (playoffResults[String(matchNumber - 4)] === "Tie") {
+            if (playoffResults[String(matchNumber - 2)] === "Red") {
+                $("#davidPriceNumber").addClass("redScore");
+            } else if (playoffResults[String(matchNumber - 2)] === "Blue") {
+                $("#davidPriceNumber").addClass("blueScore");
+            } else if (playoffResults[String(matchNumber - 2)] === "Tie") {
+                $("#davidPriceNumber").addClass("tieScore");
+            }
+        }
+        if (playoffResults[String(matchNumber - 2)] === "Tie") {
+            if (playoffResults[String(matchNumber - 4)] === "Red") {
+                $("#davidPriceNumber").addClass("redScore");
+            } else if (playoffResults[String(matchNumber - 4)] === "Blue") {
+                $("#davidPriceNumber").addClass("blueScore");
+            }
+        }
+        return "TB" + (matchArray[1] || "");
     }
-    if (matchArray[0] === "Final") {
-        if (matchArray[1] === "2") {
+
+    if (matchNumber > 18) {
+        if (matchNumber > 19) {
             if (playoffResults["Final 1"] === "Red") {
                 $("#davidPriceNumber").addClass("redScore");
                 return "F" + (matchArray[1] || "")
