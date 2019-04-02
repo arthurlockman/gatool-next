@@ -81,6 +81,7 @@ functions:
               querystrings:
                 eventCode: false
                 districtCode: false
+                teamNumber: false
   GetEventAvatars:
     handler: handler.GetEventAvatars
     description: Get avatars for a specific event for a specific year
