@@ -1324,8 +1324,8 @@ function getTeamList(year) {
                                 var data = JSON.parse(req.responseText);
                                 if (data.Awards !== '{"Awards":[]}') {
                                     for (var i = 0; i < data.Awards.length; i++) {
-                                        if ((data.Awards[i].awardId === 633) || (data.Awards[i].awardId === 643)) {
-                                            //Engineering Inspiration or Rookie Inspiration Award
+                                        if ((data.Awards[i].awardId === 633) || (data.Awards[i].awardId === 417)) {
+                                            //Engineering Inspiration or Rookie All Star Award
                                             districtTeams.push({
                                                 "teamNumber": data.Awards[i].teamNumber
                                             });
