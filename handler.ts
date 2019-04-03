@@ -1,7 +1,8 @@
 import {APIGatewayEvent, Callback, Context, CustomAuthorizerEvent, Handler} from 'aws-lambda';
 import {MatchWithEventDetails} from './model/match';
 import {EventAvatars, EventSchedule, EventType} from './model/event';
-import {BuildHighScoreJson, GetAvatarData, GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode, ResponseWithHeaders} from './utils/utils';
+import {BuildHighScoreJson, GetAvatarData, GetDataFromFIRST,
+    GetDataFromFIRSTAndReturn, ReturnJsonWithCode, ResponseWithHeaders} from './utils/utils';
 import {
     GetHighScoresFromDb,
     GetTeamUpdatesForTeam,
@@ -26,12 +27,16 @@ const GetTeams: Handler = (event: APIGatewayEvent, context: Context, callback: C
     }
     const eventCode = event.queryStringParameters.eventCode;
     const districtCode = event.queryStringParameters.districtCode;
+    const teamNumber = event.queryStringParameters.teamNumber;
     const query = [];
     if (eventCode) {
         query.push(`eventCode=${eventCode}`);
     }
     if (districtCode) {
         query.push(`districtCode=${districtCode}`);
+    }
+    if (teamNumber) {
+        query.push(`teamNumber=${teamNumber}`);
     }
     const initialTeamData = GetDataFromFIRST(`${event.pathParameters.year}/teams?${query.join('&')}&page=1`);
     initialTeamData.then(teamData => {
