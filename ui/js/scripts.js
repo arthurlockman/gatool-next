@@ -1326,9 +1326,12 @@ function getTeamList(year) {
                                     for (var i = 0; i < data.Awards.length; i++) {
                                         if ((data.Awards[i].awardId === 633) || (data.Awards[i].awardId === 417)) {
                                             //Engineering Inspiration or Rookie All Star Award
-                                            districtTeams.push({
-                                                "teamNumber": data.Awards[i].teamNumber
-                                            });
+                                            if (data.Awards[i].teamNumber !== null) {
+                                                districtTeams.push({
+                                                    "teamNumber": data.Awards[i].teamNumber
+                                                });
+                                            }
+                                           
                                         }
                                         //console.log(districtTeams);
                                         //console.log("handing back the values");
@@ -1383,7 +1386,7 @@ function getTeamList(year) {
                             //finished
                             //console.log(value);
                             for (var i = 0; i < value.length; i++) {
-                                var index = -1
+                                var index = -1;
                                 for (var ii = 0; ii < eventTeamList.length; ii++) {
                                     if (value[i].teamNumber === eventTeamList[ii].teamNumber) {
                                         index = ii;
