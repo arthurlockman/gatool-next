@@ -23,7 +23,7 @@ if (!localStorage.qualsList) {
     localStorage.qualsList = '{"Schedule":[]}'
 }
 if (!localStorage.teamList) {
-    localStorage.teamList = "{}"
+    localStorage.teamList = "[]"
 }
 if (!localStorage.eventName) {
     localStorage.eventName = ""
@@ -112,9 +112,6 @@ window.onload = function () {
 
     //hide the schedule progress bar. We'll show it if we need it.
     $('#scheduleProgressBar').hide();
-
-    //hide the EI and RIA portion of the Awards Screen until we need it.
-    $("#districtChampsAwards").hide();
 
     //change the Select Picker behavior to support Mobile browsers with native controls
     //if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
@@ -497,7 +494,7 @@ function initEnvironment() {
     localStorage.events = "{}";
     localStorage.playoffList = '{"Schedule":[]}';
     localStorage.qualsList = '{"Schedule":[]}';
-    localStorage.teamList = "{}";
+    localStorage.teamList = "[]";
     localStorage.clock = "ready";
     localStorage.matchHighScore = 0;
     localStorage.highScoreDetails = "{}";
@@ -580,6 +577,7 @@ function handleEventSelection() {
     localStorage.currentMatch = 1;
     localStorage.playoffList = '{"Schedule":[]}';
     localStorage.qualsList = '{"Schedule":[]}';
+    localStorage.eventDistrict = "";
     lastRanksUpdate = "";
     lastQualsUpdate = "";
     qualsComplete = !1;
@@ -603,6 +601,7 @@ function handleEventSelection() {
     localStorage.currentEvent = data.code;
 
     $('#eventCodeContainer').html(data.code);
+    $('#districtCodeContainer').html(data.districtCode || "Regional Event");
     $('#eventLocationContainer').html(data.venue + "" + " in " + data.city + ", " + data.stateprov + " " + data.country);
     var startDate = moment(data.dateStart, 'YYYY-MM-DDTHH:mm:ss').format('dddd, MMMM Do');
     var endDate = moment(data.dateEnd, 'YYYY-MM-DDTHH:mm:ss').format('dddd, MMMM Do, YYYY');
@@ -613,7 +612,8 @@ function handleEventSelection() {
     $('#playByPlayDisplay').hide();
     $("#eventName").html('<span class="loadingEvent"><b>Waiting for event schedule... Team Data available.</b></span>');
     localStorage.eventName = data.name;
-    localStorage.teamList = "";
+    localStorage.eventDistrict = data.districtCode;
+    localStorage.teamList = "[]";
     if (inChamps() || inSubdivision()) {
         allianceSelectionLength = 23
     } else {
@@ -666,7 +666,7 @@ function handleOffseasonEventSelection() {
     $('#playByPlayDisplay').hide();
     $("#eventName").html('<span class="loadingEvent"><b>Waiting for event schedule... Team Data available.</b></span>');
     localStorage.eventName = data.name;
-    localStorage.teamList = "";
+    localStorage.teamList = "[]";
     if (inChamps() || inSubdivision()) {
         allianceSelectionLength = 23
     } else {
@@ -1303,17 +1303,148 @@ function getTeamList(year) {
                     team.matchesPlayed = "";
                     compressLocalStorage("teamData" + eventTeamList[j].teamNumber, team);
                     highScores['"' + eventTeamList[j].teamNumber + '.score"'] = 0;
-                    highScores['"' + eventTeamList[j].teamNumber + '.description"'] = ""
+                    highScores['"' + eventTeamList[j].teamNumber + '.description"'] = "";
+                }
+                localStorage.teamList = JSON.stringify(eventTeamList);
+                if ((localStorage.eventDistrict !== "") && (localStorage.eventName.search("hampionship") >= 0)) {
+                    var districtEvents = [];
+                    var districtPromises = [];
+                    for (var i = 0; i < currentEventList.length; i++) {
+                        if (currentEventList[i].districtCode === localStorage.eventDistrict) {
+                            districtEvents.push(currentEventList[i].code);
+                        }
+                    }
+                    for (i = 0; i < districtEvents.length; i++) {
+                        districtPromises.push(new Promise((resolve, reject) => {
+                            var req = new XMLHttpRequest();
+                            req.open('GET', apiURL + localStorage.currentYear + '/awards/' + districtEvents[i] + "/");
+                            req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+                            req.addEventListener('load', function () {
+                                var districtTeams = [];
+                                var data = JSON.parse(req.responseText);
+                                if (data.Awards !== '{"Awards":[]}') {
+                                    for (var i = 0; i < data.Awards.length; i++) {
+                                        if ((data.Awards[i].awardId === 633) || (data.Awards[i].awardId === 643)) {
+                                            //Engineering Inspiration or Rookie Inspiration Award
+                                            districtTeams.push({
+                                                "teamNumber": data.Awards[i].teamNumber
+                                            });
+                                        }
+                                        //console.log(districtTeams);
+                                        //console.log("handing back the values");
+                                    }
+                                }
+                                resolve(districtTeams);
+
+                            });
+                            req.send();
+
+                        }));
+                    }
+                    Promise.all(districtPromises).then(function (values) {
+                        var districtTeamsAll = [];
+                        var districtTeams = [];
+                        //get the team data for this list.
+                        for (var i = 0; i < values.length; i++) {
+                            for (var j = 0; j < values[i].length; j++) {
+                                districtTeamsAll.push(values[i][j]);
+                            }
+                        }
+                        districtTeamsAll.sort(function (a, b) {
+                            return parseInt(a.teamNumber) - parseInt(b.teamNumber);
+                        });
+                        districtTeams = uniq(districtTeamsAll);
+                        localStorage.districtTeamList = JSON.stringify(districtTeams);
+                        var teamDataLoadPromises = [];
+                        for (var i = 0; i < districtTeams.length; i++) {
+                            teamDataLoadPromises.push(new Promise((resolve, reject) => {
+                                var req = new XMLHttpRequest();
+                                req.open('GET', apiURL + localStorage.currentYear + '/teams?teamNumber=' + districtTeams[i].teamNumber);
+                                req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+                                req.addEventListener('load', function () {
+                                    if (req.responseText.substr(0, 5) !== '"Team') {
+                                        var data = JSON.parse(req.responseText);
+                                        if (data.teams.length > 0) {
+                                            var teamData = data.teams[0];
+                                            //console.log("getDistrictTeamData: " + i);
+                                            //console.log(teamData);
+                                            resolve(teamData);
+                                        } else {
+                                            reject(data);
+                                        }
+
+                                    }
+
+                                });
+                                req.send();
+                            }));
+                        }
+                        Promise.all(teamDataLoadPromises).then(function (value) {
+                            //finished
+                            //console.log(value);
+                            for (var i = 0; i < value.length; i++) {
+                                var index = -1
+                                for (var ii = 0; ii < eventTeamList.length; ii++) {
+                                    if (value[i].teamNumber === eventTeamList[ii].teamNumber) {
+                                        index = ii;
+                                    }
+
+                                }
+                                if (index < 0) {
+                                    $('#teamsTableBody').append(generateTeamTableRow(value[i]));
+                                    var team  = decompressLocalStorage("teamData" + value[i].teamNumber);
+                                    team.rank = "";
+                                    team.alliance = "";
+                                    team.allianceName = "";
+                                    team.allianceChoice = "";
+                                    team.sortOrder1 = "";
+                                    team.sortOrder2 = "";
+                                    team.sortOrder3 = "";
+                                    team.sortOrder4 = "";
+                                    team.sortOrder5 = "";
+                                    team.sortOrder6 = "";
+                                    team.wins = "";
+                                    team.losses = "";
+                                    team.ties = "";
+                                    team.qualAverage = "";
+                                    team.dq = "";
+                                    team.matchesPlayed = "";
+                                    compressLocalStorage("teamData" + value[i].teamNumber, team);
+                                    highScores['"' + value[i].teamNumber + '.score"'] = 0;
+                                    highScores['"' + value[i].teamNumber + '.description"'] = "";
+                                    eventTeamList.push(value[i]);
+                                    
+                                }
+                            }
+                            localStorage.teamList = JSON.stringify(eventTeamList);
+                            getTeamAwardsAsync(eventTeamList, year);
+                            if (Number(localStorage.currentYear) >= 2018) {
+                                getAvatars()
+                            }
+                            getHybridSchedule();
+                            displayAwardsTeams();
+                            lastSchedulePage = !0;
+                        })
+                            .catch(function (err) {
+                                // Will catch failure of first failed promise
+                                console.log("Failed:", err);
+                            });
+
+                    })
+                        .catch(function (err) {
+                            // Will catch failure of first failed promise
+                            console.log("GetDistrictAwards Failed:", err);
+                        });
+                } else {
+                    getTeamAwardsAsync(eventTeamList, year);
+                    if (Number(localStorage.currentYear) >= 2018) {
+                        getAvatars()
+                    }
+                    getHybridSchedule();
+                    displayAwardsTeams();
+                    lastSchedulePage = !0
                 }
 
-                localStorage.teamList = JSON.stringify(eventTeamList);
-                getTeamAwardsAsync(eventTeamList, year);
-                if (Number(localStorage.currentYear) >= 2018) {
-                    getAvatars()
-                }
-                getHybridSchedule();
-                displayAwardsTeams();
-                lastSchedulePage = !0
 
             }
             $("#teamUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"))
@@ -1776,7 +1907,7 @@ function displayAwardsTeams(teamList) {
     var sortedTeams = [];
     teamList = JSON.parse(localStorage.teamList);
     for (var j = 0; j < teamList.length; j++) {
-        sortedTeams[j] = teamList[j].teamNumber
+        sortedTeams[j] = Number(teamList[j].teamNumber)
     }
     $("#awardsTeamList1").html("");
     $("#awardsTeamList2").html("");
@@ -1785,18 +1916,18 @@ function displayAwardsTeams(teamList) {
     $("#awardsTeamList5").html("");
     $("#awardsTeamList6").html("");
     sortedTeams.sort(function (a, b) {
-        return a - b
+        return a-b;
     });
     for (var i = 0; i < sortedTeams.length; i++) {
         if (i < sortedTeams.length / 6) {
             column = "1"
-        } else if (i > sortedTeams.length / 6 && i <= sortedTeams.length * 2 / 6) {
+        } else if (i >= sortedTeams.length / 6 && i < sortedTeams.length * 2 / 6) {
             column = "2"
-        } else if (i > sortedTeams.length * 2 / 6 && i <= sortedTeams.length * 3 / 6) {
+        } else if (i >= sortedTeams.length * 2 / 6 && i < sortedTeams.length * 3 / 6) {
             column = "3"
-        } else if (i > sortedTeams.length * 3 / 6 && i <= sortedTeams.length * 4 / 6) {
+        } else if (i >= sortedTeams.length * 3 / 6 && i < sortedTeams.length * 4 / 6) {
             column = "4"
-        } else if (i > sortedTeams.length * 4 / 6 && i <= sortedTeams.length * 5 / 6) {
+        } else if (i >= sortedTeams.length * 4 / 6 && i < sortedTeams.length * 5 / 6) {
             column = "5"
         } else {
             column = "6"

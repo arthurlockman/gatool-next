@@ -647,3 +647,6 @@ function eventWeek(event) {
         return "";
     }
 }
+function uniq(a) {
+    return Array.from(new Set(a));
+ }
