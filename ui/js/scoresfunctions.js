@@ -270,3 +270,16 @@ function getTeamRanks() {
     }
 }
 
+function getDistrictRanks() {
+    "use strict";
+    var team = {};
+    var req = new XMLHttpRequest();
+    req.open('GET', apiURL + localStorage.currentYear + '/rankings/district/' + localStorage.eventDistrict);
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+    req.addEventListener('load', function () {
+        console.log(req);
+    });
+
+    req.send();
+
+}

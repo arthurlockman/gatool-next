@@ -1179,10 +1179,12 @@ function getOffseasonSchedule() {
     data = JSON.parse(localStorage.qualsList);
     if (data.Schedule.length === 0) {
         $('#scheduleContainer').html('<b>No qualification matches have been scheduled for this event.</b>')
+        haveSchedule = false;
     } else {
         $("#scheduleContainer").html('<p class = "eventName">' + localStorage.eventName + '</p><table id="scheduleTable" class="table table-bordered table-responsive table-striped"></table>');
         matchSchedule += '<thead class="thead-default"><tr><td class="col2"><b>Time</b></td><td  class="col2"><b>Description</b></td><td class="col1"><b>Match Number</b></td><td class="col1"><b>Score</b></td><td class="col1"><b>Station 1</b></td><td class="col1"><b>Station 2</b></td><td class="col1"><b>Station 3</b></td></tr></thead><tbody>';
         qualScheduleLength = data.Schedule.length;
+        haveSchedule = true;
         for (i = 0; i < data.Schedule.length; i++) {
             element = data.Schedule[i];
             matchSchedule += generateMatchTableRow(element);
@@ -2428,12 +2430,13 @@ function getTeamData(teamList, year) {
     "use strict";
     var teamDataLoadPromises = [];
     $('#teamDataTabPicker').addClass('alert-danger');
-    for (var team in teamList) {
+    for (var i = 0;i<teamList.length;i++) {
         teamDataLoadPromises.push(new Promise((resolve, reject) => {
             var req = new XMLHttpRequest();
-            req.open('GET', apiURL + year + '/teamdata/' + team.teamNumber + "/");
+            req.open('GET', apiURL + year + '/teams?teamNumber=' + teamList[i].teamNumber);
             req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
             req.addEventListener('load', function () {
+                //console.log(req.responseText);
                 if (req.status === 200) {
                     if (req.responseText.substr(0, 5) !== '"Team') {
                         var data = JSON.parse(req.responseText);
@@ -3382,13 +3385,15 @@ function handleQualsFiles(e) {
                 workbook = XLSX.read(btoa(arr), { type: 'base64' })
             }
             var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+            var worksheet1 = workbook.Sheets[workbook.SheetNames[0]];
             var schedule = XLSX.utils.sheet_to_json(worksheet, { range: 4 });
             var formattedSchedule = {};
             var innerSchedule = [];
             var teamListArray = [];
             var teamList = [];
             var teamToInsert = {};
-            var teamTable = "";
+            localStorage.eventName = worksheet1["B3"].v;
+
             for (var i = 0; i < schedule.length; i++) {
                 if (schedule[i].Match) {
                     var tempRow = {
@@ -3404,7 +3409,7 @@ function handleQualsFiles(e) {
                         "scoreBlueFinal": "",
                         "scoreBlueFoul": "",
                         "scoreBlueAuto": "",
-                        "Teams": [{
+                        "teams": [{
                             "teamNumber": schedule[i]["Red 1"],
                             "station": "Red1",
                             "surrogate": !1,
@@ -3454,7 +3459,7 @@ function handleQualsFiles(e) {
             }
             formattedSchedule.Schedule = innerSchedule;
             teamListArray.sort(function (a, b) {
-                return a - b
+                return Number(a) - Number(b)
             });
             for (i = 0; i < teamListArray.length; i++) {
                 teamToInsert = { "teamNumber": teamListArray[i] };
@@ -3508,7 +3513,7 @@ function handlePlayoffFiles(e) {
                         "scoreBlueFinal": "",
                         "scoreBlueFoul": "",
                         "scoreBlueAuto": "",
-                        "Teams": [{
+                        "teams": [{
                             "teamNumber": schedule[i]["Red 1"],
                             "station": "Red1",
                             "surrogate": !1,

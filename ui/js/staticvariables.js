@@ -78,8 +78,8 @@ for (var i = 0; i < allianceSelectionOrder.length; i++) {
 var champSubdivisions = ["ARCHIMEDES", "CARSON", "CARVER", "CURIE", "DALY", "DARWIN", "GALILEO", "HOPPER", "NEWTON", "ROEBLING", "TESLA", "TURING"];
 var champDivisions = ["ARDA", "CANE", "CATE", "CUDA", "GARO", "HOTU"];
 var champs = ["CMP", "CMPTX", "CMPMO", "CMPMI"];
-var miDivisions = ["MICMP1", "MICMP2", "MICMP3", "MICMP4"];
-var miChamps = ["MICMP"];
+var miDivisions = ["MICMP1", "MICMP2", "MICMP3", "MICMP4","ONCMP1","ONCMP2"];
+var miChamps = ["MICMP","ONCMP"];
 
 //This section defines the week boundaries for filtering.
 
