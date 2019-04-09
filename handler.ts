@@ -63,6 +63,40 @@ const GetTeams: Handler = (event: APIGatewayEvent, context: Context, callback: C
 };
 
 // noinspection JSUnusedGlobalSymbols
+const GetDistrictRankings: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+    const query = [];
+    query.push(`districtCode=${event.pathParameters.districtCode}`);
+    if (event.queryStringParameters) {
+        const top = event.queryStringParameters.top;
+        if (top) {
+            query.push(`top=${top}`);
+        }
+    }
+    const initialRankingData = GetDataFromFIRST(`${event.pathParameters.year}/rankings/district?${query.join('&')}&page=1`);
+    initialRankingData.then(rankingData => {
+        if (rankingData.body.statusCode) {
+            return ReturnJsonWithCode(rankingData.body.statusCode, rankingData.body.message, callback);
+        }
+        if (rankingData.body.pageTotal === 1) {
+            return ReturnJsonWithCode(200, rankingData.body, callback, rankingData.headers);
+        } else {
+            const promises: Promise<any>[] = [];
+            for (let i = 2; i <= rankingData.body.pageTotal; i++) {
+                promises.push(GetDataFromFIRST(`${event.pathParameters.year}/rankings/district?${query.join('&')}&page=${i}`));
+            }
+            Promise.all(promises).then(allRankData => {
+                allRankData.map(districtRank => {
+                    rankingData.body.rankingCountPage += districtRank.body.rankingCountPage;
+                    rankingData.body.districtRanks = rankingData.body.districtRanks.concat(districtRank.body.districtRanks);
+                });
+                rankingData.body.pageTotal = 1;
+                return ReturnJsonWithCode(200, rankingData.body, callback, rankingData.headers);
+            });
+        }
+    })
+};
+
+// noinspection JSUnusedGlobalSymbols
 const GetEventTeams: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
     // TODO: remove pagination from this API
     return GetDataFromFIRSTAndReturn(event.pathParameters.year + '/teams?eventcode='
@@ -477,7 +511,7 @@ const Authorize: Handler = (event: CustomAuthorizerEvent, context: Context, call
 export {GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedule, GetEventAvatars,
     UpdateHighScores, GetHighScores, GetOffseasonEvents, GetEventAlliances, GetEventRankings,
     Authorize, GetTeamAvatar, GetEventHighScores, GetTeamUpdates, PutTeamUpdates, GetUserPreferences,
-    PutUserPreferences, GetHistoricTeamAwards, GetDistrictTeams, GetTeams}
+    PutUserPreferences, GetHistoricTeamAwards, GetDistrictTeams, GetTeams, GetDistrictRankings}
 
 // Handle unexpected application errors
 process.on('unhandledRejection', (reason, p) => {

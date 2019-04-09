@@ -247,6 +247,21 @@ functions:
           parameters:
             year: true
             eventCode: true
+  GetDistrictRankings:
+    handler: handler.GetDistrictRankings
+    description: Get district rankings
+    events:
+      - http:
+          path: api/{year}/district/rankings/{districtCode}
+          method: get
+          cors: true
+          authorizer: Authorize
+          request:
+            parameters:
+              year: true
+              districtCode: true
+            querystrings:
+              top: false
   GetUserPreferences:
     handler: handler.GetUserPreferences
     description: Get the stored preferences for a particular user.
