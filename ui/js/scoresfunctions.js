@@ -189,7 +189,7 @@ function getTeamRanks() {
                     $("#rankingDisplay").html('<b>Ranking</b>');
                 }
                 $('#ranksContainer').html('<p class = "eventName">' + localStorage.eventName + ' (<b><span id="rankstablelastupdated"></span></b>)</p><p>This table lists the teams in rank order for this competition. This table updates during the competition, and freezes once Playoff Matches begin. </p><table id="ranksTable" class="table table-condensed table-responsive table-bordered table-striped"></table>');
-                var ranksList = '<thead  id="ranksTableHead" class="thead-default"><tr><td class="col1"><b>Team #</b></td><td class="col1"><b>Rank</b></td><td class="col2"><b>Team Name</b></td><td class = "col1"><b>RP Avg.</b></td><td class="col1"><b>Wins</b></td><td  class="col1"><b>Losses</b></td><td class="col1"><b>Ties</b></td><td class="col1"><b>Qual Avg</b></td><td class="col1"><b>DQ</b></td><td class="col1"><b>Matches Played</b></td></tr></thead><tbody>';
+                var ranksList = '<thead  id="ranksTableHead" class="thead-default"><tr><td onclick="w3.sortHTMLAsNumber(\'#ranksTable\',\'.ranksTableRow\', \'.rankTableNumber\')" class="col1"><b>Team #</b></td><td onclick="w3.sortHTMLAsNumber(\'#ranksTable\',\'.ranksTableRow\', \'.rankTableRank\')" class="col1"><b>Rank</b></td><td class="col2"><b>Team Name</b></td><td class = "col1"><b>RP Avg.</b></td><td class="col1"><b>Wins</b></td><td  class="col1"><b>Losses</b></td><td class="col1"><b>Ties</b></td><td class="col1"><b>Qual Avg</b></td><td class="col1"><b>DQ</b></td><td class="col1"><b>Matches Played</b></td><td onclick="w3.sortHTMLAsNumber(\'#ranksTable\',\'.ranksTableRow\', \'.sortDistrictRank\')" class="col1 districtRank"><b>District Rank</b></tr></thead><tbody>';
 
                 for (var i = 0; i < data.Rankings.length; i++) {
 
@@ -262,24 +262,15 @@ function getTeamRanks() {
 
                 $("#rankUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"));
             }
+            $(".districtRank").hide();
+            if (localStorage.eventDistrict != "") {
+                $(".districtRank").show();
+                getDistrictRanks(localStorage.eventDistrict,localStorage.currentYear);
+            }
             backupAllianceList = allianceListUnsorted.slice(8);
         }
     });
     if (localStorage.offseason !== "true") {
         req.send();
     }
-}
-
-function getDistrictRanks() {
-    "use strict";
-    var team = {};
-    var req = new XMLHttpRequest();
-    req.open('GET', apiURL + localStorage.currentYear + '/rankings/district/' + localStorage.eventDistrict);
-    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
-    req.addEventListener('load', function () {
-        console.log(req);
-    });
-
-    req.send();
-
 }

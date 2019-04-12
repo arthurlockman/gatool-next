@@ -511,6 +511,7 @@ function initEnvironment() {
     undoCounter = [];
     allianceSelectionLength = 15;
     rankingsList = [];
+    districtRankings = {};
     currentAllianceChoice = 0;
     teamLoadProgressBar = 0;
     teamAwardCalls = 0;
@@ -540,6 +541,7 @@ function prepareAllianceSelection() {
     backupAllianceListUndo = [];
     undoCounter = [];
     rankingsList = [];
+    districtRankings = {};
     currentAllianceChoice = 0;
     $("#allianceSelectionTable").html('<table> <tr> <td><table class="availableTeams"> <tr> <td colspan="5"><strong>Teams for Alliance Selection</strong></td></tr><tr> <td id="allianceTeamList1" class="col1"><div class="allianceTeam">List of teams</div></td><td id="allianceTeamList2" class="col1"><div class="allianceTeam">List of teams</div></td><td id="allianceTeamList3" class="col1"><div class="allianceTeam">List of teams</div></td><td id="allianceTeamList4" class="col1"><div class="allianceTeam">List of teams</div></td><td id="allianceTeamList5" class="col1"><div class="allianceTeam allianceCaptain">List of teams</div></td></tr></table></td><td class="col1"><table id="backupTeamsTable" class="backupAlliancesTable"> <tr> <td><p><strong>Backup Alliances</strong><br>(Initially rank 9 to 16 top to bottom)</p></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam1">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam2">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam3">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam4">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam5">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam6">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam7">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam8">List of teams</div></td></tr></table></td><td><table class="alliancesTeamsTable"> <tr class="col6"> <td id="Alliance1" class="col3 dropzone"><div class="alliancedrop" id="Alliance1Captain">Alliance 1 Captain</div><div class="alliancedrop nextAllianceChoice" id="Alliance1Round1" >Alliance 1 first choice</div><div class="alliancedrop" id="Alliance1Round2" >Alliance 1 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance1Round3" >Alliance 1 third choice</div></td><td id="Alliance8" class="col3"><div class="alliancedrop" id="Alliance8Captain" >Alliance 8 Captain</div><div class="alliancedrop" id="Alliance8Round1" >Alliance 8 first choice</div><div class="alliancedrop" id="Alliance8Round2" >Alliance 8 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance8Round3" >Alliance 8 third choice</div></td></tr><tr class="col6"> <td id="Alliance2" class="col3"><div class="alliancedrop" id="Alliance2Captain" >Alliance 2 Captain</div><div class="alliancedrop" id="Alliance2Round1" >Alliance 2 first choice</div><div class="alliancedrop" id="Alliance2Round2" >Alliance 2 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance2Round3" >Alliance 2 third choice</div></td><td id="Alliance7" class="col3"><div class="alliancedrop" id="Alliance7Captain" >Alliance 7 Captain</div><div class="alliancedrop" id="Alliance7Round1" >Alliance 7 first choice</div><div class="alliancedrop" id="Alliance7Round2" >Alliance 7 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance7Round3" >Alliance 7 third choice</div></td></tr><tr class="col6"> <td id="Alliance3" class="col3"><div class="alliancedrop" id="Alliance3Captain" >Alliance 3 Captain</div><div class="alliancedrop" id="Alliance3Round1" >Alliance 3 first choice</div><div class="alliancedrop" id="Alliance3Round2" >Alliance 3 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance3Round3" >Alliance 3 third choice</div></td><td id="Alliance6" class="col3"><div class="alliancedrop" id="Alliance6Captain" >Alliance 6 Captain</div><div class="alliancedrop" id="Alliance6Round1" >Alliance 6 first choice</div><div class="alliancedrop" id="Alliance6Round2" >Alliance 6 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance6Round3" >Alliance 6 third choice</div></td></tr><tr class="col6"> <td id="Alliance4" class="col3"><div class="alliancedrop" id="Alliance4Captain" >Alliance 4 Captain</div><div class="alliancedrop" id="Alliance4Round1" >Alliance 4 first choice</div><div class="alliancedrop" id="Alliance4Round2" >Alliance 4 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance4Round3" >Alliance 4 third choice</div></td><td id="Alliance5" class="col3"><div class="alliancedrop" id="Alliance5Captain" >Alliance 5 Captain</div><div class="alliancedrop" id="Alliance5Round1" >Alliance 5 first choice</div><div class="alliancedrop" id="Alliance5Round2" >Alliance 5 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance5Round3" >Alliance 5 third choice</div></td></tr></table></td></tr></table>')
 }
@@ -612,7 +614,9 @@ function handleEventSelection() {
     $('#playByPlayDisplay').hide();
     $("#eventName").html('<span class="loadingEvent"><b>Waiting for event schedule... Team Data available.</b></span>');
     localStorage.eventName = data.name;
-    localStorage.eventDistrict = data.districtCode;
+    if (data.districtCode !== null) {
+        localStorage.eventDistrict = data.districtCode;
+    }
     localStorage.teamList = "[]";
     if (inChamps() || inSubdivision()) {
         allianceSelectionLength = 23
@@ -1333,7 +1337,7 @@ function getTeamList(year) {
                                                     "teamNumber": data.Awards[i].teamNumber
                                                 });
                                             }
-                                           
+
                                         }
                                         //console.log(districtTeams);
                                         //console.log("handing back the values");
@@ -1397,7 +1401,7 @@ function getTeamList(year) {
                                 }
                                 if (index < 0) {
                                     $('#teamsTableBody').append(generateTeamTableRow(value[i]));
-                                    var team  = decompressLocalStorage("teamData" + value[i].teamNumber);
+                                    var team = decompressLocalStorage("teamData" + value[i].teamNumber);
                                     team.rank = "";
                                     team.alliance = "";
                                     team.allianceName = "";
@@ -1418,7 +1422,7 @@ function getTeamList(year) {
                                     highScores['"' + value[i].teamNumber + '.score"'] = 0;
                                     highScores['"' + value[i].teamNumber + '.description"'] = "";
                                     eventTeamList.push(value[i]);
-                                    
+
                                 }
                             }
                             localStorage.teamList = JSON.stringify(eventTeamList);
@@ -1921,7 +1925,7 @@ function displayAwardsTeams(teamList) {
     $("#awardsTeamList5").html("");
     $("#awardsTeamList6").html("");
     sortedTeams.sort(function (a, b) {
-        return a-b;
+        return a - b;
     });
     for (var i = 0; i < sortedTeams.length; i++) {
         if (i < sortedTeams.length / 6) {
@@ -2430,7 +2434,7 @@ function getTeamData(teamList, year) {
     "use strict";
     var teamDataLoadPromises = [];
     $('#teamDataTabPicker').addClass('alert-danger');
-    for (var i = 0;i<teamList.length;i++) {
+    for (var i = 0; i < teamList.length; i++) {
         teamDataLoadPromises.push(new Promise((resolve, reject) => {
             var req = new XMLHttpRequest();
             req.open('GET', apiURL + year + '/teams?teamNumber=' + teamList[i].teamNumber);
@@ -2456,6 +2460,28 @@ function getTeamData(teamList, year) {
         $('#teamDataTabPicker').removeClass('alert-danger');
         $('#teamDataTabPicker').addClass('alert-success')
     })
+}
+
+function getDistrictRanks(districtCode, year) {
+    "use strict";
+    var req = new XMLHttpRequest();
+    req.open('GET', apiURL + year + '/district/rankings/' + districtCode);
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+    req.addEventListener('load', function () {
+        if (req.status === 200) {
+            var data = JSON.parse(req.responseText);
+            var team = {};
+            for (var i = 0; i<data.districtRanks.length;i++) {
+                districtRankings[data.districtRanks[i].teamNumber]=data.districtRanks[i];
+            }
+            
+            for (var i = 0;i<eventTeamList.length;i++) {
+                $("#rankDistrictRank"+eventTeamList[i].teamNumber).html('<span class="sortDistrictRank">'+districtRankings[eventTeamList[i].teamNumber].rank+"</span><br>("+districtRankings[eventTeamList[i].teamNumber].totalPoints+" pts)")
+            }
+            
+        }
+    });
+    req.send()
 }
 
 function playoffScoreDetails(matchNumber1, matchNumber2, tournamentLevel) {
@@ -2623,20 +2649,21 @@ function getTeamForStation(teamList, station) {
 
 function updateRanksTableRow(teamData, teamNumber) {
     "use strict";
-    var returnData = '<tr><td id="rankTableNumber' + teamNumber + '">' + teamNumber + '</td>';
-    returnData += '<td id="rankTableRank' + teamData.teamNumber + '">' + teamData.rank + '</td>';
+    var returnData = '<tr class="ranksTableRow"><td class="rankTableNumber" id="rankTableNumber' + teamNumber + '">' + teamNumber + '</td>';
+    returnData += '<td id="rankTableRank' + teamNumber + '" class="rankTableRank">' + teamData.rank + '</td>';
     if (teamData.nameShortLocal === "") {
-        returnData += '<td id="rankTableName' + teamData.teamNumber + '">' + teamData.nameShort + '</td>'
+        returnData += '<td id="rankTableName' + teamNumber + '">' + teamData.nameShort + '</td>'
     } else {
-        returnData += '<td id="rankTableName' + teamData.teamNumber + '">' + teamData.nameShortLocal + '</td>'
+        returnData += '<td id="rankTableName' + teamNumber + '">' + teamData.nameShortLocal + '</td>'
     }
-    returnData += '<td id="rankTableRP' + teamData.teamNumber + '">' + teamData.sortOrder1 + '</td>';
-    returnData += '<td id="rankTableWins' + teamData.teamNumber + '">' + teamData.wins + '</td>';
-    returnData += '<td id="rankTableLosses' + teamData.teamNumber + '">' + teamData.losses + '</td>';
-    returnData += '<td id="rankTableTies' + teamData.teamNumber + '">' + teamData.ties + '</td>';
-    returnData += '<td id="rankTableQualAverage' + teamData.teamNumber + '">' + teamData.qualAverage + '</td>';
-    returnData += '<td id="rankTableDq' + teamData.teamNumber + '">' + teamData.dq + '</td>';
-    returnData += '<td id="rankTableMatchesPlayed' + teamData.teamNumber + '">' + teamData.matchesPlayed + '</td>';
+    returnData += '<td id="rankTableRP' + teamNumber + '">' + teamData.sortOrder1 + '</td>';
+    returnData += '<td id="rankTableWins' + teamNumber + '">' + teamData.wins + '</td>';
+    returnData += '<td id="rankTableLosses' + teamNumber + '">' + teamData.losses + '</td>';
+    returnData += '<td id="rankTableTies' + teamNumber + '">' + teamData.ties + '</td>';
+    returnData += '<td id="rankTableQualAverage' + teamNumber + '">' + teamData.qualAverage + '</td>';
+    returnData += '<td id="rankTableDq' + teamNumber + '">' + teamData.dq + '</td>';
+    returnData += '<td id="rankTableMatchesPlayed' + teamNumber + '">' + teamData.matchesPlayed + '</td>';
+    returnData += '<td id="rankDistrictRank' + teamNumber + '" class="districtRank rankTableDistrictRank"></td>';
     return returnData + '</tr>'
 }
 
@@ -3467,6 +3494,7 @@ function handleQualsFiles(e) {
             }
             $("#eventTeamCount").html(teamList.length);
             $('#teamsListEventName').html(localStorage.eventName);
+            $("#teamsTable tbody").empty();
             getTeamData(teamList, localStorage.currentYear);
             localStorage.qualsList = JSON.stringify(formattedSchedule);
             getHybridSchedule();

@@ -17,6 +17,7 @@ var backupAllianceListUndo = [];
 var undoCounter=[];
 var allianceSelectionLength = 15;
 var rankingsList = [];
+var districtRankings = {};
 var eventTeamList = [];
 var eventQualsSchedule = [];
 var eventPlayoffSchedule = [];
