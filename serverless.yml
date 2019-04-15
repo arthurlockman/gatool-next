@@ -262,6 +262,18 @@ functions:
               districtCode: true
             querystrings:
               top: false
+  GetTeamAppearances:
+    handler: handler.GetTeamAppearances
+    description: Get all appearances at events a team has ever had
+    events:
+      - http:
+          path: api/team/{teamNumber}/appearances
+          method: get
+          cors: true
+          authorizer: Authorize
+          request:
+            parameters:
+              teamNumber: true
   GetUserPreferences:
     handler: handler.GetUserPreferences
     description: Get the stored preferences for a particular user.

@@ -1,8 +1,10 @@
 import {APIGatewayEvent, Callback, Context, CustomAuthorizerEvent, Handler} from 'aws-lambda';
 import {MatchWithEventDetails} from './model/match';
 import {EventAvatars, EventSchedule, EventType} from './model/event';
-import {BuildHighScoreJson, GetAvatarData, GetDataFromFIRST,
-    GetDataFromFIRSTAndReturn, ReturnJsonWithCode, ResponseWithHeaders} from './utils/utils';
+import {
+    BuildHighScoreJson, GetAvatarData, GetDataFromFIRST,
+    GetDataFromFIRSTAndReturn, ReturnJsonWithCode, ResponseWithHeaders, GetDataFromTBAAndReturn
+} from './utils/utils';
 import {
     GetHighScoresFromDb,
     GetTeamUpdatesForTeam,
@@ -314,6 +316,11 @@ const GetEventHighScores: Handler = (event: APIGatewayEvent, context: Context, c
 };
 
 // noinspection JSUnusedGlobalSymbols
+const GetTeamAppearances: Handler = (event: APIGatewayEvent) => {
+    return GetDataFromTBAAndReturn(`team/frc${event.pathParameters.teamNumber}/events`);
+};
+
+// noinspection JSUnusedGlobalSymbols
 const GetOffseasonEvents: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
     // TODO: implement this stub
 };
@@ -511,7 +518,8 @@ const Authorize: Handler = (event: CustomAuthorizerEvent, context: Context, call
 export {GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedule, GetEventAvatars,
     UpdateHighScores, GetHighScores, GetOffseasonEvents, GetEventAlliances, GetEventRankings,
     Authorize, GetTeamAvatar, GetEventHighScores, GetTeamUpdates, PutTeamUpdates, GetUserPreferences,
-    PutUserPreferences, GetHistoricTeamAwards, GetDistrictTeams, GetTeams, GetDistrictRankings}
+    PutUserPreferences, GetHistoricTeamAwards, GetDistrictTeams, GetTeams, GetDistrictRankings,
+    GetTeamAppearances}
 
 // Handle unexpected application errors
 process.on('unhandledRejection', (reason, p) => {

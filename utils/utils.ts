@@ -26,6 +26,18 @@ const GetDataFromFIRSTAndReturn = (path: string, callback: any) => {
 };
 
 /**
+ * Get and return data from the blue alliance
+ * @param path The path on the TBA API to call
+ */
+const GetDataFromTBAAndReturn = (path: string) => {
+    return GetDataFromTBA(path).then((response) => {
+        return CreateResponseJson(200, response.body, response.headers);
+    }).catch(rejection => {
+        return CreateResponseJson(parseInt(rejection.response.statusCode, 10), rejection.response.body);
+    });
+};
+
+/**
  * Get data from FIRST and return a promise
  * @param path The path to GET data from
  */
@@ -37,6 +49,28 @@ const GetDataFromFIRST = (path: string): Promise<ResponseWithHeaders> => {
             json: true,
             headers: {
                 'Authorization': process.env.FRC_API_KEY,
+                'Accept': 'application/json'
+            },
+            transform: includeHeaders
+        };
+        return rp(options);
+    } catch (err) {
+        return Promise.reject(err);
+    }
+};
+
+/**
+ * Get data from FIRST and return a promise
+ * @param path The path to GET data from
+ */
+const GetDataFromTBA = (path: string): Promise<ResponseWithHeaders> => {
+    try {
+        const options = {
+            method: 'GET',
+            uri: 'https://www.thebluealliance.com/api/v3/' + path,
+            json: true,
+            headers: {
+                'X-TBA-Auth-Key': process.env.TBA_API_KEY,
                 'Accept': 'application/json'
             },
             transform: includeHeaders
@@ -100,6 +134,31 @@ const ReturnJsonWithCode = (statusCode: number, body: any, callback: any, header
 };
 
 /**
+ * Return JSON data to the user with a specific status code.
+ * @param statusCode The status code to use in the return.
+ * @param body The body data (JSON) to return
+ * @param headers Additional headers to return with the response
+ */
+const CreateResponseJson = (statusCode: number, body: any, headers?: any): any => {
+    const responseHeaders = {
+        'Access-Control-Allow-Origin': '*', // Required for CORS support to work
+        'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS
+        'Content-Type': 'application/json',
+        'charset': 'utf-8',
+        'Cache-Control': 'no-cache'
+    };
+    if (headers && headers['last-modified']) {
+        responseHeaders['Last-Modified'] = headers['last-modified'];
+    }
+    return {
+        statusCode: statusCode,
+        body: JSON.stringify(body),
+        headers: responseHeaders,
+        isBase64Encoded: false
+    };
+};
+
+/**
  * Build a JSON object for a high score
  * @param year The year
  * @param type The score type
@@ -116,4 +175,4 @@ const BuildHighScoreJson = (year: string, type: string, level: string, match: Ma
     }
 };
 
-export {GetDataFromFIRST, GetDataFromFIRSTAndReturn, ReturnJsonWithCode, GetAvatarData, BuildHighScoreJson}
+export {GetDataFromFIRST, GetDataFromFIRSTAndReturn, GetDataFromTBAAndReturn, ReturnJsonWithCode, GetAvatarData, BuildHighScoreJson}
