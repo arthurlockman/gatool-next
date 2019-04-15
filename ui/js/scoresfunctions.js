@@ -265,7 +265,7 @@ function getTeamRanks() {
             $(".districtRank").hide();
             if (localStorage.eventDistrict != "") {
                 $(".districtRank").show();
-                getDistrictRanks(localStorage.eventDistrict,localStorage.currentYear);
+                getDistrictRanks(localStorage.eventDistrict, localStorage.currentYear);
             }
             backupAllianceList = allianceListUnsorted.slice(8);
         }
@@ -273,4 +273,105 @@ function getTeamRanks() {
     if (localStorage.offseason !== "true") {
         req.send();
     }
+}
+
+function getAllTeamAwards(teamNumber) {
+    "use strict";
+    var req = new XMLHttpRequest();
+    req.open('GET', apiURL + "team/" + teamNumber + "/awards");
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+    req.addEventListener('load', function () {
+        if (req.status === 200) {
+            console.log(JSON.parse(req.responseText));
+        } else {
+            console.log("error.");
+        }
+    });
+    req.send();
+}
+
+function getTeamAppearances(teamNumber) {
+    "use strict";
+    var req = new XMLHttpRequest();
+    req.open('GET', apiURL + "team/" + teamNumber + "/appearances");
+    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+    req.addEventListener('load', function () {
+        if (req.status === 200) {
+            var appearances = JSON.parse(req.responseText);
+            var result = {};
+            var teamInfo = {};
+            result.champsAppearances = 0;
+            result.champsAppearancesyears = [];
+            result.einsteinAppearances = 0;
+            result.einsteinAppearancesyears = [];
+
+            result.districtChampsAppearances = 0;
+            result.districtChampsAppearancesyears = [];
+            result.districtEinsteinAppearances = 0;
+            result.districtEinsteinAppearancesyears = [];
+            result.FOCAppearances = 0;
+            result.FOCAppearancesyears = [];
+            for (var i = 0; i < appearances.length; i++) {
+                //check for district code
+                //DISTRICT_CMP = 2
+                //DISTRICT_CMP_DIVISION = 5   
+                // Ontario (>=2019), Michigan (>=2017) check for Einstein appearances
+                //appearances.district.abbreviation = "ont"
+                //appearances.district.abbreviation = "fim"
+                // >=2017 check for Division appearance then Champs appearances
+                //test for champs prior to 2001
+                if (appearances[i].district !== null) {
+                    if (((appearances[i].year >= 2019) && (appearances[i].district.abbreviation === "ont")) || ((appearances[i].year >= 2017) && (appearances[i].district.abbreviation === "fim"))) {
+                        if (appearances[i].event_type === 5) {
+                            result.districtChampsAppearances += 1;
+                            result.districtChampsAppearancesyears.push(appearances[i].year);
+                        }
+                        if (appearances[i].event_type === 2) {
+                            result.districtEinsteinAppearances += 1;
+                            result.districtEinsteinAppearancesyears.push(appearances[i].year);
+                        }
+                    } else {
+                        if (appearances[i].event_type === 2) {
+                            result.districtChampsAppearances += 1;
+                            result.districtChampsAppearancesyears.push(appearances[i].year);
+                        }
+
+                    }
+                }
+
+
+                //check for champs Division code
+                //CMP_DIVISION = 3
+                //CMP_FINALS = 4
+                //FOC = 6
+                // >=2001 check for Division appearance then Champs appearances
+                if (appearances[i].event_type === 6) {
+                    result.FOCAppearances += 1;
+                }
+                //test for champs prior to 2001
+                if (appearances[i].year < 2001) {
+                    if (appearances[i].event_type === 4) {
+                        result.champsAppearances += 1;
+                        result.champsAppearancesyears.push(appearances[i].year);
+                    }
+                } else {
+                    if (appearances[i].event_type === 3) {
+                        result.champsAppearances += 1;
+                        result.champsAppearancesyears.push(appearances[i].year);
+                    }
+                    if (appearances[i].event_type === 4) {
+                        result.einsteinAppearances += 1;
+                        result.einsteinAppearancesyears.push(appearances[i].year);
+                    }
+
+                }
+            }
+            teamInfo = decompressLocalStorage("teamData" + teamNumber);
+            teamInfo.appearances = result;
+            compressLocalStorage("teamData" + teamNumber, teamInfo);
+        } else {
+            console.log("error.");
+        }
+    });
+    req.send();
 }

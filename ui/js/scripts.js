@@ -1559,8 +1559,8 @@ function handlePlayoffBracket2() {
                     break;
                 }
             }
-            console.log(matchArray[i].description);
-            console.log(winner);
+            //console.log(matchArray[i].description);
+            //console.log(winner);
         }
 
     }
@@ -2894,6 +2894,7 @@ function generateTeamTableRow(teamData) {
     teamInfo.topSponsors = topSponsors;
     teamInfo.organization = organization;
     compressLocalStorage("teamData" + teamData.teamNumber, teamInfo);
+    getTeamAppearances(teamData.teamNumber);
     return returnData + '</tr>'
 }
 
