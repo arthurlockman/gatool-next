@@ -274,6 +274,18 @@ functions:
           request:
             parameters:
               teamNumber: true
+  GetAllTeamAwards:
+    handler: handler.GetAllTeamAwards
+    description: Get all awards a team has ever won
+    events:
+      - http:
+          path: api/team/{teamNumber}/awards
+          method: get
+          cors: true
+          authorizer: Authorize
+          request:
+            parameters:
+              teamNumber: true
   GetUserPreferences:
     handler: handler.GetUserPreferences
     description: Get the stored preferences for a particular user.

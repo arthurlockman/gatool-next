@@ -321,6 +321,11 @@ const GetTeamAppearances: Handler = (event: APIGatewayEvent) => {
 };
 
 // noinspection JSUnusedGlobalSymbols
+const GetAllTeamAwards: Handler = (event: APIGatewayEvent) => {
+    return GetDataFromTBAAndReturn(`team/frc${event.pathParameters.teamNumber}/awards`);
+};
+
+// noinspection JSUnusedGlobalSymbols
 const GetOffseasonEvents: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
     // TODO: implement this stub
 };
@@ -519,7 +524,7 @@ export {GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedul
     UpdateHighScores, GetHighScores, GetOffseasonEvents, GetEventAlliances, GetEventRankings,
     Authorize, GetTeamAvatar, GetEventHighScores, GetTeamUpdates, PutTeamUpdates, GetUserPreferences,
     PutUserPreferences, GetHistoricTeamAwards, GetDistrictTeams, GetTeams, GetDistrictRankings,
-    GetTeamAppearances}
+    GetTeamAppearances, GetAllTeamAwards}
 
 // Handle unexpected application errors
 process.on('unhandledRejection', (reason, p) => {
