@@ -3,7 +3,8 @@ import {MatchWithEventDetails} from './model/match';
 import {EventAvatars, EventSchedule, EventType} from './model/event';
 import {
     BuildHighScoreJson, GetAvatarData, GetDataFromFIRST,
-    GetDataFromFIRSTAndReturn, ReturnJsonWithCode, ResponseWithHeaders, GetDataFromTBAAndReturn
+    GetDataFromFIRSTAndReturn, ReturnJsonWithCode, ResponseWithHeaders,
+    GetDataFromTBAAndReturn, CreateResponseJson
 } from './utils/utils';
 import {
     GetHighScoresFromDb,
@@ -18,8 +19,8 @@ const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
 
 // noinspection JSUnusedGlobalSymbols
-const GetEvents: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
-    return GetDataFromFIRSTAndReturn(event.pathParameters.year + '/events', callback);
+const GetEvents: Handler = (event: APIGatewayEvent) => {
+    return GetDataFromFIRSTAndReturn(event.pathParameters.year + '/events');
 };
 
 // noinspection JSUnusedGlobalSymbols
@@ -99,22 +100,22 @@ const GetDistrictRankings: Handler = (event: APIGatewayEvent, context: Context, 
 };
 
 // noinspection JSUnusedGlobalSymbols
-const GetEventTeams: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+const GetEventTeams: Handler = (event: APIGatewayEvent) => {
     // TODO: remove pagination from this API
     return GetDataFromFIRSTAndReturn(event.pathParameters.year + '/teams?eventcode='
-        + event.pathParameters.eventCode + '&page=' + event.pathParameters.page, callback);
+        + event.pathParameters.eventCode + '&page=' + event.pathParameters.page);
 };
 
 // noinspection JSUnusedGlobalSymbols
-const GetDistrictTeams: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+const GetDistrictTeams: Handler = (event: APIGatewayEvent) => {
     // TODO: remove pagination from this API
     return GetDataFromFIRSTAndReturn(event.pathParameters.year + '/teams?districtCode='
-        + event.pathParameters.districtCode + '&page=' + event.pathParameters.page, callback);
+        + event.pathParameters.districtCode + '&page=' + event.pathParameters.page);
 };
 
 // noinspection JSUnusedGlobalSymbols
-const GetTeamAwards: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
-    return GetDataFromFIRSTAndReturn(event.pathParameters.year + '/awards/' + event.pathParameters.teamNumber, callback);
+const GetTeamAwards: Handler = (event: APIGatewayEvent) => {
+    return GetDataFromFIRSTAndReturn(event.pathParameters.year + '/awards/' + event.pathParameters.teamNumber);
 };
 
 // noinspection JSUnusedGlobalSymbols
@@ -145,76 +146,76 @@ const GetHistoricTeamAwards: Handler = (event: APIGatewayEvent, context: Context
 };
 
 // noinspection JSUnusedGlobalSymbols
-const GetEventScores: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+const GetEventScores: Handler = (event: APIGatewayEvent) => {
     const range = (event.pathParameters.start === event.pathParameters.end) ?
         '?matchNumber=' + event.pathParameters.start :
         '?start=' + event.pathParameters.start + '&end=' + event.pathParameters.end;
     return GetDataFromFIRSTAndReturn(event.pathParameters.year + '/scores/' +
-        event.pathParameters.eventCode + '/' + event.pathParameters.tournamentLevel + range, callback);
+        event.pathParameters.eventCode + '/' + event.pathParameters.tournamentLevel + range);
 };
 
 // noinspection JSUnusedGlobalSymbols
-const GetEventSchedule: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+const GetEventSchedule: Handler = (event: APIGatewayEvent) => {
     return GetDataFromFIRSTAndReturn(event.pathParameters.year + '/schedule/' +
-        event.pathParameters.eventCode + '/' + event.pathParameters.tournamentLevel + '/hybrid', callback);
+        event.pathParameters.eventCode + '/' + event.pathParameters.tournamentLevel + '/hybrid');
 };
 
 // noinspection JSUnusedGlobalSymbols
 const GetHighScores: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
     return GetHighScoresFromDb().then(scores => {
-        ReturnJsonWithCode(200, scores.Items.filter(x => x.year === event.pathParameters.year), callback);
+        return CreateResponseJson(200, scores.Items.filter(x => x.year === event.pathParameters.year));
     });
 };
 
 // noinspection JSUnusedGlobalSymbols
-const GetEventAlliances: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
-    return GetDataFromFIRSTAndReturn(`${event.pathParameters.year}/alliances/${event.pathParameters.eventCode}`, callback);
+const GetEventAlliances: Handler = (event: APIGatewayEvent) => {
+    return GetDataFromFIRSTAndReturn(`${event.pathParameters.year}/alliances/${event.pathParameters.eventCode}`);
 };
 
 // noinspection JSUnusedGlobalSymbols
-const GetEventRankings: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
-    return GetDataFromFIRSTAndReturn(`${event.pathParameters.year}/rankings/${event.pathParameters.eventCode}`, callback);
+const GetEventRankings: Handler = (event: APIGatewayEvent) => {
+    return GetDataFromFIRSTAndReturn(`${event.pathParameters.year}/rankings/${event.pathParameters.eventCode}`);
 };
 
 // noinspection JSUnusedGlobalSymbols
-const GetEventAvatars: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+const GetEventAvatars: Handler = (event: APIGatewayEvent) => {
     const year = event.pathParameters.year;
     const eventCode = event.pathParameters.eventCode;
     const initialAvatarData = GetAvatarData(year, eventCode);
-    initialAvatarData.then(avatarList => {
+    return initialAvatarData.then(avatarList => {
         if (avatarList.statusCode) {
-            return ReturnJsonWithCode(avatarList.statusCode, avatarList.message, callback);
+            return CreateResponseJson(avatarList.statusCode, avatarList.message);
         }
         if (avatarList.pageTotal === 1) {
-            return ReturnJsonWithCode(200, avatarList, callback);
+            return CreateResponseJson(200, avatarList);
         } else {
             const promises: Promise<EventAvatars>[] = [];
             for (let i = 2; i <= avatarList.pageTotal; i++) {
                 promises.push(GetAvatarData(year, eventCode, i));
             }
-            Promise.all(promises).then(allAvatarData => {
+            return Promise.all(promises).then(allAvatarData => {
                 allAvatarData.map(avatar => {
                     avatarList.teamCountPage += avatar.teamCountPage;
                     avatarList.teams = avatarList.teams.concat(avatar.teams);
                 });
                 avatarList.pageTotal = 1;
-                return ReturnJsonWithCode(200, avatarList, callback);
+                return CreateResponseJson(200, avatarList);
             });
         }
     });
 };
 
 // noinspection JSUnusedGlobalSymbols
-const GetTeamAvatar: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+const GetTeamAvatar: Handler = (event: APIGatewayEvent) => {
     const avatar = GetDataFromFIRST(
         `${event.pathParameters.year}/avatars?teamNumber=${event.pathParameters.teamNumber}`);
-    avatar.then(value => {
+    return avatar.then(value => {
         const allAvatars = value.body as EventAvatars;
         const teamAvatar = allAvatars.teams[0];
         if (teamAvatar.encodedAvatar == null) {
             throw new Error('Bad request');
         }
-        callback(null, {
+        return {
             statusCode: 200,
             body: teamAvatar.encodedAvatar,
             headers: {
@@ -224,11 +225,11 @@ const GetTeamAvatar: Handler = (event: APIGatewayEvent, context: Context, callba
                 'charset': 'utf-8'
             },
             isBase64Encoded: true
-        })
+        };
     }).catch(rejection => {
-        const statusCode = rejection.response ? parseInt(rejection.response.statusCode, 10) : 404;
+        const statusCode = rejection.response ? parseInt(rejection.statusCode, 10) : 404;
         const message = rejection.response ? rejection.response.body : 'Avatar not found.';
-        return ReturnJsonWithCode(statusCode, message, callback);
+        return CreateResponseJson(statusCode, message);
     });
 };
 

@@ -15,13 +15,12 @@ const includeHeaders = (body, response, resolveWithFullResponse) => {
 /**
  * Get and return data from the FIRST API
  * @param path The path on the FIRST API to call
- * @param callback The lambda callback to return the data
  */
-const GetDataFromFIRSTAndReturn = (path: string, callback: any) => {
+const GetDataFromFIRSTAndReturn = (path: string) => {
     return GetDataFromFIRST(path).then((response) => {
-        ReturnJsonWithCode(200, response.body, callback, response.headers);
+        return CreateResponseJson(200, response.body, response.headers);
     }).catch(rejection => {
-        ReturnJsonWithCode(parseInt(rejection.response.statusCode, 10), rejection.response.body, callback);
+        return CreateResponseJson(parseInt(rejection.statusCode, 10), rejection.response.body);
     });
 };
 
@@ -33,7 +32,7 @@ const GetDataFromTBAAndReturn = (path: string) => {
     return GetDataFromTBA(path).then((response) => {
         return CreateResponseJson(200, response.body, response.headers);
     }).catch(rejection => {
-        return CreateResponseJson(parseInt(rejection.response.statusCode, 10), rejection.response.body);
+        return CreateResponseJson(parseInt(rejection.statusCode, 10), rejection.response.body);
     });
 };
 
@@ -100,7 +99,7 @@ const GetAvatarData = (year: string, eventCode: string, page?: number): Promise<
     }).catch(rejection => {
         return {
             body: {
-                statusCode: parseInt(rejection.response.statusCode, 10),
+                statusCode: parseInt(rejection.statusCode, 10),
                 message: rejection.response.body
             }
         };
@@ -175,4 +174,5 @@ const BuildHighScoreJson = (year: string, type: string, level: string, match: Ma
     }
 };
 
-export {GetDataFromFIRST, GetDataFromFIRSTAndReturn, GetDataFromTBAAndReturn, ReturnJsonWithCode, GetAvatarData, BuildHighScoreJson}
+export {GetDataFromFIRST, GetDataFromFIRSTAndReturn, GetDataFromTBAAndReturn,
+    ReturnJsonWithCode, GetAvatarData, BuildHighScoreJson, CreateResponseJson}
