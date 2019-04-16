@@ -32,6 +32,9 @@ const GetDataFromTBAAndReturn = (path: string) => {
     return GetDataFromTBA(path).then((response) => {
         return CreateResponseJson(200, response.body, response.headers);
     }).catch(rejection => {
+        if (!!rejection.message && rejection.message.includes('TIMEDOUT')) {
+            return CreateResponseJson(504, 'Timed Out');
+        }
         return CreateResponseJson(parseInt(rejection.statusCode, 10), rejection.response.body);
     });
 };
@@ -72,6 +75,7 @@ const GetDataFromTBA = (path: string): Promise<ResponseWithHeaders> => {
                 'X-TBA-Auth-Key': process.env.TBA_API_KEY,
                 'Accept': 'application/json'
             },
+            timeout: 10000,
             transform: includeHeaders
         };
         return rp(options);
