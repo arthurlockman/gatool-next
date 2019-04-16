@@ -1459,6 +1459,7 @@ function getTeamList(year) {
 
             }
             $("#teamUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"))
+            getTeamAppearances(eventTeamList);
         }
     });
     req.send()
@@ -2932,7 +2933,6 @@ function generateTeamTableRow(teamData) {
     teamInfo.topSponsors = topSponsors;
     teamInfo.organization = organization;
     compressLocalStorage("teamData" + teamData.teamNumber, teamInfo);
-    getTeamAppearances(teamData.teamNumber);
     return returnData + '</tr>'
 }
 

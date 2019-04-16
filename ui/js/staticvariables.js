@@ -68,6 +68,8 @@ playoffTieBreakerMatches["17"] = ["13","15"]
 playoffTieBreakerMatches["18"] = ["14","16"];
 playoffTieBreakerMatches["24"] = ["19","20","21","22","23"];
 playoffTieBreakerMatches["list"] = ["9","10","11","12","17","18","24"];
+var tbaBatchLength = 5;
+var tbaBatchDelay = 100;
 
 for (var i = 1; i < 9; i++) {
     allianceChoices['Alliance' + i + 'Captain'] = "";

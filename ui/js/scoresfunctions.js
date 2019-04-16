@@ -290,7 +290,32 @@ function getAllTeamAwards(teamNumber) {
     req.send();
 }
 
-function getTeamAppearances(teamNumber) {
+function getTeamAppearances(teamList) {
+    for (let j = 0; j < teamList.length; j++) {
+        let delay = tbaBatchDelay * j;
+        setTimeout(function () { getTeamAppearance(teamList[j].teamNumber) }, delay);
+    }
+}
+
+function getTeamAppearances1(teamList) {
+    var remainder = Math.round((teamList.length / tbaBatchLength - Math.floor(teamList.length / tbaBatchLength)) * tbaBatchLength);
+    var batches = Math.floor(teamList.length / tbaBatchLength);
+    for (var i = 0; i < batches; i++) {
+        for (var j = 0; j < tbaBatchLength; j++) {
+            var index = i * tbaBatchLength + j;
+            getTeamAppearance(teamList[index].teamNumber);
+        }
+        wait(tbaBatchDelay);
+    }
+    for (var j = 0; j < remainder; j++) {
+        var index = tbaBatchLength * batches + j;
+        getTeamAppearance(teamList[index].teamNumber);
+    }
+
+}
+
+
+function getTeamAppearance(teamNumber) {
     "use strict";
     var req = new XMLHttpRequest();
     req.open('GET', apiURL + "team/" + teamNumber + "/appearances");
@@ -367,9 +392,11 @@ function getTeamAppearances(teamNumber) {
                 }
             }
             eventAppearances[String(teamNumber)] = result;
-            
-        } else {
-            console.log("error.");
+
+        } else if (req.status === 504) {
+            console.log("Appearances Timeout. Trying " + teamNumber + " again");
+            let timerTeamNumber = teamNumber;
+            setTimeout(function () { getTeamAppearance(timerTeamNumber); }, 5000);
         }
     });
     req.send();
