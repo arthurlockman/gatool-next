@@ -11,7 +11,7 @@ provider:
   region: us-east-1
   role: arn:aws:iam::336977810532:role/service-role/GAToolRole
   stage: production
-  timeout: 10
+  timeout: 30
   environment: # Environment variables available to the whole service
     SERVICE_AWS_REGION: ${self:provider.region}
     FRC_API_KEY: ${ssm:frc-api-key~true}
