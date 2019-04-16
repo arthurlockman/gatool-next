@@ -509,6 +509,7 @@ function initEnvironment() {
     declinedListUndo = [];
     backupAllianceListUndo = [];
     undoCounter = [];
+    eventAppearances = {};
     allianceSelectionLength = 15;
     rankingsList = [];
     districtRankings = {};
@@ -596,6 +597,7 @@ function handleEventSelection() {
     showAllianceSelectionOverride = false;
     playoffResultsDetails = {};
     playoffResults = {};
+    eventAppearances = {};
 
     var e = document.getElementById('eventSelector');
     var data = JSON.parse(e.value);
@@ -1850,6 +1852,42 @@ function announceDisplay() {
                 $("#" + stationList[ii] + "Notes").html('Notes: "' + teamData.teamNotesLocal + '"');
                 $("#" + stationList[ii] + "PlaybyPlayNotes").html('Notes: "' + teamData.teamNotesLocal + '"')
             }
+            var appearanceDisplay = "";
+            if (inChamps() || inSubdivision()) {
+                var appearanceData = eventAppearances[String(currentMatchData.teams[ii].teamNumber)];
+                if (typeof appearanceData !== "undefined") {
+                    if (appearanceData.champsAppearances === 1) {
+                        appearanceDisplay += "<b>1 Champs Appearance</b><br>";
+                    }
+                    if (appearanceData.champsAppearances > 1) {
+                        appearanceDisplay += "<b>" + appearanceData.champsAppearances + " Champs Appearances</b><br>";
+                    }
+                    if (appearanceData.champsAppearancesyears.length > 0) {
+                        appearanceDisplay += appearanceData.champsAppearancesyears.join(", ") + "<br>";
+                    }
+                    if (appearanceData.einsteinAppearances === 1) {
+                        appearanceDisplay += "<b>1 Einstein Appearance</b><br>";
+                    }
+                    if (appearanceData.einsteinAppearances > 1) {
+                        appearanceDisplay += "<b>" + appearanceData.einsteinAppearances + " Einstein Appearances</b><br>";
+                    }
+                    if (appearanceData.einsteinAppearancesyears.length > 0) {
+                        appearanceDisplay += appearanceData.einsteinAppearancesyears.join(", ") + "<br>";
+                    }
+                    if (appearanceData.FOCAppearances === 1) {
+                        appearanceDisplay += "<b>Festival of Champions team</b><br>";
+                    }
+                    if (appearanceData.FOCAppearances > 1) {
+                        appearanceDisplay += "<b>" + appearanceData.FOCAppearances + " FOC Appearances</b><br>";
+                    }
+                    if (appearanceData.FOCAppearancesyears.length > 0) {
+                        appearanceDisplay += appearanceData.FOCAppearancesyears.join(", ") + "<br>";
+                    }
+                }
+            }
+
+            $("#" + stationList[ii] + "Champs").html(appearanceDisplay);
+
         }
         if ((localStorage.currentMatch > JSON.parse(localStorage.qualsList).Schedule.length) || inChamps() || (inMiChamps() && (localStorage.currentYear >= 2017))) {
             if (inChamps() || inMiChamps()) {
@@ -2471,14 +2509,14 @@ function getDistrictRanks(districtCode, year) {
         if (req.status === 200) {
             var data = JSON.parse(req.responseText);
             var team = {};
-            for (var i = 0; i<data.districtRanks.length;i++) {
-                districtRankings[data.districtRanks[i].teamNumber]=data.districtRanks[i];
+            for (var i = 0; i < data.districtRanks.length; i++) {
+                districtRankings[data.districtRanks[i].teamNumber] = data.districtRanks[i];
             }
-            
-            for (var i = 0;i<eventTeamList.length;i++) {
-                $("#rankDistrictRank"+eventTeamList[i].teamNumber).html('<span class="sortDistrictRank">'+districtRankings[eventTeamList[i].teamNumber].rank+"</span><br>("+districtRankings[eventTeamList[i].teamNumber].totalPoints+" pts)")
+
+            for (var i = 0; i < eventTeamList.length; i++) {
+                $("#rankDistrictRank" + eventTeamList[i].teamNumber).html('<span class="sortDistrictRank">' + districtRankings[eventTeamList[i].teamNumber].rank + "</span><br>(" + districtRankings[eventTeamList[i].teamNumber].totalPoints + " pts)")
             }
-            
+
         }
     });
     req.send()

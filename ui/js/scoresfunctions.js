@@ -299,7 +299,6 @@ function getTeamAppearances(teamNumber) {
         if (req.status === 200) {
             var appearances = JSON.parse(req.responseText);
             var result = {};
-            var teamInfo = {};
             result.champsAppearances = 0;
             result.champsAppearancesyears = [];
             result.einsteinAppearances = 0;
@@ -347,6 +346,7 @@ function getTeamAppearances(teamNumber) {
                 // >=2001 check for Division appearance then Champs appearances
                 if (appearances[i].event_type === 6) {
                     result.FOCAppearances += 1;
+                    result.FOCAppearancesyears.push(appearances[i].year);
                 }
                 //test for champs prior to 2001
                 if (appearances[i].year < 2001) {
@@ -366,9 +366,8 @@ function getTeamAppearances(teamNumber) {
 
                 }
             }
-            teamInfo = decompressLocalStorage("teamData" + teamNumber);
-            teamInfo.appearances = result;
-            compressLocalStorage("teamData" + teamNumber, teamInfo);
+            eventAppearances[String(teamNumber)] = result;
+            
         } else {
             console.log("error.");
         }

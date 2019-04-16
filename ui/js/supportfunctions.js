@@ -647,6 +647,15 @@ function eventWeek(event) {
         return "";
     }
 }
+
 function uniq(a) {
     return Array.from(new Set(a));
+ }
+
+ function wait(ms){
+    var start = new Date().getTime();
+    var end = start;
+    while(end < start + ms) {
+      end = new Date().getTime();
+   }
  }

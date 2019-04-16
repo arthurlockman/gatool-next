@@ -232,6 +232,9 @@ color: black;
 	padding: 0px;
 	margin: 0px
 }
+.champs {
+	color:blue
+}
 .HOFRed {
 	font-style: italic;
 	font-weight: bold;
