@@ -471,7 +471,7 @@ function getTeamAppearance(teamNumber) {
         } else if (req.status === 504) {
             console.log("Appearances Timeout. Trying " + teamNumber + " again");
             let timerTeamNumber = teamNumber;
-            setTimeout(function () { getTeamAppearance(timerTeamNumber); }, 3000 + Math.random() * 2000);
+            setTimeout(function () { getTeamAppearance(timerTeamNumber); }, 10000 + Math.random() * 2000);
         }
     });
     req.send();
