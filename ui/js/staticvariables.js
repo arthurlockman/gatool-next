@@ -27,6 +27,7 @@ var allianceChoices = {};
 var replacementAlliance = {};
 var allianceChoicesUndo = [];
 var eventAppearances = {};
+var champsAwards = {};
 var allianceListUnsortedUndo = [];
 var allianceTeamListUndo = [];
 var teamNumberUndo = [];

@@ -282,9 +282,97 @@ function getAllTeamAwards(teamNumber) {
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         if (req.status === 200) {
-            console.log(JSON.parse(req.responseText));
-        } else {
-            console.log("error.");
+            var allAwards = JSON.parse(req.responseText);
+            var result = {};
+            result.chairmans = 0;
+            result.chairmansyears = [];
+            result.champsFinalist = 0;
+            result.champsFinalistyears = [];
+            result.champsSubdivisionWinner = 0;
+            result.champsSubdivisionWinneryears = [];
+            result.woodieflowers = 0;
+            result.woodieflowersyears = [];
+
+            for (var i = 0; i < allAwards.length; i++) {
+                //Chairman's Award
+                //award_type === 0
+                //event_key === xxxxcmp
+                if ((allAwards[i].award_type === 0) && (allAwards[i].event_key === allAwards[i].year+"cmp")) {
+                    result.chairmans += 1;
+                    result.chairmansyears.push(allAwards[i].year);
+                }
+
+                //Champs Finalist
+                //award_type === 2
+                //event_key === xxxxcmp
+                if ((allAwards[i].award_type === 2) && allAwards[i].event_key.endsWith("cmp") && (allAwards[i].event_key === allAwards[i].year+"cmp")) {
+                    result.champsFinalist += 1;
+                    result.champsFinalistyears.push(allAwards[i].year);
+                }
+
+                //Champs Subdivision Winner
+                //award_type === 1
+                //event_key === [xxxarc,xxxgal,xxxcur,xxxxdar,xxxxtes,xxxxdal,xxxxcars,xxxxcarv,xxxxtur,xxxxroe,xxxxhop,xxxxnew]
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"arc")) {
+                    result.champsSubdivisionWinner += 1;
+                    result.champsSubdivisionWinneryears.push(allAwards[i].year + " Archimedes");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"cur")) {
+                    result.champsSubdivisionWinner += 1;
+                    result.champsSubdivisionWinneryears.push(allAwards[i].year + " Curie");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"dar")) {
+                    result.champsSubdivisionWinner += 1;
+                    result.champsSubdivisionWinneryears.push(allAwards[i].year + " Darwin");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"tes")) {
+                    result.champsSubdivisionWinner += 1;
+                    result.champsSubdivisionWinneryears.push(allAwards[i].year + " Tesla");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"dal")) {
+                    result.champsSubdivisionWinner += 1;
+                    result.champsSubdivisionWinneryears.push(allAwards[i].year + " Daley");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"cars")) {
+                    result.champsSubdivisionWinner += 1;
+                    result.champsSubdivisionWinneryears.push(allAwards[i].year + " Carson");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"carv")) {
+                    result.champsSubdivisionWinner += 1;
+                    result.champsSubdivisionWinneryears.push(allAwards[i].year + " Carver");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"tur")) {
+                    result.champsSubdivisionWinner += 1;
+                    result.champsSubdivisionWinneryears.push(allAwards[i].year + "Turing");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"roe")) {
+                    result.champsSubdivisionWinner += 1;
+                    result.champsSubdivisionWinneryears.push(allAwards[i].year + " Roebling");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"hop")) {
+                    result.champsSubdivisionWinner += 1;
+                    result.champsSubdivisionWinneryears.push(allAwards[i].year + " Hopper");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"new")) {
+                    result.champsSubdivisionWinner += 1;
+                    result.champsSubdivisionWinneryears.push(allAwards[i].year + " Newton");
+                }
+
+                //Woodie Flowers
+                //award_type === 3
+                //event_key === xxxxcmp
+                if ((allAwards[i].award_type === 3) && (allAwards[i].event_key === allAwards[i].year+"cmp")) {
+                    result.woodieflowers += 1;
+                    result.woodieflowersyears.push(allAwards[i].year + " " + allAwards[i].recipient_list[0].awardee);
+                }
+
+            }
+            champsAwards[String(teamNumber)] = result;
+
+        } else if (req.status === 504) {
+            console.log("allAwards Timeout. Trying " + teamNumber + " again");
+            let timerTeamNumber = teamNumber;
+            setTimeout(function () { getAllTeamAwards(timerTeamNumber); }, 5000);
         }
     });
     req.send();
@@ -293,25 +381,11 @@ function getAllTeamAwards(teamNumber) {
 function getTeamAppearances(teamList) {
     for (let j = 0; j < teamList.length; j++) {
         let delay = tbaBatchDelay * j;
-        setTimeout(function () { getTeamAppearance(teamList[j].teamNumber) }, delay);
+        setTimeout(function () {
+            getTeamAppearance(teamList[j].teamNumber);
+            getAllTeamAwards(teamList[j].teamNumber);
+        }, delay);
     }
-}
-
-function getTeamAppearances1(teamList) {
-    var remainder = Math.round((teamList.length / tbaBatchLength - Math.floor(teamList.length / tbaBatchLength)) * tbaBatchLength);
-    var batches = Math.floor(teamList.length / tbaBatchLength);
-    for (var i = 0; i < batches; i++) {
-        for (var j = 0; j < tbaBatchLength; j++) {
-            var index = i * tbaBatchLength + j;
-            getTeamAppearance(teamList[index].teamNumber);
-        }
-        wait(tbaBatchDelay);
-    }
-    for (var j = 0; j < remainder; j++) {
-        var index = tbaBatchLength * batches + j;
-        getTeamAppearance(teamList[index].teamNumber);
-    }
-
 }
 
 

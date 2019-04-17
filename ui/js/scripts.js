@@ -510,6 +510,7 @@ function initEnvironment() {
     backupAllianceListUndo = [];
     undoCounter = [];
     eventAppearances = {};
+    champsAwards = {};
     allianceSelectionLength = 15;
     rankingsList = [];
     districtRankings = {};
@@ -598,7 +599,7 @@ function handleEventSelection() {
     playoffResultsDetails = {};
     playoffResults = {};
     eventAppearances = {};
-
+    champsAwards = {};
     var e = document.getElementById('eventSelector');
     var data = JSON.parse(e.value);
     localStorage.eventSelector = data.code;
@@ -1856,6 +1857,7 @@ function announceDisplay() {
             var appearanceDisplay = "";
             if (inChamps() || inSubdivision()) {
                 var appearanceData = eventAppearances[String(currentMatchData.teams[ii].teamNumber)];
+                var allAwardsData = champsAwards[String(currentMatchData.teams[ii].teamNumber)];
                 if (typeof appearanceData !== "undefined") {
                     if (appearanceData.champsAppearances === 1) {
                         appearanceDisplay += "<b>1 Champs Appearance</b><br>";
@@ -1884,6 +1886,39 @@ function announceDisplay() {
                     if (appearanceData.FOCAppearancesyears.length > 0) {
                         appearanceDisplay += appearanceData.FOCAppearancesyears.join(", ") + "<br>";
                     }
+                }
+                if (typeof allAwardsData !== "undefined") {
+                    if (allAwardsData.chairmans > 0) {
+                        appearanceDisplay += "<b>Chairman's Award</b><br> "+allAwardsData.chairmansyears.join(", ") + "<br>";
+                    }
+                    if (allAwardsData.champsFinalist === 1) {
+                        appearanceDisplay += "<b>Champs Finalist</b><br>";
+                    }
+                    if (allAwardsData.champsFinalist > 1) {
+                        appearanceDisplay += "<b>" + allAwardsData.champsFinalist + " time Champs Finalist</b><br>";
+                    }
+                    if (allAwardsData.champsFinalistyears.length > 0) {
+                        appearanceDisplay += allAwardsData.champsFinalistyears.join(", ") + "<br>";
+                    }
+                    if (allAwardsData.champsSubdivisionWinner === 1) {
+                        appearanceDisplay += "<b>Subdivision Winner</b><br>";
+                    }
+                    if (allAwardsData.champsSubdivisionWinner > 1) {
+                        appearanceDisplay += "<b>" + allAwardsData.champsSubdivisionWinner + " time Subdivision Winner</b><br>";
+                    }
+                    if (allAwardsData.champsSubdivisionWinneryears.length > 0) {
+                        appearanceDisplay += allAwardsData.champsSubdivisionWinneryears.join(", ") + "<br>";
+                    }
+                    if (allAwardsData.woodieflowers === 1) {
+                        appearanceDisplay += "<b>Woodie Flowers Awardee</b><br>";
+                    }
+                    if (allAwardsData.woodieflowers > 1) {
+                        appearanceDisplay += "<b>" + allAwardsData.woodieflowers + " Woodie Flowers Awardees</b><br>";
+                    }
+                    if (allAwardsData.woodieflowersyears.length > 0) {
+                        appearanceDisplay += allAwardsData.woodieflowersyears.join(", ") + "<br>";
+                    }
+
                 }
             }
 

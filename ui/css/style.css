@@ -107,7 +107,7 @@ color: black;
 	color: red;
 }
 .redAlliance {
-	border: 1px solid #ccc;
+	border: 2px solid #ccc;
 	background-color: #F7B3B4
 }
 .redAllianceTeam {
@@ -123,7 +123,7 @@ color: black;
 	color: white
 }
 .blueAlliance {
-	border: 1px solid #ccc;
+	border: 2px solid #ccc;
 	background-color: #98B4F4
 }
 .blueAllianceTeam {
