@@ -659,3 +659,25 @@ function uniq(a) {
       end = new Date().getTime();
    }
  }
+
+
+function exportXLSX() {
+	//var elt = document.getElementById("teamsTable");
+    //var wb = XLSX.utils.table_to_book(elt, {cellHTML:true},{sheet:"Team Table"});
+    /* create new workbook */
+    var data = [];
+    for (var i=0;i<eventTeamList.length;i++) {
+        var item = decompressLocalStorage("teamData"+eventTeamList[i].teamNumber);
+        item.teamNumber = eventTeamList[i].teamNumber;
+        data.push(item);
+    }
+    var workbook = XLSX.utils.book_new();
+
+    var ws = XLSX.utils.json_to_sheet(data,{cellHTML:"true"});
+    XLSX.utils.book_append_sheet(workbook, ws, "Team Table");
+	//XLSX.write(wb, {bookType:"biff8", bookSST:true, type: 'base64'});
+   // XLSX.writeFile(wb, "teamstable.xls");
+    XLSX.write(workbook, {bookType:"xlsx", bookSST:true, type: 'base64'});
+    XLSX.writeFile(workbook, "teamstable.xlsx");
+
+}
