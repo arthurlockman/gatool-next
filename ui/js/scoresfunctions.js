@@ -297,7 +297,7 @@ function getAllTeamAwards(teamNumber) {
                 //Chairman's Award
                 //award_type === 0
                 //event_key === xxxxcmp
-                if ((allAwards[i].award_type === 0) && ((allAwards[i].event_key === allAwards[i].year+"cmp") || (allAwards[i].event_key === allAwards[i].year+"cmptx"))) {
+                if ((allAwards[i].award_type === 0) && ((allAwards[i].event_key === allAwards[i].year + "cmp") || (allAwards[i].event_key === allAwards[i].year + "cmptx") || (allAwards[i].event_key === allAwards[i].year + "cmpmi"))) {
                     result.chairmans += 1;
                     result.chairmansyears.push(allAwards[i].year);
                 }
@@ -305,7 +305,7 @@ function getAllTeamAwards(teamNumber) {
                 //Champs Finalist
                 //award_type === 2
                 //event_key === xxxxcmp
-                if ((allAwards[i].award_type === 2) && ((allAwards[i].event_key === allAwards[i].year+"cmp") || (allAwards[i].event_key === allAwards[i].year+"cmptx"))) {
+                if ((allAwards[i].award_type === 2) && ((allAwards[i].event_key === allAwards[i].year + "cmp") || (allAwards[i].event_key === allAwards[i].year + "cmptx") || (allAwards[i].event_key === allAwards[i].year + "cmpmi"))) {
                     result.champsFinalist += 1;
                     result.champsFinalistyears.push(allAwards[i].year);
                 }
@@ -313,47 +313,47 @@ function getAllTeamAwards(teamNumber) {
                 //Champs Subdivision Winner
                 //award_type === 1
                 //event_key === [xxxarc,xxxgal,xxxcur,xxxxdar,xxxxtes,xxxxdal,xxxxcars,xxxxcarv,xxxxtur,xxxxroe,xxxxhop,xxxxnew]
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"arc")) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "arc")) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Archimedes");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"cur")) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "cur")) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Curie");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"dar")) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "dar")) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Darwin");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"tes")) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "tes")) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Tesla");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"dal")) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "dal")) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Daley");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"cars")) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "cars")) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Carson");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"carv")) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "carv")) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Carver");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"tur")) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "tur")) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + "Turing");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"roe")) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "roe")) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Roebling");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"hop")) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "hop")) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Hopper");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year+"new")) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "new")) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Newton");
                 }
@@ -361,7 +361,7 @@ function getAllTeamAwards(teamNumber) {
                 //Woodie Flowers
                 //award_type === 3
                 //event_key === xxxxcmp
-                if ((allAwards[i].award_type === 3) && ((allAwards[i].event_key === allAwards[i].year+"cmp") || (allAwards[i].event_key === allAwards[i].year+"cmptx"))) {
+                if ((allAwards[i].award_type === 3) && ((allAwards[i].event_key === allAwards[i].year + "cmp") || (allAwards[i].event_key === allAwards[i].year + "cmptx") || (allAwards[i].event_key === allAwards[i].year + "cmpmi"))) {
                     result.woodieflowers += 1;
                     result.woodieflowersyears.push(allAwards[i].year + " " + allAwards[i].recipient_list[0].awardee);
                 }
@@ -458,7 +458,8 @@ function getTeamAppearance(teamNumber) {
                         result.champsAppearances += 1;
                         result.champsAppearancesyears.push(appearances[i].year);
                     }
-                    if (appearances[i].event_type === 4) {
+                    //fix this later: mapping out this year's Einstein appearances.
+                    if (appearances[i].event_type === 4 && appearances[i].year < Number(localStorage.currentYear)) {
                         result.einsteinAppearances += 1;
                         result.einsteinAppearancesyears.push(appearances[i].year);
                     }
@@ -470,7 +471,7 @@ function getTeamAppearance(teamNumber) {
         } else if (req.status === 504) {
             console.log("Appearances Timeout. Trying " + teamNumber + " again");
             let timerTeamNumber = teamNumber;
-            setTimeout(function () { getTeamAppearance(timerTeamNumber); }, 5000);
+            setTimeout(function () { getTeamAppearance(timerTeamNumber); }, 3000 + Math.random() * 2000);
         }
     });
     req.send();
