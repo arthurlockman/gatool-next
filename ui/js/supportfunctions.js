@@ -303,18 +303,18 @@ function openTab(evt, tabID) {
 function getNextTab() {
     $(".active").removeClass('active');
     tablist.index++;
-    if (tablist.index>=tablist.tabs.length) {
+    if (tablist.index >= tablist.tabs.length) {
         tablist.index = 0;
-    } 
+    }
     document.getElementById(tablist.tabs[tablist.index]).click();
 }
 
 function getPreviousTab() {
     $(".active").removeClass('active');
     tablist.index--;
-    if (tablist.index<0) {
-        tablist.index = tablist.tabs.length-1;
-    } 
+    if (tablist.index < 0) {
+        tablist.index = tablist.tabs.length - 1;
+    }
     document.getElementById(tablist.tabs[tablist.index]).click();
 }
 
@@ -337,7 +337,7 @@ function scaleRows() {
     }
     var announceHeight = Math.round((height - $("#navbar").outerHeight() - $("#appTab").outerHeight() - $("#gameButtonsAnnounce").outerHeight() - $("#footer").outerHeight() - $("#announceTableHeader").outerHeight()) / (verticalDivisions * 2) - 10);
     var playByPlayHeight = Math.round((height - $("#navbar").outerHeight() - $("#appTab").outerHeight() - $("#gameButtonsPlayByPlay").outerHeight() - $("#footer").outerHeight() - $("#announceTableHeader").outerHeight()) / verticalDivisions - 25);
-    var bracketHeight = Math.round((height - $("#navbar").outerHeight()- $("#playoffBracketHeader").outerHeight()) / bracketDivisions - 25);
+    var bracketHeight = Math.round((height - $("#navbar").outerHeight() - $("#playoffBracketHeader").outerHeight()) / bracketDivisions - 25);
     $(".redAlliancePlayByPlay,.blueAlliancePlayByPlay").css("height", playByPlayHeight + "px");
     $(".redAlliance,.blueAlliance").css("height", announceHeight + "px");
     $(".col1").css("width", col1width + "px");
@@ -350,9 +350,9 @@ function scaleRows() {
     $(".col10").css("width", col10width + "px");
     $(".spacer").css("height", ($("#navbar").outerHeight() - 35) + "px");
     $(".bracket1").css("height", bracketHeight + "px");
-    $(".bracket2").css("height", bracketHeight*2 + "px");
-    $(".bracket3").css("height", bracketHeight*3 + "px");
-    $(".bracket4").css("height", bracketHeight*4 + "px");
+    $(".bracket2").css("height", bracketHeight * 2 + "px");
+    $(".bracket3").css("height", bracketHeight * 3 + "px");
+    $(".bracket4").css("height", bracketHeight * 4 + "px");
 }
 
 function tournamentLevel(tournament) {
@@ -650,39 +650,40 @@ function eventWeek(event) {
 
 function uniq(a) {
     return Array.from(new Set(a));
- }
+}
 
- function wait(ms){
+function wait(ms) {
     var start = new Date().getTime();
     var end = start;
-    while(end < start + ms) {
-      end = new Date().getTime();
-   }
- }
+    while (end < start + ms) {
+        end = new Date().getTime();
+    }
+}
 
 
 function exportXLSX() {
-	//var elt = document.getElementById("teamsTable");
+    //var elt = document.getElementById("teamsTable");
     //var wb = XLSX.utils.table_to_book(elt, {cellHTML:true},{sheet:"Team Table"});
     /* create new workbook */
     var data = [];
-    for (var i=0;i<eventTeamList.length;i++) {
+    var workbook = XLSX.utils.book_new();
+
+    //Add the team table to the worksheet
+    for (var i = 0; i < eventTeamList.length; i++) {
         var record = {};
-        var item = decompressLocalStorage("teamData"+eventTeamList[i].teamNumber);
+        var item = decompressLocalStorage("teamData" + eventTeamList[i].teamNumber);
         var keys = Object.keys(item);
         record.teamNumber = eventTeamList[i].teamNumber;
-        for (var j=0;j<keys.length;j++) {
-            record[keys[j]]=item[keys[j]];
+        for (var j = 0; j < keys.length; j++) {
+            record[keys[j]] = item[keys[j]];
         }
         data.push(record);
     }
-    var workbook = XLSX.utils.book_new();
-
-    var ws = XLSX.utils.json_to_sheet(data,{cellHTML:"true"});
+    var ws = XLSX.utils.json_to_sheet(data, { cellHTML: "true" });
     XLSX.utils.book_append_sheet(workbook, ws, "Team Table");
-	//XLSX.write(wb, {bookType:"biff8", bookSST:true, type: 'base64'});
-   // XLSX.writeFile(wb, "teamstable.xls");
-    XLSX.write(workbook, {bookType:"xlsx", bookSST:true, type: 'base64'});
+    
+
+    XLSX.write(workbook, { bookType: "xlsx", bookSST: true, type: 'base64' });
     XLSX.writeFile(workbook, "teamstable.xlsx");
 
 }

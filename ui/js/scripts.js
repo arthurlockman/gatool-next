@@ -49,6 +49,9 @@ if (!localStorage.showAwards) {
 if (!localStorage.showEventNames) {
     localStorage.showEventNames = "true"
 }
+if (!localStorage.showChampsStats) {
+    localStorage.showChampsStats = "true"
+}
 if (!localStorage.offseason) {
     localStorage.offseason = "false"
 }
@@ -165,6 +168,7 @@ window.onload = function () {
     $("[name='showNotes']").bootstrapSwitch('state', (localStorage.showNotes === "true"));
     $("[name='showMottoes']").bootstrapSwitch('state', (localStorage.showMottoes === "true"));
     $("[name='showEventNames']").bootstrapSwitch('state', (localStorage.showEventNames === "true"));
+    $("[name='showChampsStats']").bootstrapSwitch('state', (localStorage.showChampsStats === "true"));
     $("[name='autoAdvance']").bootstrapSwitch('state', (localStorage.autoAdvance === "true"));
     $("[name='offseason']").bootstrapSwitch('state', (localStorage.offseason === "true"));
     $("[name='showRobotName']").bootstrapSwitch('state', true);
@@ -207,6 +211,13 @@ window.onload = function () {
     } else {
         localStorage.showEventNames = "false"
     }
+ // Handle Champs Stats toggle during loading.
+ if ($("#showChampsStats").bootstrapSwitch('state')) {
+    localStorage.showChampsStats = "true"
+} else {
+    localStorage.showChampsStats = "false"
+}
+
 
     // Handle Auto Advance toggle during loading.
     if ($("#autoAdvance").bootstrapSwitch('state')) {
@@ -303,6 +314,16 @@ window.onload = function () {
             localStorage.showEventNames = "false"
         }
         displayAwards()
+    };
+
+    //Handle a change in Champs Stats Display
+    document.getElementById('showChampsStats').onchange = function () {
+        if ($("#showChampsStats").bootstrapSwitch('state')) {
+            localStorage.showChampsStats = "true";
+        } else {
+            localStorage.showChampsStats = "false";
+        }
+        announceDisplay();
     };
 
     //Handle a change in autoAdvance
@@ -500,6 +521,7 @@ function initEnvironment() {
     localStorage.highScoreDetails = "{}";
     localStorage.allianceNoChange = "false";
     localStorage.showEventNames = "true";
+    localStorage.showChampsStats = "true";
     playoffResults = {};
     playoffResultsDetails = {};
     allianceTeamList = [];
@@ -1855,7 +1877,8 @@ function announceDisplay() {
                 $("#" + stationList[ii] + "PlaybyPlayNotes").html('Notes: "' + teamData.teamNotesLocal + '"')
             }
             var appearanceDisplay = "";
-            if (inChamps() || inSubdivision()) {
+            if ((inChamps() || inSubdivision()) && localStorage.showChampsStats === "true") {
+
                 var appearanceData = eventAppearances[String(currentMatchData.teams[ii].teamNumber)];
                 var allAwardsData = champsAwards[String(currentMatchData.teams[ii].teamNumber)];
                 if (typeof appearanceData !== "undefined") {
