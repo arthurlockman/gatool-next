@@ -666,13 +666,16 @@ function exportXLSX() {
     //var wb = XLSX.utils.table_to_book(elt, {cellHTML:true},{sheet:"Team Table"});
     /* create new workbook */
     var data = [];
+    var data2 = [];
+    var record = {};
+    var keys = [];
     var workbook = XLSX.utils.book_new();
 
     //Add the team table to the worksheet
     for (var i = 0; i < eventTeamList.length; i++) {
-        var record = {};
         var item = decompressLocalStorage("teamData" + eventTeamList[i].teamNumber);
-        var keys = Object.keys(item);
+        record = {};
+        keys = Object.keys(item);
         record.teamNumber = eventTeamList[i].teamNumber;
         for (var j = 0; j < keys.length; j++) {
             record[keys[j]] = item[keys[j]];
@@ -681,9 +684,39 @@ function exportXLSX() {
     }
     var ws = XLSX.utils.json_to_sheet(data, { cellHTML: "true" });
     XLSX.utils.book_append_sheet(workbook, ws, "Team Table");
-    
+
+    data = [];
+    data2 = [];
+    //Add the Schedule to the worksheet   
+    if (localStorage.qualsList !== '{"Schedule":[]}') {
+        data = JSON.parse(localStorage.qualsList).Schedule;
+        if (localStorage.playoffList !== '{"Schedule":[]}') {
+            data = data.concat(JSON.parse(localStorage.playoffList).Schedule);
+        }
+        console.log(data);
+        for (var i = 0; i < data.length; i++) {
+            var item = data[i];
+            record = {};
+            keys = Object.keys(item);
+            for (var j = 0; j < keys.length; j++) {
+                if (keys[j] !== "teams") {
+                    record[keys[j]] = item[keys[j]];
+                } else {
+                    for (var k = 0; k < item.teams.length; k++) {
+                        record[item.teams[k].station] = item.teams[k].teamNumber
+                    }
+                }
+
+            }
+            data2.push(record);
+
+        }
+        console.log(data2);
+        ws = XLSX.utils.json_to_sheet(data2, { cellHTML: "true" });
+        XLSX.utils.book_append_sheet(workbook, ws, "schedule");
+    }
 
     XLSX.write(workbook, { bookType: "xlsx", bookSST: true, type: 'base64' });
-    XLSX.writeFile(workbook, "teamstable.xlsx");
+    XLSX.writeFile(workbook, "gatoolExport_" + localStorage.currentYear + localStorage.currentEvent + moment().format('MMDDYYYY_hhmmss')+".xlsx");
 
 }
