@@ -2439,6 +2439,7 @@ function getTeamAwards(teamNumber, year) {
     teamAwardCalls++;
     $('#teamDataTabPicker').addClass('alert-danger');
     var awards = "";
+    var flatAwards = "";
     var eventNames = [];
     var data = {};
     eventNames[String(year)] = JSON.parse(localStorage.events);
@@ -2473,6 +2474,7 @@ function getTeamAwards(teamNumber, year) {
                         awardName = data.Awards[i].name;
                         awardHilight = awardsHilight(awardName);
                         awards += '<span class="awardsDepth' + String(j + 1) + '">' + awardHilight.before + data.year + ' <span class="awardsEventName">' + eventNames[data.year][data.Awards[i].eventCode] + '</span><span class="awardsEventCode">' + data.Awards[i].eventCode + '</span>: ' + awardName + awardHilight.after;
+                        flatAwards += data.year + " " + eventNames[data.year][data.Awards[i].eventCode] + ": " + awardName + String.fromCharCode(10);
                         if (i === data.Awards.length - 1) {
                             awards += '<span class="lastAward' + String(j + 1) + '"><span class="awardsSeparator1"> || </span><span class="awardsSeparator2"> // </span><span class="awardsSeparator3"><br></span></span></span>';
                         } else {
@@ -2485,6 +2487,7 @@ function getTeamAwards(teamNumber, year) {
 
         }
         teamData.awards = awards;
+        teamData.awardsNoFormatting = flatAwards;
         compressLocalStorage("teamData" + teamNumber, teamData);
         teamAwardCalls--;
         if ((teamAwardCalls === 0) && (teamUpdateCalls === 0) && (lastSchedulePage)) {

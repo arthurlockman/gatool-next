@@ -667,9 +667,14 @@ function exportXLSX() {
     /* create new workbook */
     var data = [];
     for (var i=0;i<eventTeamList.length;i++) {
+        var record = {};
         var item = decompressLocalStorage("teamData"+eventTeamList[i].teamNumber);
-        item.teamNumber = eventTeamList[i].teamNumber;
-        data.push(item);
+        var keys = Object.keys(item);
+        record.teamNumber = eventTeamList[i].teamNumber;
+        for (var j=0;j<keys.length;j++) {
+            record[keys[j]]=item[keys[j]];
+        }
+        data.push(record);
     }
     var workbook = XLSX.utils.book_new();
 
