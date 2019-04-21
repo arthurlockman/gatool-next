@@ -2784,6 +2784,7 @@ function resetVisits() {
         compressLocalStorage("teamData" + eventTeamList[j].teamNumber, team);
         $("#lastVisit" + eventTeamList[j].teamNumber).attr("lastvisit", "No recent visit");
         $("#lastVisit" + eventTeamList[j].teamNumber).html("No recent visit")
+        $("#teamTableNumber"+ eventTeamList[j].teamNumber).removeClass("btn-success");
     }
 }
 
@@ -2795,9 +2796,13 @@ function updateTeamTableRow(teamData) {
     if (teamInfo.lastVisit === "No recent visit") {
         lastVisit = "No recent visit"
     } else {
-        lastVisit = moment(teamInfo.lastVisit).fromNow()
+        lastVisit = moment(teamInfo.lastVisit).fromNow();
     }
-    var returnData = '<tr class="teamsTableRow"><td class = "btn-default" id="teamTableNumber' + teamData.teamNumber + '" onclick="updateTeamInfo(' + teamData.teamNumber + ')"><span class="teamDataNumber">' + teamData.teamNumber + '</span><br><span id="lastVisit' + teamData.teamNumber + '" teamNumber = "' + teamData.teamNumber + '"  lastvisit = "' + teamInfo.lastVisit + '">' + lastVisit + '</span></td>';
+    var returnData = '<tr class="teamsTableRow"><td class = "btn-default';
+    if (lastVisit !== "No recent visit") {
+        returnData += " btn-success";
+    }
+    returnData +='" id="teamTableNumber' + teamData.teamNumber + '" onclick="updateTeamInfo(' + teamData.teamNumber + ')"><span class="teamDataNumber">' + teamData.teamNumber + '</span><br><span id="lastVisit' + teamData.teamNumber + '" teamNumber = "' + teamData.teamNumber + '"  lastvisit = "' + teamInfo.lastVisit + '">' + lastVisit + '</span></td>';
     returnData += '<td id="teamTableRank' + teamData.teamNumber + '" class="rank0"></td>';
     if ((teamInfo.avatar !== "null") && (Number(localStorage.currentYear) >= 2018 && (typeof teamInfo !== "undefined"))) {
         avatar = '<img src="https://www.gatool.org/' + teamInfo.avatar + '">&nbsp;'
@@ -2955,9 +2960,13 @@ function generateTeamTableRow(teamData) {
     if (teamInfo.lastVisit === "No recent visit") {
         lastVisit = "No recent visit"
     } else {
-        lastVisit = moment(teamInfo.lastVisit).fromNow()
+        lastVisit = moment(teamInfo.lastVisit).fromNow();
     }
-    returnData += '<tr class="teamsTableRow"><td class = "btn-default" id="teamTableNumber' + teamData.teamNumber + '" onclick="updateTeamInfo(' + teamData.teamNumber + ')"><span class="teamDataNumber">' + teamData.teamNumber + '</span><br><span id="lastVisit' + teamData.teamNumber + '" teamNumber = "' + teamData.teamNumber + '" lastvisit = "' + teamInfo.lastVisit + '">' + lastVisit + '</span></td>';
+    returnData += '<tr class="teamsTableRow"><td class = "btn-default';
+    if (lastVisit !== "No recent visit") {
+        returnData += " btn-success";
+    }
+    returnData += '" id="teamTableNumber' + teamData.teamNumber + '" onclick="updateTeamInfo(' + teamData.teamNumber + ')"><span class="teamDataNumber">' + teamData.teamNumber + '</span><br><span id="lastVisit' + teamData.teamNumber + '" teamNumber = "' + teamData.teamNumber + '" lastvisit = "' + teamInfo.lastVisit + '">' + lastVisit + '</span></td>';
     returnData += '<td id="teamTableRank' + teamData.teamNumber + '" class="rank0"></td>';
     if ((teamInfo.avatar !== "null") && (Number(localStorage.currentYear) >= 2018)) {
         avatar = '<img src="https://www.gatool.org/' + teamInfo.avatar + '">&nbsp;'

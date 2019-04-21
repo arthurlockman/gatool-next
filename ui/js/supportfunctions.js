@@ -85,6 +85,9 @@ function timer() {
     $("[lastVisit]").each(function () {
         if ($(this).attr("lastvisit") !== "No recent visit") {
             $(this).html(moment($(this).attr("lastVisit")).fromNow());
+            $(this).parent().addClass("btn-success");
+        } else {
+            $(this).parent().removeClass("btn-success");
         }
     });
 
@@ -717,6 +720,6 @@ function exportXLSX() {
     }
 
     XLSX.write(workbook, { bookType: "xlsx", bookSST: true, type: 'base64' });
-    XLSX.writeFile(workbook, "gatoolExport_" + localStorage.currentYear + localStorage.currentEvent + moment().format('MMDDYYYY_hhmmss')+".xlsx");
+    XLSX.writeFile(workbook, "gatoolExport_" + localStorage.currentYear + localStorage.currentEvent + moment().format('MMDDYYYY_hhmmss') + ".xlsx");
 
 }
