@@ -6051,6 +6051,15 @@ var events2017Data = {
     "eventCount": 196
 };
 var hallOfFame = [{
+    "Year": 2019,
+    "Chairmans": 1902,
+    "Challenge": "Destination: Deep Space Houston",
+    "Winner1": 973,
+    "Winner2": 1323,
+    "Winner3": 5026,
+    "Winner4": 4201,
+    "Winner5": null
+},{
     "Year": 2018,
     "Chairmans": 1311,
     "Challenge": "PowerUP! Houston",

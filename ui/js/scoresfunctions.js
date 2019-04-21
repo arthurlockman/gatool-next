@@ -459,7 +459,8 @@ function getTeamAppearance(teamNumber) {
                         result.champsAppearancesyears.push(appearances[i].year);
                     }
                     //fix this later: mapping out this year's Einstein appearances.
-                    if (appearances[i].event_type === 4 && appearances[i].year < Number(localStorage.currentYear)) {
+                    //if (appearances[i].event_type === 4 && appearances[i].year < Number(localStorage.currentYear)) {
+                    if (appearances[i].event_type === 4) {
                         result.einsteinAppearances += 1;
                         result.einsteinAppearancesyears.push(appearances[i].year);
                     }
