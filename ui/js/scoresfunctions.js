@@ -292,6 +292,8 @@ function getAllTeamAwards(teamNumber) {
             result.champsSubdivisionWinneryears = [];
             result.woodieflowers = 0;
             result.woodieflowersyears = [];
+            result.deansList = 0;
+            result.deansListyears = [];
 
             for (var i = 0; i < allAwards.length; i++) {
                 //Chairman's Award
@@ -360,10 +362,24 @@ function getAllTeamAwards(teamNumber) {
 
                 //Woodie Flowers
                 //award_type === 3
-                //event_key === xxxxcmp
+                //event_key === xxxxcmp, xxxxcmptx, xxxxcmpmi
                 if ((allAwards[i].award_type === 3) && ((allAwards[i].event_key === allAwards[i].year + "cmp") || (allAwards[i].event_key === allAwards[i].year + "cmptx") || (allAwards[i].event_key === allAwards[i].year + "cmpmi"))) {
                     result.woodieflowers += 1;
                     result.woodieflowersyears.push(allAwards[i].year + " " + allAwards[i].recipient_list[0].awardee);
+                }
+
+                //Dean's List
+                //award_type === 4
+                //event_key === xxxxcmp, xxxxcmptx, xxxxcmpmi
+                if ((allAwards[i].award_type === 4) && ((allAwards[i].event_key === allAwards[i].year + "cmp") || (allAwards[i].event_key === allAwards[i].year + "cmptx") || (allAwards[i].event_key === allAwards[i].year + "cmpmi"))) {
+                    result.deansList += 1;
+                    for (var j = 0; j < allAwards[i].recipient_list.length; j++) {
+                        if (allAwards[i].recipient_list[j].team_key === "frc" + teamNumber) {
+                            result.deansListyears.push(allAwards[i].year + " " + allAwards[i].recipient_list[j].awardee);
+                        }
+                    }
+
+
                 }
 
             }

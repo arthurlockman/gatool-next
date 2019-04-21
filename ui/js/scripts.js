@@ -211,12 +211,12 @@ window.onload = function () {
     } else {
         localStorage.showEventNames = "false"
     }
- // Handle Champs Stats toggle during loading.
- if ($("#showChampsStats").bootstrapSwitch('state')) {
-    localStorage.showChampsStats = "true"
-} else {
-    localStorage.showChampsStats = "false"
-}
+    // Handle Champs Stats toggle during loading.
+    if ($("#showChampsStats").bootstrapSwitch('state')) {
+        localStorage.showChampsStats = "true"
+    } else {
+        localStorage.showChampsStats = "false"
+    }
 
 
     // Handle Auto Advance toggle during loading.
@@ -1912,7 +1912,7 @@ function announceDisplay() {
                 }
                 if (typeof allAwardsData !== "undefined") {
                     if (allAwardsData.chairmans > 0) {
-                        appearanceDisplay += "<b>Chairman's Award</b><br> "+allAwardsData.chairmansyears.join(", ") + "<br>";
+                        appearanceDisplay += "<b>Chairman's Award</b><br> " + allAwardsData.chairmansyears.join(", ") + "<br>";
                     }
                     if (allAwardsData.champsFinalist === 1) {
                         appearanceDisplay += "<b>Champs Finalist</b><br>";
@@ -1940,6 +1940,15 @@ function announceDisplay() {
                     }
                     if (allAwardsData.woodieflowersyears.length > 0) {
                         appearanceDisplay += allAwardsData.woodieflowersyears.join(", ") + "<br>";
+                    }
+                    if (allAwardsData.deansList === 1) {
+                        appearanceDisplay += "<b>Dean's List Awardee</b><br>";
+                    }
+                    if (allAwardsData.deansList > 1) {
+                        appearanceDisplay += "<b>" + allAwardsData.deansList + " Dean's List Awardees</b><br>";
+                    }
+                    if (allAwardsData.deansListyears.length > 0) {
+                        appearanceDisplay += allAwardsData.deansListyears.join(", ") + "<br>";
                     }
 
                 }
