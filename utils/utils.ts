@@ -75,7 +75,7 @@ const GetDataFromTBA = (path: string): Promise<ResponseWithHeaders> => {
                 'X-TBA-Auth-Key': process.env.TBA_API_KEY,
                 'Accept': 'application/json'
             },
-            timeout: 15000,
+            timeout: 20000,
             transform: includeHeaders
         };
         return rp(options);
