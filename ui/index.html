@@ -241,7 +241,8 @@
             <div id="teamsContainer">
                 <p class="eventName" onclick="updateTeamTable()"><span id="teamsTableEventName">Event team list unavailable.</span>
                 </p>
-                <p>This table is editable and sortable. Tap on a team number to change data for a specific team. Edits you make are local to this browser, and they will persist here if you do not clear your browser cache. You can save your changes to the gatool Cloud on the team details page or on the Setup Screen. Cells highlighted in green have been modified, either by you or by other gatool users. <span style="cursor: pointer" onClick="exportXLSX();" ><b>Tap here to download this table as Excel (won't work on iOS devices)</b></span></p>
+                <p>This table is editable and sortable. Tap on a team number to change data for a specific team. Edits you make are local to this browser, and they will persist here if you do not clear your browser cache. You can save your changes to the gatool Cloud on the team details page or on the Setup Screen. Cells highlighted in green have been modified, either by you or by other gatool users.</p>
+                <p><span style="cursor: pointer" onClick="exportXLSX();" ><b>Tap to download this table as Excel (won't work on iOS devices)</b></span></p> 
                 <table id="teamsTable" class="table table-condensed table-responsive table-bordered table-striped">
                     <thead id="teamsTableHead" class="thead-default">
                         <tr>
@@ -272,7 +273,7 @@
                 </table>
                 <p align="center">
                     <button type="button" id="billAucoinNuclearOption" class="btn btn-danger" onclick="resetAwards()">Reset stored awards to their TIMS values.</button>&nbsp;&nbsp;
-                    <button type="button" id="resetVisitTimes" class="btn btn-danger" onclick="resetVisits()">Reset visit times. Use at the start of each day.</button>
+                    <button type="button" id="resetVisitTimes" class="btn btn-success" onclick="resetVisits()">Reset visit times. Use at the start of each day.</button>
                 </p>
             </div>
         </div>
