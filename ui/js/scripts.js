@@ -771,7 +771,7 @@ function createEventMenu() {
     var options = [];
     var events = {};
     for (var i = 0; i < tmp.length; i++) {
-        var _option = { text: tmp[i].name, value: tmp[i] };
+        var _option = { text: tmp[i].name.replace("- FIRST Robotics Competition -","-"), value: tmp[i] };
         options.push(_option);
         events[tmp[i].code] = tmp[i].name
     }
