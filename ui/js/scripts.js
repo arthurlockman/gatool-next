@@ -638,7 +638,7 @@ function handleEventSelection() {
     $('#playByPlayBanner').show();
     $('#playByPlayDisplay').hide();
     $("#eventName").html('<span class="loadingEvent"><b>Waiting for event schedule... Team Data available.</b></span>');
-    localStorage.eventName = data.name;
+    localStorage.eventName = data.name.replace("- FIRST Robotics Competition -","-");
     if (data.districtCode !== null) {
         localStorage.eventDistrict = data.districtCode;
     }
@@ -773,7 +773,7 @@ function createEventMenu() {
     for (var i = 0; i < tmp.length; i++) {
         var _option = { text: tmp[i].name.replace("- FIRST Robotics Competition -","-"), value: tmp[i] };
         options.push(_option);
-        events[tmp[i].code] = tmp[i].name
+        events[tmp[i].code] = tmp[i].name.replace("- FIRST Robotics Competition -","-");
     }
     options.sort(function (a, b) {
         if (a.text < b.text) {
