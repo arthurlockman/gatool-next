@@ -1977,7 +1977,7 @@ function replaceTeam(station, originalTeam) {
     var replacementTeam = originalTeam;
     var message = "You are about to replace Alliance team <b>" + originalTeam + "</b> for another team.<br>";
     message += "This is a one-time replacement, since the substitution will be recorded at FIRST when the match ends and the score is committed.";
-    message += '<div id = "substituteTeamInput" class="form-group"><label for="substituteTeamUpdate">Substitute Team Entry</label><input type="text" class="form-control" id="substituteTeamUpdate" placeholder="Enter a Team Number"></div>';
+    message += '<div id = "substituteTeamInput" class="form-group"><label for="substituteTeamUpdate">Substitute Team Entry</label><input inputmode="numeric" pattern="[0-9]*" type="text" class="form-control" id="substituteTeamUpdate" placeholder="Enter a Team Number"></div>';
     BootstrapDialog.show({
         type: 'type-success',
         title: '<b>Alliance Team ' + originalTeam + ' Substitution</b>',
