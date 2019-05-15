@@ -2505,6 +2505,12 @@ function getTeamAwards(teamNumber, year) {
                     for (var i = 0; i < data.Awards.length; i++) {
                         awardName = data.Awards[i].name;
                         awardHilight = awardsHilight(awardName);
+                        if (awardName === "Volunteer of the Year") {
+                            awardName += " "+data.Awards[i].person;
+                            if (champs.indexOf(data.Awards[i].eventCode) >= 0) {
+                                awardHilight = { "before": "<span class ='awardHilight'>", "after": "</span>" };
+                            }
+                        }
                         awards += '<span class="awardsDepth' + String(j + 1) + '">' + awardHilight.before + data.year + ' <span class="awardsEventName">' + eventNames[data.year][data.Awards[i].eventCode] + '</span><span class="awardsEventCode">' + data.Awards[i].eventCode + '</span>: ' + awardName + awardHilight.after;
                         flatAwards += data.year + " " + eventNames[data.year][data.Awards[i].eventCode] + ": " + awardName + String.fromCharCode(10);
                         if (i === data.Awards.length - 1) {
