@@ -1950,6 +1950,15 @@ function announceDisplay() {
                     if (allAwardsData.deansListyears.length > 0) {
                         appearanceDisplay += allAwardsData.deansListyears.join(", ") + "<br>";
                     }
+                    if (allAwardsData.voy === 1) {
+                        appearanceDisplay += "<b>Volunteer of the Year</b><br>";
+                    }
+                    if (allAwardsData.voy > 1) {
+                        appearanceDisplay += "<b>" + allAwardsData.voy + " Volunteers of the Year</b><br>";
+                    }
+                    if (allAwardsData.voyyears.length > 0) {
+                        appearanceDisplay += allAwardsData.voyyears.join(", ") + "<br>";
+                    }
 
                 }
             }
@@ -2511,8 +2520,8 @@ function getTeamAwards(teamNumber, year) {
                                 awardHilight = { "before": "<span class ='awardHilight'>", "after": "</span>" };
                             }
                         }
-                        awards += '<span class="awardsDepth' + String(j + 1) + '">' + awardHilight.before + data.year + ' <span class="awardsEventName">' + eventNames[data.year][data.Awards[i].eventCode] + '</span><span class="awardsEventCode">' + data.Awards[i].eventCode + '</span>: ' + awardName + awardHilight.after;
-                        flatAwards += data.year + " " + eventNames[data.year][data.Awards[i].eventCode] + ": " + awardName + String.fromCharCode(10);
+                        awards += '<span class="awardsDepth' + String(j + 1) + '">' + awardHilight.before + data.year + ' <span class="awardsEventName">' + eventNames[data.year][data.Awards[i].eventCode].replace("- FIRST Robotics Competition -","-") + '</span><span class="awardsEventCode">' + data.Awards[i].eventCode + '</span>: ' + awardName + awardHilight.after;
+                        flatAwards += data.year + " " + eventNames[data.year][data.Awards[i].eventCode].replace("- FIRST Robotics Competition -","-") + ": " + awardName + String.fromCharCode(10);
                         if (i === data.Awards.length - 1) {
                             awards += '<span class="lastAward' + String(j + 1) + '"><span class="awardsSeparator1"> || </span><span class="awardsSeparator2"> // </span><span class="awardsSeparator3"><br></span></span></span>';
                         } else {

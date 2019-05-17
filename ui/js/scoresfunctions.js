@@ -294,6 +294,8 @@ function getAllTeamAwards(teamNumber) {
             result.woodieflowersyears = [];
             result.deansList = 0;
             result.deansListyears = [];
+            result.voy = 0;
+            result.voyyears = [];
 
             for (var i = 0; i < allAwards.length; i++) {
                 //Chairman's Award
@@ -333,7 +335,7 @@ function getAllTeamAwards(teamNumber) {
                 }
                 if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "dal")) {
                     result.champsSubdivisionWinner += 1;
-                    result.champsSubdivisionWinneryears.push(allAwards[i].year + " Daley");
+                    result.champsSubdivisionWinneryears.push(allAwards[i].year + " Daly");
                 }
                 if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "cars")) {
                     result.champsSubdivisionWinner += 1;
@@ -380,6 +382,25 @@ function getAllTeamAwards(teamNumber) {
                     }
 
 
+                }
+
+
+                //Volunteer of the Year
+                //award_type === 5
+                //event_key === xxxxcmp, xxxxcmptx, xxxxcmpmi
+                if ((allAwards[i].award_type === 5) && ((allAwards[i].event_key === allAwards[i].year + "cmp") || (allAwards[i].event_key === allAwards[i].year + "cmptx") || (allAwards[i].event_key === allAwards[i].year + "cmpmi"))) {
+                    var voyEvent = "";
+                    if (allAwards[i].event_key === allAwards[i].year + "cmp") {
+                        voyEvent = "FIRST Champs";
+                    } else if (allAwards[i].event_key === allAwards[i].year + "cmptx") {
+                        voyEvent = "Houston Champs";
+
+                    } else if (allAwards[i].event_key === allAwards[i].year + "cmpmi") {
+                        voyEvent = "Detroit Champs";
+                    }
+
+                    result.voy += 1;
+                    result.voyyears.push(allAwards[i].year + " " + voyEvent + " - " + allAwards[i].recipient_list[0].awardee);
                 }
 
             }
