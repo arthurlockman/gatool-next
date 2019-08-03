@@ -798,6 +798,11 @@ function createEventMenu() {
             optionPrefix = "•• ";
             optionPostfix = " ••"
         }
+        if (option.value.type === "OffSeason") {
+            optionClass = "bg-warning";
+            optionPrefix = "•• ";
+            optionPostfix = " ••"
+        }
         if (option.value.type.startsWith("Regional")) {
             optionFilter += " eventsfilter filtersregional"
         } else if (option.value.type.startsWith("Champion")) {
