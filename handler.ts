@@ -4,7 +4,7 @@ import {EventAvatars, EventSchedule, EventType} from './model/event';
 import {
     BuildHighScoreJson, GetAvatarData, GetDataFromFIRST,
     GetDataFromFIRSTAndReturn, ReturnJsonWithCode, ResponseWithHeaders,
-    GetDataFromTBAAndReturn, CreateResponseJson
+    GetDataFromTBAAndReturn, CreateResponseJson, GetDataFromTBA
 } from './utils/utils';
 import {
     GetHighScoresFromDb,
@@ -328,7 +328,93 @@ const GetAllTeamAwards: Handler = (event: APIGatewayEvent) => {
 
 // noinspection JSUnusedGlobalSymbols
 const GetOffseasonEvents: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
-    // TODO: implement this stub
+    return GetDataFromTBA(`events/${event.pathParameters.year}`).then(response => {
+        const events = response.body;
+        const result = [];
+        const output = {};
+        for (let i = 1; i < events.length; i++) {
+            try {
+                if (events[i].event_type_string === 'Offseason') {
+                    let address = 'no address, no city, no state, no country';
+                    if (!!events[i].address) {
+                        address = events[i].address;
+                    }
+                    const tmp = {
+                        'code': events[i].key,
+                        'divisionCode': events[i].event_code,
+                        'name': events[i].short_name,
+                        'type': events[i].event_type_string,
+                        'districtCode': events[i].event_district_string,
+                        'venue': events[i].location_name,
+                        'address': address.split(', ')[0],
+                        'city': address.split(', ')[1],
+                        'stateprov': address.split(', ')[2],
+                        'country': address.split(', ')[3],
+                        'website': events[i].website,
+                        'timezone': events[i].timezone,
+                        'dateStart': events[i].start_date,
+                        'dateEnd': events[i].end_date
+                    };
+                    result.push(tmp);
+                }
+            } catch (ex) {
+                console.error(`Error parsing event data: ${JSON.stringify(events[i])}`);
+            }
+        }
+        return CreateResponseJson(200, {
+            'Events': result,
+            'eventCount': result.length
+        });
+    }).catch(rejection => {
+        if (!!rejection.message && rejection.message.includes('TIMEDOUT')) {
+            return CreateResponseJson(504, 'Timed Out');
+        }
+        return CreateResponseJson(parseInt(rejection.statusCode, 10), rejection.response.body);
+    });
+};
+
+// noinspection JSUnusedGlobalSymbols
+const GetOffseasonTeams: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
+    return GetDataFromTBA(`event/${event.pathParameters.eventCode}/teams`).then(response => {
+        const teams = response.body;
+        teams.sort(function (a, b) {
+            return parseInt(a.team_number, 10) - parseInt(b.team_number, 10);
+        });
+        const result = [];
+        for (let i = 1; i < teams.length; i++) {
+            try {
+                const tmp = {
+                    'teamNumber': teams[i].team_number,
+                    'nameFull': teams[i].name,
+                    'nameShort': teams[i].nickname,
+                    'schoolName': null,
+                    'city': teams[i].city,
+                    'stateProv': teams[i].state_prov,
+                    'country': teams[i].country,
+                    'website': teams[i].website,
+                    'rookieYear': teams[i].rookie_year,
+                    'robotName': null,
+                    'districtCode': null,
+                    'homeCMP': null
+                };
+                result.push(tmp);
+            } catch (ex) {
+                console.error(`Error parsing event data: ${JSON.stringify(teams[i])}`);
+            }
+        }
+        return CreateResponseJson(200, {
+            'teams': result,
+            'teamCountTotal': result.length,
+            'teamCountPage': result.length,
+            'pageCurrent': 1,
+            'pageTotal': 1
+        });
+    }).catch(rejection => {
+        if (!!rejection.message && rejection.message.includes('TIMEDOUT')) {
+            return CreateResponseJson(504, 'Timed Out');
+        }
+        return CreateResponseJson(parseInt(rejection.statusCode, 10), rejection.response.body);
+    });
 };
 
 // noinspection JSUnusedGlobalSymbols
@@ -525,7 +611,7 @@ export {GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedul
     UpdateHighScores, GetHighScores, GetOffseasonEvents, GetEventAlliances, GetEventRankings,
     Authorize, GetTeamAvatar, GetEventHighScores, GetTeamUpdates, PutTeamUpdates, GetUserPreferences,
     PutUserPreferences, GetHistoricTeamAwards, GetDistrictTeams, GetTeams, GetDistrictRankings,
-    GetTeamAppearances, GetAllTeamAwards}
+    GetTeamAppearances, GetAllTeamAwards, GetOffseasonTeams}
 
 // Handle unexpected application errors
 process.on('unhandledRejection', (reason, p) => {

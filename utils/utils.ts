@@ -178,5 +178,5 @@ const BuildHighScoreJson = (year: string, type: string, level: string, match: Ma
     }
 };
 
-export {GetDataFromFIRST, GetDataFromFIRSTAndReturn, GetDataFromTBAAndReturn,
+export {GetDataFromFIRST, GetDataFromFIRSTAndReturn, GetDataFromTBAAndReturn, GetDataFromTBA,
     ReturnJsonWithCode, GetAvatarData, BuildHighScoreJson, CreateResponseJson}

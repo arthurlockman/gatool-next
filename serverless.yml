@@ -305,6 +305,24 @@ functions:
           method: put
           cors: true
           authorizer: Authorize
+  GetOffseasonTeamsV2:
+    handler: handler.GetOffseasonTeams
+    description: Get offseason teams for an event
+    events:
+      - http:
+          path: api/{year}/offseasonteamsv2/{eventCode}/{page}
+          method: get
+          cors: true
+          authorizer: Authorize
+  GetOffseasonEventsV2:
+    handler: handler.GetOffseasonEvents
+    description: Get offseason events
+    events:
+      - http:
+          path: api/{year}/offseasoneventsv2
+          method: get
+          cors: true
+          authorizer: Authorize
   UpdateHighScores:
     handler: handler.UpdateHighScores
     description: Update the event high scores at a regular interval
@@ -313,8 +331,6 @@ functions:
       - schedule:
           rate: rate(10 minutes)
           enabled: true
-
-# TODO: outline resources and tables needed for the service
 
 resources:
   Resources:
