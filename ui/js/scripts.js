@@ -1289,6 +1289,9 @@ function getTeamList(year) {
     $("#teamUpdateContainer").html("Loading team data...");
     var req = new XMLHttpRequest();
     var endpoint = "/teams?eventCode=";
+    if (localStorage.offseason === "true") {
+        endpoint = "/offseasonteamsv2/";
+    }
     req.open('GET', apiURL + year + endpoint + localStorage.currentEvent);
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
