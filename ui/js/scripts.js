@@ -1292,7 +1292,12 @@ function getTeamList(year) {
     if (localStorage.offseason === "true") {
         endpoint = "/offseasonteamsv2/";
     }
-    req.open('GET', apiURL + year + endpoint + localStorage.currentEvent);
+    if (localStorage.offseason === "true") {
+        req.open('GET', apiURL + year + endpoint + localStorage.currentEvent + "/1");
+    } else {
+        req.open('GET', apiURL + year + endpoint + localStorage.currentEvent);
+    }
+    
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         if (req.status === 200) {
