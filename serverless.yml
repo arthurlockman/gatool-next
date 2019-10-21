@@ -7,7 +7,7 @@ service: GAToolBackend
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs10.x
   region: us-east-1
   role: arn:aws:iam::336977810532:role/service-role/GAToolRole
   stage: production
