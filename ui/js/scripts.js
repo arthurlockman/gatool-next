@@ -2523,7 +2523,7 @@ function getTeamAwards(teamNumber, year) {
         for (var j = 0; j < values.length; j++) {
             if (values[j] !== null) {
                 data = JSON.parse(values[j]);
-                if (data.Awards !== '{"Awards":[]}') {
+                if ((data.Awards !== '{"Awards":[]}') || (data.includes("Malformed Parameter")) {
                     for (var i = 0; i < data.Awards.length; i++) {
                         awardName = data.Awards[i].name;
                         awardHilight = awardsHilight(awardName);
