@@ -638,7 +638,7 @@ function handleEventSelection() {
     $('#playByPlayBanner').show();
     $('#playByPlayDisplay').hide();
     $("#eventName").html('<span class="loadingEvent"><b>Waiting for event schedule... Team Data available.</b></span>');
-    localStorage.eventName = data.name.replace("- FIRST Robotics Competition -","-");
+    localStorage.eventName = data.name.replace("- FIRST Robotics Competition -", "-");
     if (data.districtCode !== null) {
         localStorage.eventDistrict = data.districtCode;
     }
@@ -771,9 +771,9 @@ function createEventMenu() {
     var options = [];
     var events = {};
     for (var i = 0; i < tmp.length; i++) {
-        var _option = { text: tmp[i].name.replace("- FIRST Robotics Competition -","-"), value: tmp[i] };
+        var _option = { text: tmp[i].name.replace("- FIRST Robotics Competition -", "-"), value: tmp[i] };
         options.push(_option);
-        events[tmp[i].code] = tmp[i].name.replace("- FIRST Robotics Competition -","-");
+        events[tmp[i].code] = tmp[i].name.replace("- FIRST Robotics Competition -", "-");
     }
     options.sort(function (a, b) {
         if (a.text < b.text) {
@@ -1297,7 +1297,7 @@ function getTeamList(year) {
     } else {
         req.open('GET', apiURL + year + endpoint + localStorage.currentEvent);
     }
-    
+
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         if (req.status === 200) {
@@ -1510,18 +1510,20 @@ function getAvatars() {
         if (req.status === 200) {
 
             var data = JSON.parse(req.responseText);
-            var teamData = {};
-            for (var i = 0; i < data.teams.length; i++) {
-                if (typeof localStorage["teamData" + data.teams[i].teamNumber] !== "undefined") {
-                    teamData = decompressLocalStorage("teamData" + data.teams[i].teamNumber);
-                    if (data.teams[i].encodedAvatar !== null) {
-                        teamData.avatar = data.teams[i].encodedAvatar;
-                        $("#avatar" + data.teams[i].teamNumber).html('<img src="https://www.gatool.org/' + data.teams[i].encodedAvatar + '">&nbsp;')
-                    } else {
-                        teamData.avatar = "null";
-                        $("#avatar" + data.teams[i].teamNumber).html("")
+            if (data.body.statusCode === 400) {
+                var teamData = {};
+                for (var i = 0; i < data.teams.length; i++) {
+                    if (typeof localStorage["teamData" + data.teams[i].teamNumber] !== "undefined") {
+                        teamData = decompressLocalStorage("teamData" + data.teams[i].teamNumber);
+                        if (data.teams[i].encodedAvatar !== null) {
+                            teamData.avatar = data.teams[i].encodedAvatar;
+                            $("#avatar" + data.teams[i].teamNumber).html('<img src="https://www.gatool.org/' + data.teams[i].encodedAvatar + '">&nbsp;')
+                        } else {
+                            teamData.avatar = "null";
+                            $("#avatar" + data.teams[i].teamNumber).html("")
+                        }
+                        compressLocalStorage("teamData" + data.teams[i].teamNumber, teamData)
                     }
-                    compressLocalStorage("teamData" + data.teams[i].teamNumber, teamData)
                 }
             }
         }
@@ -2528,13 +2530,13 @@ function getTeamAwards(teamNumber, year) {
                         awardName = data.Awards[i].name;
                         awardHilight = awardsHilight(awardName);
                         if (awardName === "Volunteer of the Year") {
-                            awardName += " "+data.Awards[i].person;
+                            awardName += " " + data.Awards[i].person;
                             if (champs.indexOf(data.Awards[i].eventCode) >= 0) {
                                 awardHilight = { "before": "<span class ='awardHilight'>", "after": "</span>" };
                             }
                         }
-                        awards += '<span class="awardsDepth' + String(j + 1) + '">' + awardHilight.before + data.year + ' <span class="awardsEventName">' + eventNames[data.year][data.Awards[i].eventCode].replace("- FIRST Robotics Competition -","-") + '</span><span class="awardsEventCode">' + data.Awards[i].eventCode + '</span>: ' + awardName + awardHilight.after;
-                        flatAwards += data.year + " " + eventNames[data.year][data.Awards[i].eventCode].replace("- FIRST Robotics Competition -","-") + ": " + awardName + String.fromCharCode(10);
+                        awards += '<span class="awardsDepth' + String(j + 1) + '">' + awardHilight.before + data.year + ' <span class="awardsEventName">' + eventNames[data.year][data.Awards[i].eventCode].replace("- FIRST Robotics Competition -", "-") + '</span><span class="awardsEventCode">' + data.Awards[i].eventCode + '</span>: ' + awardName + awardHilight.after;
+                        flatAwards += data.year + " " + eventNames[data.year][data.Awards[i].eventCode].replace("- FIRST Robotics Competition -", "-") + ": " + awardName + String.fromCharCode(10);
                         if (i === data.Awards.length - 1) {
                             awards += '<span class="lastAward' + String(j + 1) + '"><span class="awardsSeparator1"> || </span><span class="awardsSeparator2"> // </span><span class="awardsSeparator3"><br></span></span></span>';
                         } else {
@@ -2812,7 +2814,7 @@ function resetVisits() {
         compressLocalStorage("teamData" + eventTeamList[j].teamNumber, team);
         $("#lastVisit" + eventTeamList[j].teamNumber).attr("lastvisit", "No recent visit");
         $("#lastVisit" + eventTeamList[j].teamNumber).html("No recent visit")
-        $("#teamTableNumber"+ eventTeamList[j].teamNumber).removeClass("btn-success");
+        $("#teamTableNumber" + eventTeamList[j].teamNumber).removeClass("btn-success");
     }
 }
 
@@ -2830,7 +2832,7 @@ function updateTeamTableRow(teamData) {
     if (lastVisit !== "No recent visit") {
         returnData += " btn-success";
     }
-    returnData +='" id="teamTableNumber' + teamData.teamNumber + '" onclick="updateTeamInfo(' + teamData.teamNumber + ')"><span class="teamDataNumber">' + teamData.teamNumber + '</span><br><span id="lastVisit' + teamData.teamNumber + '" teamNumber = "' + teamData.teamNumber + '"  lastvisit = "' + teamInfo.lastVisit + '">' + lastVisit + '</span></td>';
+    returnData += '" id="teamTableNumber' + teamData.teamNumber + '" onclick="updateTeamInfo(' + teamData.teamNumber + ')"><span class="teamDataNumber">' + teamData.teamNumber + '</span><br><span id="lastVisit' + teamData.teamNumber + '" teamNumber = "' + teamData.teamNumber + '"  lastvisit = "' + teamInfo.lastVisit + '">' + lastVisit + '</span></td>';
     returnData += '<td id="teamTableRank' + teamData.teamNumber + '" class="rank0"></td>';
     if ((teamInfo.avatar !== "null") && (Number(localStorage.currentYear) >= 2018 && (typeof teamInfo !== "undefined"))) {
         avatar = '<img src="https://www.gatool.org/' + teamInfo.avatar + '">&nbsp;'
