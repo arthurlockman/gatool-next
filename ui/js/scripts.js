@@ -1510,7 +1510,7 @@ function getAvatars() {
         if (req.status === 200) {
 
             var data = JSON.parse(req.responseText);
-            if (data.body.statusCode === 400) {
+            if (data.body.statusCode !== 400) {
                 var teamData = {};
                 for (var i = 0; i < data.teams.length; i++) {
                     if (typeof localStorage["teamData" + data.teams[i].teamNumber] !== "undefined") {
