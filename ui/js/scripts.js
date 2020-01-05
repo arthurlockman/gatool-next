@@ -2499,6 +2499,7 @@ function getTeamAwards(teamNumber, year) {
     var eventNames = [];
     var data = {};
     eventNames[String(year)] = JSON.parse(localStorage.events);
+    eventNames["2019"] = events2019;
     eventNames["2018"] = events2018;
     eventNames["2017"] = events2017;
     eventNames["2016"] = events2016;
