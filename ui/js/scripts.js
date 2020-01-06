@@ -1508,9 +1508,7 @@ function getAvatars() {
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         if (req.status === 200) {
-
             var data = JSON.parse(req.responseText);
-            if (data.body.statusCode !== 400) {
                 var teamData = {};
                 for (var i = 0; i < data.teams.length; i++) {
                     if (typeof localStorage["teamData" + data.teams[i].teamNumber] !== "undefined") {
@@ -1525,7 +1523,6 @@ function getAvatars() {
                         compressLocalStorage("teamData" + data.teams[i].teamNumber, teamData)
                     }
                 }
-            }
         }
     });
     req.send()

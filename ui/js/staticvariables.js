@@ -89,16 +89,16 @@ var miChamps = ["MICMP","ONCMP"];
 
 var eventWeeks = [];
 eventWeeks["2020"] = {
-    "Week0": "February 15, 2020",
-    "Week1": "February 26, 2020",
-    "Week2": "March 4, 2020",
-    "Week3": "March 11, 2020",
-    "Week4": "March 18, 2020",
-    "Week5": "March 25, 2020",
-    "Week6": "April 1, 2020",
-    "Week7": "April 8, 2020",
-    "Houston": "April 15,2020",
-    "Detroit": "April 29, 2020"
+    "Week0": "February 16, 2020",
+    "Week1": "March 1, 2020",
+    "Week2": "March 8, 2020",
+    "Week3": "March 17, 2020",
+    "Week4": "March 23, 2020",
+    "Week5": "March 29, 2020",
+    "Week6": "April 5, 2020",
+    "Week7": "April 11, 2020",
+    "Houston": "April 19,2020",
+    "Detroit": "May 2, 2020"
 };
 eventWeeks["2019"] = {
     "Week0": "February 27, 2019",
