@@ -183,8 +183,8 @@ const GetEventAvatars: Handler = (event: APIGatewayEvent) => {
     const eventCode = event.pathParameters.eventCode;
     const initialAvatarData = GetAvatarData(year, eventCode);
     return initialAvatarData.then(avatarList => {
-        if (avatarList.statusCode) {
-            return CreateResponseJson(avatarList.statusCode, avatarList.message);
+        if (avatarList.body && avatarList.body.statusCode) {
+            return CreateResponseJson(avatarList.body.statusCode, avatarList.body.message);
         }
         if (avatarList.pageTotal === 1) {
             return CreateResponseJson(200, avatarList);
