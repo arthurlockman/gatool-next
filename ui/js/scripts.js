@@ -366,7 +366,7 @@ window.onload = function () {
     });
 
     //Add the image to the cheat sheet. We do this late so that other items will load first.
-    $('#cheatSheetImage').html('<img src="images/infinite-recharge-cheat-sheet.png" width="100%" alt="Cheatsheet">');
+    $('#cheatSheetImage').html('<a href="https://www.gatool.org/images/infinite-recharge-cheat-sheet.pdf"><img src="images/infinite-recharge-cheat-sheet.png" width="100%" alt="Cheatsheet"></a>');
     $('#allianceSelectionTable').hide();
     $('#allianceUndoButton').hide();
 
