@@ -1837,11 +1837,11 @@ function announceDisplay() {
             } else {
                 $("#" + stationList[ii] + "Sponsors").html(teamData.topSponsorsLocal)
             }
-            if (teamData.awardsLocal === "") {
+            // if (teamData.awardsLocal === "") {
                 $("#" + stationList[ii] + "Awards").html(teamData.awards)
-            } else {
-                $("#" + stationList[ii] + "Awards").html(teamData.awardsLocal)
-            }
+            //} else {
+            //    $("#" + stationList[ii] + "Awards").html(teamData.awardsLocal)
+            //}
             $("#" + stationList[ii] + "Rank").html(teamData.rank);
             if (inChamps() || (inMiChamps() && (localStorage.currentYear >= 2017)) || (inSubdivision() && (localStorage.currentMatch > qualsList.Schedule.length))) {
                 $('#' + stationList[ii] + 'PlayByPlayAlliance').html("");
@@ -3148,13 +3148,13 @@ function updateTeamInfo(teamNumber) {
         $("#sponsorsUpdate").val(teamData.sponsorsLocal);
         $("#sponsorsUpdateLabel").addClass("bg-success")
     }
-    if (teamData.awardsLocal === "") {
+    // if (teamData.awardsLocal === "") {
         $("#awardsUpdate").html(teamData.awards);
         $("#awardsUpdateLabel").removeClass("bg-success")
-    } else {
-        $("#awardsUpdate").html(teamData.awardsLocal);
-        $("#awardsUpdateLabel").addClass("bg-success")
-    }
+    // } else {
+    //    $("#awardsUpdate").html(teamData.awardsLocal);
+    //   $("#awardsUpdateLabel").addClass("bg-success")
+    // } 
     if (teamData.teamYearsNoCompeteLocal) {
         $("#teamYearsNoCompeteUpdate").val(teamData.teamYearsNoCompeteLocal);
         $("#teamYearsNoCompeteUpdateLabel").addClass("bg-success");
@@ -3233,13 +3233,13 @@ function updateTeamInfoDone(cloudSave) {
     if ($("#awardsUpdate").html() === "<br>") {
         $("#awardsUpdate").html("")
     }
-    if ((teamData.awards !== $("#awardsUpdate").html()) && ($("#awardsUpdate").html() !== "")) {
-        teamData.awardsLocal = $("#awardsUpdate").html();
-        $("#teamTableAwards" + teamNumber).html($("#awardsUpdate").html())
-    } else {
+    // if ((teamData.awards !== $("#awardsUpdate").html()) && ($("#awardsUpdate").html() !== "")) {
+    //     teamData.awardsLocal = $("#awardsUpdate").html();
+    //     $("#teamTableAwards" + teamNumber).html($("#awardsUpdate").html())
+    // } else {
         teamData.awardsLocal = "";
         $("#teamTableAwards" + teamNumber).html(teamData.awards)
-    }
+    // }
     if (teamData.teamMottoLocal !== $("#teamMottoUpdate").val()) {
         teamData.teamMottoLocal = $("#teamMottoUpdate").val()
     }
