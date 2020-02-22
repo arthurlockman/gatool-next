@@ -574,6 +574,10 @@ color: black;
 .bootstrap-dialog-footer-buttons {
 	text-align: center
 }
+.showAlliancePlayoff {
+	text-align: center;
+	margin-top: 40px
+}
 
 @media (max-width: 768px) {
 p {
