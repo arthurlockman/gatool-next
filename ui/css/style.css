@@ -262,6 +262,11 @@ color: black;
 	font-size: 40px;
 	margin: 0px
 }
+.playByPlaysayNumber {
+	font-size: medium;
+	line-height: 100%;
+	margin-bottom: 10px
+}
 .playByPlayOrganization {
 	font-size: medium;
 	font-style: italic;
@@ -616,6 +621,9 @@ p {
 .playByPlayteamNumber {
 	font-size: 24px
 }
+.playByPlaysayNumber {
+	font-size: 12px
+}
 .playByPlayOrganization {
 	font-size: 12px
 }
@@ -685,6 +693,9 @@ ul.tab li a {
 .mobileHide {
 	display: none
 }
+.playByPlaysayNumber {
+	font-size: 10px;
+}
 .playByPlayOrganization {
 	font-size: 10px
 }
@@ -747,6 +758,10 @@ ul.tab li a {
 .mobileHide {
 	display: block
 }
+.playByPlaysayNumber {
+	font-size: 14px;
+	margin-bottom: 5px
+}
 .playByPlayOrganization {
 	font-size: 14px;
 	margin: 0px;
@@ -785,6 +800,9 @@ ul.tab li a {
 .mobileHide {
 	font-size: 14px;
 	display: block
+}
+.playByPlaysayNumber {
+	font-size: 16px
 }
 .playByPlayOrganization {
 	font-size: 16px;

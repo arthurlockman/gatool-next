@@ -21,6 +21,8 @@ function getTeamUpdates(teamNumber, singleton) {
             teamData.teamNotesLocal = teamUpdates.teamNotesLocal;
             teamData.teamYearsNoCompeteLocal = teamUpdates.teamYearsNoCompeteLocal;
             teamData.showRobotName = teamUpdates.showRobotName;
+            teamData.teamNotes = teamUpdates.teamNotes;
+            teamData.sayNumber = teamUpdates.sayNumber;
             compressLocalStorage("teamData" + teamNumber, teamData);
 
         }
@@ -90,6 +92,8 @@ function sendTeamUpdates(teamNumber, singleton) {
     teamUpdates.teamNotesLocal = teamData.teamNotesLocal;
     teamUpdates.teamYearsNoCompeteLocal = teamData.teamYearsNoCompeteLocal;
     teamUpdates.showRobotName = teamData.showRobotName;
+    teamUpdates.teamNotes = teamData.teamNotes;
+    teamUpdates.sayNumber = teamData.sayNumber;
     teamUpdates.source = parseJwt(localStorage.getItem("token")).email;
     req.open('PUT', apiURL + 'team/' + teamNumber + '/updates');
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));

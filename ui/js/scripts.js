@@ -1794,6 +1794,15 @@ function announceDisplay() {
                 $('#' + stationList[ii] + 'TeamNumber').html("<b>" + replacementAlliance[stationList[ii]] + "</b>");
                 $('#' + stationList[ii] + 'PlaybyPlayteamNumber').html(replacementAlliance[stationList[ii]])
             }
+            if (teamData.sayNumber) {
+                $('#'+ stationList[ii] + 'sayNumber').html(teamData.sayNumber+'<br>');
+                $('#'+ stationList[ii] + 'sayNumber').show();
+                $('#'+ stationList[ii] + 'PlayByPlaysayNumber').html(teamData.sayNumber);
+                $('#'+ stationList[ii] + 'PlayByPlaysayNumber').show();
+            } else {
+                $('#'+ stationList[ii] + 'sayNumber').hide();
+                $('#'+ stationList[ii] + 'PlayByPlaysayNumber').hide();
+            }
             $('#' + stationList[ii] + 'RookieYear').html(rookieYearDisplay(teamData.rookieYear, teamData.teamYearsNoCompeteLocal));
             if ((localStorage.currentMatch > JSON.parse(localStorage.qualsList).Schedule.length) || inChamps() || (inMiChamps() && (localStorage.currentYear >= 2017))) {
                 $('#' + stationList[ii] + 'Alliance').html(teamData.allianceName + "<br>" + teamData.allianceChoice);
@@ -2871,6 +2880,11 @@ function updateTeamTableRow(teamData) {
         } else {
             returnData += '<td  class="bg-success" id="teamTableRobotName' + teamData.teamNumber + '">' + teamInfo.robotNameLocal + '</td>'
         }
+    if (teamInfo.teamNotes) {
+        returnData += '<td class="bg-success" id="teamTableNotes' + teamData.teamNumber + '">' + teamInfo.teamNotes + '</td>'
+    } else {
+        returnData += '<td id="teamTableNotes' + teamData.teamNumber + '">No additional notes</td>'
+    }
     }
     returnData += '<td class = "cityStateSort">' + teamInfo.cityStateSort + '</td>';
     return returnData + '</tr>'
@@ -2890,6 +2904,12 @@ function generateTeamTableRow(teamData) {
         }
         if (typeof teamInfo.showRobotName === "undefined") {
             teamInfo.showRobotName = true
+        }
+        if (typeof teamInfo.teamNotes === "undefined") {
+            teamInfo.teamNotes = ""
+        }
+        if (typeof teamInfo.sayNumber === "undefined") {
+            teamInfo.sayNumber = ""
         }
     } else {
         teamInfo = {
@@ -2928,6 +2948,8 @@ function generateTeamTableRow(teamData) {
             "awardsLocal": "",
             "teamMottoLocal": "",
             "teamNotesLocal": "",
+            "teamNotes": "",
+            "sayNumber": "",
             "avatar": "null",
             "lastVisit": "No recent visit",
             "teamYearsNoCompeteLocal": ""
@@ -3036,6 +3058,11 @@ function generateTeamTableRow(teamData) {
             returnData += '<td  class="bg-success" id="teamTableRobotName' + teamData.teamNumber + '">' + teamInfo.robotNameLocal + '</td>'
         }
         robotName = teamData.robotName
+    }
+    if (teamInfo.teamNotes) {
+        returnData += '<td class="bg-success" id="teamTableNotes' + teamData.teamNumber + '">' + teamInfo.teamNotes + '</td>'
+    } else {
+        returnData += '<td id="teamTableNotes' + teamData.teamNumber + '">No additional notes</td>'
     }
     returnData += '<td class = "cityStateSort">' + teamInfo.cityStateSort + '</td>';
     teamInfo.sponsors = sponsors;
@@ -3178,6 +3205,20 @@ function updateTeamInfo(teamNumber) {
         $("#teamNotesUpdate").val("");
         $("#teamNotesUpdateLabel").removeClass("bg-success");
     }
+    if (teamData.teamNotes) {
+        $("#teamNotes").val(teamData.teamNotes);
+        $("#teamNotesLabel").addClass("bg-success");
+    } else {
+        $("#teamNotes").val("");
+        $("#teamNotesLabel").removeClass("bg-success");
+    }
+    if (teamData.sayNumber) {
+        $("#sayNumber").val(teamData.sayNumber);
+        $("#sayNumberLabel").addClass("bg-success");
+    } else {
+        $("#sayNumber").val("");
+        $("#sayNumberLabel").removeClass("bg-success");
+    }
 
     $(".tabcontent").hide();
     $("#teamDataEntry").show()
@@ -3203,6 +3244,13 @@ function updateTeamInfoDone(cloudSave) {
     }
     if (teamData.teamNotesLocal !== $("#teamNotesUpdate").val()) {
         teamData.teamNotesLocal = $("#teamNotesUpdate").val()
+    }
+    if (teamData.teamNotes !== $("#teamNotes").val()) {
+        teamData.teamNotes = $("#teamNotes").val();
+        $("#teamTableNotes" + teamNumber).html($("#teamNotes").val())
+    }
+    if (teamData.sayNumber !== $("#sayNumber").val()) {
+        teamData.sayNumber = $("#sayNumber").val();
     }
     if ((teamData.topSponsors !== $("#topSponsorsUpdate").val()) && ($("#topSponsorsUpdate").val() !== "")) {
         teamData.topSponsorsLocal = $("#topSponsorsUpdate").val();

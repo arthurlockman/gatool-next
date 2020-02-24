@@ -6066,6 +6066,15 @@ var events2017Data = {
 };
 var hallOfFame = [{
     "Year": 2019,
+    "Chairmans": 1816,
+    "Challenge": "Destination: Deep Space Detroit",
+    "Winner1": 3707,
+    "Winner2": 217,
+    "Winner3": 4481,
+    "Winner4": 1218,
+    "Winner5": null
+},{
+    "Year": 2019,
     "Chairmans": 1902,
     "Challenge": "Destination: Deep Space Houston",
     "Winner1": 973,

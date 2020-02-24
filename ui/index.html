@@ -252,7 +252,7 @@
                 <p class="eventName" onclick="updateTeamTable()"><span id="teamsTableEventName">Event team list unavailable.</span>
                 </p>
                 <p>This table is editable and sortable. Tap on a team number to change data for a specific team. Edits you make are local to this browser, and they will persist here if you do not clear your browser cache. You can save your changes to the gatool Cloud on the team details page or on the Setup Screen. Cells highlighted in green have been modified, either by you or by other gatool users.</p>
-                <p><span style="cursor: pointer" onClick="exportXLSX();"><b>Tap to download this table as Excel (won't work on iOS devices)</b></span></p>
+                <p><span style="cursor: pointer" onClick="exportXLSX();"><b>Tap to download this table as Excel (will save to Files on iOS 13+)</b></span></p>
                 <table id="teamsTable" class="table table-condensed table-responsive table-bordered table-striped">
                     <thead id="teamsTableHead" class="thead-default">
                         <tr>
@@ -265,18 +265,20 @@
                             <td onclick="w3.sortHTML('#teamsTable','.teamsTableRow', '.teamTableName')" class="col2">
                                 <b>Team Name</b>
                             </td>
-                            <td onclick="w3.sortHTML('#teamsTable','.teamsTableRow', '.cityStateSort')" class="col2">
+                            <td onclick="w3.sortHTML('#teamsTable','.teamsTableRow', '.cityStateSort')" class="col1">
                                 <b>City</b>
                             </td>
                             <td onclick="w3.sortHTML('#teamsTable','.teamsTableRow', 'td:nth-child(5)')" class="col2">
-                                <b>Top 5 Sponsors</b></td>
-                            <td onclick="w3.sortHTML('#teamsTable','.teamsTableRow', 'td:nth-child(6)')" class="col2">
+                                <b>Top Sponsors</b></td>
+                            <td onclick="w3.sortHTML('#teamsTable','.teamsTableRow', 'td:nth-child(6)')" class="col1">
                                 <b>Organization</b>
                             </td>
                             <td onclick="w3.sortHTML('#teamsTable','.teamsTableRow', 'td:nth-child(7)')" class="col1">
                                 <b>Rookie Year</b></td>
                             <td onclick="w3.sortHTML('#teamsTable','.teamsTableRow', 'td:nth-child(8)')" class="col1">
                                 <b>Robot name</b></td>
+                            <td onclick="w3.sortHTML('#teamsTable','.teamsTableRow', 'td:nth-child(9)')" class="col2">
+                                <b>Additional Notes</b></td>
                         </tr>
                     </thead>
                     <tbody id="teamsTableBody"></tbody>
@@ -324,6 +326,7 @@
                     <tr id="announceRow1" class="redAlliance">
                         <td class="col2">
                             <span id="red1TeamNumber" class="announceTeamNumber">Red1 Team Number</span><br>
+                            <span id="red1sayNumber">one two three<br></span>
                             <span id="red1RookieYear">Red1 Rookie</span>
                             <p id="red1Alliance" class="announceAlliance">Alliance</p>
                         </td>
@@ -346,6 +349,7 @@
                     <tr id="announceRow2" class="redAlliance">
                         <td class="col2">
                             <span id="red2TeamNumber" class="announceTeamNumber">red2 Team Number</span><br>
+                            <span id="red2sayNumber">one two three<br></span>
                             <span id="red2RookieYear">red2 Rookie</span>
                             <p id="red2Alliance" class="announceAlliance">Alliance</p>
                         </td>
@@ -368,6 +372,7 @@
                     <tr id="announceRow3" class="redAlliance">
                         <td class="col2">
                             <span id="red3TeamNumber" class="announceTeamNumber">red3 Team Number</span><br>
+                            <span id="red3sayNumber">one two three<br></span>
                             <span id="red3RookieYear">red3 Rookie</span>
                             <p id="red3Alliance" class="announceAlliance">Alliance</p>
                         </td>
@@ -390,6 +395,7 @@
                     <tr id="announceRow4" class="redAlliance champsDisplay">
                         <td class="col2">
                             <span id="red4TeamNumber" class="announceTeamNumber">red4 Team Number</span><br>
+                            <span id="red4sayNumber">one two three<br></span>
                             <span id="red4RookieYear">red4 Rookie</span>
                             <p id="red4Alliance" class="announceAlliance">Alliance</p>
                         </td>
@@ -412,6 +418,7 @@
                     <tr id="announceRow5" class="blueAlliance">
                         <td class="col2">
                             <span id="blue1TeamNumber" class="announceTeamNumber">blue1 Team Number</span><br>
+                            <span id="blue1sayNumber">one two three</span><br>
                             <span id="blue1RookieYear">blue1 Rookie</span>
                             <p id="blue1Alliance" class="announceAlliance">Alliance</p>
                         </td>
@@ -434,6 +441,7 @@
                     <tr id="announceRow6" class="blueAlliance">
                         <td class="col2">
                             <span id="blue2TeamNumber" class="announceTeamNumber">blue2 Team Number</span><br>
+                            <span id="blue2sayNumber">one two three<br></span>
                             <span id="blue2RookieYear">blue2 Rookie</span>
                             <p id="blue2Alliance" class="announceAlliance">Alliance</p>
                         </td>
@@ -456,6 +464,7 @@
                     <tr id="announceRow7" class="blueAlliance">
                         <td class="col2">
                             <span id="blue3TeamNumber" class="announceTeamNumber">blue3 Team Number</span><br>
+                            <span id="blue3sayNumber">one two three<br></span>
                             <span id="blue3RookieYear">blue3 Rookie</span>
                             <p id="blue3Alliance" class="announceAlliance">Alliance</p>
                         </td>
@@ -478,6 +487,7 @@
                     <tr id="announceRow8" class="blueAlliance champsDisplay">
                         <td class="col2">
                             <span id="blue4TeamNumber" class="announceTeamNumber">blue4 Team Number</span><br>
+                            <span id="blue4sayNumber">one two three<br></span>
                             <span id="blue4RookieYear">blue4 Rookie</span>
                             <p id="blue4Alliance" class="announceAlliance">Alliance</p>
                         </td>
@@ -528,6 +538,7 @@
                     <tr id="playByPlayRow1" class="row">
                         <td class="col2 blueAlliancePlayByPlay" align="center">
                             <p id="blue1PlaybyPlayteamNumber" class="playByPlayteamNumber">blue1</p>
+                            <p id="blue1PlayByPlaysayNumber" class="playByPlaysayNumber">one two three</p>
                             <p id="blue1PlayByPlayOrganization" class="playByPlayOrganization">organization</p>
                             <p id="blue1PlayByPlayCity" class="playByPlayCity">city</p>
                             <p id="blue1PlayByPlayMotto" class="playByPlayCity mottoes">Motto</p>
@@ -541,6 +552,7 @@
                         </td>
                         <td class="col2 redAlliancePlayByPlay" align="center">
                             <p id="red3PlaybyPlayteamNumber" class="playByPlayteamNumber">red3</p>
+                            <p id="red3PlayByPlaysayNumber" class="playByPlaysayNumber">one two three</p>
                             <p id="red3PlayByPlayOrganization" class="playByPlayOrganization">organization</p>
                             <p id="red3PlayByPlayCity" class="playByPlayCity">city</p>
                             <p id="red3PlayByPlayMotto" class="playByPlayCity mottoes">Motto</p>
@@ -555,7 +567,8 @@
                     </tr>
                     <tr id="playByPlayRow2" class="row">
                         <td class="col2 blueAlliancePlayByPlay" align="center">
-                            <span id="blue2PlaybyPlayteamNumber" class="playByPlayteamNumber">blue2 </span><br>
+                            <p id="blue2PlaybyPlayteamNumber" class="playByPlayteamNumber">blue2</p>
+                            <p id="blue2PlayByPlaysayNumber" class="playByPlaysayNumber">one two three</p>
                             <p id="blue2PlayByPlayOrganization" class="playByPlayOrganization">organization</p>
                             <p id="blue2PlayByPlayCity" class="playByPlayCity">city</p>
                             <p id="blue2PlayByPlayMotto" class="playByPlayCity mottoes">Motto</p>
@@ -569,6 +582,7 @@
                         </td>
                         <td class="col2 redAlliancePlayByPlay" align="center">
                             <p id="red2PlaybyPlayteamNumber" class="playByPlayteamNumber">red2 </p>
+                            <p id="red2PlayByPlaysayNumber" class="playByPlaysayNumber">one two three</p>
                             <p id="red2PlayByPlayOrganization" class="playByPlayOrganization">organization</p>
                             <p id="red2PlayByPlayCity" class="playByPlayCity">city</p>
                             <p id="red2PlayByPlayMotto" class="playByPlayCity mottoes">Motto</p>
@@ -583,7 +597,8 @@
                     </tr>
                     <tr id="playByPlayRow3" class="row">
                         <td class="col2 blueAlliancePlayByPlay" align="center">
-                            <span id="blue3PlaybyPlayteamNumber" class="playByPlayteamNumber">blue3 </span><br>
+                            <p id="blue3PlaybyPlayteamNumber" class="playByPlayteamNumber">blue3 </p>
+                            <p id="blue3PlayByPlaysayNumber" class="playByPlaysayNumber">one two three</p>
                             <p id="blue3PlayByPlayOrganization" class="playByPlayOrganization">organization</p>
                             <p id="blue3PlayByPlayCity" class="playByPlayCity">city</p>
                             <p id="blue3PlayByPlayMotto" class="playByPlayCity mottoes">Motto</p>
@@ -596,7 +611,8 @@
                             <p id="blue3PlaybyPlayNotes" class="notes playByPlayWinLossTie">blue3 Notes</p>
                         </td>
                         <td class="col2 redAlliancePlayByPlay" align="center">
-                            <span id="red1PlaybyPlayteamNumber" class="playByPlayteamNumber">red1</span><br>
+                            <p id="red1PlaybyPlayteamNumber" class="playByPlayteamNumber">red1</p>
+                            <p id="red1PlayByPlaysayNumber" class="playByPlaysayNumber">one two three</p>
                             <p id="red1PlayByPlayOrganization" class="playByPlayOrganization">organization</p>
                             <p id="red1PlayByPlayCity" class="playByPlayCity">city</p>
                             <p id="red1PlayByPlayMotto" class="playByPlayCity mottoes">Motto</p>
@@ -611,7 +627,8 @@
                     </tr>
                     <tr id="playByPlayRow4" class="row champsDisplay">
                         <td class="col2 blueAlliancePlayByPlay" align="center">
-                            <span id="blue4PlaybyPlayteamNumber" class="playByPlayteamNumber">blue4 </span><br>
+                            <p id="blue4PlaybyPlayteamNumber" class="playByPlayteamNumber">blue4 </p>
+                            <p id="blue4PlayByPlaysayNumber" class="playByPlaysayNumber">one two three</p>
                             <p id="blue4PlayByPlayOrganization" class="playByPlayOrganization">organization</p>
                             <p id="blue4PlayByPlayCity" class="playByPlayCity">city</p>
                             <p id="blue4PlayByPlayMotto" class="playByPlayCity mottoes">Motto</p>
@@ -624,7 +641,8 @@
                             <p id="blue4PlaybyPlayNotes" class="notes playByPlayWinLossTie">blue4 Notes</p>
                         </td>
                         <td class="col2 redAlliancePlayByPlay" align="center">
-                            <span id="red4PlaybyPlayteamNumber" class="playByPlayteamNumber">red4</span><br>
+                            <p id="red4PlaybyPlayteamNumber" class="playByPlayteamNumber">red4</p>
+                            <p id="red4PlayByPlaysayNumber" class="playByPlaysayNumber">one two three</p>
                             <p id="red4PlayByPlayOrganization" class="playByPlayOrganization">organization</p>
                             <p id="red4PlayByPlayCity" class="playByPlayCity">city</p>
                             <p id="red4PlayByPlayMotto" class="playByPlayCity mottoes">Motto</p>
@@ -1017,13 +1035,16 @@
                 <div id="teamNameUpdateLabel" class="form-group"><label for="teamNameUpdate">Team Name (<span id="teamNameUpdateTIMS">xxx</span> in TIMS)</label> <input type="text" class="form-control" id="teamNameUpdate" placeholder="Enter a Team Name"></div>
                 <div id="organizationUpdateLabel" class="form-group"><label for="organizationUpdate">Organization/School (<span id="organizationUpdateTIMS">xxx</span> in TIMS)</label> <input type="text" class="form-control" id="organizationUpdate" placeholder="Enter an Organization or School Name">
                 </div>
+                <div id="sayNumberLabel" class="form-group"><label for="sayNumber">How to pronounce the team number (some teams are particular)</label><input type="text" class="form-control" id="sayNumber" placeholder="Tell us how to pronounce the team number"></div>
                 <div id="robotNameUpdateLabel" class="form-group"><label for="robotNameUpdate">Robot Name (<span id="robotNameUpdateTIMS">xxx</span> in TIMS) &nbsp;&nbsp;&nbsp; Robot name <input type="checkbox" id="showRobotName" name="showRobotName" value="true" checked></label><input type="text" class="form-control" id="robotNameUpdate" placeholder="Enter a Robot Name"></div>
                 <div id="teamMottoUpdateLabel" class="form-group"><label for="teamMottoUpdate">Team Motto (Team mottoes are local and do not come from FIRST)</label> <input type="text" class="form-control" id="teamMottoUpdate" placeholder="Enter a Team Motto"></div>
                 <div id="cityStateUpdateLabel" class="form-group"><label for="cityStateUpdate">City, State (<span id="cityStateUpdateTIMS">xxx</span> in TIMS)</label> <input type="text" class="form-control" id="cityStateUpdate" placeholder="Enter a city and state">
                 </div>
-                <div id="teamYearsNoCompeteUpdateLabel" class="form-group"><label for="teamYearsNoCompeteUpdate">Years NOT competing with FIRST (will be used in calculating Nth season)</label> <input type="text" class="form-control" id="teamYearsNoCompeteUpdate" placeholder="Enter the number of years this team has NOT competed since their founding">
+                <div id="teamYearsNoCompeteUpdateLabel" class="form-group"><label for="teamYearsNoCompeteUpdate">Years NOT competing with FIRST (will be used in calculating Nth season)</label> <input type="text" class="form-control" id="teamYearsNoCompeteUpdate" placeholder="Enter the number of years (not the years!) this team has NOT competed since their founding">
                 </div>
-                <div id="teamNotesUpdateLabel" class="form-group"><label for="teamNotesUpdate">Team Notes (These notes are local notes and do not come from FIRST)</label> <input type="text" class="form-control" id="teamNotesUpdate" placeholder="Enter some notes you would like to have on the Announce Screen">
+                <div id="teamNotesUpdateLabel" class="form-group"><label for="teamNotesUpdate">Team Notes for Announce Screen (These notes are local notes and do not come from FIRST)</label> <input type="text" class="form-control" id="teamNotesUpdate" placeholder="Enter some notes you would like to have on the Announce Screen">
+                </div>
+                <div id="teamNotesLabel" class="form-group"><label for="teamNotes">Team Notes for Team Data screen (These notes are local notes and do not come from FIRST)</label> <input type="text" class="form-control" id="teamNotes" placeholder="Enter some notes you would like to have on the Team Data Screen">
                 </div>
                 <div id="topSponsorsUpdateLabel" class="form-group"><label for="topSponsorsUpdate">Top Sponsors (Enter no more than 5 top sponsors from the full sponsor list below)</label> <textarea class="form-control" rows="3" id="topSponsorsUpdate" placeholder="Enter the team's top 5 sponsors"></textarea>
                 </div>

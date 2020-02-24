@@ -696,7 +696,7 @@ function exportXLSX() {
         if (localStorage.playoffList !== '{"Schedule":[]}') {
             data = data.concat(JSON.parse(localStorage.playoffList).Schedule);
         }
-        console.log(data);
+        //console.log(data);
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
             record = {};
@@ -714,7 +714,7 @@ function exportXLSX() {
             data2.push(record);
 
         }
-        console.log(data2);
+        //console.log(data2);
         ws = XLSX.utils.json_to_sheet(data2, { cellHTML: "true" });
         XLSX.utils.book_append_sheet(workbook, ws, "schedule");
     }
