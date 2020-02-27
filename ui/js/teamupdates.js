@@ -24,7 +24,6 @@ function getTeamUpdates(teamNumber, singleton) {
             teamData.teamNotes = teamUpdates.teamNotes;
             teamData.sayNumber = teamUpdates.sayNumber;
             compressLocalStorage("teamData" + teamNumber, teamData);
-
         }
         teamUpdateCalls--;
         if ((teamAwardCalls === 0) && (teamUpdateCalls === 0) && (lastSchedulePage)) {
@@ -66,6 +65,9 @@ function getTeamUpdates(teamNumber, singleton) {
                         }
                     }]
                 });
+            }
+            if (Number(localStorage.currentYear) >= 2018) {
+                getAvatars()
             }
         }
 
