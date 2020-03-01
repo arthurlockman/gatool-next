@@ -154,6 +154,7 @@
                 <p><input name="showMottoes" id="showMottoes" type="checkbox" value="true" checked> &nbsp;Show Mottoes on Announce and Play-by-play</p>
                 <p><input name="showEventNames" id="showEventNames" type="checkbox" value="true" checked> &nbsp;Show Event Names instead of codes</p>
                 <p><input name="showChampsStats" id="showChampsStats" type="checkbox" value="true" checked> &nbsp;Show Champs statistics on Announce</p>
+                <p><input name="swapPlayByPlay" id="swapPlayByPlay" type="checkbox" value="true" checked> &nbsp;Swap Play by Play Screen Orientation</p>
                 <p><input name="autoAdvance" id="autoAdvance" type="checkbox" value="true" checked> &nbsp;Automatically advance to the next match when loading</p>
                 <div class="container alert alert-warning col-sm-12">
                     <p><strong>The following settings are specific to how we display Awards.</strong></p>
@@ -545,7 +546,7 @@
                             <p id="blue1PlayByPlayAlliance" class="playByPlayAlliance"></p>
                         </td>
                         <td class="col4 blueAlliancePlayByPlay">
-                            <p class="playByPlayTeamName" id="blue1PlaybyPlayTeamName">blue1 Team Name</p>
+                            <p id="blue1PlaybyPlayTeamName" class="playByPlayTeamName">blue1 Team Name</p>
                             <p id="blue1PlaybyPlayRobotName" class="playByPlayRobotName">blue1 Robot Name</p>
                             <p id="blue1WinLossTie" class="playByPlayWinLossTie text-center">win-loss-tie</p>
                             <p id="blue1PlaybyPlayNotes" class="notes playByPlayWinLossTie">blue1 Notes</p>
@@ -559,7 +560,7 @@
                             <p id="red3PlayByPlayAlliance" class="playByPlayAlliance"></p>
                         </td>
                         <td class="col4 redAlliancePlayByPlay">
-                            <p class="playByPlayTeamName" id="red3PlaybyPlayTeamName">red3 Team Name</p>
+                            <p id="red3PlaybyPlayTeamName" class="playByPlayTeamName">red3 Team Name</p>
                             <p id="red3PlaybyPlayRobotName" class="playByPlayRobotName">red3 Robot Name</p>
                             <p id="red3WinLossTie" class="playByPlayWinLossTie text-center">win-loss-tie</p>
                             <p id="red3PlaybyPlayNotes" class="notes playByPlayWinLossTie">red3 Notes</p>
@@ -575,7 +576,7 @@
                             <p id="blue2PlayByPlayAlliance" class="playByPlayAlliance"></p>
                         </td>
                         <td class="col4 blueAlliancePlayByPlay">
-                            <p class="playByPlayTeamName" id="blue2PlaybyPlayTeamName">blue2 Team Name</p>
+                            <p id="blue2PlaybyPlayTeamName" class="playByPlayTeamName">blue2 Team Name</p>
                             <p id="blue2PlaybyPlayRobotName" class="playByPlayRobotName">blue2 Robot Name</p>
                             <p id="blue2WinLossTie" class="playByPlayWinLossTie text-center">win-loss-tie</p>
                             <p id="blue2PlaybyPlayNotes" class="notes playByPlayWinLossTie">blue2 Notes</p>
@@ -589,7 +590,7 @@
                             <p id="red2PlayByPlayAlliance" class="playByPlayAlliance"></p>
                         </td>
                         <td class="col4 redAlliancePlayByPlay">
-                            <p class="playByPlayTeamName" id="red2PlaybyPlayTeamName">red2 Team Name</p>
+                            <p id="red2PlaybyPlayTeamName" class="playByPlayTeamName">red2 Team Name</p>
                             <p id="red2PlaybyPlayRobotName" class="playByPlayRobotName">red2 Robot Name</p>
                             <p id="red2WinLossTie" class="playByPlayWinLossTie text-center">win-loss-tie</p>
                             <p id="red2PlaybyPlayNotes" class="notes playByPlayWinLossTie">red2 Notes</p>
@@ -605,7 +606,7 @@
                             <p id="blue3PlayByPlayAlliance" class="playByPlayAlliance"></p>
                         </td>
                         <td class="col4 blueAlliancePlayByPlay">
-                            <p class="playByPlayTeamName" id="blue3PlaybyPlayTeamName">blue3 Team Name</p>
+                            <p id="blue3PlaybyPlayTeamName" class="playByPlayTeamName">blue3 Team Name</p>
                             <p id="blue3PlaybyPlayRobotName" class="playByPlayRobotName">blue3 Robot Name</p>
                             <p id="blue3WinLossTie" class="playByPlayWinLossTie text-center">win-loss-tie</p>
                             <p id="blue3PlaybyPlayNotes" class="notes playByPlayWinLossTie">blue3 Notes</p>
@@ -619,7 +620,7 @@
                             <p id="red1PlayByPlayAlliance" class="playByPlayAlliance"></p>
                         </td>
                         <td class="col4 redAlliancePlayByPlay">
-                            <p class="playByPlayTeamName" id="red1PlaybyPlayTeamName">red1 Team Name</p>
+                            <p id="red1PlaybyPlayTeamName" class="playByPlayTeamName">red1 Team Name</p>
                             <p id="red1PlaybyPlayRobotName" class="playByPlayRobotName">red1 Robot Name</p>
                             <p id="red1WinLossTie" class="playByPlayWinLossTie text-center">win-loss-tie</p>
                             <p id="red1PlaybyPlayNotes" class="notes playByPlayWinLossTie">red1 Notes</p>
@@ -635,7 +636,7 @@
                             <p id="blue4PlayByPlayAlliance" class="playByPlayAlliance"></p>
                         </td>
                         <td class="col4 blueAlliancePlayByPlay">
-                            <p class="playByPlayTeamName" id="blue4PlaybyPlayTeamName">blue4 Team Name</p>
+                            <p id="blue4PlaybyPlayTeamName" class="playByPlayTeamName">blue4 Team Name</p>
                             <p id="blue4PlaybyPlayRobotName" class="playByPlayRobotName">blue4 Robot Name</p>
                             <p id="blue4WinLossTie" class="playByPlayWinLossTie text-center">win-loss-tie</p>
                             <p id="blue4PlaybyPlayNotes" class="notes playByPlayWinLossTie">blue4 Notes</p>
@@ -649,10 +650,132 @@
                             <p id="red4PlayByPlayAlliance" class="playByPlayAlliance"></p>
                         </td>
                         <td class="col4 redAlliancePlayByPlay">
-                            <p class="playByPlayTeamName" id="red4PlaybyPlayTeamName">red4 Team Name</p>
+                            <p id="red4PlaybyPlayTeamName" class="playByPlayTeamName">red4 Team Name</p>
                             <p id="red4PlaybyPlayRobotName" class="playByPlayRobotName">red4 Robot Name</p>
                             <p id="red4WinLossTie" class="playByPlayWinLossTie text-center">win-loss-tie</p>
                             <p id="red4PlaybyPlayNotes" class="notes playByPlayWinLossTie">red4 Notes</p>
+                        </td>
+                    </tr>
+                </table>
+                <table id="playByPlayTableSwap">
+                    <tr id="playByPlayRow1Swap" class="row">
+                        <td class="col2 redAlliancePlayByPlay" align="center">
+                            <p id="red3PlaybyPlayteamNumberSwap" class="playByPlayteamNumber">red3</p>
+                            <p id="red3PlayByPlaysayNumberSwap" class="playByPlaysayNumber">one two three</p>
+                            <p id="red3PlayByPlayOrganizationSwap" class="playByPlayOrganization">organization</p>
+                            <p id="red3PlayByPlayCitySwap" class="playByPlayCity">city</p>
+                            <p id="red3PlayByPlayMottoSwap" class="playByPlayCity mottoes">Motto</p>
+                            <p id="red3PlayByPlayAllianceSwap" class="playByPlayAlliance"></p>
+                        </td>
+                        <td class="col4 redAlliancePlayByPlay">
+                            <p id="red3PlaybyPlayTeamNameSwap" class="playByPlayTeamName">red3 Team Name</p>
+                            <p id="red3PlaybyPlayRobotNameSwap" class="playByPlayRobotName">red3 Robot Name</p>
+                            <p id="red3WinLossTieSwap" class="playByPlayWinLossTie text-center">win-loss-tie</p>
+                            <p id="red3PlaybyPlayNotesSwap" class="notes playByPlayWinLossTie">red3 Notes</p>
+                        </td>
+                        <td class="col2 blueAlliancePlayByPlay" align="center">
+                            <p id="blue1PlaybyPlayteamNumberSwap" class="playByPlayteamNumber">blue1</p>
+                            <p id="blue1PlayByPlaysayNumberSwap" class="playByPlaysayNumber">one two three</p>
+                            <p id="blue1PlayByPlayOrganizationSwap" class="playByPlayOrganization">organization</p>
+                            <p id="blue1PlayByPlayCitySwap" class="playByPlayCity">city</p>
+                            <p id="blue1PlayByPlayMottoSwap" class="playByPlayCity mottoes">Motto</p>
+                            <p id="blue1PlayByPlayAllianceSwap" class="playByPlayAlliance"></p>
+                        </td>
+                        <td class="col4 blueAlliancePlayByPlay">
+                            <p id="blue1PlaybyPlayTeamNameSwap" class="playByPlayTeamName">blue1 Team Name</p>
+                            <p id="blue1PlaybyPlayRobotNameSwap" class="playByPlayRobotName">blue1 Robot Name</p>
+                            <p id="blue1WinLossTieSwap" class="playByPlayWinLossTie text-center">win-loss-tie</p>
+                            <p id="blue1PlaybyPlayNotesSwap" class="notes playByPlayWinLossTie">blue1 Notes</p>
+                        </td>
+                    </tr>
+                    <tr id="playByPlayRow2Swap" class="row">
+                        <td class="col2 redAlliancePlayByPlay" align="center">
+                            <p id="red2PlaybyPlayteamNumberSwap" class="playByPlayteamNumber">red2 </p>
+                            <p id="red2PlayByPlaysayNumberSwap" class="playByPlaysayNumber">one two three</p>
+                            <p id="red2PlayByPlayOrganizationSwap" class="playByPlayOrganization">organization</p>
+                            <p id="red2PlayByPlayCitySwap" class="playByPlayCity">city</p>
+                            <p id="red2PlayByPlayMottoSwap" class="playByPlayCity mottoes">Motto</p>
+                            <p id="red2PlayByPlayAllianceSwap" class="playByPlayAlliance"></p>
+                        </td>
+                        <td class="col4 redAlliancePlayByPlay">
+                            <p id="red2PlaybyPlayTeamNameSwap" class="playByPlayTeamName">red2 Team Name</p>
+                            <p id="red2PlaybyPlayRobotNameSwap" class="playByPlayRobotName">red2 Robot Name</p>
+                            <p id="red2WinLossTieSwap" class="playByPlayWinLossTie text-center">win-loss-tie</p>
+                            <p id="red2PlaybyPlayNotesSwap" class="notes playByPlayWinLossTie">red2 Notes</p>
+                        </td>
+                        <td class="col2 blueAlliancePlayByPlay" align="center">
+                            <p id="blue2PlaybyPlayteamNumberSwap" class="playByPlayteamNumber">blue2</p>
+                            <p id="blue2PlayByPlaysayNumberSwap" class="playByPlaysayNumber">one two three</p>
+                            <p id="blue2PlayByPlayOrganizationSwap" class="playByPlayOrganization">organization</p>
+                            <p id="blue2PlayByPlayCitySwap" class="playByPlayCity">city</p>
+                            <p id="blue2PlayByPlayMottoSwap" class="playByPlayCity mottoes">Motto</p>
+                            <p id="blue2PlayByPlayAllianceSwap" class="playByPlayAlliance"></p>
+                        </td>
+                        <td class="col4 blueAlliancePlayByPlay">
+                            <p id="blue2PlaybyPlayTeamNameSwap" class="playByPlayTeamName">blue2 Team Name</p>
+                            <p id="blue2PlaybyPlayRobotNameSwap" class="playByPlayRobotName">blue2 Robot Name</p>
+                            <p id="blue2WinLossTieSwap" class="playByPlayWinLossTie text-center">win-loss-tie</p>
+                            <p id="blue2PlaybyPlayNotesSwap" class="notes playByPlayWinLossTie">blue2 Notes</p>
+                        </td>
+                    </tr>
+                    <tr id="playByPlayRow3Swap" class="row">
+                        <td class="col2 redAlliancePlayByPlay" align="center">
+                            <p id="red1PlaybyPlayteamNumberSwap" class="playByPlayteamNumber">red1</p>
+                            <p id="red1PlayByPlaysayNumberSwap" class="playByPlaysayNumber">one two three</p>
+                            <p id="red1PlayByPlayOrganizationSwap" class="playByPlayOrganization">organization</p>
+                            <p id="red1PlayByPlayCitySwap" class="playByPlayCity">city</p>
+                            <p id="red1PlayByPlayMottoSwap" class="playByPlayCity mottoes">Motto</p>
+                            <p id="red1PlayByPlayAllianceSwap" class="playByPlayAlliance"></p>
+                        </td>
+                        <td class="col4 redAlliancePlayByPlay">
+                            <p id="red1PlaybyPlayTeamNameSwap" class="playByPlayTeamName">red1 Team Name</p>
+                            <p id="red1PlaybyPlayRobotNameSwap" class="playByPlayRobotName">red1 Robot Name</p>
+                            <p id="red1WinLossTieSwap" class="playByPlayWinLossTie text-center">win-loss-tie</p>
+                            <p id="red1PlaybyPlayNotesSwap" class="notes playByPlayWinLossTie">red1 Notes</p>
+                        </td>
+                        <td class="col2 blueAlliancePlayByPlay" align="center">
+                            <p id="blue3PlaybyPlayteamNumberSwap" class="playByPlayteamNumber">blue3 </p>
+                            <p id="blue3PlayByPlaysayNumberSwap" class="playByPlaysayNumber">one two three</p>
+                            <p id="blue3PlayByPlayOrganizationSwap" class="playByPlayOrganization">organization</p>
+                            <p id="blue3PlayByPlayCitySwap" class="playByPlayCity">city</p>
+                            <p id="blue3PlayByPlayMottoSwap" class="playByPlayCity mottoes">Motto</p>
+                            <p id="blue3PlayByPlayAllianceSwap" class="playByPlayAlliance"></p>
+                        </td>
+                        <td class="col4 blueAlliancePlayByPlay">
+                            <p id="blue3PlaybyPlayTeamNameSwap" class="playByPlayTeamName">blue3 Team Name</p>
+                            <p id="blue3PlaybyPlayRobotNameSwap" class="playByPlayRobotName">blue3 Robot Name</p>
+                            <p id="blue3WinLossTieSwap" class="playByPlayWinLossTie text-center">win-loss-tie</p>
+                            <p id="blue3PlaybyPlayNotesSwap" class="notes playByPlayWinLossTie">blue3 Notes</p>
+                        </td>
+                    </tr>
+                    <tr id="playByPlayRow4Swap" class="row champsDisplay">
+                        <td class="col2 redAlliancePlayByPlay" align="center">
+                            <p id="red4PlaybyPlayteamNumberSwap" class="playByPlayteamNumber">red4</p>
+                            <p id="red4PlayByPlaysayNumberSwap" class="playByPlaysayNumber">one two three</p>
+                            <p id="red4PlayByPlayOrganizationSwap" class="playByPlayOrganization">organization</p>
+                            <p id="red4PlayByPlayCitySwap" class="playByPlayCity">city</p>
+                            <p id="red4PlayByPlayMottoSwap" class="playByPlayCity mottoes">Motto</p>
+                            <p id="red4PlayByPlayAllianceSwap" class="playByPlayAlliance"></p>
+                        </td>
+                        <td class="col4 redAlliancePlayByPlay">
+                            <p id="red4PlaybyPlayTeamNameSwap" class="playByPlayTeamName">red4 Team Name</p>
+                            <p id="red4PlaybyPlayRobotNameSwap" class="playByPlayRobotName">red4 Robot Name</p>
+                            <p id="red4WinLossTieSwap" class="playByPlayWinLossTie text-center">win-loss-tie</p>
+                            <p id="red4PlaybyPlayNotesSwap" class="notes playByPlayWinLossTie">red4 Notes</p>
+                        </td>
+                        <td class="col2 blueAlliancePlayByPlay" align="center">
+                            <p id="blue4PlaybyPlayteamNumberSwap" class="playByPlayteamNumber">blue4 </p>
+                            <p id="blue4PlayByPlaysayNumberSwap" class="playByPlaysayNumber">one two three</p>
+                            <p id="blue4PlayByPlayOrganizationSwap" class="playByPlayOrganization">organization</p>
+                            <p id="blue4PlayByPlayCitySwap" class="playByPlayCity">city</p>
+                            <p id="blue4PlayByPlayMottoSwap" class="playByPlayCity mottoes">Motto</p>
+                            <p id="blue4PlayByPlayAllianceSwap" class="playByPlayAlliance"></p>
+                        </td>
+                        <td class="col4 blueAlliancePlayByPlay">
+                            <p id="blue4PlaybyPlayTeamNameSwap" class="playByPlayTeamName">blue4 Team Name</p>
+                            <p id="blue4PlaybyPlayRobotNameSwap" class="playByPlayRobotName">blue4 Robot Name</p>
+                            <p id="blue4WinLossTieSwap" class="playByPlayWinLossTie text-center">win-loss-tie</p>
+                            <p id="blue4PlaybyPlayNotesSwap"Swap class="notes playByPlayWinLossTie">blue4 Notes</p>
                         </td>
                     </tr>
                 </table>

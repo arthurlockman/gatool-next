@@ -23,6 +23,7 @@ function getTeamUpdates(teamNumber, singleton) {
             teamData.showRobotName = teamUpdates.showRobotName;
             teamData.teamNotes = teamUpdates.teamNotes;
             teamData.sayNumber = teamUpdates.sayNumber;
+            //teamData.source = teamUpdates.source;
             compressLocalStorage("teamData" + teamNumber, teamData);
         }
         teamUpdateCalls--;

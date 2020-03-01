@@ -64,6 +64,9 @@ if (!localStorage.currentEventList) {
 if (!localStorage.autoAdvance) {
     localStorage.autoAdvance = "false"
 }
+if (!localStorage.swapPlayByPlay) {
+    localStorage.swapPlayByPlay = "false"
+}
 
 // reset some of those variables, which will be adjusted later.
 localStorage.clock = "ready";
@@ -170,6 +173,7 @@ window.onload = function () {
     $("[name='showEventNames']").bootstrapSwitch('state', (localStorage.showEventNames === "true"));
     $("[name='showChampsStats']").bootstrapSwitch('state', (localStorage.showChampsStats === "true"));
     $("[name='autoAdvance']").bootstrapSwitch('state', (localStorage.autoAdvance === "true"));
+    $("[name='swapPlayByPlay']").bootstrapSwitch('state', (localStorage.swapPlayByPlay === "true"));
     $("[name='offseason']").bootstrapSwitch('state', (localStorage.offseason === "true"));
     $("[name='showRobotName']").bootstrapSwitch('state', true);
     $("[name='showRobotName']").bootstrapSwitch('size', 'mini');
@@ -225,6 +229,14 @@ window.onload = function () {
     } else {
         localStorage.autoAdvance = "false"
     }
+
+    // Handle Play by Play Screen swap toggle during loading.
+    if ($("#swapPlayByPlay").bootstrapSwitch('state')) {
+        localStorage.swapPlayByPlay = "true"
+    } else {
+        localStorage.swapPlayByPlay = "false"
+    }
+    
 
     // Handle Offseason toggle during loading. Hide and show offseason annotations in the Setup/Schedule display.
     if ($("#offseason").bootstrapSwitch('state')) {
@@ -332,6 +344,22 @@ window.onload = function () {
             localStorage.autoAdvance = "true"
         } else {
             localStorage.autoAdvance = "false"
+        }
+    };
+
+    //Handle a change in Swap PlayByPlay
+    document.getElementById('swapPlayByPlay').onchange = function () {
+        if ($("#swapPlayByPlay").bootstrapSwitch('state')) {
+            localStorage.swapPlayByPlay = "true"
+        } else {
+            localStorage.swapPlayByPlay = "false"
+        }
+        if (localStorage.swapPlayByPlay === "true"){
+            $("#playByPlayTable").hide();
+            $("#playByPlayTableSwap").show();
+        } else {
+            $("#playByPlayTable").show();
+            $("#playByPlayTableSwap").hide();
         }
     };
 
@@ -1715,6 +1743,14 @@ function announceDisplay() {
     "use strict";
     $("#davidPriceNumber").removeClass("redScore blueScore tieScore");
     $("#davidPriceAlliances").hide();
+    if (localStorage.swapPlayByPlay === "true"){
+        $("#playByPlayTable").hide();
+        $("#playByPlayTableSwap").show();
+    } else {
+        $("#playByPlayTable").show();
+        $("#playByPlayTableSwap").hide();
+    }
+    
     var qualsList = JSON.parse(localStorage.qualsList);
     var currentMatch = localStorage.currentMatch - 1;
     var teamCount = 6;
@@ -1780,36 +1816,38 @@ function announceDisplay() {
             }
             var teamData = decompressLocalStorage("teamData" + currentMatchData.teams[ii].teamNumber);
             $('#' + stationList[ii] + 'TeamNumber').html("<b>" + currentMatchData.teams[ii].teamNumber + "</b>");
-            $('#' + stationList[ii] + 'PlaybyPlayteamNumber').html(currentMatchData.teams[ii].teamNumber);
+            $('#' + stationList[ii] + 'PlaybyPlayteamNumber'+', #' + stationList[ii] + 'PlaybyPlayteamNumberSwap').html(currentMatchData.teams[ii].teamNumber);
             inHallOfFame(currentMatchData.teams[ii].teamNumber, stationList[ii]);
             if ((localStorage.currentMatch > qualsList.Schedule.length) || inChamps() || (inMiChamps() && (localStorage.currentYear >= 2017))) {
                 document.getElementById(stationList[ii] + 'TeamNumber').setAttribute("onclick", "replaceTeam('" + stationList[ii] + "','" + currentMatchData.teams[ii].teamNumber + "')");
-                document.getElementById(stationList[ii] + 'PlaybyPlayteamNumber').setAttribute("onclick", "replaceTeam('" + stationList[ii] + "','" + currentMatchData.teams[ii].teamNumber + "')")
+                document.getElementById(stationList[ii] + 'PlaybyPlayteamNumber').setAttribute("onclick", "replaceTeam('" + stationList[ii] + "','" + currentMatchData.teams[ii].teamNumber + "')");
+                document.getElementById(stationList[ii] + 'PlaybyPlayteamNumberSwap').setAttribute("onclick", "replaceTeam('" + stationList[ii] + "','" + currentMatchData.teams[ii].teamNumber + "')")
             } else {
                 document.getElementById(stationList[ii] + 'TeamNumber').setAttribute("onclick", "");
-                document.getElementById(stationList[ii] + 'PlaybyPlayteamNumber').setAttribute("onclick", "")
+                document.getElementById(stationList[ii] + 'PlaybyPlayteamNumber').setAttribute("onclick", "");
+                document.getElementById(stationList[ii] + 'PlaybyPlayteamNumberSwap').setAttribute("onclick", "")
             }
             if (replacementAlliance[stationList[ii]]) {
                 teamData = decompressLocalStorage("teamData" + replacementAlliance[stationList[ii]]);
                 $('#' + stationList[ii] + 'TeamNumber').html("<b>" + replacementAlliance[stationList[ii]] + "</b>");
-                $('#' + stationList[ii] + 'PlaybyPlayteamNumber').html(replacementAlliance[stationList[ii]])
+                $('#' + stationList[ii] + 'PlaybyPlayteamNumber'+', #' + stationList[ii] + 'PlaybyPlayteamNumberSwap').html(replacementAlliance[stationList[ii]])
             }
             if (teamData.sayNumber) {
                 $('#'+ stationList[ii] + 'sayNumber').html(teamData.sayNumber+'<br>');
                 $('#'+ stationList[ii] + 'sayNumber').show();
-                $('#'+ stationList[ii] + 'PlayByPlaysayNumber').html(teamData.sayNumber);
-                $('#'+ stationList[ii] + 'PlayByPlaysayNumber').show();
+                $('#'+ stationList[ii] + 'PlayByPlaysayNumber'+', #'+ stationList[ii] + 'PlayByPlaysayNumberSwap').html(teamData.sayNumber);
+                $('#'+ stationList[ii] + 'PlayByPlaysayNumber'+', #'+ stationList[ii] + 'PlayByPlaysayNumberSwap').show();
             } else {
                 $('#'+ stationList[ii] + 'sayNumber').hide();
-                $('#'+ stationList[ii] + 'PlayByPlaysayNumber').hide();
+                $('#'+ stationList[ii] + 'PlayByPlaysayNumber'+', #'+ stationList[ii] + 'PlayByPlaysayNumberSwap').hide();
             }
             $('#' + stationList[ii] + 'RookieYear').html(rookieYearDisplay(teamData.rookieYear, teamData.teamYearsNoCompeteLocal));
             if ((localStorage.currentMatch > JSON.parse(localStorage.qualsList).Schedule.length) || inChamps() || (inMiChamps() && (localStorage.currentYear >= 2017))) {
                 $('#' + stationList[ii] + 'Alliance').html(teamData.allianceName + "<br>" + teamData.allianceChoice);
-                $('#' + stationList[ii] + 'PlayByPlayAlliance').html("<p><b>" + teamData.allianceName + "<br>" + teamData.allianceChoice + "<b></p>")
+                $('#' + stationList[ii] + 'PlayByPlayAlliance'+', #' + stationList[ii] + 'PlayByPlayAllianceSwap').html("<p><b>" + teamData.allianceName + "<br>" + teamData.allianceChoice + "<b></p>")
             } else {
                 $('#' + stationList[ii] + 'Alliance').html("");
-                $('#' + stationList[ii] + 'PlayByPlayAlliance').html("")
+                $('#' + stationList[ii] + 'PlayByPlayAlliance'+', #' + stationList[ii] + 'PlayByPlayAllianceSwap').html("")
             }
             if (teamData.nameShortLocal === "") {
                 $("#" + stationList[ii] + "TeamName").html(teamData.nameShort)
@@ -1855,49 +1893,52 @@ function announceDisplay() {
             //}
             $("#" + stationList[ii] + "Rank").html(teamData.rank);
             if (inChamps() || (inMiChamps() && (localStorage.currentYear >= 2017)) || (inSubdivision() && (localStorage.currentMatch > qualsList.Schedule.length))) {
-                $('#' + stationList[ii] + 'PlayByPlayAlliance').html("");
+                $('#' + stationList[ii] + 'PlayByPlayAlliance'+', #' + stationList[ii] + 'PlayByPlayAllianceSwap').html("");
                 $("#" + stationList[ii] + "WinLossTie").html("<p class='playByPlayChampsAlliance'>" + teamData.allianceName + "<br>" + teamData.allianceChoice + "</p>");
+                $("#" + stationList[ii] + "WinLossTieSwap").html("<p class='playByPlayChampsAlliance'>" + teamData.allianceName + "<br>" + teamData.allianceChoice + "</p>");
                 rankHighlight(stationList[ii] + "Rank", teamData.rank)
             } else {
                 $("#" + stationList[ii] + "WinLossTie").html("<table class='wltTable'><tr><td id='" + stationList[ii] + "PlayByPlayRank' class='wltCol'>Rank " + teamData.rank + "<br>AV RP " + teamData.sortOrder1 + "</td><td class='wltCol'>Qual Avg<br>" + teamData.qualAverage + "</td><td class='wltCol'>W-L-T<br>" + teamData.wins + "-" + teamData.losses + "-" + teamData.ties + "</td></tr><tr><td colspan='3'>Team high score: " + highScores['"' + currentMatchData.teams[ii].teamNumber + '.score"'] + "<br>in " + highScores['"' + currentMatchData.teams[ii].teamNumber + '.description"'] + "</td></tr></table>");
+                $("#" + stationList[ii] + "WinLossTieSwap").html("<table class='wltTable'><tr><td id='" + stationList[ii] + "PlayByPlayRankSwap' class='wltCol'>Rank " + teamData.rank + "<br>AV RP " + teamData.sortOrder1 + "</td><td class='wltCol'>Qual Avg<br>" + teamData.qualAverage + "</td><td class='wltCol'>W-L-T<br>" + teamData.wins + "-" + teamData.losses + "-" + teamData.ties + "</td></tr><tr><td colspan='3'>Team high score: " + highScores['"' + currentMatchData.teams[ii].teamNumber + '.score"'] + "<br>in " + highScores['"' + currentMatchData.teams[ii].teamNumber + '.description"'] + "</td></tr></table>");
                 rankHighlight(stationList[ii] + "PlayByPlayRank", teamData.rank);
+                rankHighlight(stationList[ii] + "PlayByPlayRankSwap", teamData.rank);
                 rankHighlight(stationList[ii] + "Rank", teamData.rank)
             }
             if (teamData.nameShortLocal === "") {
-                $('#' + stationList[ii] + 'PlaybyPlayTeamName').html(teamData.nameShort)
+                $('#' + stationList[ii] + 'PlaybyPlayTeamName'+', #' + stationList[ii] + 'PlaybyPlayTeamNameSwap').html(teamData.nameShort)
             } else {
-                $('#' + stationList[ii] + 'PlaybyPlayTeamName').html(teamData.nameShortLocal)
+                $('#' + stationList[ii] + 'PlaybyPlayTeamName'+', #' + stationList[ii] + 'PlaybyPlayTeamNameSwap').html(teamData.nameShortLocal)
             }
             if (teamData.showRobotName === true) {
                 if (teamData.robotNameLocal === "") {
-                    $('#' + stationList[ii] + 'PlaybyPlayRobotName').html(teamData.robotName)
+                    $('#' + stationList[ii] + 'PlaybyPlayRobotName'+', #' + stationList[ii] + 'PlaybyPlayRobotNameSwap').html(teamData.robotName)
                 } else {
-                    $('#' + stationList[ii] + 'PlaybyPlayRobotName').html(teamData.robotNameLocal)
+                    $('#' + stationList[ii] + 'PlaybyPlayRobotName'+', #' + stationList[ii] + 'PlaybyPlayRobotNameSwap').html(teamData.robotNameLocal)
                 }
             } else {
-                $('#' + stationList[ii] + 'PlaybyPlayRobotName').html("")
+                $('#' + stationList[ii] + 'PlaybyPlayRobotName'+', #' + stationList[ii] + 'PlaybyPlayRobotNameSwap').html("")
             }
             if (teamData.cityStateLocal === "") {
-                $("#" + stationList[ii] + "PlayByPlayCity").html(teamData.cityState)
+                $("#" + stationList[ii] + "PlayByPlayCity"+", #" + stationList[ii] + "PlayByPlayCitySwap").html(teamData.cityState)
             } else {
-                $("#" + stationList[ii] + "PlayByPlayCity").html(teamData.cityStateLocal)
+                $("#" + stationList[ii] + "PlayByPlayCity"+", #" + stationList[ii] + "PlayByPlayCitySwap").html(teamData.cityStateLocal)
             }
             if (teamData.organizationLocal === "") {
-                $("#" + stationList[ii] + "PlayByPlayOrganization").html(teamData.organization)
+                $("#" + stationList[ii] + "PlayByPlayOrganization"+", #" + stationList[ii] + "PlayByPlayOrganizationSwap").html(teamData.organization)
             } else {
-                $("#" + stationList[ii] + "PlayByPlayOrganization").html(teamData.organizationLocal)
+                $("#" + stationList[ii] + "PlayByPlayOrganization"+", #" + stationList[ii] + "PlayByPlayOrganizationSwap").html(teamData.organizationLocal)
             }
             if (teamData.teamMottoLocal === "") {
-                $("#" + stationList[ii] + "PlayByPlayMotto").html("")
+                $("#" + stationList[ii] + "PlayByPlayMotto"+", #" + stationList[ii] + "PlayByPlayMottoSwap").html("")
             } else {
-                $("#" + stationList[ii] + "PlayByPlayMotto").html('Motto: "' + teamData.teamMottoLocal + '"')
+                $("#" + stationList[ii] + "PlayByPlayMotto"+", #" + stationList[ii] + "PlayByPlayMottoSwap").html('Motto: "' + teamData.teamMottoLocal + '"')
             }
             if (teamData.teamNotesLocal === "") {
                 $("#" + stationList[ii] + "Notes").html("");
-                $("#" + stationList[ii] + "PlaybyPlayNotes").html("")
+                $("#" + stationList[ii] + "PlaybyPlayNotes"+",#" + stationList[ii] + "PlaybyPlayNotesSwap").html("")
             } else {
                 $("#" + stationList[ii] + "Notes").html('Notes: "' + teamData.teamNotesLocal + '"');
-                $("#" + stationList[ii] + "PlaybyPlayNotes").html('Notes: "' + teamData.teamNotesLocal + '"')
+                $("#" + stationList[ii] + "PlaybyPlayNotes"+",#" + stationList[ii] + "PlaybyPlayNotesSwap").html('Notes: "' + teamData.teamNotesLocal + '"')
             }
             var appearanceDisplay = "";
             if ((inChamps() || inSubdivision()) && localStorage.showChampsStats === "true") {
@@ -2624,7 +2665,11 @@ function getDistrictRanks(districtCode, year) {
             }
 
             for (var i = 0; i < eventTeamList.length; i++) {
+                if (typeof districtRankings[eventTeamList[i].teamNumber] !== "undefined") {
                 $("#rankDistrictRank" + eventTeamList[i].teamNumber).html('<span class="sortDistrictRank">' + districtRankings[eventTeamList[i].teamNumber].rank + "</span><br>(" + districtRankings[eventTeamList[i].teamNumber].totalPoints + " pts)")
+                } else {
+                    $("#rankDistrictRank" + eventTeamList[i].teamNumber).html('<span class="sortDistrictRank" hidden>9999</span>Out of District')
+                }
             }
 
         }
