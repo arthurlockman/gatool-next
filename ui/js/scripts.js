@@ -3454,6 +3454,14 @@ function resetAwards() {
 function parsePlayoffMatchName(matchName) {
     "use strict";
     var matchArray = matchName.split(" ");
+    if (matchName.indexOf("iebreaker")>=0){
+        if (matchArray[0] === "Tiebreaker") {
+            return matchArray[0] + " " + (matchArray[1] || "")
+        } else {
+            return matchArray[1] + " " + (matchArray[2] || "")
+        }
+        
+    }
     if ((matchArray[0] === "Quarterfinal") && (matchArray[1] <= 4)) {
         return "Quarterfinal " + matchArray[1] + " Match 1"
     }
@@ -3499,9 +3507,6 @@ function parsePlayoffMatchName(matchName) {
             }
             return "Semifinal " + (matchArray[1] - 2) + " Match 2 <br>" + tiebreaker.advantage + "First match tied";
         }
-    }
-    if (matchArray[0] === "Tiebreaker") {
-        return matchArray[0] + " " + (matchArray[1] || "")
     }
     if (matchArray[0] === "Final") {
         if (matchArray[1] === "2") {
@@ -3564,7 +3569,12 @@ function davidPriceFormat(priceMatchData) {
                 $("#davidPriceNumber").addClass("blueScore");
             }
         }
-        return "TB" + (matchArray[1] || "");
+        if (matchArray[1].indexOf("iebreaker")>=0){
+            return "TB" + (matchArray[2] || "");
+        } else {
+            return "TB" + (matchArray[1] || "");
+        }
+        
     }
 
     if ((matchNumber > 12) && (matchNumber <= 14)) {
