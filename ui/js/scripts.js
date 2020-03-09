@@ -3877,3 +3877,15 @@ function showAllianceSelectionPlayoff(targetMode) {
         $("#showPlayoffBracket").show();
     }
 }
+
+function switchStats() {
+    var fontSize = $('.playByPlayTeamName').css("font-size").replace("px","");
+    if ($('.playByPlayWinLossTie').css("display") === "none") {
+        $('.playByPlayWinLossTie').show();
+        $('.playByPlayTeamName').css({"font-size" : (fontSize/1.5)+"px"});
+    } else {
+        $('.playByPlayWinLossTie').hide();
+        $('.playByPlayTeamName').css({"font-size" : (fontSize*1.5)+"px"});
+    }
+   
+}
