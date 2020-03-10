@@ -23,7 +23,8 @@ function getTeamUpdates(teamNumber, singleton) {
             teamData.showRobotName = teamUpdates.showRobotName;
             teamData.teamNotes = teamUpdates.teamNotes;
             teamData.sayNumber = teamUpdates.sayNumber;
-            //teamData.source = teamUpdates.source;
+            teamData.lastUpdate = (teamUpdates.lastUpdate || "No recent update");
+            teamData.source = teamUpdates.source;
             compressLocalStorage("teamData" + teamNumber, teamData);
         }
         teamUpdateCalls--;
@@ -97,6 +98,7 @@ function sendTeamUpdates(teamNumber, singleton) {
     teamUpdates.showRobotName = teamData.showRobotName;
     teamUpdates.teamNotes = teamData.teamNotes;
     teamUpdates.sayNumber = teamData.sayNumber;
+    teamUpdates.lastUpdate = teamData.lastVisit;
     teamUpdates.source = parseJwt(localStorage.getItem("token")).email;
     req.open('PUT', apiURL + 'team/' + teamNumber + '/updates');
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));

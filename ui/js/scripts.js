@@ -3152,6 +3152,12 @@ function updateTeamInfo(teamNumber) {
     localStorage.currentTeam = teamNumber;
     var teamData = decompressLocalStorage("teamData" + teamNumber);
     $("#teamNumberUpdate").html(teamNumber);
+    if ((teamData.lastUpdate === "No recent update") || (typeof teamData.lastUpdate === "undefined")) {
+        $("#teamUpdateLastUpdate").html("No recent update");
+    } else {
+        $("#teamUpdateLastUpdate").html(moment(teamData.lastUpdate).format('MMMM Do YYYY, h:mm:ss a'));
+    }
+    
     if (teamData.nameShort) {
         $("#teamNameUpdateTIMS").html(teamData.nameShort)
     } else {
@@ -3347,6 +3353,9 @@ function updateTeamInfoDone(cloudSave) {
     //console.log(typeof cloudSave + " cloudSave value " + cloudSave);
     if (cloudSave === "true") {
         teamUpdateCalls++;
+        teamData = decompressLocalStorage("teamData" + teamNumber);
+        teamData.lastUpdate = teamData.lastVisit;
+        compressLocalStorage("teamData" + teamNumber, teamData);
         sendTeamUpdates(teamNumber, !0)
     }
     $(".tabcontent").hide();
