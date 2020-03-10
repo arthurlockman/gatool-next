@@ -24,7 +24,7 @@ function getTeamUpdates(teamNumber, singleton) {
             teamData.teamNotes = teamUpdates.teamNotes;
             teamData.sayNumber = teamUpdates.sayNumber;
             teamData.lastUpdate = (teamUpdates.lastUpdate || "No recent update");
-            teamData.source = teamUpdates.source;
+            //teamData.source = teamUpdates.source;
             compressLocalStorage("teamData" + teamNumber, teamData);
         }
         teamUpdateCalls--;

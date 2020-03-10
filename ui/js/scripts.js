@@ -3151,11 +3151,24 @@ function updateTeamInfo(teamNumber) {
     "use strict";
     localStorage.currentTeam = teamNumber;
     var teamData = decompressLocalStorage("teamData" + teamNumber);
+    var message = "";
     $("#teamNumberUpdate").html(teamNumber);
     if ((teamData.lastUpdate === "No recent update") || (teamData.lastUpdate === "No recent visit") || (typeof teamData.lastUpdate === "undefined")) {
         $("#teamUpdateLastUpdate").html("No recent update");
+        $("#lastUpdatedWarning").removeClass("alert-danger alert-success alert-warning");
+        $("#lastUpdatedWarning").addClass("alert-warning");
+
     } else {
-        $("#teamUpdateLastUpdate").html(moment(teamData.lastUpdate).format('MMMM Do YYYY, h:mm:ss a'));
+        message = moment(teamData.lastUpdate).format('MMMM Do YYYY, h:mm:ss a');
+        $("#lastUpdatedWarning").removeClass("alert-warning alert-success alert-warning");
+        if (moment().diff(teamData.lastUpdate,"days")>21) {
+            $("#lastUpdatedWarning").addClass("alert-danger");
+            message += ". Your updates are older than 3 weeks. Please be sure to verify the values here and push any changes to gatool Cloud."
+        } else {
+            $("#lastUpdatedWarning").addClass("alert-success");
+        }
+        $("#teamUpdateLastUpdate").html(message);
+        
     }
     
     if (teamData.nameShort) {
