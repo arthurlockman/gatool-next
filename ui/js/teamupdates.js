@@ -98,7 +98,7 @@ function sendTeamUpdates(teamNumber, singleton) {
     teamUpdates.showRobotName = teamData.showRobotName;
     teamUpdates.teamNotes = teamData.teamNotes;
     teamUpdates.sayNumber = teamData.sayNumber;
-    teamUpdates.lastUpdate = teamData.lastVisit;
+    teamUpdates.lastUpdate = moment().format();
     teamUpdates.source = parseJwt(localStorage.getItem("token")).email;
     req.open('PUT', apiURL + 'team/' + teamNumber + '/updates');
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
