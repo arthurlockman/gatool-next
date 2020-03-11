@@ -3161,6 +3161,7 @@ function updateTeamInfo(teamNumber) {
     } else {
         message = moment(teamData.lastUpdate).format('MMMM Do YYYY, h:mm:ss a');
         $("#lastUpdatedWarning").removeClass("alert-warning alert-success alert-warning");
+        //If the update is older than 3 weeks, alert the user.
         if (moment().diff(teamData.lastUpdate,"days")>21) {
             $("#lastUpdatedWarning").addClass("alert-danger");
             message += ". Your updates are older than 3 weeks. Please be sure to verify the values here and push any changes to gatool Cloud."
