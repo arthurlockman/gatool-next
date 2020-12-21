@@ -100,6 +100,21 @@ function timer() {
     //update the warning in the Alliance Selection
     //if (localStorage.inPlayoffs !== "true") { ranksQualsCompare(); }
     ranksQualsCompare();
+
+    // ensure current match if Auto Advance is active
+    if (localStorage.autoAdvance === "true") {
+        // check once per minute
+        if (localStorage.autoAdvanceTimer === "false") {
+            // start counting
+            localStorage.autoAdvanceTimer = Date.now();
+        } else if ((Date.now() - localStorage.autoAdvanceTimer) > 60000) {
+            localStorage.autoAdvanceTimer = Date.now();
+            getRegularSeasonSchedule();
+        }
+        
+    } else {
+        localStorage.autoAdvanceTimer = "false";
+    }
 }
 
 function localStorageSpace() {

@@ -193,7 +193,6 @@ function getTeamRanks() {
 
                 for (var i = 0; i < data.Rankings.length; i++) {
 
-                    //team = JSON.parse(localStorage["teamData" + data.Rankings[i].teamNumber]);
                     team = decompressLocalStorage("teamData" + data.Rankings[i].teamNumber);
                     team.rank = data.Rankings[i].rank;
                     allianceTeamList[i] = data.Rankings[i].teamNumber;
@@ -214,7 +213,6 @@ function getTeamRanks() {
                     $("#teamTableRank" + data.Rankings[i].teamNumber).html(data.Rankings[i].rank);
                     $("#teamTableRank" + data.Rankings[i].teamNumber).attr("class", teamTableRankHighlight(data.Rankings[i].rank));
                     ranksList += updateRanksTableRow(team, data.Rankings[i].teamNumber);
-                    //localStorage["teamData" + data.Rankings[i].teamNumber] = JSON.stringify(team);
                     compressLocalStorage("teamData" + data.Rankings[i].teamNumber, team);
 
                     if (data.Rankings[i].matchesPlayed < matchCount) {

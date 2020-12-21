@@ -62,7 +62,8 @@ if (!localStorage.currentEventList) {
     localStorage.currentEventList = []
 }
 if (!localStorage.autoAdvance) {
-    localStorage.autoAdvance = "false"
+    localStorage.autoAdvance = "false";
+    localStorage.autoAdvanceTimer = "false"
 }
 if (!localStorage.swapPlayByPlay) {
     localStorage.swapPlayByPlay = "false"
@@ -227,7 +228,8 @@ window.onload = function () {
     if ($("#autoAdvance").bootstrapSwitch('state')) {
         localStorage.autoAdvance = "true"
     } else {
-        localStorage.autoAdvance = "false"
+        localStorage.autoAdvance = "false";
+        localStorage.autoAdvanceTimer = "false"
     }
 
     // Handle Play by Play Screen swap toggle during loading.
@@ -343,7 +345,8 @@ window.onload = function () {
         if ($("#autoAdvance").bootstrapSwitch('state')) {
             localStorage.autoAdvance = "true"
         } else {
-            localStorage.autoAdvance = "false"
+            localStorage.autoAdvance = "false";
+            localStorage.autoAdvanceTimer = "false"
         }
     };
 
@@ -2842,21 +2845,21 @@ function getTeamForStation(teamList, station) {
 
 function updateRanksTableRow(teamData, teamNumber) {
     "use strict";
-    var returnData = '<tr class="ranksTableRow"><td class="rankTableNumber" id="rankTableNumber' + teamNumber + '">' + teamNumber + '</td>';
-    returnData += '<td id="rankTableRank' + teamNumber + '" class="rankTableRank">' + teamData.rank + '</td>';
+    var returnData = `<tr class="ranksTableRow"><td class="rankTableNumber" id="rankTableNumber${teamNumber}">${teamNumber}</td>`;
+    returnData += `<td id="rankTableRank${teamNumber}" class="rankTableRank">${teamData.rank}</td>`;
     if (teamData.nameShortLocal === "") {
-        returnData += '<td id="rankTableName' + teamNumber + '">' + teamData.nameShort + '</td>'
+        returnData += `<td id="rankTableName${teamNumber}">${teamData.nameShort}</td>`
     } else {
-        returnData += '<td id="rankTableName' + teamNumber + '">' + teamData.nameShortLocal + '</td>'
+        returnData += `<td id="rankTableName${teamNumber}">${teamData.nameShortLocal}</td>`
     }
-    returnData += '<td id="rankTableRP' + teamNumber + '">' + teamData.sortOrder1 + '</td>';
-    returnData += '<td id="rankTableWins' + teamNumber + '">' + teamData.wins + '</td>';
-    returnData += '<td id="rankTableLosses' + teamNumber + '">' + teamData.losses + '</td>';
-    returnData += '<td id="rankTableTies' + teamNumber + '">' + teamData.ties + '</td>';
-    returnData += '<td id="rankTableQualAverage' + teamNumber + '">' + teamData.qualAverage + '</td>';
-    returnData += '<td id="rankTableDq' + teamNumber + '">' + teamData.dq + '</td>';
-    returnData += '<td id="rankTableMatchesPlayed' + teamNumber + '">' + teamData.matchesPlayed + '</td>';
-    returnData += '<td id="rankDistrictRank' + teamNumber + '" class="districtRank rankTableDistrictRank"></td>';
+    returnData += `<td id="rankTableRP${teamNumber}">${teamData.sortOrder1}</td>`;
+    returnData += `<td id="rankTableWins${teamNumber}">${teamData.wins}</td>`;
+    returnData += `<td id="rankTableLosses${teamNumber}">${teamData.losses}</td>`;
+    returnData += `<td id="rankTableTies${teamNumber}">${teamData.ties}</td>`;
+    returnData += `<td id="rankTableQualAverage${teamNumber}">${teamData.qualAverage}</td>`;
+    returnData += `<td id="rankTableDq${teamNumber}">${teamData.dq}</td>`;
+    returnData += `<td id="rankTableMatchesPlayed${teamNumber}">${teamData.matchesPlayed}</td>`;
+    returnData += `<td id="rankDistrictRank${teamNumber}" class="districtRank rankTableDistrictRank"></td>`;
     return returnData + '</tr>'
 }
 
@@ -2964,8 +2967,8 @@ function generateTeamTableRow(teamData) {
             "nameFull": teamData.nameFull,
             "rookieYear": teamData.rookieYear,
             "robotName": teamData.robotName,
-            "organization": "",
-            "sponsors": "",
+            "organization": teamData.schoolName,
+            "sponsors": teamData.nameFull,
             "topSponsors": "",
             "awards": "",
             "alliance": "",
@@ -3018,9 +3021,11 @@ function generateTeamTableRow(teamData) {
         if (organization === sponsorsRaw) {
             sponsorArray[0] = sponsorsRaw
         } else {
-            sponsorsRaw = sponsorsRaw.slice(0, sponsorsRaw.length - organization.length).trim();
-            sponsorsRaw = sponsorsRaw.slice(0, sponsorsRaw.length - 1).trim();
-            sponsorArray = trimArray(sponsorsRaw.split("/"))
+            //sponsorsRaw = sponsorsRaw.slice(0, sponsorsRaw.length - organization.length).trim();
+            //sponsorsRaw = sponsors
+            //sponsorsRaw = sponsorsRaw.slice(0, sponsorsRaw.length - 1).trim();
+            sponsorArray = trimArray(sponsorsRaw.split("/"));
+            sponsorArray.push(sponsorArray.pop().split("&")[0]);
         }
     }
     organizationArray = trimArray(teamData.nameFull.split("/").pop().split("&"));
