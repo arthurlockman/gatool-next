@@ -88,6 +88,20 @@ var miChamps = ["MICMP","ONCMP"];
 //This section defines the week boundaries for filtering.
 
 var eventWeeks = [];
+//2021 week boundaries need to be adjusted as the season unfolds.
+
+eventWeeks["2021"] = { 
+    "Week0": "April 1, 2021",
+    "Week1": "April 12, 2021",
+    "Week2": "April 19, 2021",
+    "Week3": "April 26, 2021",
+    "Week4": "May 3, 2021",
+    "Week5": "May 10, 2021",
+    "Week6": "May 17, 2021",
+    "Week7": "May 24, 2021",
+    "Houston": "July 1, 2021",
+    "Detroit": "August 1, 2021"
+};
 eventWeeks["2020"] = {
     "Week0": "February 16, 2020",
     "Week1": "March 1, 2020",
