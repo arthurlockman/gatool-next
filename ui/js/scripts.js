@@ -99,6 +99,29 @@ var webAuth = new auth0.WebAuth({
     redirectUri: window.location.href
 });
 
+var emptyTeamsResponse = {
+    "teams": [
+        {
+            "schoolName": "School Name",
+            "website": "",
+            "homeCMP": "XXX",
+            "teamNumber": 0,
+            "nameFull": "Unknown",
+            "nameShort": "Team Name",
+            "city": "Hometown",
+            "stateProv": "State",
+            "country": "Country",
+            "rookieYear": 1900,
+            "robotName": "",
+            "districtCode": "XXX"
+        }
+    ],
+    "teamCountTotal": 1,
+    "teamCountPage": 1,
+    "pageCurrent": 1,
+    "pageTotal": 1
+}
+
 function handleAuthentication() {
     webAuth.parseHash(function (err, authResult) {
         if (authResult && authResult.accessToken && authResult.idToken) {
@@ -243,10 +266,12 @@ window.onload = function () {
     // Handle Offseason toggle during loading. Hide and show offseason annotations in the Setup/Schedule display.
     if ($("#offseason").bootstrapSwitch('state')) {
         $(".offseason").show();
-        $(".regularseason").hide()
+        $(".regularseason").hide();
+        switchStats();
     } else {
         $(".offseason").hide();
-        $(".regularseason").show()
+        $(".regularseason").show();
+        switchStats();
     }
 
     // Handle Sponsors toggle. Hide and show sponsors in the announce/PBP display.
@@ -293,10 +318,12 @@ window.onload = function () {
         localStorage.offseason = $("#offseason").bootstrapSwitch('state');
         if ($("#offseason").bootstrapSwitch('state')) {
             $(".offseason").show();
-            $(".regularseason").hide()
+            $(".regularseason").hide();
+            switchStats()
         } else {
             $(".offseason").hide();
-            $(".regularseason").show()
+            $(".regularseason").show();
+            switchStats()
         }
         localStorage.removeItem("eventSelector");
         loadEventsList()
@@ -378,6 +405,7 @@ window.onload = function () {
     document.getElementById("PlayoffFiles").addEventListener('change', handlePlayoffFiles, !1);
     document.getElementById("QualsFilesReset").addEventListener('click', handleQualsFilesReset, !1);
     document.getElementById("PlayoffFilesReset").addEventListener('click', handlePlayoffFilesReset, !1);
+    //document.getElementById("RanksFiles").addEventListener('change', handleRanksFiles, !1);
 
     //setup the Offseason Tab
     $('#offseasonTeamListToJSON').click(function () {
@@ -803,10 +831,16 @@ function createEventMenu() {
     var tmp = currentEventList;
     var options = [];
     var events = {};
+    var eventName = "";
     for (var i = 0; i < tmp.length; i++) {
-        var _option = { text: tmp[i].name.replace("- FIRST Robotics Competition -", "-"), value: tmp[i] };
+        if (tmp[i].name === "") {
+            eventName = tmp[i].code;
+        } else {
+            eventName = tmp[i].name;
+        }
+        var _option = { text: eventName.replace("- FIRST Robotics Competition -", "-"), value: tmp[i] };
         options.push(_option);
-        events[tmp[i].code] = tmp[i].name.replace("- FIRST Robotics Competition -", "-");
+        events[tmp[i].code] = eventName.replace("- FIRST Robotics Competition -", "-");
     }
     options.sort(function (a, b) {
         if (a.text < b.text) {
@@ -1320,6 +1354,7 @@ function getTeamList(year) {
     "use strict";
     $("#teamDataTabPicker").addClass("alert-danger");
     $("#teamUpdateContainer").html("Loading team data...");
+    eventTeamList = [];
     var req = new XMLHttpRequest();
     var endpoint = "/teams?eventCode=";
     if (localStorage.offseason === "true") {
@@ -1557,6 +1592,12 @@ function getAvatars() {
                     }
                 }
         }
+        if (req.status >= 400) {
+            console.log(req.responseText);
+        }
+    });
+    req.addEventListener('error', function(errorText) {
+        console.log(errorText);
     });
     req.send()
 }
@@ -1797,8 +1838,13 @@ function announceDisplay() {
             $("#topMatchNamePlayByPlay").html("<b>" + currentMatchData.description + " of " + qualsList.Schedule.length + "</b>");
             $("#davidPriceNumber").html(davidPriceFormat(currentMatchData))
         }
-        $("#eventHighScorePlayByPlay").html("<b>Current High Score: " + localStorage.matchHighScore + "<br>from " + localStorage.highScoreDetails + "</b>");
-        getHighScores();
+        if (localStorage.offseason === "true") {
+            $("#eventHighScorePlayByPlay").html("Offline Event")
+        } else {
+            $("#eventHighScorePlayByPlay").html("<b>Current High Score: " + localStorage.matchHighScore + "<br>from " + localStorage.highScoreDetails + "</b>");
+            getHighScores();
+        }
+
 
         function checkTeam(element) {
             return element !== currentMatchData.teams[ii].teamNumber
@@ -2551,6 +2597,7 @@ function getTeamAwards(teamNumber, year) {
     var eventNames = [];
     var data = {};
     eventNames[String(year)] = JSON.parse(localStorage.events);
+    eventNames["2020"] = events2020
     eventNames["2019"] = events2019;
     eventNames["2018"] = events2018;
     eventNames["2017"] = events2017;
@@ -2559,6 +2606,7 @@ function getTeamAwards(teamNumber, year) {
     var teamData = decompressLocalStorage("teamData" + teamNumber);
     var awardHilight = { "before": "<b>", "after": "</b>" };
     var awardName = "";
+    var eventName = "";
     var promisesArray = [];
     if (teamData.rookieYear <= year) {
         promisesArray.push(asyncAPICall(apiURL, year, "awards", teamNumber));
@@ -2588,8 +2636,13 @@ function getTeamAwards(teamNumber, year) {
                                 awardHilight = { "before": "<span class ='awardHilight'>", "after": "</span>" };
                             }
                         }
-                        awards += '<span class="awardsDepth' + String(j + 1) + '">' + awardHilight.before + data.year + ' <span class="awardsEventName">' + eventNames[data.year][data.Awards[i].eventCode].replace("- FIRST Robotics Competition -", "-") + '</span><span class="awardsEventCode">' + data.Awards[i].eventCode + '</span>: ' + awardName + awardHilight.after;
-                        flatAwards += data.year + " " + eventNames[data.year][data.Awards[i].eventCode].replace("- FIRST Robotics Competition -", "-") + ": " + awardName + String.fromCharCode(10);
+                        if (typeof eventNames[data.year][data.Awards[i].eventCode] == "undefined") {
+                            eventName = data.Awards[i].eventCode;
+                        } else {
+                            eventName = eventNames[data.year][data.Awards[i].eventCode].replace("- FIRST Robotics Competition -", "-");
+                        }
+                        awards += '<span class="awardsDepth' + String(j + 1) + '">' + awardHilight.before + data.year + ' <span class="awardsEventName">' + eventName + '</span><span class="awardsEventCode">' + data.Awards[i].eventCode + '</span>: ' + awardName + awardHilight.after;
+                        flatAwards += data.year + " " + eventName + ": " + awardName + String.fromCharCode(10);
                         if (i === data.Awards.length - 1) {
                             awards += '<span class="lastAward' + String(j + 1) + '"><span class="awardsSeparator1"> || </span><span class="awardsSeparator2"> // </span><span class="awardsSeparator3"><br></span></span></span>';
                         } else {
@@ -2629,6 +2682,7 @@ function getTeamData(teamList, year) {
     for (var i = 0; i < teamList.length; i++) {
         teamDataLoadPromises.push(new Promise((resolve, reject) => {
             var req = new XMLHttpRequest();
+            req.teamNumber = teamList[i].teamNumber;
             req.open('GET', apiURL + year + '/teams?teamNumber=' + teamList[i].teamNumber);
             req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
             req.addEventListener('load', function () {
@@ -2645,7 +2699,16 @@ function getTeamData(teamList, year) {
                     }
                 }
             });
-            req.send()
+            req.addEventListener('error', function (errorText) {
+                //console.log(errorText.currentTarget.teamNumber);
+                var data = emptyTeamsResponse;
+                var teamData = data.teams[0];
+                teamData.teamNumber = errorText.currentTarget.teamNumber;
+                $("#teamsTableBody").append(generateTeamTableRow(teamData));
+                eventTeamList.push(data.teams[0]);
+                resolve()
+            });
+            req.send();
         }))
     }
     Promise.all(teamDataLoadPromises).then((value) => {
@@ -3776,6 +3839,7 @@ function handleQualsFiles(e) {
             $("#teamsTable tbody").empty();
             getTeamData(teamList, localStorage.currentYear);
             localStorage.qualsList = JSON.stringify(formattedSchedule);
+            lastSchedulePage = true;
             getHybridSchedule();
             $("#QualsFiles").hide();
             $("#QualsFilesReset").show()
@@ -3852,9 +3916,57 @@ function handlePlayoffFiles(e) {
             }
             formattedSchedule.Schedule = innerSchedule;
             localStorage.playoffList = JSON.stringify(formattedSchedule);
+            lastSchedulePage = true;
             getHybridSchedule();
             $("#PlayoffFiles").hide();
             $("#PlayoffFilesReset").show()
+        };
+        reader.readAsBinaryString(f)
+    }
+}
+
+function handleRanksFiles(e) {
+    "use strict";
+    var rABS = !0;
+    var files = e.target.files;
+    var i, f;
+    for (i = 0; i !== files.length; ++i) {
+        f = files[i];
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var data = e.target.result;
+            var workbook;
+            if (rABS) {
+                workbook = XLSX.read(data, { type: 'binary' })
+            } else {
+                var arr = fixdata(data);
+                workbook = XLSX.read(btoa(arr), { type: 'base64' })
+            }
+            var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+            var ranks = XLSX.utils.sheet_to_json(worksheet, { range: 4 });
+            var innerRanks = [];
+            for (var i = 0; i < ranks.length; i++) {
+                if (ranks[i].Rank) {
+                    var tempRow = {
+                        "rank": ranks[i].Rank,
+                        "teamNumber": ranks[i].Team,
+                        "sortOrder1": ranks[i][3],
+                        "sortOrder2": ranks[i][4],
+                        "sortOrder3": ranks[i][5],
+                        "sortOrder4": ranks[i][6],
+                        "sortOrder5": ranks[i][7],
+                        "sortOrder6": ranks[i][8],
+                        "wins": ranks[i][9].split("-")[0],
+                        "losses": ranks[i][9].split("-")[1],
+                        "ties": ranks[i][9].split("-")[2],
+                        "qualAverage": 0,
+                        "dq": ranks[i].DQ,
+                        "matchesPlayed": ranks[i].Played
+                    };
+                    innerRanks.push(tempRow)
+                }
+            }
+            localStorage.Rankings = JSON.stringify(innerRanks);
         };
         reader.readAsBinaryString(f)
     }

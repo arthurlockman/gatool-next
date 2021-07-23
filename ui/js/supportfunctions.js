@@ -151,7 +151,8 @@ function decompressLocalStorage(target) {
         return value;
 
     } catch (err) {
-        return JSON.parse(LZString.decompress(localStorage[target]));
+        value = JSON.parse(LZString.decompress(localStorage[target]));
+        return value;
     }
 }
 

@@ -161,7 +161,6 @@ function getTeamRanks() {
                     allianceListUnsorted[j] = teamList[j].teamNumber;
                     //team = JSON.parse(localStorage["teamData" + teamList[j].teamNumber]);
                     team = decompressLocalStorage("teamData" + teamList[j].teamNumber);
-
                     team.rank = "";
                     team.sortOrder1 = "";
                     team.sortOrder2 = "";
@@ -197,7 +196,7 @@ function getTeamRanks() {
                     team.rank = data.Rankings[i].rank;
                     allianceTeamList[i] = data.Rankings[i].teamNumber;
                     allianceListUnsorted[i] = data.Rankings[i].teamNumber;
-                    rankingsList = data.Rankings[i].teamNumber;
+                    //rankingsList = data.Rankings[i].teamNumber;
                     team.sortOrder1 = data.Rankings[i].sortOrder1;
                     team.sortOrder2 = data.Rankings[i].sortOrder2;
                     team.sortOrder3 = data.Rankings[i].sortOrder3;

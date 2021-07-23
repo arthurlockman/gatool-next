@@ -75,6 +75,7 @@ function getTeamUpdates(teamNumber, singleton) {
 
 
     });
+
     req.send();
 }
 
@@ -228,7 +229,7 @@ function resetThisAward() {
                 var teamData = decompressLocalStorage("teamData" + localStorage.currentTeam);
                 $("#awardsUpdate").html(teamData.awards);
                 $("#awardsUpdateLabel").removeClass("bg-success");
-                
+
             }
         }]
     });
