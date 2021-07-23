@@ -8,7 +8,6 @@ server.key
 .build/*
 .serverless/*
 dist/*
-package-lock.json
 event.test.json
 
 ui/bracketTest.html
