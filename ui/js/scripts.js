@@ -2142,7 +2142,10 @@ function displayAwardsTeams(teamList) {
     "use strict";
     var column = 1;
     var sortedTeams = [];
-    teamList = JSON.parse(localStorage.teamList);
+    if (typeof teamList === "undefined") {
+        teamList = JSON.parse(localStorage.teamList);
+    }
+    
     for (var j = 0; j < teamList.length; j++) {
         sortedTeams[j] = Number(teamList[j].teamNumber)
     }
@@ -3843,6 +3846,7 @@ function handleQualsFiles(e) {
             getHybridSchedule();
             $("#QualsFiles").hide();
             $("#QualsFilesReset").show()
+            displayAwardsTeams(teamList.slice());
         };
         reader.readAsBinaryString(f)
     }
