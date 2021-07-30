@@ -1182,7 +1182,7 @@ function getRegularSeasonSchedule() {
                 $('#scheduleProgressBar').hide();
                 localStorage.playoffList = JSON.stringify(data);
                 $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"));
-                displayAwardsTeams(allianceListUnsorted.slice(0));
+                //displayAwardsTeams(allianceListUnsorted.slice(0));
                 getAllianceList()
             }
         }
@@ -1537,7 +1537,7 @@ function getTeamList(year) {
                                 getAvatars()
                             }
                             getHybridSchedule();
-                            displayAwardsTeams();
+                            displayAwardsTeams(eventTeamList.slice());
                             lastSchedulePage = !0;
                         })
                             .catch(function (err) {
@@ -1556,7 +1556,7 @@ function getTeamList(year) {
                         getAvatars()
                     }
                     getHybridSchedule();
-                    displayAwardsTeams();
+                    displayAwardsTeams(eventTeamList.slice());
                     lastSchedulePage = !0
                 }
 

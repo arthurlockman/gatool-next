@@ -255,7 +255,6 @@ function getTeamRanks() {
                 $("#backupAllianceTeam8").html("<div id='backupAllianceTeamContainer8' class ='allianceTeam' captain='alliance' teamnumber=" + allianceTeamList[7] + " onclick='allianceAlert(this)'>" + allianceTeamList[7] + "</div>");
 
                 allianceTeamList = sortAllianceTeams(allianceTeamList);
-                displayAwardsTeams(allianceListUnsorted.slice(0));
 
                 $("#rankUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"));
             }
