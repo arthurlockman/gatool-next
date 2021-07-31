@@ -2093,6 +2093,16 @@ function announceDisplay() {
         displayAwards();
     }
 }
+function inEvent(teamNumber) {
+    var teamsInEvent = JSON.parse(localStorage.teamList);
+    var result = false;
+    for (var i = 0; i<teamsInEvent.length; i++) {
+        if (teamsInEvent[i].teamNumber === parseInt(teamNumber)) {
+            result = true;
+        }
+    }
+    return result;
+}
 
 function replaceTeam(station, originalTeam) {
     "use strict";
@@ -2112,8 +2122,9 @@ function replaceTeam(station, originalTeam) {
             action: function (dialogRef) {
                 dialogRef.close();
                 if ($("#substituteTeamUpdate").val()) {
+
                     replacementTeam = $("#substituteTeamUpdate").val();
-                    if (allianceListUnsorted.indexOf(parseInt(replacementTeam)) >= 0) {
+                    if (inEvent(replacementTeam)) {
                         replacementAlliance[station] = replacementTeam
                     } else {
                         BootstrapDialog.show({
@@ -3931,21 +3942,15 @@ function handlePlayoffFiles(e) {
 
 function handleRanksFiles(e) {
     "use strict";
-    var rABS = !0;
     var files = e.target.files;
     var i, f;
     for (i = 0; i !== files.length; ++i) {
         f = files[i];
         var reader = new FileReader();
         reader.onload = function (e) {
-            var data = e.target.result;
+            var data = new Uint8Array(e.target.result);
             var workbook;
-            if (rABS) {
-                workbook = XLSX.read(data, { type: 'binary' })
-            } else {
-                var arr = fixdata(data);
-                workbook = XLSX.read(btoa(arr), { type: 'base64' })
-            }
+            workbook = XLSX.read(data, { type: 'array' });
             var worksheet = workbook.Sheets[workbook.SheetNames[0]];
             var ranks = XLSX.utils.sheet_to_json(worksheet, { range: 4 });
             var innerRanks = [];
@@ -3972,7 +3977,7 @@ function handleRanksFiles(e) {
             }
             localStorage.Rankings = JSON.stringify(innerRanks);
         };
-        reader.readAsBinaryString(f)
+        reader.readAsArrayBuffer(f);
     }
 }
 
