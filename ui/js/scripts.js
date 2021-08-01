@@ -1825,7 +1825,7 @@ function announceDisplay() {
             });
             blueTeams = [blueAlliance[0].captain, blueAlliance[0].round1, blueAlliance[0].round2, blueAlliance[0].round3, blueAlliance[0].backup]
         }
-        if ((currentMatchData.description.split(" ")[0] !== "Qualification") && (currentMatchData.description.split(" ")[0] !== "Einstein") && (Number(localStorage.currentYear) >= 2017)) {
+        if ((currentMatchData.description.split(" ")[0] !== "Qualification") && (currentMatchData.description.split(" ")[0] !== "Einstein") && (currentMatchData.description.split(" ")[0] !== "Round") && (Number(localStorage.currentYear) >= 2017)) {
             $("#matchNameAnnounce").html(parsePlayoffMatchName(currentMatchData.description));
             $("#topMatchNameAnnounce").html(localStorage.eventName + "<br>" + parsePlayoffMatchName(currentMatchData.description));
             $("#matchName").html(parsePlayoffMatchName(currentMatchData.description));
