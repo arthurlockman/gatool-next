@@ -2708,35 +2708,51 @@ function getTeamData(teamList, year) {
                             var teamData = data.teams[0];
                             $("#teamsTableBody").append(generateTeamTableRow(teamData));
                             eventTeamList.push(data.teams[0]);
-                            resolve()
+                            resolve({ teamNumber: req.teamNumber, year: year - 1, retry: false })
                         }
                     }
                 }
                 if (req.status === 502) {
                     var data = emptyTeamsResponse;
                     var teamData = data.teams[0];
-                    teamData.teamNumber = errorText.currentTarget.teamNumber;
+                    teamData.teamNumber = req.teamNumber;
                     $("#teamsTableBody").append(generateTeamTableRow(teamData));
                     eventTeamList.push(data.teams[0]);
-                    resolve()
+                    resolve({ teamNumber: req.teamNumber, year: year - 1, retry: true })
                 }
 
             });
             req.addEventListener('error', function (errorText) {
                 //console.log(errorText.currentTarget.teamNumber);
-                var data = emptyTeamsResponse;
-                var teamData = data.teams[0];
-                teamData.teamNumber = req.teamNumber;
-                $("#teamsTableBody").append(generateTeamTableRow(teamData));
-                eventTeamList.push(data.teams[0]);
-                resolve()
+                if ((parseInt(localStorage.currentYear) - parseInt(year)) > 3) {
+                    var data = emptyTeamsResponse;
+                    var teamData = data.teams[0];
+                    teamData.teamNumber = req.teamNumber;
+                    $("#teamsTableBody").append(generateTeamTableRow(teamData));
+                    eventTeamList.push(data.teams[0]);
+                    resolve({ teamNumber: req.teamNumber, year: year - 1, retry: false })
+                } else {
+                    resolve({ teamNumber: req.teamNumber, year: year - 1, retry: true })
+                }
+
             });
             req.send();
         }))
     }
     Promise.all(teamDataLoadPromises).then((value) => {
-        $('#teamDataTabPicker').removeClass('alert-danger');
-        $('#teamDataTabPicker').addClass('alert-success')
+        var retryList = [];
+        for (var i = 0; i < value.length; i++) {
+            if (value[i].retry == true) {
+                retryList.push(value[i]);
+            }
+        }
+        if (retryList.length > 0) {
+            getTeamData(retryList, retryList[0].year);
+        } else {
+            $('#teamDataTabPicker').removeClass('alert-danger');
+            $('#teamDataTabPicker').addClass('alert-success');
+        }
+
     })
 }
 
