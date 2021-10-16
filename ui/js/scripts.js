@@ -2726,7 +2726,7 @@ function getTeamData(teamList, year) {
                 //console.log(errorText.currentTarget.teamNumber);
                 var data = emptyTeamsResponse;
                 var teamData = data.teams[0];
-                teamData.teamNumber = errorText.currentTarget.teamNumber;
+                teamData.teamNumber = req.teamNumber;
                 $("#teamsTableBody").append(generateTeamTableRow(teamData));
                 eventTeamList.push(data.teams[0]);
                 resolve()
