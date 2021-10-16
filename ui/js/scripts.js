@@ -2096,7 +2096,7 @@ function announceDisplay() {
 function inEvent(teamNumber) {
     var teamsInEvent = JSON.parse(localStorage.teamList);
     var result = false;
-    for (var i = 0; i<teamsInEvent.length; i++) {
+    for (var i = 0; i < teamsInEvent.length; i++) {
         if (teamsInEvent[i].teamNumber === parseInt(teamNumber)) {
             result = true;
         }
@@ -2712,6 +2712,15 @@ function getTeamData(teamList, year) {
                         }
                     }
                 }
+                if (req.status === 502) {
+                    var data = emptyTeamsResponse;
+                    var teamData = data.teams[0];
+                    teamData.teamNumber = errorText.currentTarget.teamNumber;
+                    $("#teamsTableBody").append(generateTeamTableRow(teamData));
+                    eventTeamList.push(data.teams[0]);
+                    resolve()
+                }
+
             });
             req.addEventListener('error', function (errorText) {
                 //console.log(errorText.currentTarget.teamNumber);
