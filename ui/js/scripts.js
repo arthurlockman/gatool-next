@@ -2749,6 +2749,7 @@ function getTeamData(teamList, year) {
         if (retryList.length > 0) {
             getTeamData(retryList, retryList[0].year);
         } else {
+            displayAwardsTeams(eventTeamList.slice());
             $('#teamDataTabPicker').removeClass('alert-danger');
             $('#teamDataTabPicker').addClass('alert-success');
         }
