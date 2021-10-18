@@ -1340,6 +1340,7 @@ function handleMatchSelection(element) {
 function updateTeamTable() {
     "use strict";
     var teamData = eventTeamList.slice(0);
+    teamData.sort((a,b) => parseInt(a.teamNumber)-parseInt(b.teamNumber));
     $("#teamsTableBody").empty();
     for (var i = 0; i < teamData.length; i++) {
         var element = teamData[i];
@@ -2750,6 +2751,7 @@ function getTeamData(teamList, year) {
             getTeamData(retryList, retryList[0].year);
         } else {
             displayAwardsTeams(eventTeamList.slice());
+            localStorage.teamList = JSON.stringify(eventTeamList);
             $('#teamDataTabPicker').removeClass('alert-danger');
             $('#teamDataTabPicker').addClass('alert-success');
         }
@@ -3779,6 +3781,7 @@ function awardsHilight(awardName) {
 function handleQualsFiles(e) {
     "use strict";
     var files = e.target.files;
+    eventTeamList = [];
     var i, f;
     for (i = 0; i !== files.length; ++i) {
         f = files[i];
@@ -3878,13 +3881,16 @@ function handleQualsFiles(e) {
             }
             $("#eventTeamCount").html(teamList.length);
             $('#teamsListEventName').html(localStorage.eventName);
+            teamCountTotal = teamList.length;
+            $('#teamsTableEventName').html(localStorage.eventName);
             $("#teamsTable tbody").empty();
             getTeamData(teamList, localStorage.currentYear);
             localStorage.qualsList = JSON.stringify(formattedSchedule);
             lastSchedulePage = true;
             getHybridSchedule();
             $("#QualsFiles").hide();
-            $("#QualsFilesReset").show()
+            $("#QualsFilesReset").show();
+            $("#teamsTableBody").empty();
             displayAwardsTeams(teamList.slice());
         };
         reader.readAsArrayBuffer(f);
