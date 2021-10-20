@@ -47,8 +47,8 @@ function getTeamUpdates(teamNumber, singleton) {
                         title: 'OK',
                         action: function (dialogRef) {
                             dialogRef.close();
-                            updateTeamTable();
                             updateTeamInfo(teamNumber);
+                            updateTeamTable();
                         }
                     }]
                 });
