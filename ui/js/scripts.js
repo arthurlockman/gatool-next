@@ -687,6 +687,9 @@ function handleEventSelection() {
     var data = JSON.parse(e.value);
     localStorage.eventSelector = data.code;
     localStorage.currentEvent = data.code;
+    if (!data.name) {
+        data.name = data.code;
+    }
 
     $('#eventCodeContainer').html(data.code);
     $('#districtCodeContainer').html(data.districtCode || "Regional Event");
@@ -978,6 +981,7 @@ function showAllianceSelection() {
 function getRegularSeasonSchedule() {
     "use strict";
     $("#scheduleUpdateContainer").html("Loading schedule data...");
+    $("#rankUpdateContainer").html("Loading ranking data...");
     $('#scheduleTabPicker').addClass('alert-danger');
     var matchSchedule = "";
     var matchPicker = "";
@@ -1355,6 +1359,7 @@ function getTeamList(year) {
     "use strict";
     $("#teamDataTabPicker").addClass("alert-danger");
     $("#teamUpdateContainer").html("Loading team data...");
+    $("#teamsTableBody").empty();
     eventTeamList = [];
     var req = new XMLHttpRequest();
     var endpoint = "/teams?eventCode=";
@@ -1373,7 +1378,6 @@ function getTeamList(year) {
             var data = {};
             $('#teamloadprogress').show();
             $('#teamProgressBar').show();
-            $("#teamsTableBody").empty()
 
             if (req.responseText.includes('"teams":')) {
                 data = JSON.parse(req.responseText)
@@ -1393,7 +1397,8 @@ function getTeamList(year) {
 
                 for (var i = 0; i < data.teams.length; i++) {
                     var element = data.teams[i];
-                    $('#teamsTableBody').append(generateTeamTableRow(element));
+                    fixSponsors(element);
+                    
                     eventTeamList.push(data.teams[i])
                 }
                 for (var j = 0; j < eventTeamList.length; j++) {
@@ -1507,7 +1512,7 @@ function getTeamList(year) {
 
                                 }
                                 if (index < 0) {
-                                    $('#teamsTableBody').append(generateTeamTableRow(value[i]));
+                                    fixSponsors(value[i]);
                                     var team = decompressLocalStorage("teamData" + value[i].teamNumber);
                                     team.rank = "";
                                     team.alliance = "";
@@ -1539,6 +1544,7 @@ function getTeamList(year) {
                             }
                             getHybridSchedule();
                             displayAwardsTeams(eventTeamList.slice());
+                            updateTeamTable();
                             lastSchedulePage = !0;
                         })
                             .catch(function (err) {
@@ -2681,6 +2687,7 @@ function getTeamAwards(teamNumber, year) {
             teamLoadProgressBar = 0;
             $('#teamloadprogressbar').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
             $('#teamProgressBarLoading').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%")
+            updateTeamTable();
         }
 
 
@@ -2707,7 +2714,7 @@ function getTeamData(teamList, year) {
                         var data = JSON.parse(req.responseText);
                         if (data.teams.length > 0) {
                             var teamData = data.teams[0];
-                            $("#teamsTableBody").append(generateTeamTableRow(teamData));
+                            fixSponsors(teamData);
                             eventTeamList.push(data.teams[0]);
                             resolve({ teamNumber: req.teamNumber, year: year - 1, retry: false })
                         }
@@ -2717,7 +2724,7 @@ function getTeamData(teamList, year) {
                     var data = emptyTeamsResponse;
                     var teamData = data.teams[0];
                     teamData.teamNumber = req.teamNumber;
-                    $("#teamsTableBody").append(generateTeamTableRow(teamData));
+                    fixSponsors(teamData);
                     eventTeamList.push(data.teams[0]);
                     resolve({ teamNumber: req.teamNumber, year: year - 1, retry: true })
                 }
@@ -2729,7 +2736,7 @@ function getTeamData(teamList, year) {
                     var data = emptyTeamsResponse;
                     var teamData = data.teams[0];
                     teamData.teamNumber = req.teamNumber;
-                    $("#teamsTableBody").append(generateTeamTableRow(teamData));
+                    fixSponsors(teamData);
                     eventTeamList.push(data.teams[0]);
                     resolve({ teamNumber: req.teamNumber, year: year - 1, retry: false })
                 } else {
@@ -2754,6 +2761,7 @@ function getTeamData(teamList, year) {
             localStorage.teamList = JSON.stringify(eventTeamList);
             $('#teamDataTabPicker').removeClass('alert-danger');
             $('#teamDataTabPicker').addClass('alert-success');
+            updateTeamTable();
         }
 
     })
@@ -3043,10 +3051,9 @@ function updateTeamTableRow(teamData) {
     return returnData + '</tr>'
 }
 
-function generateTeamTableRow(teamData) {
+function fixSponsors(teamData) {
     "use strict";
     var teamInfo = {};
-    var avatar = "";
     if (typeof (localStorage["teamData" + teamData.teamNumber]) !== 'undefined') {
         teamInfo = decompressLocalStorage("teamData" + teamData.teamNumber);
         if (typeof teamInfo.cityStateSort === "undefined") {
@@ -3108,8 +3115,6 @@ function generateTeamTableRow(teamData) {
             "teamYearsNoCompeteLocal": ""
         }
     }
-    var returnData = "";
-    var robotName = "";
     var organization = "";
     var sponsors = "";
     var topSponsors = "";
@@ -3163,68 +3168,11 @@ function generateTeamTableRow(teamData) {
             organization = organizationArray.join(" & ")
         }
     }
-    var lastVisit = "";
-    if (teamInfo.lastVisit === "No recent visit") {
-        lastVisit = "No recent visit"
-    } else {
-        lastVisit = moment(teamInfo.lastVisit).fromNow();
-    }
-    returnData += '<tr class="teamsTableRow"><td class = "btn-default';
-    if (lastVisit !== "No recent visit") {
-        returnData += " btn-success";
-    }
-    returnData += '" id="teamTableNumber' + teamData.teamNumber + '" onclick="updateTeamInfo(' + teamData.teamNumber + ')"><span class="teamDataNumber">' + teamData.teamNumber + '</span><br><span id="lastVisit' + teamData.teamNumber + '" teamNumber = "' + teamData.teamNumber + '" lastvisit = "' + teamInfo.lastVisit + '">' + lastVisit + '</span></td>';
-    returnData += '<td id="teamTableRank' + teamData.teamNumber + '" class="rank0"></td>';
-    if ((teamInfo.avatar !== "null") && (Number(localStorage.currentYear) >= 2018)) {
-        avatar = '<img src="https://www.gatool.org/' + teamInfo.avatar + '">&nbsp;'
-    }
-    if (teamInfo.nameShortLocal === "") {
-        returnData += '<td id="teamTableName' + teamData.teamNumber + '">' + '<span id="avatar' + teamData.teamNumber + '">' + avatar + '</span><span class="teamTableName">' + teamInfo.nameShort + '</span></td>'
-    } else {
-        returnData += '<td  class="bg-success" id="teamTableName' + teamData.teamNumber + '">' + '<span id="avatar' + teamData.teamNumber + '">' + avatar + '</span><span class="teamTableName">' + teamInfo.nameShortLocal + '</span></td>'
-    }
-    if (teamInfo.cityStateLocal === "") {
-        returnData += '<td id="teamTableCityState' + teamData.teamNumber + '">' + teamData.city + ", " + teamData.stateProv + '<span class="cityStateSort">' + teamInfo.cityStateSort + '</span></td>'
-    } else {
-        returnData += '<td  class="bg-success" id="teamTableCityState' + teamData.teamNumber + '">' + teamInfo.cityStateLocal + '<span class="cityStateSort">' + teamInfo.cityStateSort + '</span></td>'
-    }
-    if (teamInfo.topSponsorsLocal === "") {
-        returnData += '<td id="teamTableNameFull' + teamData.teamNumber + '">' + topSponsors + '</td>'
-    } else {
-        returnData += '<td  class="bg-success" id="teamTableNameFull' + teamData.teamNumber + '">' + teamInfo.topSponsorsLocal + '</td>'
-    }
-    if (teamInfo.organizationLocal === "") {
-        returnData += '<td id="teamTableOrganization' + teamData.teamNumber + '">' + organization + '</td>'
-    } else {
-        returnData += '<td  class="bg-success" id="teamTableNameOrganization' + teamData.teamNumber + '">' + teamInfo.organizationLocal + '</td>'
-    }
-    if (Number(teamInfo.teamYearsNoCompeteLocal) > 0) {
-        returnData += '<td class="bg-success"  id="teamTableRookieYear' + teamData.teamNumber + '">' + rookieYearDisplay(teamData.rookieYear, teamInfo.teamYearsNoCompeteLocal) + '</td>';
-    }
-    else {
-        returnData += '<td id="teamTableRookieYear' + teamData.teamNumber + '">' + rookieYearDisplay(teamData.rookieYear, teamInfo.teamYearsNoCompeteLocal) + '</td>';
-    }
-    if ((teamData.robotName === null) && (teamInfo.robotNameLocal === "")) {
-        returnData += '<td id="teamTableRobotName' + teamData.teamNumber + '">' + "No robot name reported" + '</td>'
-    } else {
-        if (teamInfo.robotNameLocal === "") {
-            returnData += '<td id="teamTableRobotName' + teamData.teamNumber + '">' + teamData.robotName + '</td>'
-        } else {
-            returnData += '<td  class="bg-success" id="teamTableRobotName' + teamData.teamNumber + '">' + teamInfo.robotNameLocal + '</td>'
-        }
-        robotName = teamData.robotName
-    }
-    if (teamInfo.teamNotes) {
-        returnData += '<td class="bg-success" id="teamTableNotes' + teamData.teamNumber + '">' + teamInfo.teamNotes + '</td>'
-    } else {
-        returnData += '<td id="teamTableNotes' + teamData.teamNumber + '">No additional notes</td>'
-    }
-    returnData += '<td class = "cityStateSort">' + teamInfo.cityStateSort + '</td>';
     teamInfo.sponsors = sponsors;
     teamInfo.topSponsors = topSponsors;
     teamInfo.organization = organization;
     compressLocalStorage("teamData" + teamData.teamNumber, teamInfo);
-    return returnData + '</tr>'
+    return teamInfo;
 }
 
 function teamTableRankHighlight(rank) {
@@ -3800,7 +3748,7 @@ function handleQualsFiles(e) {
             var teamToInsert = {};
             var matchNumber = 0;
             localStorage.eventName = worksheet1["B3"].v;
-
+            localStorage.eventCode = worksheet1["B3"].v;
             for (var i = 0; i < schedule.length; i++) {
                 if (schedule[i]["Red 1"]) {
                     matchNumber++;
@@ -3881,6 +3829,10 @@ function handleQualsFiles(e) {
             }
             $("#eventTeamCount").html(teamList.length);
             $('#teamsListEventName').html(localStorage.eventName);
+            $('#eventName').html(localStorage.eventName);
+            $('#eventCodeContainer').html(localStorage.eventCode);
+            $('#districtCodeContainer').html("Offseason Event"); 
+            $('#eventLocationContainer').html("Offseason Event");
             teamCountTotal = teamList.length;
             $('#teamsTableEventName').html(localStorage.eventName);
             $("#teamsTable tbody").empty();
@@ -3890,7 +3842,7 @@ function handleQualsFiles(e) {
             getHybridSchedule();
             $("#QualsFiles").hide();
             $("#QualsFilesReset").show();
-            $("#teamsTableBody").empty();
+            updateTeamTable();
             displayAwardsTeams(teamList.slice());
         };
         reader.readAsArrayBuffer(f);
