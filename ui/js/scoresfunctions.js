@@ -139,9 +139,10 @@ function getHighScores() {
 
 function getTeamRanks() {
     "use strict";
-    $("#rankUpdateContainer").html("Loading ranking data...");
     if (localStorage.offseason == "true") {
         $('#rankUpdateContainer').html("Offline Event");
+    } else {
+        $("#rankUpdateContainer").html("Loading ranking data...");
     }
     $('#ranksProgressBar').show();
     $('#teamRanksPicker').addClass('alert-danger');
