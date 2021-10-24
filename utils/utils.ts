@@ -63,7 +63,7 @@ const GetDataFromTBA = async (path: string): Promise<ResponseWithHeaders> => {
 const GetDataFromFIRST = async (path: string): Promise<ResponseWithHeaders> => {
     const options = {
         method: 'GET',
-        uri: 'https://frc-api.firstinspires.org/v2.0/' + path,
+        uri: 'https://frc-api.firstinspires.org/v3.0/' + path,
         json: true,
         headers: {
             'Authorization': process.env.FRC_API_KEY,
