@@ -3556,8 +3556,13 @@ function parsePlayoffMatchName(matchName) {
         } else {
             var tiebreaker = {};
             tiebreaker.advantage = "No advantage<br>";
-            tiebreaker.tiebreaker = playoffResultsDetails[String(currentMatchData.matchNumber - 4)].tiebreaker;
-            tiebreaker.tiebreakerLevel = playoffResultsDetails[String(currentMatchData.matchNumber - 4)].tiebreakerLevel;
+            if (localStorage.offseason === "false") {
+                tiebreaker.tiebreaker = playoffResultsDetails[String(currentMatchData.matchNumber - 4)].tiebreaker;
+                tiebreaker.tiebreakerLevel = playoffResultsDetails[String(currentMatchData.matchNumber - 4)].tiebreakerLevel;
+            } else {
+                tiebreaker.advantage = "Offseason Event<br>";
+            }
+            
             if (tiebreaker.tiebreaker === "Red") {
                 tiebreaker.advantage = "<span class='redScoreWin'>Advantage Red (L" + tiebreaker.tiebreakerLevel + ")</span><br>";
             } else if (tiebreaker.tiebreaker === "Blue") {
