@@ -3766,32 +3766,32 @@ function handleQualsFiles(e) {
                         "scoreBlueFoul": "",
                         "scoreBlueAuto": "",
                         "teams": [{
-                            "teamNumber": schedule[i]["Red 1"],
+                            "teamNumber": removeSurrogate(schedule[i]["Red 1"]),
                             "station": "Red1",
                             "surrogate": !1,
                             "dq": !1
                         }, {
-                            "teamNumber": schedule[i]["Red 2"],
+                            "teamNumber": removeSurrogate(schedule[i]["Red 2"]),
                             "station": "Red2",
                             "surrogate": !1,
                             "dq": !1
                         }, {
-                            "teamNumber": schedule[i]["Red 3"],
+                            "teamNumber": removeSurrogate(schedule[i]["Red 3"]),
                             "station": "Red3",
                             "surrogate": !1,
                             "dq": !1
                         }, {
-                            "teamNumber": schedule[i]["Blue 1"],
+                            "teamNumber": removeSurrogate(schedule[i]["Blue 1"]),
                             "station": "Blue1",
                             "surrogate": !1,
                             "dq": !1
                         }, {
-                            "teamNumber": schedule[i]["Blue 2"],
+                            "teamNumber": removeSurrogate(schedule[i]["Blue 2"]),
                             "station": "Blue2",
                             "surrogate": !1,
                             "dq": !1
                         }, {
-                            "teamNumber": schedule[i]["Blue 3"],
+                            "teamNumber": removeSurrogate(schedule[i]["Blue 3"]),
                             "station": "Blue3",
                             "surrogate": !1,
                             "dq": !1
@@ -3849,6 +3849,13 @@ function handleQualsFiles(e) {
     }
 }
 
+function removeSurrogate(teamNumber) {
+    if (typeof teamNumber == "string") {
+        teamNumber = Number(teamNumber.replace("*",""));
+    }
+    return teamNumber;
+}
+
 function handlePlayoffFiles(e) {
     "use strict";
     var files = e.target.files;
@@ -3883,31 +3890,31 @@ function handlePlayoffFiles(e) {
                         "scoreBlueFoul": "",
                         "scoreBlueAuto": "",
                         "teams": [{
-                            "teamNumber": schedule[i]["Red 1"],
+                            "teamNumber": removeSurrogate(schedule[i]["Red 1"]),
                             "station": "Red1",
                             "surrogate": !1,
                             "dq": !1
                         }, {
-                            "teamNumber": schedule[i]["Red 2"],
+                            "teamNumber": removeSurrogate(schedule[i]["Red 2"]),
                             "station": "Red2",
                             "surrogate": !1,
                             "dq": !1
                         }, {
-                            "teamNumber": schedule[i]["Red 3"],
+                            "teamNumber": removeSurrogate(schedule[i]["Red 3"]),
                             "station": "Red3",
                             "surrogate": !1,
                             "dq": !1
                         }, {
-                            "teamNumber": schedule[i]["Blue 1"],
+                            "teamNumber": removeSurrogate(schedule[i]["Blue 1"]),
                             "station": "Blue1",
                             "surrogate": !1,
                             "dq": !1
                         }, {
-                            "teamNumber": schedule[i]["Blue 2"],
+                            "teamNumber": removeSurrogate(schedule[i]["Blue 2"]),
                             "station": "Blue2",
                             "surrogate": !1,
                             "dq": !1
-                        }, { "teamNumber": schedule[i]["Blue 3"], "station": "Blue3", "surrogate": !1, "dq": !1 }]
+                        }, { "teamNumber": removeSurrogate(schedule[i]["Blue 3"]), "station": "Blue3", "surrogate": !1, "dq": !1 }]
                     };
                     innerSchedule.push(tempRow);
                 }
