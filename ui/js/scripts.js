@@ -1344,7 +1344,7 @@ function handleMatchSelection(element) {
 function updateTeamTable() {
     "use strict";
     var teamData = eventTeamList.slice(0);
-    teamData.sort((a,b) => parseInt(a.teamNumber)-parseInt(b.teamNumber));
+    teamData.sort((a, b) => parseInt(a.teamNumber) - parseInt(b.teamNumber));
     $("#teamsTableBody").empty();
     for (var i = 0; i < teamData.length; i++) {
         var element = teamData[i];
@@ -1398,7 +1398,7 @@ function getTeamList(year) {
                 for (var i = 0; i < data.teams.length; i++) {
                     var element = data.teams[i];
                     fixSponsors(element);
-                    
+
                     eventTeamList.push(data.teams[i])
                 }
                 for (var j = 0; j < eventTeamList.length; j++) {
@@ -1871,8 +1871,8 @@ function announceDisplay() {
                 currentMatchData.teams[ii] = { "teamNumber": blueTeams[0] }
             }
             var teamData = decompressLocalStorage("teamData" + currentMatchData.teams[ii].teamNumber);
-            $('#' + stationList[ii] + 'TeamNumber').html("<b>" + currentMatchData.teams[ii].teamNumber + "</b>");
-            $('#' + stationList[ii] + 'PlaybyPlayteamNumber' + ', #' + stationList[ii] + 'PlaybyPlayteamNumberSwap').html(currentMatchData.teams[ii].teamNumber);
+            $('#' + stationList[ii] + 'TeamNumber').html(`<b>${currentMatchData.teams[ii].teamNumber}${currentMatchData.teams[ii].surrogate ? '*' : ''}</b>`);
+            $(`#${stationList[ii]}PlaybyPlayteamNumber, #${stationList[ii]}PlaybyPlayteamNumberSwap`).html(`${currentMatchData.teams[ii].teamNumber}${currentMatchData.teams[ii].surrogate ? '*' : ''}`);
             inHallOfFame(currentMatchData.teams[ii].teamNumber, stationList[ii]);
             if ((localStorage.currentMatch > qualsList.Schedule.length) || inChamps() || (inMiChamps() && (localStorage.currentYear >= 2017))) {
                 document.getElementById(stationList[ii] + 'TeamNumber').setAttribute("onclick", "replaceTeam('" + stationList[ii] + "','" + currentMatchData.teams[ii].teamNumber + "')");
@@ -3537,73 +3537,92 @@ function parsePlayoffMatchName(matchName) {
     var matchArray = matchName.split(" ");
     if (matchName.indexOf("iebreaker") >= 0) {
         if (matchArray[0] === "Tiebreaker") {
-            return matchArray[0] + " " + (matchArray[1] || "")
+            return `${matchArray[0]} ${matchArray[1] || ""}`
         } else {
-            return matchArray[1] + " " + (matchArray[2] || "")
+            return `${matchArray[1]} ${matchArray[2] || ""}`
         }
 
     }
     if ((matchArray[0] === "Quarterfinal") && (matchArray[1] <= 4)) {
-        return "Quarterfinal " + matchArray[1] + " Match 1"
+        return `Quarterfinal ${matchArray[1]} Match 1`
     }
     if ((matchArray[0] === "Quarterfinal") && (matchArray[1] > 4)) {
         if (playoffResults["Quarterfinal " + (matchArray[1] - 4)] === "Red") {
-            return "Quarterfinal " + (matchArray[1] - 4) + " Match 2 <br><span class='redScoreWin'>Advantage " + playoffResults["Quarterfinal " + (matchArray[1] - 4)] + "</span>"
+            return `Quarterfinal ${matchArray[1] - 4} Match 2 <br><span class='redScoreWin'>Advantage ${playoffResults["Quarterfinal " + (matchArray[1] - 4)]}</span>`
         } else if (playoffResults["Quarterfinal " + (matchArray[1] - 4)] === "Blue") {
-            return "Quarterfinal " + (matchArray[1] - 4) + " Match 2 <br><span class='blueScoreWin'>Advantage " + playoffResults["Quarterfinal " + (matchArray[1] - 4)] + "</span>"
+            return `Quarterfinal ${matchArray[1] - 4} Match 2 <br><span class='blueScoreWin'>Advantage ${playoffResults["Quarterfinal " + (matchArray[1] - 4)]}</span>`
         } else if (playoffResults["Quarterfinal " + (matchArray[1] - 4)] === "No results yet") {
-            return "Quarterfinal " + (matchArray[1] - 4) + " Match 2 <br>First match not reported yet"
+            return `Quarterfinal ${matchArray[1] - 4} Match 2 <br>First match not reported yet`
         } else {
-            var tiebreaker = {};
-            tiebreaker.advantage = "No advantage<br>";
+            var tiebreaker = {
+                tiebreaker: "Tie",
+                advantage: "No advantage<br>"
+            };
             if (localStorage.offseason === "false") {
                 tiebreaker.tiebreaker = playoffResultsDetails[String(currentMatchData.matchNumber - 4)].tiebreaker;
                 tiebreaker.tiebreakerLevel = playoffResultsDetails[String(currentMatchData.matchNumber - 4)].tiebreakerLevel;
             } else {
                 tiebreaker.advantage = "Offseason Event<br>";
             }
-            
+
             if (tiebreaker.tiebreaker === "Red") {
                 tiebreaker.advantage = "<span class='redScoreWin'>Advantage Red (L" + tiebreaker.tiebreakerLevel + ")</span><br>";
             } else if (tiebreaker.tiebreaker === "Blue") {
                 tiebreaker.advantage = "<span class='blueScoreWin'>Advantage Blue (L" + tiebreaker.tiebreakerLevel + ")</span><br>";
             }
-            return "Quarterfinal " + (matchArray[1] - 4) + " Match 2 <br>" + tiebreaker.advantage + "First match tied";
+            if (localStorage.offseason === "false") {
+                return `Quarterfinal ${matchArray[1] - 4} Match 2 <br>${tiebreaker.advantage}First match tied`;
+            } else {
+                return `Quarterfinal ${matchArray[1] - 4} Match 2`;
+            }
+
         }
     }
     if ((matchArray[0] === "Semifinal") && (matchArray[1] <= 2)) {
-        return "Semifinal " + matchArray[1] + " Match 1"
+        return `Semifinal ${matchArray[1]} Match 1`
     }
     if ((matchArray[0] === "Semifinal") && (matchArray[1] > 2)) {
         if (playoffResults["Semifinal " + (matchArray[1] - 2)] === "Red") {
-            return "Semifinal " + (matchArray[1] - 2) + " Match 2<br><span class='redScoreWin'>Advantage " + playoffResults["Semifinal " + (matchArray[1] - 2)] + "</span>"
+            return `Semifinal ${matchArray[1] - 2} Match 2<br><span class='redScoreWin'>Advantage ${playoffResults["Semifinal " + (matchArray[1] - 2)]}</span>`
         } else if (playoffResults["Semifinal " + (matchArray[1] - 2)] === "Blue") {
-            return "Semifinal " + (matchArray[1] - 2) + " Match 2<br><span class='blueScoreWin'>Advantage " + playoffResults["Semifinal " + (matchArray[1] - 2)] + "</span>"
+            return `Semifinal ${matchArray[1] - 2} Match 2<br><span class='blueScoreWin'>Advantage ${playoffResults["Semifinal " + (matchArray[1] - 2)]}</span>`
         } else if (playoffResults["Semifinal " + (matchArray[1] - 2)] === "No results yet") {
-            return "Semifinal " + (matchArray[1] - 2) + " Match 2<br>First match not reported yet"
+            return `Semifinal ${matchArray[1] - 2} Match 2<br>First match not reported yet`
         } else {
-            var tiebreaker = {};
-            tiebreaker.advantage = "No advantage<br>";
-            tiebreaker.tiebreaker = playoffResultsDetails[String(currentMatchData.matchNumber - 2)].tiebreaker;
-            tiebreaker.tiebreakerLevel = playoffResultsDetails[String(currentMatchData.matchNumber - 2)].tiebreakerLevel;
+            var tiebreaker = {
+                tiebreaker: "Tie",
+                advantage: "No advantage<br>"
+            };
+            if (localStorage.offseason === "false") {
+                tiebreaker.tiebreaker = playoffResultsDetails[String(currentMatchData.matchNumber - 2)].tiebreaker;
+                tiebreaker.tiebreakerLevel = playoffResultsDetails[String(currentMatchData.matchNumber - 2)].tiebreakerLevel;
+            }
+
             if (tiebreaker.tiebreaker === "Red") {
                 tiebreaker.advantage = "<span class='redScoreWin'>Advantage Red (L" + tiebreaker.tiebreakerLevel + ")</span><br>";
             } else if (tiebreaker.tiebreaker === "Blue") {
                 tiebreaker.advantage = "<span class='blueScoreWin'>Advantage Blue (L" + tiebreaker.tiebreakerLevel + ")</span><br>";
             }
-            return "Semifinal " + (matchArray[1] - 2) + " Match 2 <br>" + tiebreaker.advantage + "First match tied";
+            if (localStorage.offseason === "false") {
+                return `Semifinal ${matchArray[1] - 2} Match 2 <br>${tiebreaker.advantage}First match tied`;
+            } else {
+                return `Semifinal ${matchArray[1] - 2} Match 2`;
+            }
+
         }
     }
     if (matchArray[0] === "Final") {
         if (matchArray[1] === "2") {
             if (playoffResults["Final 1"] === "Red") {
-                return matchArray[0] + " " + (matchArray[1] || "") + "<br><span class='redScoreWin'>Advantage Red</span>"
+                return `${matchArray[0]} ${matchArray[1] || ""}<br><span class='redScoreWin'>Advantage Red</span>`
             } else if (playoffResults["Final 1"] === "Blue") {
-                return matchArray[0] + " " + (matchArray[1] || "") + "<br><span class='blueScoreWin'>Advantage Blue</span>"
+                return `${matchArray[0]} ${matchArray[1] || ""}<br><span class='blueScoreWin'>Advantage Blue</span>`
             } else if (playoffResults["Final 1"] === "No results yet") {
-                return matchArray[0] + " " + (matchArray[1] || "") + "<br>First match not reported yet"
+                return `${matchArray[0]} ${matchArray[1] || ""}<br>First match not reported yet`
+            } else if (localStorage.offseason === "true") {
+                return `${matchArray[0]} ${matchArray[1] || ""}`
             } else {
-                return matchArray[0] + " " + (matchArray[1] || "") + "<br>First match tied"
+                return `${matchArray[0]} ${matchArray[1] || ""}<br>First match tied`
             }
         }
         return matchArray[0] + " " + (matchArray[1] || "")
@@ -3773,32 +3792,32 @@ function handleQualsFiles(e) {
                         "teams": [{
                             "teamNumber": removeSurrogate(schedule[i]["Red 1"]),
                             "station": "Red1",
-                            "surrogate": !1,
+                            "surrogate": (schedule[i]["Red 1"].includes("*")) ? !0 : !1,
                             "dq": !1
                         }, {
                             "teamNumber": removeSurrogate(schedule[i]["Red 2"]),
                             "station": "Red2",
-                            "surrogate": !1,
+                            "surrogate": (schedule[i]["Red 2"].includes("*")) ? !0 : !1,
                             "dq": !1
                         }, {
                             "teamNumber": removeSurrogate(schedule[i]["Red 3"]),
                             "station": "Red3",
-                            "surrogate": !1,
+                            "surrogate": (schedule[i]["Red 3"].includes("*")) ? !0 : !1,
                             "dq": !1
                         }, {
                             "teamNumber": removeSurrogate(schedule[i]["Blue 1"]),
                             "station": "Blue1",
-                            "surrogate": !1,
+                            "surrogate": (schedule[i]["Blue 1"].includes("*")) ? !0 : !1,
                             "dq": !1
                         }, {
                             "teamNumber": removeSurrogate(schedule[i]["Blue 2"]),
                             "station": "Blue2",
-                            "surrogate": !1,
+                            "surrogate": (schedule[i]["Blue 2"].includes("*")) ? !0 : !1,
                             "dq": !1
                         }, {
                             "teamNumber": removeSurrogate(schedule[i]["Blue 3"]),
                             "station": "Blue3",
-                            "surrogate": !1,
+                            "surrogate": (schedule[i]["Blue 3"].includes("*")) ? !0 : !1,
                             "dq": !1
                         }]
                     };
@@ -3835,8 +3854,9 @@ function handleQualsFiles(e) {
             $("#eventTeamCount").html(teamList.length);
             $('#teamsListEventName').html(localStorage.eventName);
             $('#eventName').html(localStorage.eventName);
+            $('#eventNameAwards').html(localStorage.eventName);
             $('#eventCodeContainer').html(localStorage.eventCode);
-            $('#districtCodeContainer').html("Offseason Event"); 
+            $('#districtCodeContainer').html("Offseason Event");
             $('#eventLocationContainer').html("Offseason Event");
             teamCountTotal = teamList.length;
             $('#teamsTableEventName').html(localStorage.eventName);
@@ -3855,8 +3875,8 @@ function handleQualsFiles(e) {
 }
 
 function removeSurrogate(teamNumber) {
-    if (typeof teamNumber == "string") {
-        teamNumber = Number(teamNumber.replace("*",""));
+    if (teamNumber.includes("*")) {
+        teamNumber = Number(teamNumber.replace("*", ""));
     }
     return teamNumber;
 }
@@ -3897,29 +3917,34 @@ function handlePlayoffFiles(e) {
                         "teams": [{
                             "teamNumber": removeSurrogate(schedule[i]["Red 1"]),
                             "station": "Red1",
-                            "surrogate": !1,
+                            "surrogate": (schedule[i]["Red 1"].includes("*")) ? !0 : !1,
                             "dq": !1
                         }, {
                             "teamNumber": removeSurrogate(schedule[i]["Red 2"]),
                             "station": "Red2",
-                            "surrogate": !1,
+                            "surrogate": (schedule[i]["Red 2"].includes("*")) ? !0 : !1,
                             "dq": !1
                         }, {
                             "teamNumber": removeSurrogate(schedule[i]["Red 3"]),
                             "station": "Red3",
-                            "surrogate": !1,
+                            "surrogate": (schedule[i]["Red 3"].includes("*")) ? !0 : !1,
                             "dq": !1
                         }, {
                             "teamNumber": removeSurrogate(schedule[i]["Blue 1"]),
                             "station": "Blue1",
-                            "surrogate": !1,
+                            "surrogate": (schedule[i]["Blue 1"].includes("*")) ? !0 : !1,
                             "dq": !1
                         }, {
                             "teamNumber": removeSurrogate(schedule[i]["Blue 2"]),
                             "station": "Blue2",
-                            "surrogate": !1,
+                            "surrogate": (schedule[i]["Blue 2"].includes("*")) ? !0 : !1,
                             "dq": !1
-                        }, { "teamNumber": removeSurrogate(schedule[i]["Blue 3"]), "station": "Blue3", "surrogate": !1, "dq": !1 }]
+                        }, { 
+                            "teamNumber": removeSurrogate(schedule[i]["Blue 3"]),
+                            "station": "Blue3", 
+                            "surrogate": (schedule[i]["Blue 3"].includes("*")) ? !0 : !1, 
+                            "dq": !1 
+                        }]
                     };
                     innerSchedule.push(tempRow);
                 }
