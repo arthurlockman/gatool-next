@@ -2645,6 +2645,18 @@ function getTeamAwards(teamNumber, year) {
     var handleAllPromises = Promise.all(promisesArray);
 
     handleAllPromises.then(function (values) {
+        for (var k = 0; k < 3; k++) {
+            let items = specialAwards.filter(item => item.Year == (parseInt(year) - k));
+            if (items.length > 0) {
+                let teamAwards = items[0].Awards.filter(item => item.teamNumber == teamNumber);
+                if (teamAwards.length > 0) {
+                    let currentAwards = JSON.parse(values[k]);
+                    currentAwards.Awards = currentAwards.Awards.concat(teamAwards);
+                    values[k] = JSON.stringify(currentAwards);
+                }
+            }
+        }
+
         for (var j = 0; j < values.length; j++) {
             if (values[j] !== null) {
                 data = JSON.parse(values[j]);
@@ -3744,7 +3756,7 @@ function davidPriceFormat(priceMatchData) {
 
 function awardsHilight(awardName) {
     "use strict";
-    if (awardName === "District Chairman's Award" || awardName === "District Event Winner" || awardName === "District Event Finalist" || awardName === "Regional Engineering Inspiration Award" || awardName === "District Engineering Inspiration Award" || awardName === "District Championship Finalist" || awardName === "District Championship Winner" || awardName === "Regional Winners" || awardName === "Regional Finalists" || awardName === "Regional Chairman's Award" || awardName === "FIRST Dean's List Finalist Award" || awardName === "Championship Subdivision Winner" || awardName === "Championship Subdivision Finalist" || awardName === "Championship Winner" || awardName === "Championship Finalist" || awardName === "Chairman's Award" || awardName === "Chairman's Award Finalist" || awardName === "FIRST Dean's List Award" || awardName === "Woodie Flowers Award") {
+    if (awardName === "District Chairman's Award" || awardName === "District Event Winner" || awardName === "District Event Finalist" || awardName === "Regional Engineering Inspiration Award" || awardName === "District Engineering Inspiration Award" || awardName === "District Championship Finalist" || awardName === "District Championship Winner" || awardName === "Regional Winners" || awardName === "Regional Finalists" || awardName === "Regional Chairman's Award" || awardName === "FIRST Dean's List Finalist Award" || awardName === "Championship Subdivision Winner" || awardName === "Championship Subdivision Finalist" || awardName === "Championship Winner" || awardName === "Championship Finalist" || awardName === "Chairman's Award" || awardName === "Chairman's Award Finalist" || awardName === "FIRST Dean's List Award" || awardName === "Woodie Flowers Award" || awardName === "Innovation Challenge Winner" || awardName === "Innovation Challenge Finalist") {
         return { "before": "<span class ='awardHilight'>", "after": "</span>" }
     } else {
         return { "before": "<span>", "after": "</span>" }
@@ -3940,11 +3952,11 @@ function handlePlayoffFiles(e) {
                             "station": "Blue2",
                             "surrogate": (schedule[i]["Blue 2"].includes("*")) ? !0 : !1,
                             "dq": !1
-                        }, { 
+                        }, {
                             "teamNumber": removeSurrogate(schedule[i]["Blue 3"]),
-                            "station": "Blue3", 
-                            "surrogate": (schedule[i]["Blue 3"].includes("*")) ? !0 : !1, 
-                            "dq": !1 
+                            "station": "Blue3",
+                            "surrogate": (schedule[i]["Blue 3"].includes("*")) ? !0 : !1,
+                            "dq": !1
                         }]
                     };
                     innerSchedule.push(tempRow);
