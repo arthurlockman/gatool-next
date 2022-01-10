@@ -17,7 +17,7 @@ provider:
     FRC_API_KEY: ${ssm:frc-api-key~true}
     TBA_API_HEADER: ${ssm:tba-api-header~true}
     TBA_API_KEY: ${ssm:tba-api-token~true}
-    FRC_CURRENT_SEASON: 2021
+    FRC_CURRENT_SEASON: 2022
     HIGH_SCORES_TABLE_NAME: HighScoresTable
     TEAM_UPDATES_TABLE_NAME: TeamUpdatesTable
     WEBSITE_BUCKET: gatoolwebsite
