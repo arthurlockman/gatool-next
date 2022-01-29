@@ -227,8 +227,13 @@ function resetThisAward() {
             action: function (dialogRef) {
                 dialogRef.close();
                 var teamData = decompressLocalStorage("teamData" + localStorage.currentTeam);
-                $("#awardsUpdate").html(teamData.awards);
                 $("#awardsUpdateLabel").removeClass("bg-success");
+                if (teamData.awards !== "") {
+                    $("#awardsUpdate").html(teamData.awards);
+                    $("#awardsUpdate .awardsDepth1, #awardsUpdate .awardsEventCode, #awardsUpdate .awardsSeparator1, #awardsUpdate .awardsSeparator2").remove();
+                } else {
+                    $("#awardsUpdate").html("No awards from FIRST in the last three years.");
+                }
 
             }
         }]

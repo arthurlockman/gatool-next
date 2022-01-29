@@ -436,8 +436,8 @@ window.onload = function () {
 
     document.addEventListener('keyup', handleKeyboardNav);
 
-    $("input, #awardsUpdate, #sponsorsUpdate, #topSponsorsUpdate").on("focus", deactivateKeys);
-    $("input, #awardsUpdate, #sponsorsUpdate, #topSponsorsUpdate").on("blur", activateKeys);
+    $("input, #awardsUpdate, #sponsorsUpdate, #topSponsorsUpdate, #teamNotes, #teamNotesUpdate").on("focus", deactivateKeys);
+    $("input, #awardsUpdate, #sponsorsUpdate, #topSponsorsUpdate, #teamNotes, #teamNotesUpdate").on("blur", activateKeys);
 
     scaleRows();
     document.getElementById('setupTabPicker').click();
@@ -3313,13 +3313,14 @@ function updateTeamInfo(teamNumber) {
         $("#sponsorsUpdate").val(teamData.sponsorsLocal);
         $("#sponsorsUpdateLabel").addClass("bg-success")
     }
-    // if (teamData.awardsLocal === "") {
-    $("#awardsUpdate").html(teamData.awards);
-    $("#awardsUpdateLabel").removeClass("bg-success")
-    // } else {
-    //    $("#awardsUpdate").html(teamData.awardsLocal);
-    //   $("#awardsUpdateLabel").addClass("bg-success")
-    // } 
+    // Format and remove award codes
+    $("#awardsUpdateLabel").removeClass("bg-success");
+    if (teamData.awards !== "") {
+        $("#awardsUpdate").html(teamData.awards);
+        $("#awardsUpdate .awardsDepth1, #awardsUpdate .awardsEventCode, #awardsUpdate .awardsSeparator1, #awardsUpdate .awardsSeparator2").remove();
+    } else {
+        $("#awardsUpdate").html("No awards from FIRST in the last three years.");
+    }
     if (teamData.teamYearsNoCompeteLocal) {
         $("#teamYearsNoCompeteUpdate").val(teamData.teamYearsNoCompeteLocal);
         $("#teamYearsNoCompeteUpdateLabel").addClass("bg-success");
@@ -4071,4 +4072,9 @@ function switchStats() {
         $('.playByPlayTeamName').css({ "font-size": (fontSize * 1.5) + "px" });
     }
 
+}
+
+function textAreaAdjust(element) {
+    element.style.height = "1px";
+    element.style.height = (25 + element.scrollHeight) + "px";
 }

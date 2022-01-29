@@ -185,8 +185,6 @@ color: black;
 .matchNumber {
 	font-size: x-large
 }
-.gatool-container {
-}
 .popup {
 	width: auto;
 	height: 180px;
@@ -582,6 +580,9 @@ color: black;
 .showAlliancePlayoff {
 	text-align: center;
 	margin-top: 40px
+}
+.form-flex {
+	height: 100%
 }
 
 @media (max-width: 768px) {
