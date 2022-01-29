@@ -3055,7 +3055,7 @@ function updateTeamTableRow(teamData) {
             returnData += '<td  class="bg-success" id="teamTableRobotName' + teamData.teamNumber + '">' + teamInfo.robotNameLocal + '</td>'
         }
         if (teamInfo.teamNotes) {
-            returnData += '<td class="bg-success" id="teamTableNotes' + teamData.teamNumber + '">' + teamInfo.teamNotes + '</td>'
+            returnData += '<td class="bg-success" id="teamTableNotes' + teamData.teamNumber + '" style="white-space: pre-line">' + teamInfo.teamNotes + '</td>'
         } else {
             returnData += '<td id="teamTableNotes' + teamData.teamNumber + '">No additional notes</td>'
         }
