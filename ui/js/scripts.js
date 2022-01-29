@@ -3356,9 +3356,11 @@ function updateTeamInfo(teamNumber) {
         $("#sayNumber").val("");
         $("#sayNumberLabel").removeClass("bg-success");
     }
-
     $(".tabcontent").hide();
-    $("#teamDataEntry").show()
+    $("#teamDataEntry").show();
+    $("#teamUpdateForm textarea").each(function () {
+        textAreaAdjust(this);
+    })
 }
 
 function updateTeamInfoDone(cloudSave) {
@@ -4076,5 +4078,5 @@ function switchStats() {
 
 function textAreaAdjust(element) {
     element.style.height = "1px";
-    element.style.height = (25 + element.scrollHeight) + "px";
+    element.style.height = (element.scrollHeight) + "px";
 }
