@@ -3381,13 +3381,19 @@ function updateTeamInfoDone(cloudSave) {
         teamData.cityStateLocal = "";
         $("#teamTableCityState" + teamNumber).html(teamData.cityState)
     }
-    if (teamData.teamNotesLocal !== $("#teamNotesUpdate").html()) {
+    if ((teamData.teamNotesLocal !== $("#teamNotesUpdate").html()) && ($("#teamNotesUpdate").text() !== "")) {
         teamData.teamNotesLocal = $("#teamNotesUpdate").html()
+    } else {
+        teamData.teamNotesLocal = "";
     }
-    if (teamData.teamNotes !== $("#teamNotes").html()){
+
+    if ((teamData.teamNotes !== $("#teamNotes").html()) && ($("#teamNotes").text() !== "")) {
         teamData.teamNotes = $("#teamNotes").html();
         $("#teamTableNotes" + teamNumber).html($("#teamNotes").html())
+    } else {
+        teamData.teamNotes = "";
     }
+
     if (teamData.sayNumber !== $("#sayNumber").val()) {
         teamData.sayNumber = $("#sayNumber").val();
     }
@@ -4078,9 +4084,13 @@ function switchStats() {
 
 function textAreaAdjust(element) {
     element.style.height = "1px";
+    var padding = 10;
     if (element.type === "textarea") {
         element.style.height = (element.scrollHeight) + "px";
     } else {
-        element.style.height = (10+element.scrollHeight) + "px";
+        element.style.height = (padding + element.scrollHeight) + "px";
+    }
+    if (element.innerHTML === "<br>") {
+        element.innerHTML = "";
     }
 }
