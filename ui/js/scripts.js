@@ -3336,17 +3336,17 @@ function updateTeamInfo(teamNumber) {
         $("#teamMottoUpdateLabel").removeClass("bg-success");
     }
     if (teamData.teamNotesLocal) {
-        $("#teamNotesUpdate").val(teamData.teamNotesLocal);
+        $("#teamNotesUpdate").html(teamData.teamNotesLocal);
         $("#teamNotesUpdateLabel").addClass("bg-success");
     } else {
-        $("#teamNotesUpdate").val("");
+        $("#teamNotesUpdate").html("");
         $("#teamNotesUpdateLabel").removeClass("bg-success");
     }
     if (teamData.teamNotes) {
-        $("#teamNotes").val(teamData.teamNotes);
+        $("#teamNotes").html(teamData.teamNotes);
         $("#teamNotesLabel").addClass("bg-success");
     } else {
-        $("#teamNotes").val("");
+        $("#teamNotes").html("");
         $("#teamNotesLabel").removeClass("bg-success");
     }
     if (teamData.sayNumber) {
@@ -3381,12 +3381,12 @@ function updateTeamInfoDone(cloudSave) {
         teamData.cityStateLocal = "";
         $("#teamTableCityState" + teamNumber).html(teamData.cityState)
     }
-    if (teamData.teamNotesLocal !== $("#teamNotesUpdate").val()) {
-        teamData.teamNotesLocal = $("#teamNotesUpdate").val()
+    if (teamData.teamNotesLocal !== $("#teamNotesUpdate").html()) {
+        teamData.teamNotesLocal = $("#teamNotesUpdate").html()
     }
-    if (teamData.teamNotes !== $("#teamNotes").val()) {
-        teamData.teamNotes = $("#teamNotes").val();
-        $("#teamTableNotes" + teamNumber).html($("#teamNotes").val())
+    if (teamData.teamNotes !== $("#teamNotes").html()){
+        teamData.teamNotes = $("#teamNotes").html();
+        $("#teamTableNotes" + teamNumber).html($("#teamNotes").html())
     }
     if (teamData.sayNumber !== $("#sayNumber").val()) {
         teamData.sayNumber = $("#sayNumber").val();
@@ -4078,5 +4078,9 @@ function switchStats() {
 
 function textAreaAdjust(element) {
     element.style.height = "1px";
-    element.style.height = (element.scrollHeight) + "px";
+    if (element.type === "textarea") {
+        element.style.height = (element.scrollHeight) + "px";
+    } else {
+        element.style.height = (10+element.scrollHeight) + "px";
+    }
 }

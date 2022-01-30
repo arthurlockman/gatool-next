@@ -584,6 +584,10 @@ color: black;
 .form-flex {
 	height: 100%
 }
+.placeholder:empty:before {
+	content: attr(placeholder);
+	color:rgb(153,153,153);
+}
 
 @media (max-width: 768px) {
 p {
