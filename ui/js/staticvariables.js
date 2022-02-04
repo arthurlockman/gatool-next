@@ -6660,3 +6660,10 @@ var specialAwards = [
 }
 ]
 var originalAndSustaining = ["20", "45", "126", "148", "151", "157", "190", "191", "250"];
+
+var timeFormats = {
+    "12hr":"h:mm:ss a",
+    "24hr":"HH:mm:ss",
+    "12hrNoSec":"h:mm a",
+    "24hrNoSec":"HH:mm"
+}

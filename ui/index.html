@@ -156,6 +156,7 @@
                 <p><input name="showChampsStats" id="showChampsStats" type="checkbox" value="true" checked> &nbsp;Show Champs statistics on Announce</p>
                 <p><input name="swapPlayByPlay" id="swapPlayByPlay" type="checkbox" value="true" checked> &nbsp;Swap Play by Play Screen Orientation</p>
                 <p><input name="autoAdvance" id="autoAdvance" type="checkbox" value="true" checked> &nbsp;Automatically advance to the next match when loading</p>
+                <p><input name="timeDisplay" id="timeDisplay" type="checkbox" value="true" checked> &nbsp;Time Format (reload page to see changes)</p>
                 <div class="container alert alert-warning col-sm-12">
                     <p><strong>The following settings are specific to how we display Awards.</strong></p>
                     <p>You can mix and match settings. You will see the changes when the team data reloads. If you make manual adjustments to awards on the Team Info screen, then you will need to reset those adjusted fields in order to see new awards that accumulate during the current season.</p>
@@ -1172,14 +1173,14 @@
                 </div>
                 <div id="sayNumberLabel" class="form-group"><label for="sayNumber">How to pronounce the team number (some teams are particular)</label><input type="text" class="form-control" id="sayNumber" placeholder="Tell us how to pronounce the team number"></div>
                 <div id="robotNameUpdateLabel" class="form-group"><label for="robotNameUpdate">Robot Name (<span id="robotNameUpdateTIMS">xxx</span> in TIMS) &nbsp;&nbsp;&nbsp; Robot name <input type="checkbox" id="showRobotName" name="showRobotName" value="true" checked></label><input type="text" class="form-control" id="robotNameUpdate" placeholder="Enter a Robot Name"></div>
-                <div id="teamMottoUpdateLabel" class="form-group"><label for="teamMottoUpdate">Team Motto (Team mottoes are local and do not come from FIRST)</label> <input type="text" class="form-control" id="teamMottoUpdate" placeholder="Enter a Team Motto"></div>
+                <div id="teamMottoUpdateLabel" class="form-group"><label for="teamMottoUpdate">Team Motto (Team mottoes are local and do not come from <i><b>FIRST</b></i>)</label> <input type="text" class="form-control" id="teamMottoUpdate" placeholder="Enter a Team Motto"></div>
                 <div id="cityStateUpdateLabel" class="form-group"><label for="cityStateUpdate">City, State (<span id="cityStateUpdateTIMS">xxx</span> in TIMS)</label> <input type="text" class="form-control" id="cityStateUpdate" placeholder="Enter a city and state">
                 </div>
-                <div id="teamYearsNoCompeteUpdateLabel" class="form-group"><label for="teamYearsNoCompeteUpdate">Number of seasons NOT competing with FIRST (will be used in calculating Nth season)</label> <input type="text" class="form-control" id="teamYearsNoCompeteUpdate" placeholder="Enter the number of seasons (not the actual years!) this team has NOT competed since their founding">
+                <div id="teamYearsNoCompeteUpdateLabel" class="form-group"><label for="teamYearsNoCompeteUpdate">Number of seasons NOT competing with <i><b>FIRST</b></i> (will be used in calculating Nth season)</label> <input type="text" class="form-control" id="teamYearsNoCompeteUpdate" placeholder="Enter the number of seasons (not the actual years!) this team has NOT competed since their founding">
                 </div>
-                <div id="teamNotesUpdateLabel" class="form-group form-flex"><label for="teamNotesUpdate">Team Notes for Announce Screen (These notes are local notes and do not come from FIRST)</label> <div contenteditable="true" onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)" class="form-control placeholder" rows="1" id="teamNotesUpdate" placeholder="Enter some notes you would like to have on the Announce Screen"></div>
+                <div id="teamNotesUpdateLabel" class="form-group form-flex"><label for="teamNotesUpdate">Team Notes for Announce Screen (These notes are local notes and do not come from <i><b>FIRST</b></i>)</label> <div contenteditable="true" onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)" class="form-control placeholder" rows="1" id="teamNotesUpdate" placeholder="Enter some notes you would like to have on the Announce Screen"></div>
                 </div>
-                <div id="teamNotesLabel" class="form-group form-flex"><label for="teamNotes">Team Notes for Team Data screen (These notes are local notes and do not come from FIRST)</label> <div contenteditable="true" onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)" class="form-control placeholder" rows="1" id="teamNotes" placeholder="Enter some notes you would like to have on the Team Data Screen"></div>
+                <div id="teamNotesLabel" class="form-group form-flex"><label for="teamNotes">Team Notes for Team Data screen (These notes are local notes and do not come from <i><b>FIRST</b></i>)</label> <div contenteditable="true" onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)" class="form-control placeholder" rows="1" id="teamNotes" placeholder="Enter some notes you would like to have on the Team Data Screen"></div>
                 </div>
                 <div id="topSponsorsUpdateLabel" class="form-group form-flex"><label for="topSponsorsUpdate">Top Sponsors (Enter no more than 5 top sponsors from the full sponsor list below)</label> <textarea onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)"  class="form-control" rows="1" id="topSponsorsUpdate" placeholder="Enter the team's top 5 sponsors"></textarea>
                 </div>
@@ -1241,7 +1242,7 @@
         </div>
         <div id="cheatsheet" class="tabcontent container-fluid">
             <h2>What is gatool?</h2>
-            <p> gatool is a tool to provide FIRST Game Announcers with up to date information while announcing events during the FIRST Robotics season. As a web-based tool, it uses up-to-date information about the event to provide a comprehensive set of useful data to Game Announcers. It is designed to work on desktops, laptops and tablet devices. In a pinch, it can be used on a mobile phone.</p>
+            <p> gatool is a tool to provide <i><b>FIRST®</b></i> Game Announcers with up to date information while announcing events during the <i><b>FIRST</b></i> Robotics season. As a web-based tool, it uses up-to-date information about the event to provide a comprehensive set of useful data to Game Announcers. It is designed to work on desktops, laptops and tablet devices. In a pinch, it can be used on a mobile phone.</p>
             <p>If you are disinclined to read the documentation referenced below, we've made a short video so you can see it in action. </p>
             <p><a target="_blank" href="https://youtu.be/8XuMEX_Mofs" target="new">Watch an overview of gatool on YouTube.</a></p>
             <h3>You can get detailed help <a href="/help.html" target="_blank">at our help page.</a></h3>
@@ -1301,7 +1302,7 @@
     <footer id="footer" class="container container-fluid gatool-footer footer">
         <div>
             <p id="loadingFeedback">Loading gatool...</p>
-            <p class="text-muted gatool-sponsors">© 2017-2022 Arthur Lockman & James Lockman, <a target="_blank" href="http://www.northernforce.org/">FIRST Robotics Team 172 Northern Force</a> and the <a target="_blank" href="http://gofarmaine.org">Gorham-Falmouth Alliance for Robotics.</a> Think Pink! <a target="_blank" href="https://frc-events.firstinspires.org/services/API">Event Data provided by FIRST.</a></p>
+            <p class="text-muted gatool-sponsors">© 2017-2022 Arthur Lockman & James Lockman, <a target="_blank" href="http://www.northernforce.org/">FIRST Robotics Team 172 Northern Force</a> and the <a target="_blank" href="http://gofarmaine.org">Gorham-Falmouth Alliance for Robotics.</a> Think Pink! <a target="_blank" href="https://frc-events.firstinspires.org/services/API">Event Data provided by <i><b>FIRST</b></i>.</a></p>
         </div>
     </footer>
     <script type="text/javascript">_satellite.pageBottom();</script>

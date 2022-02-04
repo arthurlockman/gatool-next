@@ -68,6 +68,9 @@ if (!localStorage.autoAdvance) {
 if (!localStorage.swapPlayByPlay) {
     localStorage.swapPlayByPlay = "false"
 }
+if (!localStorage.timeFormat) {
+    localStorage.timeFormat = "12hr";
+}
 
 // reset some of those variables, which will be adjusted later.
 localStorage.clock = "ready";
@@ -199,6 +202,11 @@ window.onload = function () {
     $("[name='autoAdvance']").bootstrapSwitch('state', (localStorage.autoAdvance === "true"));
     $("[name='swapPlayByPlay']").bootstrapSwitch('state', (localStorage.swapPlayByPlay === "true"));
     $("[name='offseason']").bootstrapSwitch('state', (localStorage.offseason === "true"));
+    $("[name='timeDisplay']").bootstrapSwitch('state', (localStorage.timeFormat === "12hr"));
+    $("[name='timeDisplay']").bootstrapSwitch('onText', '12&nbsp;hr');
+    $("[name='timeDisplay']").bootstrapSwitch('offText', '24&nbsp;hr');
+    
+    // Setup the switches on the Team Info Screen
     $("[name='showRobotName']").bootstrapSwitch('state', true);
     $("[name='showRobotName']").bootstrapSwitch('size', 'mini');
     $("[name='showRobotName']").bootstrapSwitch('onText', 'Shown');
@@ -390,6 +398,15 @@ window.onload = function () {
         } else {
             $("#playByPlayTable").show();
             $("#playByPlayTableSwap").hide();
+        }
+    };
+
+    //Handle a change in Time Display
+    document.getElementById('timeDisplay').onchange = function () {
+        if ($("#timeDisplay").bootstrapSwitch('state')) {
+            localStorage.timeFormat = "12hr";
+        } else {
+            localStorage.timeFormat = "24hr";
         }
     };
 
@@ -907,7 +924,7 @@ function createEventMenu() {
     $("#eventFilters").selectpicker('val', previousFilters);
     //filterEvents();
     handleEventSelection();
-    $("#eventUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"))
+    $("#eventUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]))
 }
 
 function getHybridSchedule() {
@@ -1032,7 +1049,7 @@ function getRegularSeasonSchedule() {
                 $('#scheduleTabPicker').removeClass('alert-danger');
                 $('#scheduleTabPicker').addClass('alert-success');
                 matchCount = parseInt(Number(JSON.parse(localStorage.qualsList).Schedule.length) * 6 / Number(JSON.parse(localStorage.teamList).length));
-                $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a") + "... and looking for Playoff schedule...");
+                $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]) + "... and looking for Playoff schedule...");
                 req1.send()
             }
 
@@ -1110,7 +1127,7 @@ function getRegularSeasonSchedule() {
             }
             $('#scheduleProgressBar').hide();
             localStorage.playoffList = JSON.stringify(data);
-            $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"));
+            $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]));
             if (localStorage.autoAdvance === "true") {
                 if (lastMatchPlayed < (qualScheduleLength + data.Schedule.length)) {
                     localStorage.currentMatch = String(lastMatchPlayed + 1)
@@ -1177,7 +1194,7 @@ function getRegularSeasonSchedule() {
                     document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
                     $("#matchPicker").selectpicker('refresh')
                 }
-                $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"));
+                $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]));
                 $('#scheduleTabPicker').removeClass('alert-danger');
                 $('#scheduleTabPicker').addClass('alert-success');
                 if (matchSchedule) {
@@ -1185,7 +1202,7 @@ function getRegularSeasonSchedule() {
                 }
                 $('#scheduleProgressBar').hide();
                 localStorage.playoffList = JSON.stringify(data);
-                $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"));
+                $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]));
                 //displayAwardsTeams(allianceListUnsorted.slice(0));
                 getAllianceList()
             }
@@ -1300,7 +1317,7 @@ function getOffseasonSchedule() {
         $('#scheduleTabPicker').removeClass('alert-danger');
         $('#scheduleTabPicker').addClass('alert-success')
     }
-    $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a") + "... and looking for Playoff schedule...");
+    $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]) + "... and looking for Playoff schedule...");
     $("#playoffScheduleAlert").show();
     data = JSON.parse(localStorage.playoffList);
     if (data.Schedule.length === 0) {
@@ -1328,7 +1345,7 @@ function getOffseasonSchedule() {
         document.getElementById('scheduleTable').innerHTML += matchSchedule
     }
     $('#scheduleProgressBar').hide();
-    $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"));
+    $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]));
     announceDisplay()
 }
 
@@ -1569,7 +1586,7 @@ function getTeamList(year) {
 
 
             }
-            $("#teamUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"))
+            $("#teamUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]))
             getTeamAppearances(eventTeamList);
         }
     });
@@ -1743,7 +1760,7 @@ function getAllianceList() {
                 announceDisplay();
                 handlePlayoffBracket();
             }
-            $("#allianceUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"))
+            $("#allianceUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]))
         }
     });
     if (localStorage.inPlayoffs === "true") {
@@ -2115,7 +2132,7 @@ function replaceTeam(station, originalTeam) {
     "use strict";
     var replacementTeam = originalTeam;
     var message = "You are about to replace Alliance team <b>" + originalTeam + "</b> for another team.<br>";
-    message += "This is a one-time replacement, since the substitution will be recorded at FIRST when the match ends and the score is committed.";
+    message += "This is a one-time replacement, since the substitution will be recorded at <i><b>FIRST</b></i> when the match ends and the score is committed.";
     message += '<div id = "substituteTeamInput" class="form-group"><label for="substituteTeamUpdate">Substitute Team Entry</label><input inputmode="numeric" pattern="[0-9]*" type="text" class="form-control" id="substituteTeamUpdate" placeholder="Enter a Team Number"></div>';
     BootstrapDialog.show({
         type: 'type-success',
@@ -2511,7 +2528,7 @@ function awardsAlert(teamContainer) {
     } else {
         selectedTeamInfo += "<br>Founded in "
     }
-    selectedTeamInfo += currentTeamInfo.rookieYear + ", this is their " + rookieTag + " competing with FIRST.</span>";
+    selectedTeamInfo += currentTeamInfo.rookieYear + ", this is their " + rookieTag + " competing with <i><b>FIRST</b></i>.</span>";
     BootstrapDialog.show({
         type: 'type-success',
         title: '<b>Awards Announcement</b>',
@@ -2558,7 +2575,7 @@ function chosenAllianceAlert(teamContainer) {
     } else {
         selectedTeamInfo += "<br>Founded in "
     }
-    selectedTeamInfo += currentTeamInfo.rookieYear + ", this is their " + rookieTag + " competing with FIRST.</span>";
+    selectedTeamInfo += currentTeamInfo.rookieYear + ", this is their " + rookieTag + " competing with <i><b>FIRST</b></i>.</span>";
     BootstrapDialog.show({
         type: 'type-success',
         icon: 'glyphicon glyphicon-tower',
@@ -2894,12 +2911,12 @@ function generateMatchTableRow(matchData) {
     var returnData = '<tr>';
     var matchWinner = "";
     if (matchData.actualStartTime) {
-        returnData += "<td>Actual:<br>" + moment(matchData.actualStartTime, 'YYYY-MM-DDTHH:mm:ss').format('ddd hh:mm A') + '</td>'
+        returnData += "<td>Actual:<br>" + moment(matchData.actualStartTime, 'YYYY-MM-DDTHH:mm:ss').format('ddd '+timeFormats[localStorage.timeFormat+"NoSec"]) + '</td>'
     } else {
         if (localStorage.offseason === "true") {
             returnData += "<td>Scheduled:<br>" + matchData.startTime + '</td>'
         } else {
-            returnData += "<td>Scheduled:<br>" + moment(matchData.startTime, 'YYYY-MM-DDTHH:mm:ss').format('ddd hh:mm:ss A') + '</td>'
+            returnData += "<td>Scheduled:<br>" + moment(matchData.startTime, 'YYYY-MM-DDTHH:mm:ss').format('ddd '+timeFormats[localStorage.timeFormat]) + '</td>'
         }
     }
     returnData += "<td>" + matchData.description + '</td>';
@@ -3230,7 +3247,7 @@ function updateTeamInfo(teamNumber) {
         $("#lastUpdatedWarning").addClass("alert-warning");
 
     } else {
-        message = moment(teamData.lastUpdate).format('MMMM Do YYYY, h:mm:ss a');
+        message = moment(teamData.lastUpdate).format('MMMM Do YYYY, '+timeFormats[localStorage.timeFormat]);
         $("#lastUpdatedWarning").removeClass("alert-warning alert-success alert-warning");
         //If the update is older than 3 weeks, alert the user.
         if (moment().diff(teamData.lastUpdate, "days") > 21) {
@@ -3319,7 +3336,7 @@ function updateTeamInfo(teamNumber) {
         $("#awardsUpdate").html(teamData.awards);
         $("#awardsUpdate .awardsDepth1, #awardsUpdate .awardsEventCode, #awardsUpdate .awardsSeparator1, #awardsUpdate .awardsSeparator2").remove();
     } else {
-        $("#awardsUpdate").html("No awards from FIRST in the last three years.");
+        $("#awardsUpdate").html("No awards from <i><b>FIRST</b></i> in the last three years.");
     }
     if (teamData.teamYearsNoCompeteLocal) {
         $("#teamYearsNoCompeteUpdate").val(teamData.teamYearsNoCompeteLocal);

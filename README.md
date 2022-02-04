@@ -4,7 +4,7 @@
 
 This project is the next version of the GATool, deployed into Amazon Web Services. This project is currently in development, and shouldn't be used for GATool's production workload yet.
 
-GATool is a tool used by FIRST Robotics game announcers to view data in real time that they can use to host matches and provide play-by-play coverage of FRC matches.
+GATool is a tool used by *FIRST®* Robotics game announcers to view data in real time that they can use to host matches and provide play-by-play coverage of FRC matches.
 
 ## Issues and Pull Requests
 

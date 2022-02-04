@@ -38,7 +38,7 @@ function getTeamUpdates(teamNumber, singleton) {
             $('#teamProgressBarLoading').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
             if (singleton) {
                 BootstrapDialog.show({
-                    message: "Team data loaded from gatool Cloud. Your local data for " + teamNumber + " is now showing data from the FIRST GA and MC community.",
+                    message: "Team data loaded from gatool Cloud. Your local data for " + teamNumber + " is now showing data from the <i><b>FIRST</b></i> GA and MC community.",
                     buttons: [{
                         icon: 'glyphicon glyphicon-cloud-download',
                         cssClass: 'btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton',
@@ -54,7 +54,7 @@ function getTeamUpdates(teamNumber, singleton) {
                 });
             } else {
                 BootstrapDialog.show({
-                    message: "Team data loaded from gatool Cloud. Your local data for " + localStorage.currentEvent + " is now showing data from the FIRST GA and MC community.",
+                    message: "Team data loaded from gatool Cloud. Your local data for " + localStorage.currentEvent + " is now showing data from the <i><b>FIRST</b></i> GA and MC community.",
                     buttons: [{
                         icon: 'glyphicon glyphicon-cloud-download',
                         cssClass: 'btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton',
@@ -115,7 +115,7 @@ function sendTeamUpdates(teamNumber, singleton) {
             $('#teamProgressBarLoading').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
             if (singleton) {
                 BootstrapDialog.show({
-                    message: "Team data saved to gatool Cloud. Thank you for sharing your local data for Team " + teamNumber + " with the FIRST GA and MC community.",
+                    message: "Team data saved to gatool Cloud. Thank you for sharing your local data for Team " + teamNumber + " with the <i><b>FIRST</b></i> GA and MC community.",
                     buttons: [{
                         icon: 'glyphicon glyphicon-cloud-upload',
                         label: 'OK',
@@ -128,7 +128,7 @@ function sendTeamUpdates(teamNumber, singleton) {
                 });
             } else {
                 BootstrapDialog.show({
-                    message: "Team data saved to gatool Cloud. Thank you for sharing your local data for " + localStorage.currentEvent + " with the FIRST GA and MC community.",
+                    message: "Team data saved to gatool Cloud. Thank you for sharing your local data for " + localStorage.currentEvent + " with the <i><b>FIRST</b></i> GA and MC community.",
                     buttons: [{
                         icon: 'glyphicon glyphicon-cloud-upload',
                         cssClass: "btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton",
@@ -210,7 +210,7 @@ function resetThisAward() {
     BootstrapDialog.show({
         type: 'type-info',
         title: '<b>Reset Team ' + localStorage.currentTeam + "'s Awards to TIMS values</b>",
-        message: "<b>You are about to reset the awards for this team to the values provided by FIRST.<br><b>Are you sure you want to do this?</b>",
+        message: "<b>You are about to reset the awards for this team to the values provided by <i><b>FIRST</b></i>.<br><b>Are you sure you want to do this?</b>",
         buttons: [{
             icon: 'glyphicon glyphicon-check',
             label: "No, don't save this reset now.",
@@ -232,7 +232,7 @@ function resetThisAward() {
                     $("#awardsUpdate").html(teamData.awards);
                     $("#awardsUpdate .awardsDepth1, #awardsUpdate .awardsEventCode, #awardsUpdate .awardsSeparator1, #awardsUpdate .awardsSeparator2").remove();
                 } else {
-                    $("#awardsUpdate").html("No awards from FIRST in the last three years.");
+                    $("#awardsUpdate").html("No awards from <i><b>FIRST</b></i> in the last three years.");
                 }
 
             }

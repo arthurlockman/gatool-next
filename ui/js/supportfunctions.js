@@ -45,7 +45,7 @@ function timer() {
         $("#matchTimeContainer").removeClass();
         var timeDifference = 0;
         if (currentMatchData.actualStartTime) {
-            $("#matchTime").html('<b><span id="currentTime"></span></b><br>Actual match time:<br>' + moment(currentMatchData.actualStartTime).format("MMM Do, h:mm a"));
+            $("#matchTime").html('<b><span id="currentTime"></span></b><br>Actual match time:<br>' + moment(currentMatchData.actualStartTime).format("MMM Do, "+timeFormats[localStorage.timeFormat+"NoSec"]));
             $("#matchTimeContainer").removeClass();
             $("#matchTimeContainer").addClass("col2");
             timeDifference = moment(currentMatchData.actualStartTime).diff(currentMatchData.startTime, "minutes");
@@ -79,7 +79,7 @@ function timer() {
             $("#matchTimeContainer").addClass("col2");
         }
     }
-    $("#currentTime").html(moment().format('h:mm:ss a'));
+    $("#currentTime").html(moment().format(timeFormats[localStorage.timeFormat]));
 
     //display the last pit visit time
     $("[lastVisit]").each(function () {
@@ -736,6 +736,6 @@ function exportXLSX() {
     }
 
     XLSX.write(workbook, { bookType: "xlsx", bookSST: true, type: 'base64' });
-    XLSX.writeFile(workbook, "gatoolExport_" + localStorage.currentYear + localStorage.currentEvent + moment().format('MMDDYYYY_hhmmss') + ".xlsx");
+    XLSX.writeFile(workbook, "gatoolExport_" + localStorage.currentYear + localStorage.currentEvent + moment().format('MMDDYYYY_HHmmss') + ".xlsx");
 
 }
