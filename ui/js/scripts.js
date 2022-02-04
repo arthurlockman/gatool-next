@@ -408,6 +408,7 @@ window.onload = function () {
         } else {
             localStorage.timeFormat = "24hr";
         }
+        $("#eventSelector").trigger("change")
     };
 
     //Handle Event Filter change
