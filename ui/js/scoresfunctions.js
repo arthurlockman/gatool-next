@@ -260,7 +260,7 @@ function getTeamRanks() {
 
                 allianceTeamList = sortAllianceTeams(allianceTeamList);
 
-                $("#rankUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"));
+                $("#rankUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]));
             }
             $(".districtRank").hide();
             if (localStorage.eventDistrict != "") {
