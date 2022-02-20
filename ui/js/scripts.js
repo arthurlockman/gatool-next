@@ -205,7 +205,7 @@ window.onload = function () {
     $("[name='timeDisplay']").bootstrapSwitch('state', (localStorage.timeFormat === "12hr"));
     $("[name='timeDisplay']").bootstrapSwitch('onText', '12&nbsp;hr');
     $("[name='timeDisplay']").bootstrapSwitch('offText', '24&nbsp;hr');
-    
+
     // Setup the switches on the Team Info Screen
     $("[name='showRobotName']").bootstrapSwitch('state', true);
     $("[name='showRobotName']").bootstrapSwitch('size', 'mini');
@@ -925,7 +925,7 @@ function createEventMenu() {
     $("#eventFilters").selectpicker('val', previousFilters);
     //filterEvents();
     handleEventSelection();
-    $("#eventUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]))
+    $("#eventUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, " + timeFormats[localStorage.timeFormat]))
 }
 
 function getHybridSchedule() {
@@ -1050,7 +1050,7 @@ function getRegularSeasonSchedule() {
                 $('#scheduleTabPicker').removeClass('alert-danger');
                 $('#scheduleTabPicker').addClass('alert-success');
                 matchCount = parseInt(Number(JSON.parse(localStorage.qualsList).Schedule.length) * 6 / Number(JSON.parse(localStorage.teamList).length));
-                $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]) + "... and looking for Playoff schedule...");
+                $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, " + timeFormats[localStorage.timeFormat]) + "... and looking for Playoff schedule...");
                 req1.send()
             }
 
@@ -1128,7 +1128,7 @@ function getRegularSeasonSchedule() {
             }
             $('#scheduleProgressBar').hide();
             localStorage.playoffList = JSON.stringify(data);
-            $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]));
+            $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, " + timeFormats[localStorage.timeFormat]));
             if (localStorage.autoAdvance === "true") {
                 if (lastMatchPlayed < (qualScheduleLength + data.Schedule.length)) {
                     localStorage.currentMatch = String(lastMatchPlayed + 1)
@@ -1195,7 +1195,7 @@ function getRegularSeasonSchedule() {
                     document.getElementById("matchPicker" + localStorage.currentMatch).selected = !0;
                     $("#matchPicker").selectpicker('refresh')
                 }
-                $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]));
+                $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, " + timeFormats[localStorage.timeFormat]));
                 $('#scheduleTabPicker').removeClass('alert-danger');
                 $('#scheduleTabPicker').addClass('alert-success');
                 if (matchSchedule) {
@@ -1203,7 +1203,7 @@ function getRegularSeasonSchedule() {
                 }
                 $('#scheduleProgressBar').hide();
                 localStorage.playoffList = JSON.stringify(data);
-                $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]));
+                $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, " + timeFormats[localStorage.timeFormat]));
                 //displayAwardsTeams(allianceListUnsorted.slice(0));
                 getAllianceList()
             }
@@ -1318,7 +1318,7 @@ function getOffseasonSchedule() {
         $('#scheduleTabPicker').removeClass('alert-danger');
         $('#scheduleTabPicker').addClass('alert-success')
     }
-    $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]) + "... and looking for Playoff schedule...");
+    $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, " + timeFormats[localStorage.timeFormat]) + "... and looking for Playoff schedule...");
     $("#playoffScheduleAlert").show();
     data = JSON.parse(localStorage.playoffList);
     if (data.Schedule.length === 0) {
@@ -1346,7 +1346,7 @@ function getOffseasonSchedule() {
         document.getElementById('scheduleTable').innerHTML += matchSchedule
     }
     $('#scheduleProgressBar').hide();
-    $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]));
+    $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, " + timeFormats[localStorage.timeFormat]));
     announceDisplay()
 }
 
@@ -1587,7 +1587,7 @@ function getTeamList(year) {
 
 
             }
-            $("#teamUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]))
+            $("#teamUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, " + timeFormats[localStorage.timeFormat]))
             getTeamAppearances(eventTeamList);
         }
     });
@@ -1761,7 +1761,7 @@ function getAllianceList() {
                 announceDisplay();
                 handlePlayoffBracket();
             }
-            $("#allianceUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, "+timeFormats[localStorage.timeFormat]))
+            $("#allianceUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, " + timeFormats[localStorage.timeFormat]))
         }
     });
     if (localStorage.inPlayoffs === "true") {
@@ -2912,12 +2912,12 @@ function generateMatchTableRow(matchData) {
     var returnData = '<tr>';
     var matchWinner = "";
     if (matchData.actualStartTime) {
-        returnData += "<td>Actual:<br>" + moment(matchData.actualStartTime, 'YYYY-MM-DDTHH:mm:ss').format('ddd '+timeFormats[localStorage.timeFormat+"NoSec"]) + '</td>'
+        returnData += "<td>Actual:<br>" + moment(matchData.actualStartTime, 'YYYY-MM-DDTHH:mm:ss').format('ddd ' + timeFormats[localStorage.timeFormat + "NoSec"]) + '</td>'
     } else {
         if (localStorage.offseason === "true") {
             returnData += "<td>Scheduled:<br>" + matchData.startTime + '</td>'
         } else {
-            returnData += "<td>Scheduled:<br>" + moment(matchData.startTime, 'YYYY-MM-DDTHH:mm:ss').format('ddd '+timeFormats[localStorage.timeFormat]) + '</td>'
+            returnData += "<td>Scheduled:<br>" + moment(matchData.startTime, 'YYYY-MM-DDTHH:mm:ss').format('ddd ' + timeFormats[localStorage.timeFormat]) + '</td>'
         }
     }
     returnData += "<td>" + matchData.description + '</td>';
@@ -3248,7 +3248,7 @@ function updateTeamInfo(teamNumber) {
         $("#lastUpdatedWarning").addClass("alert-warning");
 
     } else {
-        message = moment(teamData.lastUpdate).format('MMMM Do YYYY, '+timeFormats[localStorage.timeFormat]);
+        message = moment(teamData.lastUpdate).format('MMMM Do YYYY, ' + timeFormats[localStorage.timeFormat]);
         $("#lastUpdatedWarning").removeClass("alert-warning alert-success alert-warning");
         //If the update is older than 3 weeks, alert the user.
         if (moment().diff(teamData.lastUpdate, "days") > 21) {

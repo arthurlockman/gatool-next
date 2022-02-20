@@ -45,7 +45,7 @@ function timer() {
         $("#matchTimeContainer").removeClass();
         var timeDifference = 0;
         if (currentMatchData.actualStartTime) {
-            $("#matchTime").html('<b><span id="currentTime"></span></b><br>Actual match time:<br>' + moment(currentMatchData.actualStartTime).format("MMM Do, "+timeFormats[localStorage.timeFormat+"NoSec"]));
+            $("#matchTime").html('<b><span id="currentTime"></span></b><br>Actual match time:<br>' + moment(currentMatchData.actualStartTime).format("MMM Do, " + timeFormats[localStorage.timeFormat + "NoSec"]));
             $("#matchTimeContainer").removeClass();
             $("#matchTimeContainer").addClass("col2");
             timeDifference = moment(currentMatchData.actualStartTime).diff(currentMatchData.startTime, "minutes");
@@ -111,7 +111,7 @@ function timer() {
             localStorage.autoAdvanceTimer = Date.now();
             getRegularSeasonSchedule();
         }
-        
+
     } else {
         localStorage.autoAdvanceTimer = "false";
     }
@@ -738,4 +738,73 @@ function exportXLSX() {
     XLSX.write(workbook, { bookType: "xlsx", bookSST: true, type: 'base64' });
     XLSX.writeFile(workbook, "gatoolExport_" + localStorage.currentYear + localStorage.currentEvent + moment().format('MMDDYYYY_HHmmss') + ".xlsx");
 
+}
+
+// The following section creates merged Word docs. 
+// It is used in conjunction with the team list to create team info sheets.
+
+function loadFile(url, callback) {
+    PizZipUtils.getBinaryContent(url, callback);
+}
+
+function generateDocx(gameAnnouncer) {
+    loadFile(
+        "images/gatool_team_information_sheets_merge.docx",
+        function (error, content) {
+            if (error) {
+                throw error;
+            }
+            var zip = new PizZip(content);
+            var doc = new window.docxtemplater(zip, {
+                paragraphLoop: true,
+                linebreaks: true,
+            });
+
+            var data = [];
+            var record = {};
+            var keys = [];
+
+            //Create record list from all of the team data
+            for (var i = 0; i < eventTeamList.length; i++) {
+                var item = decompressLocalStorage("teamData" + eventTeamList[i].teamNumber);
+                record = {};
+                keys = Object.keys(item);
+                record.tn = eventTeamList[i].teamNumber;
+                record.year = localStorage.currentYear;
+                record.nameShort = item.nameShortLocal || item.nameShort;
+                record.organization = item.organizationLocal || item.organization;
+                record.robotName = item.robotNameLocal || item.robotName;
+                record.cityState = item.cityStateLocal || item.cityState;
+                record.cityState = item.cityStateLocal || item.cityState;
+                record.topSponsors = item.topSponsorsLocal || item.topSponsors;
+                record.teamYearsNoCompete = item.teamYearsNoCompeteLocal;
+                record.teamMotto = item.teamMottoLocal;
+                record.rookieYear = item.rookieYear;
+                record.eventName = localStorage.eventName;
+                record.gaName = gameAnnouncer || false;
+                if (i<eventTeamList.length-1) {
+                    record.lastTeam = false;
+                } else {
+                    record.lastTeam = true;
+                }
+                data.push(record);
+            }
+
+            // Render the document (Replace {first_name} by John, {last_name} by Doe, ...)
+            doc.render({
+                teams: data
+            });
+
+            var out = doc.getZip().generate({
+                type: "blob",
+                mimeType:
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                // compression: DEFLATE adds a compression step.
+                // For a 50MB output document, expect 500ms additional CPU time
+                compression: "DEFLATE",
+            });
+            // Output the document using Data-URI
+            saveAs(out, localStorage.eventName + " " + localStorage.currentYear + " Team Info Sheets.docx");
+        }
+    );
 }
