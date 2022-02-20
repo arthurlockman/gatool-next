@@ -14,6 +14,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.29.0/docxtemplater.js"></script>
+    <script src="https://unpkg.com/pizzip@3.1.1/dist/pizzip.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+    <script src="https://unpkg.com/pizzip@3.1.1/dist/pizzip-utils.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css" integrity="sha256-sj3qkRTZIL8Kff5fST1TX0EF9lEmSfFgjNvuiw2CV5w=" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/css/bootstrap-dialog.min.css" integrity="sha256-wstTM1F5dOf7cgnlRHIW3bmoRAAGh6jL7tMIvqTuFZE=" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
@@ -261,8 +265,8 @@
                             <p>You can merge this with Word to create team data sheets you can hand out at an event. <i>Note: this will save to Files on iOS 13+</i></p>
                         </td>
                         <td class="col-sm">
-                            <p><span style="cursor:pointer"><a href="images/gatool_team_information_sheets.docx" download><img style="float: left" width="30" src="images/wordicon.png"> <b>Tap here to download the merge document (docx).</b></a></span></p>
-                            <p>The merge doc contains conditional merge tags. Do not edit the merged fields. Feel free to edit any other portion of the document. <i>Note: this will save to Files on iOS 13+</i></p>
+                            <p><span style="cursor:pointer" onClick="generateDocx();"><a><img style="float: left" width="30" src="images/wordicon.png"> <b>Tap here to download a merged document (docx).</b></a></span></p>
+                            <p>This merged doc contains all of the information in your Teams List, merged onto a template you can print and distribute to teams. <i>Note: this will save to Files on iOS 13+</i></p>
                         </td>
                     </tr>
                 </table>
