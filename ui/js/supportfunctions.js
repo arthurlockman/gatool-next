@@ -808,3 +808,33 @@ function generateDocx(gameAnnouncer) {
         }
     );
 }
+
+function downloadTeamInfoSheets() {
+
+    "use strict";
+    BootstrapDialog.show({
+        type: 'type-success',
+        title: '<b>Download Team Info Sheets</b>',
+        message: 'You are about to download a Word Docx which contains all of the team data we know about the teams. If you have loaded team data from gatool cloud, or if you have made local changes, those changes will be reflected on the sheets. <br> If you would like us to personalize the sheets with your name as the Game Announcer, please enter it here: <input type="text" class="form-control" onfocus="deactivateKeys();" onblur="activateKeys();">',
+        buttons: [{
+            icon: 'glyphicon glyphicon-remove',
+            label: "No, thanks.",
+            //hotkey: 78, // "N".
+            cssClass: "btn btn-warning col-md-5 col-xs-12 col-sm-12 alertButton alertButton",
+            action: function (dialogRef) {
+                dialogRef.close();
+            }
+        }, {
+            icon: 'glyphicon glyphicon-refresh',
+            label: 'Download now!',
+            //hotkey: 13, // Enter.
+            cssClass: 'btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton alertButton',
+            action: function (dialogRef) {
+                var gameAnnouncer = dialogRef.getModalBody().find('input').val();
+                dialogRef.close();
+                generateDocx(gameAnnouncer);
+
+            }
+        }]
+    });
+}
