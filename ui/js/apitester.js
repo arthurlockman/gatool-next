@@ -17,7 +17,7 @@ function getScoutingDataNew() {
 		}
 	}
 	eventCode = $("#eventCodeInput").val() || findGetParameter("event");
-	year = $("#yarInput").val() || findGetParameter("year");
+	year = $("#yearInput").val() || findGetParameter("year");
 	$("#apiResponse").html(`Fetching data for ${eventCode} in ${year}`);
 	$("#year").html(year);
 	
