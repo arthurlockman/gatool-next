@@ -644,7 +644,150 @@ function prepareAllianceSelection() {
     rankingsList = [];
     districtRankings = {};
     currentAllianceChoice = 0;
-    $("#allianceSelectionTable").html('<table> <tr> <td><table class="availableTeams"> <tr> <td colspan="5"><strong>Teams for Alliance Selection</strong></td></tr><tr> <td id="allianceTeamList1" class="col1"><div class="allianceTeam">List of teams</div></td><td id="allianceTeamList2" class="col1"><div class="allianceTeam">List of teams</div></td><td id="allianceTeamList3" class="col1"><div class="allianceTeam">List of teams</div></td><td id="allianceTeamList4" class="col1"><div class="allianceTeam">List of teams</div></td><td id="allianceTeamList5" class="col1"><div class="allianceTeam allianceCaptain">List of teams</div></td></tr></table></td><td class="col1"><table id="backupTeamsTable" class="backupAlliancesTable"> <tr> <td><p><strong>Backup Alliances</strong><br>(Initially rank 9 to 16 top to bottom)</p></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam1">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam2">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam3">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam4">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam5">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam6">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam7">List of teams</div></td></tr><tr> <td><div class="allianceTeam" id="backupAllianceTeam8">List of teams</div></td></tr></table></td><td><table class="alliancesTeamsTable"> <tr class="col6"> <td id="Alliance1" class="col3 dropzone"><div class="alliancedrop" id="Alliance1Captain">Alliance 1 Captain</div><div class="alliancedrop nextAllianceChoice" id="Alliance1Round1" >Alliance 1 first choice</div><div class="alliancedrop" id="Alliance1Round2" >Alliance 1 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance1Round3" >Alliance 1 third choice</div></td><td id="Alliance8" class="col3"><div class="alliancedrop" id="Alliance8Captain" >Alliance 8 Captain</div><div class="alliancedrop" id="Alliance8Round1" >Alliance 8 first choice</div><div class="alliancedrop" id="Alliance8Round2" >Alliance 8 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance8Round3" >Alliance 8 third choice</div></td></tr><tr class="col6"> <td id="Alliance2" class="col3"><div class="alliancedrop" id="Alliance2Captain" >Alliance 2 Captain</div><div class="alliancedrop" id="Alliance2Round1" >Alliance 2 first choice</div><div class="alliancedrop" id="Alliance2Round2" >Alliance 2 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance2Round3" >Alliance 2 third choice</div></td><td id="Alliance7" class="col3"><div class="alliancedrop" id="Alliance7Captain" >Alliance 7 Captain</div><div class="alliancedrop" id="Alliance7Round1" >Alliance 7 first choice</div><div class="alliancedrop" id="Alliance7Round2" >Alliance 7 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance7Round3" >Alliance 7 third choice</div></td></tr><tr class="col6"> <td id="Alliance3" class="col3"><div class="alliancedrop" id="Alliance3Captain" >Alliance 3 Captain</div><div class="alliancedrop" id="Alliance3Round1" >Alliance 3 first choice</div><div class="alliancedrop" id="Alliance3Round2" >Alliance 3 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance3Round3" >Alliance 3 third choice</div></td><td id="Alliance6" class="col3"><div class="alliancedrop" id="Alliance6Captain" >Alliance 6 Captain</div><div class="alliancedrop" id="Alliance6Round1" >Alliance 6 first choice</div><div class="alliancedrop" id="Alliance6Round2" >Alliance 6 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance6Round3" >Alliance 6 third choice</div></td></tr><tr class="col6"> <td id="Alliance4" class="col3"><div class="alliancedrop" id="Alliance4Captain" >Alliance 4 Captain</div><div class="alliancedrop" id="Alliance4Round1" >Alliance 4 first choice</div><div class="alliancedrop" id="Alliance4Round2" >Alliance 4 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance4Round3" >Alliance 4 third choice</div></td><td id="Alliance5" class="col3"><div class="alliancedrop" id="Alliance5Captain" >Alliance 5 Captain</div><div class="alliancedrop" id="Alliance5Round1" >Alliance 5 first choice</div><div class="alliancedrop" id="Alliance5Round2" >Alliance 5 second choice</div><div class="alliancedrop thirdAllianceSelection" id="Alliance5Round3" >Alliance 5 third choice</div></td></tr></table></td></tr></table><p class="showAlliancePlayoff" id="showPlayoffBracket"><strong><span onclick="showAllianceSelectionPlayoff(\'playoff\');">Tap here to show Playoff Bracket.</span></strong></p>');
+    allianceSelectionOrder = [];
+    for (var alliance of allianceSelectionOrderBase) {
+        if (parseInt(alliance.substring(8, 9)) <= allianceCount) {
+            allianceSelectionOrder.push(alliance)
+        }
+    };
+
+    $("#allianceSelectionTable").html(`<table>
+    <tr>
+        <td>
+            <table class="availableTeams">
+                <tr>
+                    <td colspan="5"><strong>Teams for Alliance Selection</strong></td>
+                </tr>
+                <tr>
+                    <td id="allianceTeamList1" class="col1">
+                        <div class="allianceTeam">List of teams</div>
+                    </td>
+                    <td id="allianceTeamList2" class="col1">
+                        <div class="allianceTeam">List of teams</div>
+                    </td>
+                    <td id="allianceTeamList3" class="col1">
+                        <div class="allianceTeam">List of teams</div>
+                    </td>
+                    <td id="allianceTeamList4" class="col1">
+                        <div class="allianceTeam">List of teams</div>
+                    </td>
+                    <td id="allianceTeamList5" class="col1">
+                        <div class="allianceTeam allianceCaptain">List of teams</div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td class="col1">
+            <table id="backupTeamsTable" class="backupAlliancesTable">
+                <tr>
+                    <td>
+                        <p><strong>Backup Alliances</strong></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="allianceTeam backupAlliance" id="backupAllianceTeam1">List of teams</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="allianceTeam backupAlliance" id="backupAllianceTeam2">List of teams</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="allianceTeam backupAlliance" id="backupAllianceTeam3">List of teams</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="allianceTeam backupAlliance" id="backupAllianceTeam4">List of teams</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="allianceTeam backupAlliance" id="backupAllianceTeam5">List of teams</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="allianceTeam backupAlliance" id="backupAllianceTeam6">List of teams</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="allianceTeam backupAlliance" id="backupAllianceTeam7">List of teams</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="allianceTeam backupAlliance" id="backupAllianceTeam8">List of teams</div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table class="alliancesTeamsTable">
+                <tr class="col6">
+                    <td id="Alliance1" class="col3 dropzone">
+                        <div class="alliancedrop" id="Alliance1Captain">Alliance 1 Captain</div>
+                        <div class="alliancedrop nextAllianceChoice" id="Alliance1Round1">Alliance 1 first choice</div>
+                        <div class="alliancedrop" id="Alliance1Round2">Alliance 1 second choice</div>
+                        <div class="alliancedrop thirdAllianceSelection" id="Alliance1Round3">Alliance 1 third choice</div>
+                    </td>
+                    <td id="Alliance8" class="col3">
+                        <div class="alliancedrop" id="Alliance8Captain">Alliance 8 Captain</div>
+                        <div class="alliancedrop" id="Alliance8Round1">Alliance 8 first choice</div>
+                        <div class="alliancedrop" id="Alliance8Round2">Alliance 8 second choice</div>
+                        <div class="alliancedrop thirdAllianceSelection" id="Alliance8Round3">Alliance 8 third choice</div>
+                    </td>
+                </tr>
+                <tr class="col6">
+                    <td id="Alliance2" class="col3">
+                        <div class="alliancedrop" id="Alliance2Captain">Alliance 2 Captain</div>
+                        <div class="alliancedrop" id="Alliance2Round1">Alliance 2 first choice</div>
+                        <div class="alliancedrop" id="Alliance2Round2">Alliance 2 second choice</div>
+                        <div class="alliancedrop thirdAllianceSelection" id="Alliance2Round3">Alliance 2 third choice</div>
+                    </td>
+                    <td id="Alliance7" class="col3">
+                        <div class="alliancedrop" id="Alliance7Captain">Alliance 7 Captain</div>
+                        <div class="alliancedrop" id="Alliance7Round1">Alliance 7 first choice</div>
+                        <div class="alliancedrop" id="Alliance7Round2">Alliance 7 second choice</div>
+                        <div class="alliancedrop thirdAllianceSelection" id="Alliance7Round3">Alliance 7 third choice</div>
+                    </td>
+                </tr>
+                <tr class="col6">
+                    <td id="Alliance3" class="col3">
+                        <div class="alliancedrop" id="Alliance3Captain">Alliance 3 Captain</div>
+                        <div class="alliancedrop" id="Alliance3Round1">Alliance 3 first choice</div>
+                        <div class="alliancedrop" id="Alliance3Round2">Alliance 3 second choice</div>
+                        <div class="alliancedrop thirdAllianceSelection" id="Alliance3Round3">Alliance 3 third choice</div>
+                    </td>
+                    <td id="Alliance6" class="col3">
+                        <div class="alliancedrop" id="Alliance6Captain">Alliance 6 Captain</div>
+                        <div class="alliancedrop" id="Alliance6Round1">Alliance 6 first choice</div>
+                        <div class="alliancedrop" id="Alliance6Round2">Alliance 6 second choice</div>
+                        <div class="alliancedrop thirdAllianceSelection" id="Alliance6Round3">Alliance 6 third choice</div>
+                    </td>
+                </tr>
+                <tr class="col6">
+                    <td id="Alliance4" class="col3">
+                        <div class="alliancedrop" id="Alliance4Captain">Alliance 4 Captain</div>
+                        <div class="alliancedrop" id="Alliance4Round1">Alliance 4 first choice</div>
+                        <div class="alliancedrop" id="Alliance4Round2">Alliance 4 second choice</div>
+                        <div class="alliancedrop thirdAllianceSelection" id="Alliance4Round3">Alliance 4 third choice</div>
+                    </td>
+                    <td id="Alliance5" class="col3">
+                        <div class="alliancedrop" id="Alliance5Captain">Alliance 5 Captain</div>
+                        <div class="alliancedrop" id="Alliance5Round1">Alliance 5 first choice</div>
+                        <div class="alliancedrop" id="Alliance5Round2">Alliance 5 second choice</div>
+                        <div class="alliancedrop thirdAllianceSelection" id="Alliance5Round3">Alliance 5 third choice</div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>`);
     $("#showPlayoffBracket").hide();
 }
 
@@ -1408,10 +1551,16 @@ function getTeamList(year) {
                 teamCountTotal = data.teamCountTotal;
                 localStorage.teamList = "[]"
             } else {
-
                 $("#eventTeamCount").html(data.teamCountTotal);
                 teamCountTotal = data.teamCountTotal;
-                $('#teamsTableEventName').html(localStorage.eventName)
+                if (teamCountTotal <= 24) {
+                    allianceCount = Math.floor((teamCountTotal - 1) / 3);
+                    allianceSelectionLength = 2 * allianceCount - 1;
+                } else {
+                    allianceCount = 8;
+                }
+                $('#eventAllianceCount').html(allianceCount);
+                $('#teamsTableEventName').html(localStorage.eventName);
 
                 for (var i = 0; i < data.teams.length; i++) {
                     var element = data.teams[i];
@@ -2215,7 +2364,7 @@ function displayAwardsTeams(teamList) {
 function displayAllianceCaptains(startingPosition) {
     "use strict";
 
-    for (var i = 1; i <= 8; i++) {
+    for (var i = 1; i <= allianceCount; i++) {
         if (i <= startingPosition + 1) {
             $("#Alliance" + i + "Captain").html("Alliance " + i + " Captain<div class ='allianceTeam allianceCaptain' captain='Alliance" + i + "Captain' teamnumber='" + allianceChoices["Alliance" + i + "Captain"] + "' id='allianceTeam" + allianceChoices["Alliance" + i + "Captain"] + "' onclick='chosenAllianceAlert(this)'>" + allianceChoices["Alliance" + i + "Captain"] + "</div>")
         } else {
@@ -2225,6 +2374,7 @@ function displayAllianceCaptains(startingPosition) {
 }
 
 function displayBackupAlliances(reason) {
+    $(".backupAlliance").hide();
     for (var i = 0; i < declinedList.length; i++) {
         if (backupAllianceList.indexOf(Number(declinedList[i])) >= 0) {
             backupAllianceList.splice(backupAllianceList.indexOf(Number(declinedList[i])), 1);
@@ -2234,6 +2384,7 @@ function displayBackupAlliances(reason) {
     for (var i = 1; i <= 8; i++) {
         if (i <= backupAllianceList.length) {
             $("#backupAllianceTeam" + i).html("<div id='backupAllianceTeamContainer" + i + "' class ='allianceTeam' captain='alliance' teamnumber=" + backupAllianceList[i - 1] + " onclick='allianceAlert(this)'>" + backupAllianceList[i - 1] + "</div>");
+            $("#backupAllianceTeam" + i).show();
         }
 
     }
@@ -2426,22 +2577,21 @@ function allianceAlert(teamContainer) {
                                     teamContainer.setAttribute("captain", "alliance");
                                     var nextAlliance = parseInt(allianceBackfill.substr(8, 1));
 
-                                    for (var j = nextAlliance; j < 8; j++) {
+                                    for (var j = nextAlliance; j < allianceCount; j++) {
                                         allianceChoices["Alliance" + j + "Captain"] = Number(allianceChoices["Alliance" + (j + 1) + "Captain"])
                                     }
                                     //test for declined team
-                                    //allianceChoices.Alliance8Captain = allianceListUnsorted[7];
-                                    allianceChoices.Alliance8Captain = backupAllianceList[0];
+                                    allianceChoices[`Alliance${allianceCount}Captain`] = backupAllianceList[0];
 
-                                    index = allianceTeamList.indexOf(parseInt(allianceChoices.Alliance8Captain));
+                                    index = allianceTeamList.indexOf(parseInt(allianceChoices[`Alliance${allianceCount}Captain`]));
                                     if (index > -1) {
                                         allianceTeamList.splice(index, 1)
                                     }
-                                    index = backupAllianceList.indexOf(parseInt(allianceChoices.Alliance8Captain));
+                                    index = backupAllianceList.indexOf(parseInt(allianceChoices[`Alliance${allianceCount}Captain`]));
                                     if (index > -1) {
                                         backupAllianceList.splice(index, 1)
                                     }
-                                    index = allianceListUnsorted.indexOf(parseInt(allianceChoices.Alliance8Captain));
+                                    index = allianceListUnsorted.indexOf(parseInt(allianceChoices[`Alliance${allianceCount}Captain`]));
                                     if (index > -1) {
                                         allianceListUnsorted.splice(index, 1)
                                     }
@@ -2451,7 +2601,7 @@ function allianceAlert(teamContainer) {
                                 teamContainer.id = "allianceTeam" + teamContainer.getAttribute("teamNumber");
                                 $("#" + teamContainer.getAttribute("id")).removeClass("allianceCaptain");
                                 $("#" + allianceSelectionOrder[currentAllianceChoice]).append(teamContainer);
-                                $("#" + allianceSelectionOrder[currentAllianceChoice].substr(0, 9)).removeClass("dropzone");
+                                $("#" + allianceSelectionOrder[currentAllianceChoice].substring(0, 9)).removeClass("dropzone");
                                 $("#" + allianceSelectionOrder[currentAllianceChoice]).removeClass("nextAllianceChoice");
                                 currentAllianceChoice++;
                                 if (currentAllianceChoice <= allianceSelectionLength) {
@@ -3208,9 +3358,9 @@ function fixSponsors(teamData) {
 
 function teamTableRankHighlight(rank) {
     "use strict";
-    if ((rank <= 8) && (rank > 1)) {
+    if ((rank <= allianceCount) && (rank > 1)) {
         return "rank2"
-    } else if ((rank < 11) && (rank > 8)) {
+    } else if ((rank < (allianceCount + 3)) && (rank > allianceCount)) {
         return "rank9"
     } else if (rank === 1) {
         return "rank1"
@@ -3221,10 +3371,10 @@ function teamTableRankHighlight(rank) {
 
 function rankHighlight(station, rank) {
     "use strict";
-    if ((rank <= 8) && (rank > 1)) {
+    if ((rank <= allianceCount) && (rank > 1)) {
         document.getElementById(station).style.color = "white";
         document.getElementById(station).style.backgroundColor = "green"
-    } else if ((rank < 11) && (rank > 8)) {
+    } else if ((rank < (allianceCount + 3)) && (rank > allianceCount)) {
         document.getElementById(station).style.color = "black";
         document.getElementById(station).style.backgroundColor = "yellow"
     } else if (rank === 1) {
@@ -4080,11 +4230,13 @@ function showAllianceSelectionPlayoff(targetMode) {
         $("#allianceInfo").hide();
         $("#allianceSelectionTable").hide();
         $("#showPlayoffBracket").hide();
+        $("#showAllianceSelection").show();
     } else {
         $("#playoffBracket").hide();
         $("#allianceInfo").show();
         $("#allianceSelectionTable").show();
         $("#showPlayoffBracket").show();
+        $("#showAllianceSelection").hide();
     }
 }
 
