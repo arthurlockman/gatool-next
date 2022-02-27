@@ -16,12 +16,15 @@ var declinedListUndo = [];
 var backupAllianceListUndo = [];
 var undoCounter=[];
 var allianceSelectionLength = 15;
+var allianceCount = 8;
 var rankingsList = [];
 var districtRankings = {};
 var eventTeamList = [];
 var eventQualsSchedule = [];
 var eventPlayoffSchedule = [];
-var allianceSelectionOrder = ["Alliance1Round1", "Alliance2Round1", "Alliance3Round1", "Alliance4Round1", "Alliance5Round1", "Alliance6Round1", "Alliance7Round1", "Alliance8Round1", "Alliance8Round2", "Alliance7Round2", "Alliance6Round2", "Alliance5Round2", "Alliance4Round2", "Alliance3Round2", "Alliance2Round2", "Alliance1Round2", "Alliance1Round3", "Alliance2Round3", "Alliance3Round3", "Alliance4Round3", "Alliance5Round3", "Alliance6Round3", "Alliance7Round3", "Alliance8Round3"];
+var allianceSelectionOrderBase = ["Alliance1Round1", "Alliance2Round1", "Alliance3Round1", "Alliance4Round1", "Alliance5Round1", "Alliance6Round1", "Alliance7Round1", "Alliance8Round1", "Alliance8Round2", "Alliance7Round2", "Alliance6Round2", "Alliance5Round2", "Alliance4Round2", "Alliance3Round2", "Alliance2Round2", "Alliance1Round2", "Alliance1Round3", "Alliance2Round3", "Alliance3Round3", "Alliance4Round3", "Alliance5Round3", "Alliance6Round3", "Alliance7Round3", "Alliance8Round3"];
+var allianceSelectionOrder = [];
+
 var currentAllianceChoice = 0;
 var allianceChoices = {};
 var replacementAlliance = {};
@@ -71,7 +74,7 @@ playoffTieBreakerMatches["24"] = ["19","20","21","22","23"];
 playoffTieBreakerMatches["list"] = ["9","10","11","12","17","18","24"];
 var tbaBatchDelay = 50;
 
-for (var i = 1; i < 9; i++) {
+for (var i = 1; i <= allianceCount; i++) {
     allianceChoices['Alliance' + i + 'Captain'] = "";
 }
 for (var i = 0; i < allianceSelectionOrder.length; i++) {
@@ -6667,3 +6670,5 @@ var timeFormats = {
     "12hrNoSec":"h:mm a",
     "24hrNoSec":"HH:mm"
 }
+
+var dummyTeams = ["9999","9998","9997","9996","9995","9994","9993","9992","9991","9990","9989","9988","9987","9986","9985","9984","9983","9982","9981","9980","9979"]
