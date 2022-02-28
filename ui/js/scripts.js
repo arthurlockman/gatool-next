@@ -1650,7 +1650,7 @@ function getTeamList(year) {
                                 req.open('GET', apiURL + localStorage.currentYear + '/teams?teamNumber=' + districtTeams[i].teamNumber);
                                 req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
                                 req.addEventListener('load', function () {
-                                    if (req.responseText.substr(0, 5) !== '"Team') {
+                                    if (req.responseText.substring(0, 5) !== '"Team') {
                                         var data = JSON.parse(req.responseText);
                                         if (data.teams.length > 0) {
                                             var teamData = data.teams[0];
@@ -2575,7 +2575,7 @@ function allianceAlert(teamContainer) {
                                 if (teamContainer.getAttribute("captain") !== "alliance") {
                                     var allianceBackfill = teamContainer.getAttribute("captain");
                                     teamContainer.setAttribute("captain", "alliance");
-                                    var nextAlliance = parseInt(allianceBackfill.substr(8, 1));
+                                    var nextAlliance = parseInt(allianceBackfill.substring(8, 9));
 
                                     for (var j = nextAlliance; j < allianceCount; j++) {
                                         allianceChoices["Alliance" + j + "Captain"] = Number(allianceChoices["Alliance" + (j + 1) + "Captain"])
@@ -2891,7 +2891,7 @@ function getTeamData(teamList, year) {
             req.addEventListener('load', function () {
                 //console.log(req.responseText);
                 if (req.status === 200) {
-                    if (req.responseText.substr(0, 5) !== '"Team') {
+                    if (req.responseText.substring(0, 5) !== '"Team') {
                         var data = JSON.parse(req.responseText);
                         if (data.teams.length > 0) {
                             var teamData = data.teams[0];
@@ -3033,7 +3033,7 @@ function scoreDetails(matchNumber, tournamentLevel) {
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         if (req.status === 200) {
-            if (req.responseText.substr(0, 5) !== '"Team') {
+            if (req.responseText.substring(0, 5) !== '"Team') {
                 var data = JSON.parse(req.responseText).MatchScores[0];
                 var redAllianceScores, blueAllianceScores = [];
                 var scoreKeys = Object.keys(data.alliances[0]);
