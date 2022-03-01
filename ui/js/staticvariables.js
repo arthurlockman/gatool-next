@@ -57,6 +57,7 @@ var allianceSelectionReady = false;
 var environment = {};
 var showAllianceSelectionOverride = false;
 var tablist = {};
+var oneDayEvent = false;
 tablist.tabs=["setupTabPicker","scheduleTabPicker","teamDataTabPicker","teamRanksPicker","announceTabPicker","playByPlayTabPicker","allianceSelectionTabPicker","awardsTabPicker","statsTabPicker","cheatsheetTabPicker","davidPriceTabPicker"];
 tablist.clicks=["setup","schedule","teamdata","teamRanks","announce","playbyplay","allianceselection","awards","stats","cheatsheet","davidPrice"];
 tablist.index=0;

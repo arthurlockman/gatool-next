@@ -242,7 +242,10 @@ function getTeamRanks() {
                 lastRanksUpdate = req.getResponseHeader("Last-Modified");
                 
                 teamCountTotal = data.Rankings.length;
-                if (teamCountTotal <= 24) {
+                if (oneDayEvent) {
+                    allianceCount = 4;
+                    allianceSelectionLength = 2 * allianceCount - 1;
+                } else if (teamCountTotal <= 24) {
                     allianceCount = Math.floor((teamCountTotal - 1) / 3);
                     allianceSelectionLength = 2 * allianceCount - 1;
                 } else {

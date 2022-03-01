@@ -840,6 +840,7 @@ function handleEventSelection() {
     playoffResults = {};
     eventAppearances = {};
     champsAwards = {};
+    oneDayEvent = false;
     var e = document.getElementById('eventSelector');
     var data = JSON.parse(e.value);
     localStorage.eventSelector = data.code;
@@ -862,6 +863,11 @@ function handleEventSelection() {
     localStorage.eventName = data.name.replace("- FIRST Robotics Competition -", "-");
     if (data.districtCode !== null) {
         localStorage.eventDistrict = data.districtCode;
+    }
+    if ((data.name.indexOf("Day 1") !== -1) || (data.name.indexOf("Day 2") !== -1) || (data.name.indexOf("Day 3") !== -1)) {
+        oneDayEvent = true;
+    } else {
+        oneDayEvent = false;
     }
     localStorage.teamList = "[]";
     if (inChamps() || inSubdivision()) {
@@ -1549,7 +1555,10 @@ function getTeamList(year) {
             } else {
                 $("#eventTeamCount").html(data.teamCountTotal);
                 teamCountTotal = data.teamCountTotal;
-                if (teamCountTotal <= 24) {
+                if (oneDayEvent) {
+                    allianceCount = 4;
+                    allianceSelectionLength = 2 * allianceCount - 1;
+                } else if (teamCountTotal <= 24) {
                     allianceCount = Math.floor((teamCountTotal - 1) / 3);
                     allianceSelectionLength = 2 * allianceCount - 1;
                 } else {
