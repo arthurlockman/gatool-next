@@ -147,6 +147,7 @@ function getTeamRanks() {
     $('#ranksProgressBar').show();
     $('#teamRanksPicker').addClass('alert-danger');
     var team = {};
+    var teamAllianceReady = 0;
     var req = new XMLHttpRequest();
     req.open('GET', apiURL + localStorage.currentYear + '/rankings/' + localStorage.currentEvent);
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
@@ -194,6 +195,10 @@ function getTeamRanks() {
                 $('#ranksContainer').html('<p class = "eventName">' + localStorage.eventName + ' (<b><span id="rankstablelastupdated"></span></b>)</p><p>This table lists the teams in rank order for this competition. This table updates during the competition, and freezes once Playoff Matches begin. </p><table id="ranksTable" class="table table-condensed table-responsive table-bordered table-striped"></table>');
                 var ranksList = '<thead  id="ranksTableHead" class="thead-default"><tr><td onclick="w3.sortHTMLAsNumber(\'#ranksTable\',\'.ranksTableRow\', \'.rankTableNumber\')" class="col1"><b>Team #</b></td><td onclick="w3.sortHTMLAsNumber(\'#ranksTable\',\'.ranksTableRow\', \'.rankTableRank\')" class="col1"><b>Rank</b></td><td class="col2"><b>Team Name</b></td><td class = "col1"><b>RP Avg.</b></td><td class="col1"><b>Wins</b></td><td  class="col1"><b>Losses</b></td><td class="col1"><b>Ties</b></td><td class="col1"><b>Qual Avg</b></td><td class="col1"><b>DQ</b></td><td class="col1"><b>Matches Played</b></td><td onclick="w3.sortHTMLAsNumber(\'#ranksTable\',\'.ranksTableRow\', \'.sortDistrictRank\')" class="col1 districtRank"><b>District Rank</b></tr></thead><tbody>';
 
+                // Determine the number of matches each team will play
+                matchCount = parseInt(Number(JSON.parse(localStorage.qualsList).Schedule.length) * 6 / Number(data.Rankings.length));
+
+                //Process rank info for each team.
                 for (var i = 0; i < data.Rankings.length; i++) {
 
                     team = decompressLocalStorage("teamData" + data.Rankings[i].teamNumber);
@@ -217,14 +222,19 @@ function getTeamRanks() {
                     $("#teamTableRank" + data.Rankings[i].teamNumber).attr("class", teamTableRankHighlight(data.Rankings[i].rank));
                     ranksList += updateRanksTableRow(team, data.Rankings[i].teamNumber);
                     compressLocalStorage("teamData" + data.Rankings[i].teamNumber, team);
-                    matchCount = parseInt(Number(JSON.parse(localStorage.qualsList).Schedule.length) * 6 / Number(data.Rankings.length));
+                   
+                    //Count how many teams have not played all of their matches
                     if (data.Rankings[i].matchesPlayed < matchCount) {
-                        allianceSelectionReady = false;
-                    } else {
-                        allianceSelectionReady = true;
+                        teamAllianceReady += 1;
                     }
 
                 }
+                if (teamAllianceReady == 0) {
+                    allianceSelectionReady = true;
+                } else {
+                    allianceSelectionReady = false;
+                }
+
                 $("#ranksProgressBar").hide();
                 $('#ranksTable').html(ranksList + "</tbody>");
                 $('#teamRanksPicker').removeClass('alert-danger');
@@ -246,7 +256,7 @@ function getTeamRanks() {
                         allianceSelectionOrder.push(alliance)
                     }
                 };
-                
+
                 $("#allianceUndoButton").hide();
                 allianceChoices.Alliance1Captain = allianceTeamList[0];
                 $("#Alliance1Captain").html("Alliance 1 Captain<div class ='allianceTeam allianceCaptain' captain='Alliance1Captain' teamnumber = '" + allianceTeamList[0] + "' id='allianceTeam" + allianceTeamList[0] + "' onclick='chosenAllianceAlert(this)'>" + allianceTeamList.shift() + "</div>");
