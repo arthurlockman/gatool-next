@@ -398,9 +398,9 @@ w3.displayObject = function (id, data) {
           if (lookForARR[i] == repeatX) {value = x;}
         }
         if (value == undefined) {
-          if (lookForARR[i].substr(0, 1) == '"') {
+          if (lookForARR[i].substring(0, 1) == '"') {
             value = lookForARR[i].replace(/"/g, "");
-          } else if (lookForARR[i].substr(0,1) == "'") {
+          } else if (lookForARR[i].substring(0,1) == "'") {
             value = lookForARR[i].replace(/'/g, "");
           }
         }

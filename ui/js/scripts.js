@@ -645,11 +645,7 @@ function prepareAllianceSelection() {
     districtRankings = {};
     currentAllianceChoice = 0;
     allianceSelectionOrder = [];
-    for (var alliance of allianceSelectionOrderBase) {
-        if (parseInt(alliance.substring(8, 9)) <= allianceCount) {
-            allianceSelectionOrder.push(alliance)
-        }
-    };
+    
 
     $("#allianceSelectionTable").html(`<table>
     <tr>
@@ -1192,7 +1188,7 @@ function getRegularSeasonSchedule() {
                 }
                 $('#scheduleTabPicker').removeClass('alert-danger');
                 $('#scheduleTabPicker').addClass('alert-success');
-                matchCount = parseInt(Number(JSON.parse(localStorage.qualsList).Schedule.length) * 6 / Number(JSON.parse(localStorage.teamList).length));
+                //matchCount = parseInt(Number(JSON.parse(localStorage.qualsList).Schedule.length) * 6 / Number(JSON.parse(localStorage.teamList).length));
                 $("#scheduleUpdateContainer").html(moment().format("dddd, MMMM Do YYYY, " + timeFormats[localStorage.timeFormat]) + "... and looking for Playoff schedule...");
                 req1.send()
             }

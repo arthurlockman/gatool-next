@@ -77,8 +77,8 @@ var tbaBatchDelay = 50;
 for (var i = 1; i <= allianceCount; i++) {
     allianceChoices['Alliance' + i + 'Captain'] = "";
 }
-for (var i = 0; i < allianceSelectionOrder.length; i++) {
-    allianceChoices[allianceSelectionOrder[i]] = "";
+for (var i = 0; i < allianceSelectionOrderBase.length; i++) {
+    allianceChoices[allianceSelectionOrderBase[i]] = "";
 }
 
 //Championship events receive special treatment. We define the Championshio events here, including Michigan.

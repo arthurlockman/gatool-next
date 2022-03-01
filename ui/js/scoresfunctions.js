@@ -217,7 +217,7 @@ function getTeamRanks() {
                     $("#teamTableRank" + data.Rankings[i].teamNumber).attr("class", teamTableRankHighlight(data.Rankings[i].rank));
                     ranksList += updateRanksTableRow(team, data.Rankings[i].teamNumber);
                     compressLocalStorage("teamData" + data.Rankings[i].teamNumber, team);
-
+                    matchCount = parseInt(Number(JSON.parse(localStorage.qualsList).Schedule.length) * 6 / Number(data.Rankings.length));
                     if (data.Rankings[i].matchesPlayed < matchCount) {
                         allianceSelectionReady = false;
                     } else {
@@ -230,7 +230,23 @@ function getTeamRanks() {
                 $('#teamRanksPicker').removeClass('alert-danger');
                 $('#teamRanksPicker').addClass('alert-success');
                 lastRanksUpdate = req.getResponseHeader("Last-Modified");
+                
+                teamCountTotal = data.Rankings.length;
+                if (teamCountTotal <= 24) {
+                    allianceCount = Math.floor((teamCountTotal - 1) / 3);
+                    allianceSelectionLength = 2 * allianceCount - 1;
+                } else {
+                    allianceCount = 8;
+                }
+                $('#eventAllianceCount').html(allianceCount);
+                $("#eventTeamCount").html(teamCountTotal);
 
+                for (var alliance of allianceSelectionOrderBase) {
+                    if (parseInt(alliance.substring(8, 9)) <= allianceCount) {
+                        allianceSelectionOrder.push(alliance)
+                    }
+                };
+                
                 $("#allianceUndoButton").hide();
                 allianceChoices.Alliance1Captain = allianceTeamList[0];
                 $("#Alliance1Captain").html("Alliance 1 Captain<div class ='allianceTeam allianceCaptain' captain='Alliance1Captain' teamnumber = '" + allianceTeamList[0] + "' id='allianceTeam" + allianceTeamList[0] + "' onclick='chosenAllianceAlert(this)'>" + allianceTeamList.shift() + "</div>");
