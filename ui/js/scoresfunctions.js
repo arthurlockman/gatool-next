@@ -139,6 +139,7 @@ function getHighScores() {
 
 function getTeamRanks() {
     "use strict";
+    prepareAllianceSelection();
     if (localStorage.offseason == "true") {
         $('#rankUpdateContainer').html("Offline Event");
     } else {
@@ -186,7 +187,6 @@ function getTeamRanks() {
                 }
             } else {
                 haveRanks = true;
-                prepareAllianceSelection();
                 localStorage.Rankings = JSON.stringify(data.Rankings);
                 if (localStorage.currentMatch > JSON.parse(localStorage.qualsList).Schedule.length) {
                     $("#rankingDisplay").html("<b>Qual Seed<b>");

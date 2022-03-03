@@ -421,25 +421,25 @@ window.onload = function () {
 
     //Handle a change in Alliance Selection Override
     document.getElementById('playoffCountOverride').onchange = function () {
-        if ($("#playoffCountOverride").bootstrapSwitch('state')) {
-            localStorage.playoffCountOverride = "true";
-        } else {
-            localStorage.playoffCountOverride = "false";
-        }
-        localStorage.playoffCountOverrideValue = $("#playoffCountOverrideValue").val();
-        getTeamRanks();
+        handleAllianceCountChange();
     };
 
     //Handle a change in Alliance Selection Override
     document.getElementById('playoffCountOverrideValue').onchange = function () {
+        handleAllianceCountChange();
+    };
+
+    function handleAllianceCountChange() {
+        localStorage.playoffCountOverrideValue = $("#playoffCountOverrideValue").val();
         if ($("#playoffCountOverride").bootstrapSwitch('state')) {
             localStorage.playoffCountOverride = "true";
+            allianceCount = parseInt(localStorage.playoffCountOverrideValue);
+            $('#eventAllianceCount').html(localStorage.playoffCountOverrideValue);
         } else {
             localStorage.playoffCountOverride = "false";
-        }
-        localStorage.playoffCountOverrideValue = $("#playoffCountOverrideValue").val();
+        }     
         getTeamRanks();
-    };
+    }
 
     //Handle Event Filter change
     //document.getElementById('eventFilters').onchange = function () {
@@ -707,7 +707,7 @@ function prepareAllianceSelection() {
             <table id="backupTeamsTable" class="backupAlliancesTable">
                 <tr>
                     <td>
-                        <p><strong>Backup Alliances</strong></p>
+                        <p><strong>Backup Alliances</strong><br>(Initially rank ${parseInt(allianceCount)+1} to ${parseInt(allianceCount)+9} top to bottom)</p>
                     </td>
                 </tr>
                 <tr>
@@ -1286,7 +1286,7 @@ function getRegularSeasonSchedule() {
                 $("#allianceSelectionTable").hide();
                 $("#allianceSelectionWarning").hide();
                 $("#allianceInfo").hide();
-                prepareAllianceSelection();
+                //
                 // if (lastMatchPlayed >= data.Schedule.length - 1) {
                 //     $("#allianceSelectionTable").show();
                 //     $(".thirdAllianceSelection").hide();
@@ -1298,6 +1298,7 @@ function getRegularSeasonSchedule() {
                 // }
                 getAllianceList()
             }
+
             if (matchSchedule) {
                 document.getElementById('scheduleTable').innerHTML += matchSchedule
             }
@@ -1314,7 +1315,8 @@ function getRegularSeasonSchedule() {
                 $("#matchPicker").selectpicker('refresh')
             }
             if (matchSchedule) {
-                announceDisplay()
+                prepareAllianceSelection();
+                announceDisplay();
             }
         }
     });
