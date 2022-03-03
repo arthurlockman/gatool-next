@@ -186,6 +186,7 @@ function getTeamRanks() {
                 }
             } else {
                 haveRanks = true;
+                prepareAllianceSelection();
                 localStorage.Rankings = JSON.stringify(data.Rankings);
                 if (localStorage.currentMatch > JSON.parse(localStorage.qualsList).Schedule.length) {
                     $("#rankingDisplay").html("<b>Qual Seed<b>");
@@ -242,7 +243,10 @@ function getTeamRanks() {
                 lastRanksUpdate = req.getResponseHeader("Last-Modified");
                 
                 teamCountTotal = data.Rankings.length;
-                if (oneDayEvent) {
+                if (localStorage.playoffCountOverride === "true") {
+                    allianceCount = parseInt(localStorage.playoffCountOverrideValue);
+                    allianceSelectionLength = 2 * allianceCount - 1;
+                } else if (oneDayEvent) {
                     allianceCount = 4;
                     allianceSelectionLength = 2 * allianceCount - 1;
                 } else if (teamCountTotal <= 24) {
@@ -254,6 +258,7 @@ function getTeamRanks() {
                 $('#eventAllianceCount').html(allianceCount);
                 $("#eventTeamCount").html(teamCountTotal);
 
+                allianceSelectionOrder=[];
                 for (var alliance of allianceSelectionOrderBase) {
                     if (parseInt(alliance.substring(8, 9)) <= allianceCount) {
                         allianceSelectionOrder.push(alliance)

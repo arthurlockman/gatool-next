@@ -70,7 +70,8 @@
                 <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'announce')" id="announceTabPicker"><span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> <span class="mobileHide">Announce</span></a>
             </li>
             <li>
-                <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'playbyplay')" id="playByPlayTabPicker"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span><span class="mobileHide">Play-by-play</span></a></li>
+                <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'playbyplay')" id="playByPlayTabPicker"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span><span class="mobileHide">Play-by-play</span></a>
+            </li>
             <li>
                 <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'allianceselection')" id="allianceSelectionTabPicker"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span><span id="allianceBracket" class="mobileHide">Alliance Selection</span></a>
             </li>
@@ -93,9 +94,9 @@
         <div id="setup" class="tabcontent container-fluid">
             <div id="eventInfoContainer" class="col-xs-12 col-md-6 col-sm-6">
                 <p><select class="selectpicker" id="yearPicker" data-width="fit">
-                    <option id="yearPicker2022">2022</option>
-                    <option id="yearPicker2021">2021</option>
-                    <option id="yearPicker2020">2020</option>
+                        <option id="yearPicker2022">2022</option>
+                        <option id="yearPicker2021">2021</option>
+                        <option id="yearPicker2020">2020</option>
                     </select>
                     <select class="selectpicker" id="eventFilters" multiple title="Filter your event list..." data-selected-text-format="count > 2" onchange="filterEvents()">
                         <option id="filtersclear" value="clear">Remove Filters</option>
@@ -129,7 +130,8 @@
                             <option id="filterstx" value="TX">FIRST in Texas</option>
                         </optgroup>
                         <option id="filteroffseason" value="offseason">• Offseason •</option>
-                    </select></p>
+                    </select>
+                </p>
                 <p><select class="selectpicker" data-live-search="true" id="eventSelector" data-width="fit"> </select><br>
                     <span class="alert-info regularseason">(••blue bracketed events•• are registered Offseason events and should provide live data in gatool)</span><br>
                     <span class="alert-warning regularseason">(••orange bracketed events•• are Offseason events and may not provide live data in gatool)</span><br>
@@ -150,7 +152,7 @@
                 <p><b>Last Ranking update:</b> <span id="rankUpdateContainer">no ranking data available</span></p>
                 <p><b>Last Playoff Alliance update:</b> <span id="allianceUpdateContainer">no Playoff data available</span></p>
                 <p id="playoffScheduleAlert" onclick="getHybridSchedule()" class="btn-default alert playoffAlert col-lg-6 col-md-6 col-sm-7 col-xs-6"><span class="glyphicon glyphicon-refresh">&nbsp;</span>Tap here to refresh Playoff schedule, when available.</p>
-                <p><img width="130" src="images/RAPID_REACT_Logo_Vertical_RGB_FullColor_250.png" alt="FIRST Forward Logo"/></p>
+                <p><img width="130" src="images/RAPID_REACT_Logo_Vertical_RGB_FullColor_250.png" alt="FIRST Forward Logo" /></p>
             </div>
             <div id="maintenanceTasks" class="col-xs-12 col-md-6 col-sm-6">
                 <p><input name="showSponsors" id="showSponsors" type="checkbox" value="true" checked>&nbsp;Show Sponsors on Announce</p>
@@ -162,6 +164,18 @@
                 <p><input name="swapPlayByPlay" id="swapPlayByPlay" type="checkbox" value="true" checked> &nbsp;Swap Play by Play Screen Orientation</p>
                 <p><input name="autoAdvance" id="autoAdvance" type="checkbox" value="true" checked> &nbsp;Automatically advance to the next match when loading</p>
                 <p><input name="timeDisplay" id="timeDisplay" type="checkbox" value="true" checked> &nbsp;Time Format (Wait for event to reload to see changes)</p>
+                <p><input name="playoffCountOverride" id="playoffCountOverride" type="checkbox" value="true" checked> &nbsp;Override Alliance Selection Count &nbsp;
+                <select class="selectpicker" id="playoffCountOverrideValue" data-width="fit">
+                    <option id="playoffCountOverrideValue8" value="8">8</option>
+                    <option id="playoffCountOverrideValue7" value="7">7</option>
+                    <option id="playoffCountOverrideValue6" value="6">6</option>
+                    <option id="playoffCountOverrideValue5" value="5">5</option>
+                    <option id="playoffCountOverrideValue4" value="4">4</option>
+                    <option id="playoffCountOverrideValue3" value="3">3</option>
+                    <option id="playoffCountOverrideValue2" value="2">2</option>
+                </select></p>
+
+
                 <div class="container alert alert-warning col-sm-12">
                     <p><strong>The following settings are specific to how we display Awards.</strong></p>
                     <p>You can mix and match settings. You will see the changes when the team data reloads. If you make manual adjustments to awards on the Team Info screen, then you will need to reset those adjusted fields in order to see new awards that accumulate during the current season.</p>
@@ -287,16 +301,20 @@
                                 <b>City</b>
                             </td>
                             <td onclick="w3.sortHTML('#teamsTable','.teamsTableRow', 'td:nth-child(5)')" class="col2">
-                                <b>Top Sponsors</b></td>
+                                <b>Top Sponsors</b>
+                            </td>
                             <td onclick="w3.sortHTML('#teamsTable','.teamsTableRow', 'td:nth-child(6)')" class="col1">
                                 <b>Organization</b>
                             </td>
                             <td onclick="w3.sortHTML('#teamsTable','.teamsTableRow', 'td:nth-child(7)')" class="col1">
-                                <b>Rookie Year</b></td>
+                                <b>Rookie Year</b>
+                            </td>
                             <td onclick="w3.sortHTML('#teamsTable','.teamsTableRow', 'td:nth-child(8)')" class="col1">
-                                <b>Robot name</b></td>
+                                <b>Robot name</b>
+                            </td>
                             <td onclick="w3.sortHTML('#teamsTable','.teamsTableRow', 'td:nth-child(9)')" class="col2">
-                                <b>Additional Notes</b></td>
+                                <b>Additional Notes</b>
+                            </td>
                         </tr>
                     </thead>
                     <tbody id="teamsTableBody"></tbody>
@@ -792,7 +810,7 @@
                             <p id="blue4PlaybyPlayTeamNameSwap" class="playByPlayTeamName">blue4 Team Name</p>
                             <p id="blue4PlaybyPlayRobotNameSwap" class="playByPlayRobotName">blue4 Robot Name</p>
                             <p id="blue4WinLossTieSwap" class="playByPlayWinLossTie text-center">win-loss-tie</p>
-                            <p id="blue4PlaybyPlayNotesSwap"Swap class="notes playByPlayWinLossTie">blue4 Notes</p>
+                            <p id="blue4PlaybyPlayNotesSwap" Swap class="notes playByPlayWinLossTie">blue4 Notes</p>
                         </td>
                     </tr>
                 </table>
@@ -988,7 +1006,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <p class="showAlliancePlayoff" id="showAllianceSelection"><strong><span  onclick="showAllianceSelectionPlayoff('alliance');">Tap here to show Alliance Selection.</span></strong></p>
+                <p class="showAlliancePlayoff" id="showAllianceSelection"><strong><span onclick="showAllianceSelectionPlayoff('alliance');">Tap here to show Alliance Selection.</span></strong></p>
             </div>
             <div id="allianceInfo" class="allianceAnnounce">
                 <p><span id="eventNameAllianceSelection"></span><span id="allianceselectionlastupdated"></span>Before the selection begins and to help introduce the Alliance home town.<br><strong>IMPORTANT: Tap <em>Alliance Captain Announce</em> to continue announcing the Captains.</strong></p>
@@ -1172,7 +1190,7 @@
             <p>Use this form to update team information for <strong>Team <span id="teamNumberUpdate">xxx</span></strong>. Editable fields are shown below. Your changes will be stored locally on your machine and should not be erased if you close your browser.</p>
             <p>Tap on each item to update its value. Tap <strong>DONE</strong> when you're finished editing, or browse to another tab to cancel editing. Items <span class="bg-success"><b>highlighted in green</b></span> have local changes. Motto and Notes are always local. To reset any value to the TIMS value, simply delete it here and tap DONE.</p>
             <p>You can load changes to Team Data from gatool Cloud, or you can sync your local values with gatool Cloud using the buttons at the bottom of this screen.</p>
-            <p id="lastUpdatedWarning" class="alert-warning"><b>Last updated in gatool Cloud: <span id = "teamUpdateLastUpdate"></span></b></p>
+            <p id="lastUpdatedWarning" class="alert-warning"><b>Last updated in gatool Cloud: <span id="teamUpdateLastUpdate"></span></b></p>
             <form id="teamUpdateForm">
                 <div id="teamNameUpdateLabel" class="form-group"><label for="teamNameUpdate">Team Name (<span id="teamNameUpdateTIMS">xxx</span> in TIMS)</label> <input type="text" class="form-control" id="teamNameUpdate" placeholder="Enter a Team Name"></div>
                 <div id="organizationUpdateLabel" class="form-group"><label for="organizationUpdate">Organization/School (<span id="organizationUpdateTIMS">xxx</span> in TIMS)</label> <input type="text" class="form-control" id="organizationUpdate" placeholder="Enter an Organization or School Name">
@@ -1184,11 +1202,13 @@
                 </div>
                 <div id="teamYearsNoCompeteUpdateLabel" class="form-group"><label for="teamYearsNoCompeteUpdate">Number of seasons NOT competing with <i><b>FIRST</b></i> (will be used in calculating Nth season)</label> <input type="text" class="form-control" id="teamYearsNoCompeteUpdate" placeholder="Enter the number of seasons (not the actual years!) this team has NOT competed since their founding">
                 </div>
-                <div id="teamNotesUpdateLabel" class="form-group form-flex"><label for="teamNotesUpdate">Team Notes for Announce Screen (These notes are local notes and do not come from <i><b>FIRST</b></i>)</label> <div contenteditable="true" onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)" class="form-control placeholder" rows="1" id="teamNotesUpdate" placeholder="Enter some notes you would like to have on the Announce Screen"></div>
+                <div id="teamNotesUpdateLabel" class="form-group form-flex"><label for="teamNotesUpdate">Team Notes for Announce Screen (These notes are local notes and do not come from <i><b>FIRST</b></i>)</label>
+                    <div contenteditable="true" onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)" class="form-control placeholder" rows="1" id="teamNotesUpdate" placeholder="Enter some notes you would like to have on the Announce Screen"></div>
                 </div>
-                <div id="teamNotesLabel" class="form-group form-flex"><label for="teamNotes">Team Notes for Team Data screen (These notes are local notes and do not come from <i><b>FIRST</b></i>)</label> <div contenteditable="true" onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)" class="form-control placeholder" rows="1" id="teamNotes" placeholder="Enter some notes you would like to have on the Team Data Screen"></div>
+                <div id="teamNotesLabel" class="form-group form-flex"><label for="teamNotes">Team Notes for Team Data screen (These notes are local notes and do not come from <i><b>FIRST</b></i>)</label>
+                    <div contenteditable="true" onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)" class="form-control placeholder" rows="1" id="teamNotes" placeholder="Enter some notes you would like to have on the Team Data Screen"></div>
                 </div>
-                <div id="topSponsorsUpdateLabel" class="form-group form-flex"><label for="topSponsorsUpdate">Top Sponsors (Enter no more than 5 top sponsors from the full sponsor list below)</label> <textarea onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)"  class="form-control" rows="1" id="topSponsorsUpdate" placeholder="Enter the team's top 5 sponsors"></textarea>
+                <div id="topSponsorsUpdateLabel" class="form-group form-flex"><label for="topSponsorsUpdate">Top Sponsors (Enter no more than 5 top sponsors from the full sponsor list below)</label> <textarea onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)" class="form-control" rows="1" id="topSponsorsUpdate" placeholder="Enter the team's top 5 sponsors"></textarea>
                 </div>
                 <div id="sponsorsUpdateLabel" class="form-group form-flex"><label for="sponsorsUpdate">Full list of Sponsors (For reference only. This field does not appear in the UI. Delete to revert to TIMS value)</label> <textarea onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)" rows="1" class="form-control" id="sponsorsUpdate" placeholder="Enter the team's Sponsors"></textarea></div>
                 <div id="awardsUpdateLabel"><label for="awardsUpdate">Awards as supplied by TIMS. THIS FIELD IS NO LONGER EDITABLE. Use Notes instead.</label>

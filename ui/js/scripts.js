@@ -71,7 +71,12 @@ if (!localStorage.swapPlayByPlay) {
 if (!localStorage.timeFormat) {
     localStorage.timeFormat = "12hr";
 }
-
+if (!localStorage.playoffCountOverride) {
+    localStorage.playoffCountOverride = "false"
+}
+if (!localStorage.playoffCountOverrideValue) {
+    localStorage.playoffCountOverrideValue = "8"
+}
 // reset some of those variables, which will be adjusted later.
 localStorage.clock = "ready";
 localStorage.matchHighScore = 0;
@@ -205,6 +210,9 @@ window.onload = function () {
     $("[name='timeDisplay']").bootstrapSwitch('state', (localStorage.timeFormat === "12hr"));
     $("[name='timeDisplay']").bootstrapSwitch('onText', '12&nbsp;hr');
     $("[name='timeDisplay']").bootstrapSwitch('offText', '24&nbsp;hr');
+    $("[name='playoffCountOverride']").bootstrapSwitch('state', (localStorage.playoffCountOverride === "true"));
+    //Set Playoff Count Override value
+    $("#playoffCountOverrideValue").selectpicker('val', localStorage.playoffCountOverrideValue);
 
     // Setup the switches on the Team Info Screen
     $("[name='showRobotName']").bootstrapSwitch('state', true);
@@ -409,6 +417,28 @@ window.onload = function () {
             localStorage.timeFormat = "24hr";
         }
         $("#eventSelector").trigger("change")
+    };
+
+    //Handle a change in Alliance Selection Override
+    document.getElementById('playoffCountOverride').onchange = function () {
+        if ($("#playoffCountOverride").bootstrapSwitch('state')) {
+            localStorage.playoffCountOverride = "true";
+        } else {
+            localStorage.playoffCountOverride = "false";
+        }
+        localStorage.playoffCountOverrideValue = $("#playoffCountOverrideValue").val();
+        getTeamRanks();
+    };
+
+    //Handle a change in Alliance Selection Override
+    document.getElementById('playoffCountOverrideValue').onchange = function () {
+        if ($("#playoffCountOverride").bootstrapSwitch('state')) {
+            localStorage.playoffCountOverride = "true";
+        } else {
+            localStorage.playoffCountOverride = "false";
+        }
+        localStorage.playoffCountOverrideValue = $("#playoffCountOverrideValue").val();
+        getTeamRanks();
     };
 
     //Handle Event Filter change
@@ -645,7 +675,7 @@ function prepareAllianceSelection() {
     districtRankings = {};
     currentAllianceChoice = 0;
     allianceSelectionOrder = [];
-    
+
 
     $("#allianceSelectionTable").html(`<table>
     <tr>
@@ -1555,7 +1585,8 @@ function getTeamList(year) {
             } else {
                 $("#eventTeamCount").html(data.teamCountTotal);
                 teamCountTotal = data.teamCountTotal;
-                if (oneDayEvent) {
+                if (localStorage.playoffCountOverride === "true") {
+                } else if (oneDayEvent) {
                     allianceCount = 4;
                     allianceSelectionLength = 2 * allianceCount - 1;
                 } else if (teamCountTotal <= 24) {
