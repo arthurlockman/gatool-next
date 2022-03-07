@@ -95,8 +95,16 @@ function timer() {
     $("#localStorageUsage").html(localStorageSpace() + " in use");
 
     //display the last time we had rankings
-    $("#allianceselectionlastupdated").html(" (Ranks last updated " + moment(lastRanksUpdate).fromNow() + ")<br>");
-    $("#rankstablelastupdated").html("<b>Ranks last updated " + moment(lastRanksUpdate).fromNow() + "</b>");
+    function ranksUpdateDisplay() {
+        if (lastRanksUpdate === "") {
+            return "<b><i>No ranks available</i></b>";
+        } else {
+            return moment(lastRanksUpdate).fromNow();
+        }
+    }
+
+    $("#allianceselectionlastupdated").html(` (Ranks last updated ${ranksUpdateDisplay()})<br>`);
+    $("#rankstablelastupdated").html(`<b>Ranks last updated ${ranksUpdateDisplay()}</b>`);
     //update the warning in the Alliance Selection
     //if (localStorage.inPlayoffs !== "true") { ranksQualsCompare(); }
     ranksQualsCompare();
@@ -782,7 +790,7 @@ function generateDocx(gameAnnouncer) {
                 record.rookieYear = item.rookieYear;
                 record.eventName = localStorage.eventName;
                 record.gaName = gameAnnouncer || false;
-                if (i<eventTeamList.length-1) {
+                if (i < eventTeamList.length - 1) {
                     record.lastTeam = false;
                 } else {
                     record.lastTeam = true;
