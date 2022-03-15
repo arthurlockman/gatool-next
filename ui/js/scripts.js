@@ -1744,9 +1744,9 @@ function getTeamList(year) {
                             }
                             localStorage.teamList = JSON.stringify(eventTeamList);
                             getTeamAwardsAsync(eventTeamList, year);
-                            if (Number(localStorage.currentYear) >= 2018) {
-                                getAvatars()
-                            }
+                            //if (Number(localStorage.currentYear) >= 2018) {
+                            //    getAvatars()
+                            //}
                             getHybridSchedule();
                             displayAwardsTeams(eventTeamList.slice());
                             updateTeamTable();
@@ -1764,9 +1764,9 @@ function getTeamList(year) {
                         });
                 } else {
                     getTeamAwardsAsync(eventTeamList, year);
-                    if (Number(localStorage.currentYear) >= 2018) {
-                        getAvatars()
-                    }
+                    //if (Number(localStorage.currentYear) >= 2018) {
+                    //    getAvatars()
+                    //}
                     getHybridSchedule();
                     displayAwardsTeams(eventTeamList.slice());
                     lastSchedulePage = !0
@@ -3226,6 +3226,7 @@ function updateTeamTableRow(teamData) {
     if ((teamInfo.avatar !== "null") && (Number(localStorage.currentYear) >= 2018 && (typeof teamInfo !== "undefined"))) {
         avatar = '<img src="https://www.gatool.org/' + teamInfo.avatar + '">&nbsp;'
     }
+    avatar = `<img src="https://www.gatool.org/api/${localStorage.currentYear}/avatars/team/${teamData.teamNumber}/avatar.png" onerror="this.style.display='none'">&nbsp;`;
     if (teamInfo.nameShortLocal === "") {
         returnData += '<td id="teamTableName' + teamData.teamNumber + '">' + '<span id="avatar' + teamData.teamNumber + '">' + avatar + '</span><span class="teamTableName">' + teamInfo.nameShort + '</span></td>'
     } else {

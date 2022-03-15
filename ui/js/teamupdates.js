@@ -68,9 +68,9 @@ function getTeamUpdates(teamNumber, singleton) {
                     }]
                 });
             }
-            if (Number(localStorage.currentYear) >= 2018) {
-                getAvatars()
-            }
+            //if (Number(localStorage.currentYear) >= 2018) {
+            //    getAvatars()
+            //}
         }
 
 
