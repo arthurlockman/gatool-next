@@ -3524,7 +3524,7 @@ function updateTeamInfo(teamNumber) {
     $("#awardsUpdateLabel").removeClass("bg-success");
     if (teamData.awards !== "") {
         $("#awardsUpdate").html(teamData.awards);
-        $("#awardsUpdate .awardsDepth1, #awardsUpdate .awardsEventCode, #awardsUpdate .awardsSeparator1, #awardsUpdate .awardsSeparator2").remove();
+        $("#awardsUpdate .awardsEventCode, #awardsUpdate .awardsSeparator1, #awardsUpdate .awardsSeparator2").remove();
     } else {
         $("#awardsUpdate").html("No awards from <i><b>FIRST</b></i> in the last three years.");
     }
