@@ -17,12 +17,12 @@ function getTeamUpdates(teamNumber, singleton) {
             teamData.organizationLocal = teamUpdates.organizationLocal;
             teamData.robotNameLocal = teamUpdates.robotNameLocal;
             teamData.awardsLocal = teamUpdates.awardsLocal;
-            teamData.teamMottoLocal = teamUpdates.teamMottoLocal;
-            teamData.teamNotesLocal = teamUpdates.teamNotesLocal;
+            teamData.teamMottoLocal = teamUpdates.teamMottoLocal || "";
+            teamData.teamNotesLocal = teamUpdates.teamNotesLocal || "";
             teamData.teamYearsNoCompeteLocal = teamUpdates.teamYearsNoCompeteLocal;
             teamData.showRobotName = teamUpdates.showRobotName;
-            teamData.teamNotes = teamUpdates.teamNotes;
-            teamData.sayNumber = teamUpdates.sayNumber;
+            teamData.teamNotes = teamUpdates.teamNotes || "";
+            teamData.sayNumber = teamUpdates.sayNumber || "";
             teamData.lastUpdate = (teamUpdates.lastUpdate || "No recent update");
             //teamData.source = teamUpdates.source;
             compressLocalStorage("teamData" + teamNumber, teamData);
