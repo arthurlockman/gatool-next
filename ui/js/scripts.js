@@ -1864,7 +1864,7 @@ function handlePlayoffBracket2() {
             for (matchesToAdd = 0; matchesToAdd < playoffTieBreakerMatches[String(matchArray[i].matchNumber)].length; matchesToAdd++) {
                 winner.red = 0;
                 winner.blue = 0;
-                for (var ii = 0; ii < 5; ii++) {
+                for (var ii = 0; ii < playoffTiebreakers[localStorage.currentYear].length; ii++) {
                     winner.level = ii + 1;
                     var criterion = playoffTiebreakers[localStorage.currentYear][ii].split("+");
                     for (var a = 0; a < criterion.length; a++) {

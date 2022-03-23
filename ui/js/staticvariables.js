@@ -57,12 +57,14 @@ var allianceSelectionReady = false;
 var environment = {};
 var showAllianceSelectionOverride = false;
 var tablist = {};
+var tbaBatchDelay = 50;
 var oneDayEvent = false;
 tablist.tabs=["setupTabPicker","scheduleTabPicker","teamDataTabPicker","teamRanksPicker","announceTabPicker","playByPlayTabPicker","allianceSelectionTabPicker","awardsTabPicker","statsTabPicker","cheatsheetTabPicker","davidPriceTabPicker"];
 tablist.clicks=["setup","schedule","teamdata","teamRanks","announce","playbyplay","allianceselection","awards","stats","cheatsheet","davidPrice"];
 tablist.index=0;
 var playoffTiebreakers = {};
-playoffTiebreakers["2022"] = ["foulPoints","endgamePoints","autoPoints"];
+playoffTiebreakers["2022"] = ["foulPoints","endgamePoints","autoCargoTotal+autoTaxiPoints"];
+playoffTiebreakers["2021"] = ["foulPoints","autoPoints","endgamePoints","controlPanelPoints+teleopCellPoints"];
 playoffTiebreakers["2020"] = ["foulPoints","autoPoints","endgamePoints","controlPanelPoints+teleopCellPoints"];
 playoffTiebreakers["2019"] = ["foulPoints","cargoPoints","hatchPanelPoints","habClimbPoints","sandStormBonusPoints"];
 playoffTiebreakers["2018"] = ["foulPoints","endgamePoints","autoPoints","autoOwnershipPoints+teleopOwnershipPoints","vaultPoints"];
@@ -75,7 +77,8 @@ playoffTieBreakerMatches["17"] = ["13","15"]
 playoffTieBreakerMatches["18"] = ["14","16"];
 playoffTieBreakerMatches["24"] = ["19","20","21","22","23"];
 playoffTieBreakerMatches["list"] = ["9","10","11","12","17","18","24"];
-var tbaBatchDelay = 50;
+
+
 
 for (var i = 1; i <= allianceCount; i++) {
     allianceChoices['Alliance' + i + 'Captain'] = "";
