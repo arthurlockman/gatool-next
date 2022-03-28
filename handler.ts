@@ -453,8 +453,20 @@ const UpdateHighScores: Handler = async () => {
     for (const _event of eventList.body.Events) {
         const eventDate = new Date(_event.dateStart);
         if (eventDate < currentDate) {
-            promises.push(GetDataFromFIRST(process.env.FRC_CURRENT_SEASON + '/schedule/' + _event.code + '/qual/hybrid'));
-            promises.push(GetDataFromFIRST(process.env.FRC_CURRENT_SEASON + '/schedule/' + _event.code + '/playoff/hybrid'));
+            promises.push(GetDataFromFIRST(process.env.FRC_CURRENT_SEASON + '/schedule/' + _event.code + '/qual/hybrid').catch(_ => {
+                return {
+                    body: {
+                        Schedule: []
+                    }
+                } as ResponseWithHeaders;
+            }));
+            promises.push(GetDataFromFIRST(process.env.FRC_CURRENT_SEASON + '/schedule/' + _event.code + '/playoff/hybrid').catch(_ => {
+                return {
+                    body: {
+                        Schedule: []
+                    }
+                } as ResponseWithHeaders;
+            }));
             order.push({
                 eventCode: _event.code,
                 type: 'qual'
