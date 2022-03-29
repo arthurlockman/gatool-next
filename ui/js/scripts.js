@@ -437,7 +437,7 @@ window.onload = function () {
             $('#eventAllianceCount').html(localStorage.playoffCountOverrideValue);
         } else {
             localStorage.playoffCountOverride = "false";
-        }     
+        }
         getTeamRanks();
     }
 
@@ -707,7 +707,7 @@ function prepareAllianceSelection() {
             <table id="backupTeamsTable" class="backupAlliancesTable">
                 <tr>
                     <td>
-                        <p><strong>Backup Alliances</strong><br>(Initially rank ${parseInt(allianceCount)+1} to ${parseInt(allianceCount)+9} top to bottom)</p>
+                        <p><strong>Backup Alliances</strong><br>(Initially rank ${parseInt(allianceCount) + 1} to ${parseInt(allianceCount) + 9} top to bottom)</p>
                     </td>
                 </tr>
                 <tr>
@@ -1395,25 +1395,70 @@ function getRegularSeasonSchedule() {
 
 function processPlayoffBracket(matchData) {
     var bracketDetail = {};
+    var allianceTeams = JSON.parse(localStorage.Alliances).Alliances;
+    var allianceLookup = [];
+    allianceTeams.forEach(element => {
+        allianceLookup[element.captain] = "captain";
+        allianceLookup[element.round1] = "round1";
+        allianceLookup[element.round2] = "round2";
+        if (element.round3) { allianceLookup[element.round3] = "round3"; }
+    });
     bracketDetail.description = matchData.description;
     if (matchData.description.split(" ")[0] === "Final") {
         bracketDetail.description = "Final";
     } else {
         bracketDetail.description = matchData.description;
     }
-    bracketDetail.redAlliance = [];
-    bracketDetail.blueAlliance = [];
+    bracketDetail.redAlliance = {
+        "captain": null,
+        "round1": null,
+        "round2": null,
+        "round3": null,
+        "numbers": []
+    };
+    bracketDetail.blueAlliance = {
+        "captain": null,
+        "round1": null,
+        "round2": null,
+        "round3": null,
+        "numbers": []
+    };
     bracketDetail.winner = "grey";
     bracketDetail.matchName = "bracketMatch" + matchData.matchNumber;
     $("#" + bracketDetail.matchName + "Result").removeClass("redScore blueScore tieScore greyScore");
     if ((matchData.teams[0].teamNumber !== null) || (matchData.teams[4].teamNumber !== null)) {
         for (var i = 0; i < matchData.teams.length; i++) {
             if (matchData.teams[i].station.includes("ed")) {
-                bracketDetail.redAlliance.push(matchData.teams[i].teamNumber);
+
+                bracketDetail.redAlliance[allianceLookup[matchData.teams[i].teamNumber]] = matchData.teams[i].teamNumber;
             }
             if (matchData.teams[i].station.includes("ue")) {
-                bracketDetail.blueAlliance.push(matchData.teams[i].teamNumber);
+                bracketDetail.blueAlliance[allianceLookup[matchData.teams[i].teamNumber]] = matchData.teams[i].teamNumber;
             }
+        }
+        if (bracketDetail.redAlliance.captain) {
+            bracketDetail.redAlliance.numbers.push(bracketDetail.redAlliance.captain);
+        }
+        if (bracketDetail.redAlliance.round1) {
+            bracketDetail.redAlliance.numbers.push(bracketDetail.redAlliance.round1);
+        }
+        if (bracketDetail.redAlliance.round2) {
+            bracketDetail.redAlliance.numbers.push(bracketDetail.redAlliance.round2);
+        }
+        if (bracketDetail.redAlliance.round3) {
+            bracketDetail.redAlliance.numbers.push(bracketDetail.redAlliance.round3);
+        }
+        if (bracketDetail.blueAlliance.captain) {
+            bracketDetail.blueAlliance.numbers.push(bracketDetail.blueAlliance.captain);
+        }
+        if (bracketDetail.blueAlliance.round1) {
+            bracketDetail.blueAlliance.numbers.push(bracketDetail.blueAlliance.round1);
+        }
+        if (bracketDetail.blueAlliance.round2) {
+            bracketDetail.blueAlliance.numbers.push(bracketDetail.blueAlliance.round2);
+        }
+        if (bracketDetail.blueAlliance.round3) {
+            bracketDetail.blueAlliance.numbers.push(bracketDetail.blueAlliance.round3);
         }
         if (matchData.scoreRedFinal > matchData.scoreBlueFinal) {
             bracketDetail.winner = "red";
@@ -1423,16 +1468,16 @@ function processPlayoffBracket(matchData) {
             bracketDetail.winner = "tie"
         }
         if (matchData.teams[0].teamNumber !== null) {
-            bracketDetail.redAllianceName = decompressLocalStorage("teamData" + bracketDetail.redAlliance[0]).allianceName;
+            bracketDetail.redAllianceName = decompressLocalStorage("teamData" + bracketDetail.redAlliance.numbers[0]).allianceName;
         } else {
             bracketDetail.redAllianceName = "TBD";
         }
         if (matchData.teams[4].teamNumber !== null) {
-            bracketDetail.blueAllianceName = decompressLocalStorage("teamData" + bracketDetail.blueAlliance[0]).allianceName;
+            bracketDetail.blueAllianceName = decompressLocalStorage("teamData" + bracketDetail.blueAlliance.numbers[0]).allianceName;
         } else {
             bracketDetail.blueAllianceName = "TBD";
         }
-        bracketDetail.output = bracketDetail.description + '<br><span class="bracketRedAlliance">' + bracketDetail.redAllianceName + '<br>vs<br><span class="bracketBlueAlliance">' + bracketDetail.blueAllianceName + '<br><br><span class="bracketRedAlliance">' + bracketDetail.redAlliance.join(" ") + '</span><br><span class="bracketBlueAlliance">' + bracketDetail.blueAlliance.join(" ") + '</span><br>';
+        bracketDetail.output = bracketDetail.description + '<br><span class="bracketRedAlliance">' + bracketDetail.redAllianceName + '<br>vs<br><span class="bracketBlueAlliance">' + bracketDetail.blueAllianceName + '<br><br><span class="bracketRedAlliance">' + bracketDetail.redAlliance.numbers.join(" ") + '</span><br><span class="bracketBlueAlliance">' + bracketDetail.blueAlliance.numbers.join(" ") + '</span><br>';
 
     } else {
         bracketDetail.output = "TBD"
