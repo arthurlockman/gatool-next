@@ -164,7 +164,7 @@ functions:
               paths:
                 year: true
                 teamNumber: true
-    GetEventAwards:
+  GetEventAwards:
     handler: handler.GetEventAwards
     description: Get awards for a specific event in a specific year
     events:
