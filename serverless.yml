@@ -164,20 +164,6 @@ functions:
               paths:
                 year: true
                 teamNumber: true
-  GetEventAwards:
-    handler: handler.GetEventAwards
-    description: Get awards for a specific event in a specific year
-    events:
-      - http:
-          path: api/{year}/awards/event/{eventCode}
-          method: get
-          cors: true
-          authorizer: Authorize
-          request:
-            parameters:
-              paths:
-                year: true
-                eventCode: true
   GetHistoricTeamAwards:
     handler: handler.GetHistoricTeamAwards
     description: Get the last 3 years of awards for a team
@@ -345,6 +331,22 @@ functions:
       - schedule:
           rate: rate(10 minutes)
           enabled: true
+
+  # V3 Endpoints
+  V3-GetEventAwards:
+    handler: handler-v3.GetEventAwards
+    description: Get awards for a specific event in a specific year
+    events:
+      - http:
+          path: api/v3/{year}/awards/event/{eventCode}
+          method: get
+          cors: true
+          authorizer: Authorize
+          request:
+            parameters:
+              paths:
+                year: true
+                eventCode: true
 
 resources:
   Resources:

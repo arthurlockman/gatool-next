@@ -60,28 +60,10 @@ const GetDataFromTBA = async (path: string): Promise<ResponseWithHeaders> => {
  * Get data from FIRST and return a promise
  * @param path The path to GET data from
  */
-const GetDataFromFIRST = async (path: string): Promise<ResponseWithHeaders> => {
+const GetDataFromFIRST = async (path: string, apiVersion: string = 'v2.0'): Promise<ResponseWithHeaders> => {
     const options = {
         method: 'GET',
-        uri: 'https://frc-api.firstinspires.org/v2.0/' + path,
-        json: true,
-        headers: {
-            'Authorization': process.env.FRC_API_KEY,
-            'Accept': 'application/json'
-        },
-        transform: includeHeaders
-    };
-    return await rp(options);
-};
-
-/**
- * Get data from FIRST using V3 of their API and return a promise
- * @param path The path to GET data from
- */
- const GetDataFromFIRSTV3 = async (path: string): Promise<ResponseWithHeaders> => {
-    const options = {
-        method: 'GET',
-        uri: 'https://frc-api.firstinspires.org/v3.0/' + path,
+        uri: `https://frc-api.firstinspires.org/${apiVersion}/${path}`,
         json: true,
         headers: {
             'Authorization': process.env.FRC_API_KEY,
@@ -113,22 +95,9 @@ const BuildHighScoreJson = (year: string, type: string, level: string, match: Ma
  * Get and return data from the FIRST API
  * @param path The path on the FIRST API to call
  */
-const GetDataFromFIRSTAndReturn = async (path: string) => {
+const GetDataFromFIRSTAndReturn = async (path: string, apiVersion: string = 'v2.0') => {
     try {
-        const response = await GetDataFromFIRST(path);
-        return CreateResponseJson(200, response.body, response.headers);
-    } catch (e) {
-        return CreateResponseJson(parseInt(e.statusCode, 10), e.response.body);
-    }
-};
-
-/**
- * Get and return data from the FIRST API using Version 3
- * @param path The path on the FIRST API to call
- */
- const GetDataFromFIRSTAndReturnV3 = async (path: string) => {
-    try {
-        const response = await GetDataFromFIRSTV3(path);
+        const response = await GetDataFromFIRST(path, apiVersion);
         return CreateResponseJson(200, response.body, response.headers);
     } catch (e) {
         return CreateResponseJson(parseInt(e.statusCode, 10), e.response.body);
@@ -207,6 +176,6 @@ const ReturnJsonWithCode = (statusCode: number, body: any, headers?: any) => {
 
 
 export {
-    GetDataFromFIRST, GetDataFromFIRSTV3, GetDataFromFIRSTAndReturn, GetDataFromFIRSTAndReturnV3, GetDataFromTBAAndReturn, GetDataFromTBA,
+    GetDataFromFIRST, GetDataFromFIRSTAndReturn, GetDataFromTBAAndReturn, GetDataFromTBA,
     ReturnJsonWithCode, GetAvatarData, BuildHighScoreJson, CreateResponseJson
 }
