@@ -589,5 +589,5 @@ export {
     UpdateHighScores, GetHighScores, GetOffseasonEvents, GetEventAlliances, GetEventRankings,
     Authorize, GetTeamAvatar, GetEventHighScores, GetTeamUpdates, PutTeamUpdates, GetUserPreferences,
     PutUserPreferences, GetHistoricTeamAwards, GetDistrictTeams, GetTeams, GetDistrictRankings,
-    GetTeamAppearances, GetAllTeamAwards, GetOffseasonTeams
+    GetTeamAppearances, GetAllTeamAwards, GetOffseasonTeams, GetEventAwards
 }
