@@ -164,6 +164,20 @@ functions:
               paths:
                 year: true
                 teamNumber: true
+    GetEventAwards:
+    handler: handler.GetEventAwards
+    description: Get awards for a specific event in a specific year
+    events:
+      - http:
+          path: api/{year}/awards/event/{eventCode}
+          method: get
+          cors: true
+          authorizer: Authorize
+          request:
+            parameters:
+              paths:
+                year: true
+                eventCode: true
   GetHistoricTeamAwards:
     handler: handler.GetHistoricTeamAwards
     description: Get the last 3 years of awards for a team

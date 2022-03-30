@@ -3,7 +3,7 @@ import { MatchWithEventDetails } from './model/match';
 import { EventAvatars, EventSchedule, EventType } from './model/event';
 import {
     BuildHighScoreJson, GetAvatarData, GetDataFromFIRST,
-    GetDataFromFIRSTAndReturn, ReturnJsonWithCode, ResponseWithHeaders,
+    GetDataFromFIRSTAndReturn, GetDataFromFIRSTAndReturnV3, ReturnJsonWithCode, ResponseWithHeaders,
     GetDataFromTBAAndReturn, CreateResponseJson, GetDataFromTBA
 } from './utils/utils';
 import {
@@ -110,6 +110,11 @@ const GetDistrictTeams: Handler = async (event: APIGatewayEvent) => {
 // noinspection JSUnusedGlobalSymbols
 const GetTeamAwards: Handler = async (event: APIGatewayEvent) => {
     return await GetDataFromFIRSTAndReturn(event.pathParameters.year + '/awards/' + event.pathParameters.teamNumber);
+};
+
+// noinspection JSUnusedGlobalSymbols
+const GetEventAwards: Handler = async (event: APIGatewayEvent) => {
+    return await GetDataFromFIRSTAndReturnV3(event.pathParameters.year + '/awards/event/' + event.pathParameters.eventCode);
 };
 
 // noinspection JSUnusedGlobalSymbols
