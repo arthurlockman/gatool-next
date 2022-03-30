@@ -96,6 +96,7 @@ var matchTimer = setInterval(function () {
 
 //The apiURL determines the endpoint for API calls. 
 var apiURL = "https://www.gatool.org/api/";
+var apiURLV3 = "https://www.gatool.org/api/v3/";
 
 //Now that we have the variables all set up and all of the necessary JS and CSS are loaded, we can run the app.
 var webAuth = new auth0.WebAuth({
@@ -1685,12 +1686,12 @@ function getTeamList(year) {
                     for (i = 0; i < districtEvents.length; i++) {
                         districtPromises.push(new Promise((resolve, reject) => {
                             var req = new XMLHttpRequest();
-                            req.open('GET', apiURL + localStorage.currentYear + '/awards/' + districtEvents[i] + "/");
+                            req.open('GET', `${apiURLV3}${localStorage.currentYear}/awards/event/${districtEvents[i]}/`);
                             req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
                             req.addEventListener('load', function () {
                                 var districtTeams = [];
                                 var data = JSON.parse(req.responseText);
-                                if (data.Awards !== '{"Awards":[]}') {
+                                if (data.Awards !== '{"Awards":[]}' && req.status !== 501) {
                                     for (var i = 0; i < data.Awards.length; i++) {
                                         if ((data.Awards[i].awardId === 633) || (data.Awards[i].awardId === 417)) {
                                             //Engineering Inspiration or Rookie All Star Award
