@@ -8,4 +8,9 @@ const GetEventAwards: Handler = async (event: APIGatewayEvent) => {
   return await GetDataFromFIRSTAndReturn(`${event.pathParameters.year}/awards/event/${event.pathParameters.eventCode}`, apiVersion);
 };
 
-export { GetEventAwards }
+// noinspection JSUnusedGlobalSymbols
+const GetEventsV3: Handler = async (event: APIGatewayEvent) => {
+  return await GetDataFromFIRSTAndReturn(`${event.pathParameters.year}/events/`, apiVersion);
+};
+
+export { GetEventAwards, GetEventsV3 }

@@ -348,6 +348,21 @@ functions:
                 year: true
                 eventCode: true
 
+  V3-GetEvents:
+    handler: handler-v3.GetEventsV3
+    description: Get events for a specific year
+    events:
+      - http:
+          path: api/v3/{year}/events/
+          method: get
+          cors: true
+          authorizer: Authorize
+          request:
+            parameters:
+              paths:
+                year: true
+
+
 resources:
   Resources:
     HighScoresTable:
