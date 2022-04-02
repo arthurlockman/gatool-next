@@ -309,7 +309,14 @@ window.onload = function () {
         } else {
             $(".awards").hide()
         }
+
+        
     };
+
+    // Handle screen orientation change
+    screen.orientation.onchange = function (){
+        scaleRows();
+    }
 
     // Handle Notes toggle. Hide and show Notes in the announce/PBP display.
     document.getElementById("showNotes").onchange = function () {
