@@ -3147,6 +3147,8 @@ function generateMatchTableRow(matchData) {
     "use strict";
     var returnData = '<tr>';
     var matchWinner = "";
+    var redScoreHighlight = "";
+    var blueScoreHighlight = "";
     if (matchData.actualStartTime) {
         returnData += "<td>Actual:<br>" + moment(matchData.actualStartTime, 'YYYY-MM-DDTHH:mm:ss').format('ddd ' + timeFormats[localStorage.timeFormat + "NoSec"]) + '</td>'
     } else {
@@ -3160,9 +3162,11 @@ function generateMatchTableRow(matchData) {
     returnData += "<td>" + matchData.matchNumber + '</td>';
     if ((matchData.scoreRedFinal !== null) && (matchData.scoreRedFinal > matchData.scoreBlueFinal)) {
         matchWinner = "Red";
-        returnData += '<td onclick="scoreDetails(' + matchData.matchNumber + ',' + "'" + tournamentLevel(matchData.tournamentLevel) + "'" + ')"><span class="redScoreWin">R:' + matchData.scoreRedFinal + '</span><br><span class="blueScore"> B:' + matchData.scoreBlueFinal + '</span></td>'
+        redScoreHighlight = "redScoreWin";
+        returnData += `<td onclick="scoreDetails(${matchData.matchNumber},'${tournamentLevel(matchData.tournamentLevel)}')"><span class="redScoreWin">R:${matchData.scoreRedFinal}</span><br><span class="blueScore"> B:${matchData.scoreBlueFinal}</span></td>`
     } else if ((matchData.scoreRedFinal !== null) && matchData.scoreRedFinal < matchData.scoreBlueFinal) {
         matchWinner = "Blue";
+        blueScoreHighlight = "blueScoreWin";
         returnData += '<td onclick="scoreDetails(' + matchData.matchNumber + ',' + "'" + tournamentLevel(matchData.tournamentLevel) + "'" + ')"><span class="redScore">R:' + matchData.scoreRedFinal + '</span><br><span class="blueScoreWin"> B:' + matchData.scoreBlueFinal + '</span></td>'
     } else if (matchData.scoreRedFinal !== null) {
         matchWinner = "Tie";
@@ -3171,9 +3175,9 @@ function generateMatchTableRow(matchData) {
         matchWinner = "No results yet";
         returnData += '<td>No data.</td>'
     }
-    returnData += '<td><span class = "redAllianceTeam">' + (getTeamForStation(matchData.teams, 'Red1').teamNumber || ' ') + '</span><br><span class = "blueAllianceTeam">' + (getTeamForStation(matchData.teams, 'Blue1').teamNumber || ' ') + '</span></td>';
-    returnData += '<td><span class = "redAllianceTeam">' + (getTeamForStation(matchData.teams, 'Red2').teamNumber || ' ') + '</span><br><span class = "blueAllianceTeam">' + (getTeamForStation(matchData.teams, 'Blue2').teamNumber || ' ') + '</span></td>';
-    returnData += '<td><span class = "redAllianceTeam">' + (getTeamForStation(matchData.teams, 'Red3').teamNumber || ' ') + '</span><br><span class = "blueAllianceTeam">' + (getTeamForStation(matchData.teams, 'Blue3').teamNumber || ' ') + '</span></td>';
+    returnData += `<td><span class = "redAllianceTeam ${redScoreHighlight}">${(getTeamForStation(matchData.teams, 'Red1').teamNumber || ' ')}</span><br><span class = "blueAllianceTeam ${blueScoreHighlight}">${(getTeamForStation(matchData.teams, 'Blue1').teamNumber || ' ')}</span></td>`;
+    returnData += `<td><span class = "redAllianceTeam ${redScoreHighlight}">${(getTeamForStation(matchData.teams, 'Red2').teamNumber || ' ')}</span><br><span class = "blueAllianceTeam ${blueScoreHighlight}">${(getTeamForStation(matchData.teams, 'Blue2').teamNumber || ' ')}</span></td>`;
+    returnData += `<td><span class = "redAllianceTeam ${redScoreHighlight}">${(getTeamForStation(matchData.teams, 'Red3').teamNumber || ' ')}</span><br><span class = "blueAllianceTeam ${blueScoreHighlight}">${(getTeamForStation(matchData.teams, 'Blue3').teamNumber || ' ')}</span></td>`;
     if (matchData.scoreBlueFinal > localStorage.matchHighScore) {
         localStorage.matchHighScore = matchData.scoreBlueFinal;
         localStorage.highScoreDetails = matchData.description + "<br>(" + getTeamForStation(matchData.teams, 'Blue1').teamNumber + ", " + getTeamForStation(matchData.teams, 'Blue2').teamNumber + ", " + getTeamForStation(matchData.teams, 'Blue3').teamNumber + ")"
