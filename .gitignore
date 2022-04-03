@@ -13,3 +13,5 @@ event.test.json
 ui/bracketTest.html
 ui/manifest.webmanifest
 *.paw
+.vscode/settings.json
+
