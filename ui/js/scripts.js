@@ -310,16 +310,19 @@ window.onload = function () {
             $(".awards").hide()
         }
 
-        
+
     };
 
     // Handle screen orientation change
-    // Not working in desktop safari. Need alternate solution
+    // Not working in safari. Need alternate solution
 
-    if (window.navigator.appVersion.indexOf("Macintosh") == -1) {
-    screen.orientation.onchange = function (){
-        scaleRows();
-    }}
+    try {
+        screen.orientation.onchange = function () {
+            scaleRows();
+        }
+    } catch (err) {
+        console.log(`screen orientation not supported in ${window.navigator.appVersion}`)
+    }
 
     // Handle Notes toggle. Hide and show Notes in the announce/PBP display.
     document.getElementById("showNotes").onchange = function () {
