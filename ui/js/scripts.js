@@ -314,9 +314,12 @@ window.onload = function () {
     };
 
     // Handle screen orientation change
+    // Not working in desktop safari. Need alternate solution
+
+    if (window.navigator.appVersion.indexOf("Macintosh") == -1) {
     screen.orientation.onchange = function (){
         scaleRows();
-    }
+    }}
 
     // Handle Notes toggle. Hide and show Notes in the announce/PBP display.
     document.getElementById("showNotes").onchange = function () {
