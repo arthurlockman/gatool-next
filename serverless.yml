@@ -347,7 +347,6 @@ functions:
               paths:
                 year: true
                 eventCode: true
-
   V3-GetEvents:
     handler: handler-v3.GetEventsV3
     description: Get events for a specific year
@@ -361,7 +360,53 @@ functions:
             parameters:
               paths:
                 year: true
-
+  V3-GetSchedule:
+    handler: handler-v3.GetScheduleV3
+    description: Get schedule for a specific event. Hybrid no longer supported
+    events:
+      - http:
+          path: api/v3/{year}/schedule/{eventCode}/{tournamentLevel}
+          method: get
+          cors: true
+          authorizer: Authorize
+          request:
+            parameters:
+              paths:
+                year: true
+                eventCode: true
+                tournamentLevel: true
+  V3-GetEventScores:
+    handler: handler-v3.GetEventScoresV3
+    description: Get scores for a specific event with a year, competition level, and a start/end (match number)
+    events:
+      - http:
+          path: api/v3/{year}/scores/{eventCode}/{tournamentLevel}/{start}/{end}
+          method: get
+          cors: true
+          authorizer: Authorize
+          request:
+            parameters:
+              paths:
+                year: true
+                eventCode: true
+                tournamentLevel: true
+                start: true
+                end: true
+  V3-GetMatches:
+    handler: handler-v3.GetMatchesV3
+    description: Get match results for a specific event. Hybrid Schedule no longer supported
+    events:
+      - http:
+          path: api/v3/{year}/matches/{eventCode}/{tournamentLevel}
+          method: get
+          cors: true
+          authorizer: Authorize
+          request:
+            parameters:
+              paths:
+                year: true
+                eventCode: true
+                tournamentLevel: true
 
 resources:
   Resources:
