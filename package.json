@@ -11,7 +11,7 @@
         "deploy": "serverless client deploy --no-confirm && serverless deploy",
         "debug": "export SLS_DEBUG=* && node --inspect ./node_modules/.bin/serverless offline start --aws-profile gatool-devel"
     },
-    "author": "James Lockman, Arthur Lockman",
+    "author": "James Lockman, Arthur Rosa",
     "license": "MIT",
     "devDependencies": {
         "@types/aws-lambda": "^8.10.79",

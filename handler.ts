@@ -239,7 +239,10 @@ const GetEventHighScores: Handler = async (event: APIGatewayEvent) => {
         .map(x => { return { event: { eventCode: eventDetails.code, type: 'qual' }, match: x } })
         .concat(playoffMatchList.body.Schedule
             .map(x => { return { event: { eventCode: eventDetails.code, type: 'playoff' }, match: x } }));
-    matches = matches.filter(match => match.match.postResultTime && match.match.postResultTime !== '');
+    matches = matches.filter(match => match.match.postResultTime && match.match.postResultTime !== '' &&
+        // TODO: find a better way to filter these demo teams out, this way is not sustainable
+        match.match.teams.filter(t => t.teamNumber >= 9986).length === 0);
+
     const overallHighScorePlayoff: MatchWithEventDetails[] = [];
     const overallHighScoreQual: MatchWithEventDetails[] = [];
     const penaltyFreeHighScorePlayoff: MatchWithEventDetails[] = [];
@@ -484,8 +487,9 @@ const UpdateHighScores: Handler = async () => {
         const evt = order[eventBody.indexOf(_event)];
         if (_event.Schedule[0]) {
             for (const match of _event.Schedule) {
-                if (match.postResultTime && match.postResultTime !== '') {
-                    // Result was posted, so the match has occurred
+                // TODO: find a better way to filter these demo teams out, this way is not sustainable
+                if (match.postResultTime && match.postResultTime !== '' && match.teams.filter(t => t.teamNumber >= 9986).length === 0) {
+                    // Result was posted and it's not a demo team, so the match has occurred
                     matches.push({
                         event: evt,
                         match: match
