@@ -27,7 +27,11 @@ const GetMatchesV3: Handler = async (event: APIGatewayEvent) => {
 
 // noinspection JSUnusedGlobalSymbols
 const GetEventScoresV3: Handler = async (event: APIGatewayEvent) => {
-  return await GetDataFromFIRSTAndReturn(`${event.pathParameters.year}/scores/${event.pathParameters.eventCode}/${event.pathParameters.tournamentLevel}/${event.pathParameters.start}/${event.pathParameters.end}`, apiVersion);
+  if (event.pathParameters.start === event.pathParameters.end) {
+    return await GetDataFromFIRSTAndReturn(`${event.pathParameters.year}/scores/${event.pathParameters.eventCode}/${event.pathParameters.tournamentLevel}?matchNumber=${event.pathParameters.start}`, apiVersion);
+  } else {
+    return await GetDataFromFIRSTAndReturn(`${event.pathParameters.year}/scores/${event.pathParameters.eventCode}/${event.pathParameters.tournamentLevel}?start=${event.pathParameters.start}&end=${event.pathParameters.end}`, apiVersion);
+  }
 };
 
 export { GetEventAwards, GetEventsV3, GetScheduleV3, GetMatchesV3, GetEventScoresV3 }
