@@ -3236,20 +3236,20 @@ function getTeamForStation(teamList, station) {
 
 function updateRanksTableRow(teamData, teamNumber) {
     "use strict";
-    var returnData = `<tr class="ranksTableRow"><td class="rankTableNumber" id="rankTableNumber${teamNumber}">${teamNumber}</td>`;
+    var returnData = `<tr class="ranksTableRow"><td id="rankTableNumber${teamNumber}" class="rankTableNumber">${teamNumber}</td>`;
     returnData += `<td id="rankTableRank${teamNumber}" class="rankTableRank">${teamData.rank}</td>`;
     if (teamData.nameShortLocal === "") {
-        returnData += `<td id="rankTableName${teamNumber}">${teamData.nameShort}</td>`
+        returnData += `<td id="rankTableName${teamNumber}" class="rankTableName">${teamData.nameShort}</td>`
     } else {
         returnData += `<td id="rankTableName${teamNumber}">${teamData.nameShortLocal}</td>`
     }
-    returnData += `<td id="rankTableRP${teamNumber}">${teamData.sortOrder1}</td>`;
-    returnData += `<td id="rankTableWins${teamNumber}">${teamData.wins}</td>`;
-    returnData += `<td id="rankTableLosses${teamNumber}">${teamData.losses}</td>`;
-    returnData += `<td id="rankTableTies${teamNumber}">${teamData.ties}</td>`;
-    returnData += `<td id="rankTableQualAverage${teamNumber}">${teamData.qualAverage}</td>`;
-    returnData += `<td id="rankTableDq${teamNumber}">${teamData.dq}</td>`;
-    returnData += `<td id="rankTableMatchesPlayed${teamNumber}">${teamData.matchesPlayed}</td>`;
+    returnData += `<td id="rankTableRP${teamNumber}" class="rankTableRP">${teamData.sortOrder1}</td>`;
+    returnData += `<td id="rankTableWins${teamNumber}" class="rankTableWins">${teamData.wins}</td>`;
+    returnData += `<td id="rankTableLosses${teamNumber}" class="rankTableLosses">${teamData.losses}</td>`;
+    returnData += `<td id="rankTableTies${teamNumber}" class="rankTableTies">${teamData.ties}</td>`;
+    returnData += `<td id="rankTableQualAverage${teamNumber}" class="rankTableQualAverage">${teamData.qualAverage}</td>`;
+    returnData += `<td id="rankTableDq${teamNumber}" class="rankTableDQ">${teamData.dq}</td>`;
+    returnData += `<td id="rankTableMatchesPlayed${teamNumber}" class="rankTableMatchesPlayed">${teamData.matchesPlayed}</td>`;
     returnData += `<td id="rankDistrictRank${teamNumber}" class="districtRank rankTableDistrictRank"></td>`;
     return returnData + '</tr>'
 }
