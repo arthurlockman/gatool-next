@@ -422,6 +422,20 @@ functions:
                 year: true
                 eventCode: true
                 tournamentLevel: true
+  GetEventRankingsV3:
+    handler: handler-v3.GetEventRankingsV3
+    description: Get alliance details for an event
+    events:
+    - http:
+        path: api/v3/{year}/rankings/{eventCode}
+        method: get
+        cors: true
+        authorizer: Authorize
+        request:
+          parameters:
+            year: true
+            eventCode: true
+
 
 resources:
   Resources:

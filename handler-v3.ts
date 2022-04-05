@@ -59,4 +59,9 @@ const GetHybridSchedule: Handler = async (event: APIGatewayEvent): Promise<APIGa
   return CreateResponseJson(200, returnData);
 };
 
-export { GetEventAwards, GetEventsV3, GetScheduleV3, GetMatchesV3, GetEventScoresV3, GetHybridSchedule }
+// noinspection JSUnusedGlobalSymbols
+const GetEventRankingsV3: Handler = async (event: APIGatewayEvent) => {
+  return await GetDataFromFIRSTAndReturn(`${event.pathParameters.year}/rankings/${event.pathParameters.eventCode}`, apiVersion);
+};
+
+export { GetEventAwards, GetEventsV3, GetScheduleV3, GetMatchesV3, GetEventScoresV3, GetHybridSchedule, GetEventRankingsV3 }
