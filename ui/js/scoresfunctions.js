@@ -1,27 +1,12 @@
 $("#loadingFeedback").html("Loading scoring functions...");
 
-function getSeasonHighScores(year) {
-    "use strict";
-    var promises = [];
-    if (year === 2018) {
-        for (var i = 0; i < currentEventList.length; i++) {
-            promises.push(new Promise(function (resolve, reject) {
-                getEventScores(currentEventList[i].code, currentEventList[i].type, year, "qual");
-            }));
-            promises.push(new Promise(function (resolve, reject) {
-                getEventScores(currentEventList[i].code, currentEventList[i].type, year, "playoff");
-            }));
-        }
-        Promise.all(promises);
-    }
-}
 
-function getEventScores(eventCode, type, year, tlevel) {
+function getEventScores(eventCode, year, tlevel) {
     "use strict";
     return new Promise(function (resolve, reject) {
 
         var req = new XMLHttpRequest();
-        req.open('GET', apiURL + year + '/schedule/' + eventCode + "/" + tlevel + "?returnschedule=false");
+        req.open('GET', apiURLV3 + year + '/schedule/hybrid/' + eventCode + "/" + tlevel);
         req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
         req.addEventListener('load', function () {
             if (req.status === 200) {

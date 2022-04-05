@@ -88,12 +88,6 @@ var matchTimer = setInterval(function () {
     timer()
 }, 1000);
 
-//this heartbeat checks the world high scores every 5 minutes.
-//var highScoresTimer = setInterval(function () {
-//    "use strict";
-//    getSeasonHighScores(2018);
-//}, 300000);
-
 //The apiURL determines the endpoint for API calls. 
 var apiURL = "https://www.gatool.org/api/";
 var apiURLV3 = "https://www.gatool.org/api/v3/";
@@ -1198,7 +1192,7 @@ function getRegularSeasonSchedule() {
     lastMatchPlayed = 0;
     lastPlayoffMatchPlayed = 0;
     var req = new XMLHttpRequest();
-    req.open('GET', apiURL + localStorage.currentYear + '/schedule/' + localStorage.currentEvent + '/qual?returnschedule=true');
+    req.open('GET', apiURLV3 + localStorage.currentYear + '/schedule/hybrid/' + localStorage.currentEvent + '/qual');
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         if (req.status === 200) {
@@ -1248,7 +1242,7 @@ function getRegularSeasonSchedule() {
         }
     });
     var req1 = new XMLHttpRequest();
-    req1.open('GET', apiURL + localStorage.currentYear + '/schedule/' + localStorage.currentEvent + '/playoff?returnschedule=true');
+    req1.open('GET', apiURLV3 + localStorage.currentYear + '/schedule/hybrid/' + localStorage.currentEvent + '/playoff');
     req1.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req1.addEventListener('load', function () {
         if (req1.status === 200) {
@@ -1337,7 +1331,7 @@ function getRegularSeasonSchedule() {
         }
     });
     var reqChamps = new XMLHttpRequest();
-    reqChamps.open('GET', apiURL + localStorage.currentYear + '/schedule/' + localStorage.currentEvent + '/playoff?returnschedule=true');
+    reqChamps.open('GET', apiURLV3 + localStorage.currentYear + '/schedule/hybrid/' + localStorage.currentEvent + '/playoff');
     reqChamps.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     reqChamps.addEventListener('load', function () {
         if (reqChamps.status === 200) {
