@@ -46,6 +46,7 @@ const GetEventScoresV3: Handler = async (event: APIGatewayEvent): Promise<APIGat
 };
 
 const GetHybridSchedule: Handler = async (event: APIGatewayEvent): Promise<APIGatewayResponse> => {
+
   const scheduleResponse = await GetSchedule(event.pathParameters.year, event.pathParameters.eventCode,
     event.pathParameters.tournamentLevel);
   const matchesResponse = await GetMatches(event.pathParameters.year, event.pathParameters.eventCode,
@@ -54,8 +55,8 @@ const GetHybridSchedule: Handler = async (event: APIGatewayEvent): Promise<APIGa
   const matches = matchesResponse.body.Matches;
 
   _.merge(schedule, matches);
-
-  return CreateResponseJson(200, schedule);
+  const returnData = { Schedule: schedule };
+  return CreateResponseJson(200, returnData);
 };
 
 export { GetEventAwards, GetEventsV3, GetScheduleV3, GetMatchesV3, GetEventScoresV3, GetHybridSchedule }
