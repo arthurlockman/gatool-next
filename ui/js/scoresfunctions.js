@@ -135,7 +135,7 @@ function getTeamRanks() {
     var team = {};
     var teamAllianceReady = 0;
     var req = new XMLHttpRequest();
-    req.open('GET', apiURL + localStorage.currentYear + '/rankings/' + localStorage.currentEvent);
+    req.open('GET', apiURLV3 + localStorage.currentYear + '/rankings/' + localStorage.currentEvent);
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         if (req.status === 200) {

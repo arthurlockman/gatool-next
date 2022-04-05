@@ -3044,7 +3044,7 @@ function getTeamData(teamList, year) {
 function getDistrictRanks(districtCode, year) {
     "use strict";
     var req = new XMLHttpRequest();
-    req.open('GET', apiURL + year + '/district/rankings/' + districtCode);
+    req.open('GET', apiURLV3 + year + '/district/rankings/' + districtCode);
     req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
     req.addEventListener('load', function () {
         if (req.status === 200) {
