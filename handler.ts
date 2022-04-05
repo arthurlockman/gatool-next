@@ -3,7 +3,7 @@ import { MatchWithEventDetails } from './model/match';
 import { EventAvatars, EventSchedule, EventType } from './model/event';
 import {
     BuildHighScoreJson, GetAvatarData, GetDataFromFIRST,
-    GetDataFromFIRSTAndReturn, ReturnJsonWithCode, ResponseWithHeaders,
+    GetDataFromFIRSTAndReturn, ReturnJsonWithCode,
     GetDataFromTBAAndReturn, CreateResponseJson, GetDataFromTBA
 } from './utils/utils';
 import {
@@ -17,6 +17,7 @@ import { RetrieveUserPreferences, StoreUserPreferences } from './utils/s3Storage
 
 import jwt = require('jsonwebtoken');
 import jwksClient = require('jwks-rsa');
+import { ResponseWithHeaders } from './types';
 
 // noinspection JSUnusedGlobalSymbols
 const GetEvents: Handler = (event: APIGatewayEvent) => {

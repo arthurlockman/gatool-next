@@ -2,11 +2,7 @@ import { EventAvatars } from '../model/event';
 import { MatchWithHighScoreDetails } from '../model/match';
 
 import rp = require('request-promise');
-
-export class ResponseWithHeaders {
-    headers: any;
-    body: any;
-}
+import { APIGatewayResponse, ResponseWithHeaders } from '../types';
 
 const includeHeaders = (body, response) => {
     return { 'headers': response.headers, 'body': body };
@@ -18,7 +14,7 @@ const includeHeaders = (body, response) => {
  * @param body The body data (JSON) to return
  * @param headers Additional headers to return with the response
  */
-const CreateResponseJson = (statusCode: number, body: any, headers?: any): any => {
+const CreateResponseJson = (statusCode: number, body: any, headers?: any): APIGatewayResponse => {
     const responseHeaders = {
         'Access-Control-Allow-Origin': '*', // Required for CORS support to work
         'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS
@@ -95,7 +91,7 @@ const BuildHighScoreJson = (year: string, type: string, level: string, match: Ma
  * Get and return data from the FIRST API
  * @param path The path on the FIRST API to call
  */
-const GetDataFromFIRSTAndReturn = async (path: string, apiVersion: string = 'v2.0') => {
+const GetDataFromFIRSTAndReturn = async (path: string, apiVersion: string = 'v2.0'): Promise<APIGatewayResponse> => {
     try {
         const response = await GetDataFromFIRST(path, apiVersion);
         return CreateResponseJson(200, response.body, response.headers);
@@ -108,7 +104,7 @@ const GetDataFromFIRSTAndReturn = async (path: string, apiVersion: string = 'v2.
  * Get and return data from the blue alliance
  * @param path The path on the TBA API to call
  */
-const GetDataFromTBAAndReturn = async (path: string) => {
+const GetDataFromTBAAndReturn = async (path: string): Promise<APIGatewayResponse> => {
     try {
         const response = await GetDataFromTBA(path);
         return CreateResponseJson(200, response.body, response.headers);
@@ -154,7 +150,7 @@ const GetAvatarData = async (year: string, eventCode: string, page?: number): Pr
  * @param callback The lambda callback function
  * @param headers Additional headers to return with the response
  */
-const ReturnJsonWithCode = (statusCode: number, body: any, headers?: any) => {
+const ReturnJsonWithCode = (statusCode: number, body: any, headers?: any): APIGatewayResponse => {
     const responseHeaders = {
         'Access-Control-Allow-Origin': '*', // Required for CORS support to work
         'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS

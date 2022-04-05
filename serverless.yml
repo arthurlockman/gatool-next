@@ -14,9 +14,9 @@ provider:
   timeout: 30
   environment: # Environment variables available to the whole service
     SERVICE_AWS_REGION: ${self:provider.region}
-    FRC_API_KEY: ${ssm:frc-api-key~true}
-    TBA_API_HEADER: ${ssm:tba-api-header~true}
-    TBA_API_KEY: ${ssm:tba-api-token~true}
+    FRC_API_KEY: ${ssm:/frc-api-key}
+    TBA_API_HEADER: ${ssm:/tba-api-header}
+    TBA_API_KEY: ${ssm:/tba-api-token}
     FRC_CURRENT_SEASON: 2022
     HIGH_SCORES_TABLE_NAME: HighScoresTable
     TEAM_UPDATES_TABLE_NAME: TeamUpdatesTable
@@ -398,6 +398,21 @@ functions:
     events:
       - http:
           path: api/v3/{year}/matches/{eventCode}/{tournamentLevel}
+          method: get
+          cors: true
+          authorizer: Authorize
+          request:
+            parameters:
+              paths:
+                year: true
+                eventCode: true
+                tournamentLevel: true
+  V3-GetHybridSchedule:
+    handler: handler-v3.GetHybridSchedule
+    description: Get merged hybrid schedule
+    events:
+      - http:
+          path: api/v3/{year}/schedule/hybrid/{eventCode}/{tournamentLevel}
           method: get
           cors: true
           authorizer: Authorize
