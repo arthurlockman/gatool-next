@@ -422,7 +422,7 @@ functions:
                 year: true
                 eventCode: true
                 tournamentLevel: true
-  GetEventRankingsV3:
+  V3-GetEventRankings:
     handler: handler-v3.GetEventRankingsV3
     description: Get alliance details for an event
     events:
@@ -435,6 +435,21 @@ functions:
           parameters:
             year: true
             eventCode: true
+  V3-GetDistrictRankings:
+    handler: handler-v3.GetDistrictRankingsV3
+    description: Get district rankings
+    events:
+      - http:
+          path: api/v3/{year}/district/rankings/{districtCode}
+          method: get
+          cors: true
+          authorizer: Authorize
+          request:
+            parameters:
+              year: true
+              districtCode: true
+            querystrings:
+              top: false
 
 
 resources:

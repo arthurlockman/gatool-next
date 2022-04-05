@@ -64,4 +64,36 @@ const GetEventRankingsV3: Handler = async (event: APIGatewayEvent) => {
   return await GetDataFromFIRSTAndReturn(`${event.pathParameters.year}/rankings/${event.pathParameters.eventCode}`, apiVersion);
 };
 
-export { GetEventAwards, GetEventsV3, GetScheduleV3, GetMatchesV3, GetEventScoresV3, GetHybridSchedule, GetEventRankingsV3 }
+// noinspection JSUnusedGlobalSymbols
+const GetDistrictRankingsV3: Handler = async (event: APIGatewayEvent) => {
+  const query = [];
+  query.push(`districtCode=${event.pathParameters.districtCode}`);
+  if (event.queryStringParameters) {
+      const top = event.queryStringParameters.top;
+      if (top) {
+          query.push(`top=${top}`);
+      }
+  }
+  const rankingData = await GetDataFromFIRST(`${event.pathParameters.year}/rankings/district?${query.join('&')}&page=1`, apiVersion);
+  if (rankingData.body.statusCode) {
+      return ReturnJsonWithCode(rankingData.body.statusCode, rankingData.body.message);
+  }
+  if (rankingData.body.pageTotal === 1) {
+      return ReturnJsonWithCode(200, rankingData.body, rankingData.headers);
+  } else {
+      const promises: Promise<any>[] = [];
+      for (let i = 2; i <= rankingData.body.pageTotal; i++) {
+          promises.push(GetDataFromFIRST(`${event.pathParameters.year}/rankings/district?${query.join('&')}&page=${i}`, apiVersion));
+      }
+      const allRankData = await Promise.all(promises);
+      allRankData.map(districtRank => {
+          rankingData.body.rankingCountPage += districtRank.body.rankingCountPage;
+          rankingData.body.districtRanks = rankingData.body.districtRanks.concat(districtRank.body.districtRanks);
+      });
+      rankingData.body.pageTotal = 1;
+      return ReturnJsonWithCode(200, rankingData.body, rankingData.headers);
+  }
+};
+
+
+export { GetEventAwards, GetEventsV3, GetScheduleV3, GetMatchesV3, GetEventScoresV3, GetHybridSchedule, GetEventRankingsV3, GetDistrictRankingsV3 }
