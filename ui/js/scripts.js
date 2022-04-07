@@ -3650,16 +3650,15 @@ function updateTeamInfoDone(cloudSave) {
     }
 
     // if ((teamData.teamNotesLocal !== $("#teamNotesUpdate").html()) && ($("#teamNotesUpdate").text() !== "")) {
-        if (teamData.teamNotesLocal !== $("#teamNotesUpdate").html()) {    
-        teamData.teamNotesLocal = $("#teamNotesUpdate").html()
+    if (teamData.teamNotesLocal !== $("#teamNotesUpdate").html()) {
+        teamData.teamNotesLocal = $("#teamNotesUpdate").html().trim();
     } else {
         teamData.teamNotesLocal = "";
     }
 
     // if ((teamData.teamNotes !== $("#teamNotes").html()) && ($("#teamNotes").text() !== "")) {
     if (teamData.teamNotes !== $("#teamNotes").html()) {
-                teamData.teamNotes = $("#teamNotes").html();
-        $("#teamTableNotes" + teamNumber).html($("#teamNotes").html())
+        teamData.teamNotes = $("#teamNotes").html().trim();
     } else {
         teamData.teamNotes = "";
     }
@@ -4294,6 +4293,10 @@ function handleRanksFiles(e) {
     }
 }
 
+function clickRestoreBackup() {
+    document.getElementById("BackupFiles").click();
+}
+
 function handleRestoreBackup(e) {
     "use strict";
     var files = e.target.files;
@@ -4307,12 +4310,13 @@ function handleRestoreBackup(e) {
             workbook = XLSX.read(data, { type: 'array' });
             var worksheet = workbook.Sheets[workbook.SheetNames[0]];
             var teams = XLSX.utils.sheet_to_json(worksheet);
-            for (var i=0;i<teams.length;i++) {
+            for (var i = 0; i < teams.length; i++) {
                 var teamData = {};
                 teamData = _.omit(teams[i], ["teamNumber"]);
                 compressLocalStorage("teamData" + teams[i].teamNumber, teamData);
             }
             clearFileInput("BackupFiles");
+            document.getElementById("BackupFiles").addEventListener('change', handleRestoreBackup);
             getTeamList(localStorage.currentYear);
 
         };

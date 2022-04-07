@@ -581,6 +581,11 @@ color: black;
 	text-align: center;
 	margin-top: 40px
 }
+.hiddenInput {
+	width: 0px;
+ 	height: 0px;
+ 	overflow: hidden
+}
 .form-flex {
 	height: 100%
 }

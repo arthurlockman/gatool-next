@@ -18,6 +18,7 @@
     <script src="https://unpkg.com/pizzip@3.1.1/dist/pizzip.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
     <script src="https://unpkg.com/pizzip@3.1.1/dist/pizzip-utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css" integrity="sha256-sj3qkRTZIL8Kff5fST1TX0EF9lEmSfFgjNvuiw2CV5w=" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/css/bootstrap-dialog.min.css" integrity="sha256-wstTM1F5dOf7cgnlRHIW3bmoRAAGh6jL7tMIvqTuFZE=" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
@@ -97,6 +98,7 @@
                         <option id="yearPicker2022">2022</option>
                         <option id="yearPicker2021">2021</option>
                         <option id="yearPicker2020">2020</option>
+                        <option id="yearPicker2019">2019</option>
                     </select>
                     <select class="selectpicker" id="eventFilters" multiple title="Filter your event list..." data-selected-text-format="count > 2" onchange="filterEvents()">
                         <option id="filtersclear" value="clear">Remove Filters</option>
@@ -277,11 +279,15 @@
                     <tr class="row">
                         <td class="col-sm">
                             <p><span style="cursor: pointer" onClick="exportXLSX();"><b><a><img style="float: left" width="30" src="images/excelicon.png"> Tap to download this table as Excel</a></b></span></p>
-                            <p>You can merge this with Word to create team data sheets you can hand out at an event. <i>Note: this will save to Files on iOS 13+</i></p>
+                            <p>You can use this as a backup of your team data in conjunction with the Restore Backup button on the right. You can also merge this with Word to create team data sheets you can hand out at an event. <i>Note: this will save to Files on iOS 13+</i></p>
                         </td>
                         <td class="col-sm">
                             <p><span style="cursor:pointer" onClick="downloadTeamInfoSheets();"><a><img style="float: left" width="30" src="images/wordicon.png"> <b>Tap here to download a merged document (docx).</b></a></span></p>
                             <p>This merged doc contains all of the information in your Teams List, merged onto a template you can print and distribute to teams. <i>Note: this will save to Files on iOS 13+</i></p>
+                        </td>
+                        <td>
+                            <p><span style="cursor:pointer" onClick="clickRestoreBackup();"><input type="file" id="BackupFiles" class="hiddenInput" /><b><a><img style="float: left"  width="30" src="images/excelicon.png"> Tap to restore team data from Excel</a></b></span></p>
+                            <p>You can export your teams data to Excel using the button on the left, and then restore it from backup here. This is handy in low or no network situations, where you may be unable to update changes to gatool Cloud. <i>Note: Be careful if you modify the Excel file and then import it here.</i></p></p>
                         </td>
                     </tr>
                 </table>
