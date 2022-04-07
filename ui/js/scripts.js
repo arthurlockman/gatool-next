@@ -462,6 +462,7 @@ window.onload = function () {
     document.getElementById("QualsFilesReset").addEventListener('click', handleQualsFilesReset, !1);
     document.getElementById("PlayoffFilesReset").addEventListener('click', handlePlayoffFilesReset, !1);
     //document.getElementById("RanksFiles").addEventListener('change', handleRanksFiles, !1);
+    document.getElementById("BackupFiles").addEventListener('change', handleRestoreBackup);
 
     //setup the Offseason Tab
     $('#offseasonTeamListToJSON').click(function () {
@@ -3647,14 +3648,17 @@ function updateTeamInfoDone(cloudSave) {
         teamData.cityStateLocal = "";
         $("#teamTableCityState" + teamNumber).html(teamData.cityState)
     }
-    if ((teamData.teamNotesLocal !== $("#teamNotesUpdate").html()) && ($("#teamNotesUpdate").text() !== "")) {
+
+    // if ((teamData.teamNotesLocal !== $("#teamNotesUpdate").html()) && ($("#teamNotesUpdate").text() !== "")) {
+        if (teamData.teamNotesLocal !== $("#teamNotesUpdate").html()) {    
         teamData.teamNotesLocal = $("#teamNotesUpdate").html()
     } else {
         teamData.teamNotesLocal = "";
     }
 
-    if ((teamData.teamNotes !== $("#teamNotes").html()) && ($("#teamNotes").text() !== "")) {
-        teamData.teamNotes = $("#teamNotes").html();
+    // if ((teamData.teamNotes !== $("#teamNotes").html()) && ($("#teamNotes").text() !== "")) {
+    if (teamData.teamNotes !== $("#teamNotes").html()) {
+                teamData.teamNotes = $("#teamNotes").html();
         $("#teamTableNotes" + teamNumber).html($("#teamNotes").html())
     } else {
         teamData.teamNotes = "";
@@ -4285,6 +4289,32 @@ function handleRanksFiles(e) {
                 }
             }
             localStorage.Rankings = JSON.stringify(innerRanks);
+        };
+        reader.readAsArrayBuffer(f);
+    }
+}
+
+function handleRestoreBackup(e) {
+    "use strict";
+    var files = e.target.files;
+    var i, f;
+    for (i = 0; i !== files.length; ++i) {
+        f = files[i];
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var data = new Uint8Array(e.target.result);
+            var workbook;
+            workbook = XLSX.read(data, { type: 'array' });
+            var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+            var teams = XLSX.utils.sheet_to_json(worksheet);
+            for (var i=0;i<teams.length;i++) {
+                var teamData = {};
+                teamData = _.omit(teams[i], ["teamNumber"]);
+                compressLocalStorage("teamData" + teams[i].teamNumber, teamData);
+            }
+            clearFileInput("BackupFiles");
+            getTeamList(localStorage.currentYear);
+
         };
         reader.readAsArrayBuffer(f);
     }
