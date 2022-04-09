@@ -20,7 +20,12 @@ const GetMatches = async (year: string, eventCode: string, tournamentLevel: stri
 
 const BuildHybridSchedule = async (year: string, eventCode: string, tournamentLevel: string): Promise<Match[]> => {
   const scheduleResponse = await GetSchedule(year, eventCode, tournamentLevel);
-  const matchesResponse = await GetMatches(year, eventCode, tournamentLevel);
+  var matchesResponse;
+  try {
+    matchesResponse = await GetMatches(year, eventCode, tournamentLevel);
+  } catch (e) {
+    return scheduleResponse.body.Schedule;
+  }
   const schedule = scheduleResponse.body.Schedule;
   const matches = matchesResponse.body.Matches;
 
