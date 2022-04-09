@@ -10,19 +10,22 @@ import { BuildHighScoreJson, CreateResponseJson, GetDataFromFIRST, GetDataFromFI
 const apiVersion = 'v3.0';
 
 // Common API endpoints
-const GetSchedule = async (year: string, eventCode: string, tournamentLevel: string): Promise<ResponseWithHeaders> => {
-  return await GetDataFromFIRST(`${year}/schedule/${eventCode}/${tournamentLevel}`, apiVersion);
+const GetSchedule = async (year: string, eventCode: string, tournamentLevel: string,
+  apiVersionOverride: string = apiVersion): Promise<ResponseWithHeaders> => {
+  return await GetDataFromFIRST(`${year}/schedule/${eventCode}/${tournamentLevel}`, apiVersionOverride);
 };
 
-const GetMatches = async (year: string, eventCode: string, tournamentLevel: string): Promise<ResponseWithHeaders> => {
-  return await GetDataFromFIRST(`${year}/matches/${eventCode}/${tournamentLevel}`, apiVersion);
+const GetMatches = async (year: string, eventCode: string, tournamentLevel: string,
+  apiVersionOverride: string = apiVersion): Promise<ResponseWithHeaders> => {
+  return await GetDataFromFIRST(`${year}/matches/${eventCode}/${tournamentLevel}`, apiVersionOverride);
 };
 
 const BuildHybridSchedule = async (year: string, eventCode: string, tournamentLevel: string): Promise<Match[]> => {
   const scheduleResponse = await GetSchedule(year, eventCode, tournamentLevel);
-  var matchesResponse;
+  let matchesResponse: ResponseWithHeaders;
   try {
-    matchesResponse = await GetMatches(year, eventCode, tournamentLevel);
+    // TODO: revert to V3 once FIRST fixes their API
+    matchesResponse = await GetMatches(year, eventCode, tournamentLevel, 'v2.0');
   } catch (e) {
     return scheduleResponse.body.Schedule;
   }
