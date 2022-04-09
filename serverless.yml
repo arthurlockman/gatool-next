@@ -194,20 +194,6 @@ functions:
                 tournamentLevel: true
                 start: true
                 end: true
-  GetEventHighScores:
-    handler: handler.GetEventHighScores
-    description: Get high scores for a specific event and year
-    events:
-      - http:
-          path: api/{year}/highscores/{eventCode}
-          method: get
-          cors: true
-          authorizer: Authorize
-          request:
-            parameters:
-              paths:
-                year: true
-                eventCode: true
   GetEventSchedule:
     handler: handler.GetEventSchedule
     description: Get the event schedule for a specific event, year, and competition level
@@ -323,14 +309,6 @@ functions:
           method: get
           cors: true
           authorizer: Authorize
-  UpdateHighScores:
-    handler: handler.UpdateHighScores
-    description: Update the event high scores at a regular interval
-    timeout: 60
-    events:
-      - schedule:
-          rate: rate(10 minutes)
-          enabled: true
 
   # V3 Endpoints
   V3-GetEventAwards:
@@ -450,6 +428,28 @@ functions:
               districtCode: true
             querystrings:
               top: false
+  V3-UpdateHighScores:
+    handler: handler-v3.UpdateHighScores
+    description: Update the event high scores at a regular interval
+    timeout: 60
+    events:
+      - schedule:
+          rate: rate(10 minutes)
+          enabled: true
+  V3-GetEventHighScores:
+    handler: handler-v3.GetEventHighScoresV3
+    description: Get high scores for a specific event and year
+    events:
+      - http:
+          path: api/{year}/highscores/{eventCode}
+          method: get
+          cors: true
+          authorizer: Authorize
+          request:
+            parameters:
+              paths:
+                year: true
+                eventCode: true
 
 
 resources:

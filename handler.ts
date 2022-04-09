@@ -1,18 +1,15 @@
-import { APIGatewayEvent, APIGatewayTokenAuthorizerEvent, Callback, Context, CustomAuthorizerEvent, Handler } from 'aws-lambda';
-import { MatchWithEventDetails } from './model/match';
-import { EventAvatars, EventSchedule, EventType } from './model/event';
+import { APIGatewayEvent, APIGatewayTokenAuthorizerEvent, Handler } from 'aws-lambda';
+import { EventAvatars } from './model/event';
 import {
-    BuildHighScoreJson, GetAvatarData, GetDataFromFIRST,
+    GetAvatarData, GetDataFromFIRST,
     GetDataFromFIRSTAndReturn, ReturnJsonWithCode,
     GetDataFromTBAAndReturn, CreateResponseJson, GetDataFromTBA
 } from './utils/utils';
 import {
     GetHighScoresFromDb,
     GetTeamUpdatesForTeam,
-    StoreHighScore,
     StoreTeamUpdateForTeam,
 } from './utils/databaseUtils';
-import { FindHighestScore } from './utils/scoreUtils';
 import { RetrieveUserPreferences, StoreUserPreferences } from './utils/s3StorageUtils';
 
 import jwt = require('jsonwebtoken');
@@ -225,82 +222,6 @@ const GetTeamAvatar: Handler = async (event: APIGatewayEvent) => {
 };
 
 // noinspection JSUnusedGlobalSymbols
-const GetEventHighScores: Handler = async (event: APIGatewayEvent) => {
-    const eventList = await GetDataFromFIRST(`${event.pathParameters.year}/events/`);
-    const evtList = eventList.body.Events.filter(evt => evt.code === event.pathParameters.eventCode);
-    if (evtList.length !== 1) {
-        return ReturnJsonWithCode(404, 'Event not found.');
-    }
-    const eventDetails = evtList[0];
-    const qualMatchList = await GetDataFromFIRST(`${event.pathParameters.year}/schedule/${event.pathParameters.eventCode}/qual/hybrid`);
-    const playoffMatchList =
-        await GetDataFromFIRST(`${event.pathParameters.year}/schedule/${event.pathParameters.eventCode}/playoff/hybrid`);
-
-    let matches: MatchWithEventDetails[] = qualMatchList.body.Schedule
-        .map(x => { return { event: { eventCode: eventDetails.code, type: 'qual' }, match: x } })
-        .concat(playoffMatchList.body.Schedule
-            .map(x => { return { event: { eventCode: eventDetails.code, type: 'playoff' }, match: x } }));
-    matches = matches.filter(match => match.match.postResultTime && match.match.postResultTime !== '' &&
-        // TODO: find a better way to filter these demo teams out, this way is not sustainable
-        match.match.teams.filter(t => t.teamNumber >= 9986).length === 0);
-
-    const overallHighScorePlayoff: MatchWithEventDetails[] = [];
-    const overallHighScoreQual: MatchWithEventDetails[] = [];
-    const penaltyFreeHighScorePlayoff: MatchWithEventDetails[] = [];
-    const penaltyFreeHighScoreQual: MatchWithEventDetails[] = [];
-    const offsettingPenaltyHighScorePlayoff: MatchWithEventDetails[] = [];
-    const offsettingPenaltyHighScoreQual: MatchWithEventDetails[] = [];
-    for (const match of matches) {
-        if (match.event.type === 'playoff') {
-            overallHighScorePlayoff.push(match);
-        }
-        if (match.event.type === 'qual') {
-            overallHighScoreQual.push(match);
-        }
-        if (match.event.type === 'playoff'
-            && match.match.scoreBlueFoul === 0 && match.match.scoreRedFoul === 0) {
-            penaltyFreeHighScorePlayoff.push(match);
-        } else if (match.event.type === 'qual'
-            && match.match.scoreBlueFoul === 0 && match.match.scoreRedFoul === 0) {
-            penaltyFreeHighScoreQual.push(match);
-        } else if (match.event.type === 'playoff'
-            && match.match.scoreBlueFoul === match.match.scoreRedFoul && match.match.scoreBlueFoul > 0) {
-            offsettingPenaltyHighScorePlayoff.push(match);
-        } else if (match.event.type === 'qual'
-            && match.match.scoreBlueFoul === match.match.scoreRedFoul && match.match.scoreBlueFoul > 0) {
-            offsettingPenaltyHighScoreQual.push(match);
-        }
-    }
-    const highScoresData = [];
-    if (overallHighScorePlayoff.length > 0) {
-        highScoresData.push(BuildHighScoreJson(event.pathParameters.year, 'overall', 'playoff',
-            FindHighestScore(overallHighScorePlayoff)));
-    }
-    if (overallHighScoreQual.length > 0) {
-        highScoresData.push(BuildHighScoreJson(event.pathParameters.year, 'overall', 'qual',
-            FindHighestScore(overallHighScoreQual)));
-    }
-    if (penaltyFreeHighScorePlayoff.length > 0) {
-        highScoresData.push(BuildHighScoreJson(event.pathParameters.year, 'penaltyFree', 'playoff',
-            FindHighestScore(penaltyFreeHighScorePlayoff)));
-    }
-    if (penaltyFreeHighScoreQual.length > 0) {
-        highScoresData.push(BuildHighScoreJson(event.pathParameters.year, 'penaltyFree', 'qual',
-            FindHighestScore(penaltyFreeHighScoreQual)));
-    }
-    if (offsettingPenaltyHighScorePlayoff.length > 0) {
-        highScoresData.push(BuildHighScoreJson(event.pathParameters.year, 'offsetting', 'playoff',
-            FindHighestScore(offsettingPenaltyHighScorePlayoff)));
-    }
-    if (offsettingPenaltyHighScoreQual.length > 0) {
-        highScoresData.push(BuildHighScoreJson(event.pathParameters.year, 'offsetting', 'qual',
-            FindHighestScore(offsettingPenaltyHighScoreQual)));
-    }
-    return ReturnJsonWithCode(200, highScoresData);
-
-};
-
-// noinspection JSUnusedGlobalSymbols
 const GetTeamAppearances: Handler = async (event: APIGatewayEvent) => {
     return await GetDataFromTBAAndReturn(`team/frc${event.pathParameters.teamNumber}/events`);
 };
@@ -422,9 +343,9 @@ const PutTeamUpdates: Handler = async (event: APIGatewayEvent) => {
 const GetUserPreferences: Handler = async (event: APIGatewayEvent) => {
     const token = event.headers['Authorization'];
     const decoded = jwt.decode(token.replace('Bearer ', ''), { complete: true });
-    if (decoded !== null && decoded.payload.email !== null) {
+    if (decoded !== null && (decoded.payload as any).email !== null) {
         try {
-            const userName: string = decoded.payload.email;
+            const userName: string = (decoded.payload as any).email;
             const preferences = await RetrieveUserPreferences(userName);
             return ReturnJsonWithCode(200, JSON.parse(preferences.Body.toString('utf-8')));
         } catch (e) {
@@ -438,110 +359,12 @@ const GetUserPreferences: Handler = async (event: APIGatewayEvent) => {
 const PutUserPreferences: Handler = async (event: APIGatewayEvent) => {
     const token = event.headers['Authorization'];
     const decoded = jwt.decode(token.replace('Bearer ', ''), { complete: true });
-    if (decoded !== null && decoded.payload.email !== null) {
-        const userName: string = decoded.payload.email;
+    if (decoded !== null && (decoded.payload as any).email !== null) {
+        const userName: string = (decoded.payload as any).email;
         await StoreUserPreferences(userName, JSON.parse(event.body));
         return ReturnJsonWithCode(200, `Preferences stored for ${userName}`);
     }
     return ReturnJsonWithCode(400, 'Unable to decode user from token.');
-};
-
-// TODO: make async
-// noinspection JSUnusedGlobalSymbols
-const UpdateHighScores: Handler = async () => {
-    const eventList = await GetDataFromFIRST(process.env.FRC_CURRENT_SEASON + '/events');
-    const promises: Promise<ResponseWithHeaders>[] = [];
-    const order: EventType[] = [];
-    const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() + 1);
-    for (const _event of eventList.body.Events) {
-        const eventDate = new Date(_event.dateStart);
-        if (eventDate < currentDate) {
-            promises.push(GetDataFromFIRST(process.env.FRC_CURRENT_SEASON + '/schedule/' + _event.code + '/qual/hybrid').catch(_ => {
-                return {
-                    body: {
-                        Schedule: []
-                    }
-                } as ResponseWithHeaders;
-            }));
-            promises.push(GetDataFromFIRST(process.env.FRC_CURRENT_SEASON + '/schedule/' + _event.code + '/playoff/hybrid').catch(_ => {
-                return {
-                    body: {
-                        Schedule: []
-                    }
-                } as ResponseWithHeaders;
-            }));
-            order.push({
-                eventCode: _event.code,
-                type: 'qual'
-            });
-            order.push({
-                eventCode: _event.code,
-                type: 'playoff'
-            });
-        }
-    }
-    const events = await Promise.all(promises);
-    const matches: MatchWithEventDetails[] = [];
-    const eventBody = events.map(e => e.body) as EventSchedule[];
-    for (const _event of eventBody) {
-        const evt = order[eventBody.indexOf(_event)];
-        if (_event.Schedule[0]) {
-            for (const match of _event.Schedule) {
-                // TODO: find a better way to filter these demo teams out, this way is not sustainable
-                if (match.postResultTime && match.postResultTime !== '' && match.teams.filter(t => t.teamNumber >= 9986).length === 0) {
-                    // Result was posted and it's not a demo team, so the match has occurred
-                    matches.push({
-                        event: evt,
-                        match: match
-                    });
-                }
-            }
-        } else {
-            console.log('Event', evt.eventCode, evt.type, 'has no schedule data, likely occurs in the future');
-        }
-    }
-    const overallHighScorePlayoff: MatchWithEventDetails[] = [];
-    const overallHighScoreQual: MatchWithEventDetails[] = [];
-    const penaltyFreeHighScorePlayoff: MatchWithEventDetails[] = [];
-    const penaltyFreeHighScoreQual: MatchWithEventDetails[] = [];
-    const offsettingPenaltyHighScorePlayoff: MatchWithEventDetails[] = [];
-    const offsettingPenaltyHighScoreQual: MatchWithEventDetails[] = [];
-    for (const match of matches) {
-        if (match.event.type === 'playoff') {
-            overallHighScorePlayoff.push(match);
-        }
-        if (match.event.type === 'qual') {
-            overallHighScoreQual.push(match);
-        }
-        if (match.event.type === 'playoff'
-            && match.match.scoreBlueFoul === 0 && match.match.scoreRedFoul === 0) {
-            penaltyFreeHighScorePlayoff.push(match);
-        } else if (match.event.type === 'qual'
-            && match.match.scoreBlueFoul === 0 && match.match.scoreRedFoul === 0) {
-            penaltyFreeHighScoreQual.push(match);
-        } else if (match.event.type === 'playoff'
-            && match.match.scoreBlueFoul === match.match.scoreRedFoul && match.match.scoreBlueFoul > 0) {
-            offsettingPenaltyHighScorePlayoff.push(match);
-        } else if (match.event.type === 'qual'
-            && match.match.scoreBlueFoul === match.match.scoreRedFoul && match.match.scoreBlueFoul > 0) {
-            offsettingPenaltyHighScoreQual.push(match);
-        }
-    }
-    const highScorePromises = [];
-    highScorePromises.push(StoreHighScore(process.env.FRC_CURRENT_SEASON, 'overall', 'playoff',
-        FindHighestScore(overallHighScorePlayoff)));
-    highScorePromises.push(StoreHighScore(process.env.FRC_CURRENT_SEASON, 'overall', 'qual',
-        FindHighestScore(overallHighScoreQual)));
-    highScorePromises.push(StoreHighScore(process.env.FRC_CURRENT_SEASON, 'penaltyFree', 'playoff',
-        FindHighestScore(penaltyFreeHighScorePlayoff)));
-    highScorePromises.push(StoreHighScore(process.env.FRC_CURRENT_SEASON, 'penaltyFree', 'qual',
-        FindHighestScore(penaltyFreeHighScoreQual)));
-    highScorePromises.push(StoreHighScore(process.env.FRC_CURRENT_SEASON, 'offsetting', 'playoff',
-        FindHighestScore(offsettingPenaltyHighScorePlayoff)));
-    highScorePromises.push(StoreHighScore(process.env.FRC_CURRENT_SEASON, 'offsetting', 'qual',
-        FindHighestScore(offsettingPenaltyHighScoreQual)));
-    return await Promise.all(highScorePromises);
 };
 
 // noinspection JSUnusedGlobalSymbols
@@ -576,7 +399,7 @@ const Authorize: Handler = async (event: APIGatewayTokenAuthorizerEvent) => {
                     Resource: '*',
                 }]
             },
-            context: { scope: decoded.payload.scope }
+            context: { scope: (decoded.payload as any).scope }
         };
     } else {
         throw new Error('Unauthorized.');
@@ -586,8 +409,8 @@ const Authorize: Handler = async (event: APIGatewayTokenAuthorizerEvent) => {
 // noinspection JSUnusedGlobalSymbols
 export {
     GetEvents, GetEventTeams, GetTeamAwards, GetEventScores, GetEventSchedule, GetEventAvatars,
-    UpdateHighScores, GetHighScores, GetOffseasonEvents, GetEventAlliances, GetEventRankings,
-    Authorize, GetTeamAvatar, GetEventHighScores, GetTeamUpdates, PutTeamUpdates, GetUserPreferences,
+    GetHighScores, GetOffseasonEvents, GetEventAlliances, GetEventRankings,
+    Authorize, GetTeamAvatar, GetTeamUpdates, PutTeamUpdates, GetUserPreferences,
     PutUserPreferences, GetHistoricTeamAwards, GetDistrictTeams, GetTeams, GetDistrictRankings,
     GetTeamAppearances, GetAllTeamAwards, GetOffseasonTeams
 }
