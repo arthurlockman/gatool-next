@@ -1275,6 +1275,10 @@ function getRegularSeasonSchedule() {
                 $(".playoffBadge").addClass("greyScore");
                 for (var i = 0; i < data.Schedule.length; i++) {
                     var element = data.Schedule[i];
+                    if (typeof element.scoreRedFinal === "undefined") {
+                        element.scoreRedFinal = null;
+                        element.scoreBlueFinal = null;
+                    }
                     var optionClass = "";
                     if ((element.scoreRedFinal !== null) && (element.scoreBlueFinal !== null)) {
                         optionClass = ' class="bg-success" ';
