@@ -1208,6 +1208,10 @@ function getRegularSeasonSchedule() {
                 qualScheduleLength = data.Schedule.length;
                 for (var i = 0; i < data.Schedule.length; i++) {
                     var element = data.Schedule[i];
+                    if (typeof element.scoreRedFinal === "undefined") {
+                        element.scoreRedFinal = null;
+                        element.scoreBlueFinal = null;
+                    }
                     var optionClass = "";
                     if ((element.scoreRedFinal !== null) && (element.scoreBlueFinal !== null)) {
                         optionClass = ' class="bg-success" '
@@ -1354,6 +1358,10 @@ function getRegularSeasonSchedule() {
                 qualScheduleLength = data.Schedule.length;
                 for (var i = 0; i < data.Schedule.length; i++) {
                     var element = data.Schedule[i];
+                    if (typeof element.scoreRedFinal === "undefined") {
+                        element.scoreRedFinal = null;
+                        element.scoreBlueFinal = null;
+                    }
                     matchSchedule += generateMatchTableRow(element);
                     matchPicker += '<option id="matchPicker' + parseInt(i + 1) + '" matchNumber="' + parseInt(i + 1) + '">' + element.description + '</option>';
                     if ((element.scoreRedFinal !== null) && (element.scoreBlueFinal !== null)) {
