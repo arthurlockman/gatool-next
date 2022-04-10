@@ -1425,6 +1425,7 @@ function processPlayoffBracket(matchData) {
         allianceLookup[element.round1] = "round1";
         allianceLookup[element.round2] = "round2";
         if (element.round3) { allianceLookup[element.round3] = "round3"; }
+        if (element.backup) { allianceLookup[element.backup] = "backup"; }
     });
     bracketDetail.description = matchData.description;
     if (matchData.description.split(" ")[0] === "Final") {
@@ -1437,6 +1438,8 @@ function processPlayoffBracket(matchData) {
         "round1": null,
         "round2": null,
         "round3": null,
+        "backup": null,
+        "backupReplaced": null,
         "numbers": []
     };
     bracketDetail.blueAlliance = {
@@ -1444,6 +1447,8 @@ function processPlayoffBracket(matchData) {
         "round1": null,
         "round2": null,
         "round3": null,
+        "backup": null,
+        "backupReplaced": null,
         "numbers": []
     };
     bracketDetail.winner = "grey";
@@ -1471,6 +1476,9 @@ function processPlayoffBracket(matchData) {
         if (bracketDetail.redAlliance.round3) {
             bracketDetail.redAlliance.numbers.push(bracketDetail.redAlliance.round3);
         }
+        if (bracketDetail.redAlliance.backup) {
+            bracketDetail.redAlliance.numbers.push(bracketDetail.redAlliance.backup);
+        }
         if (bracketDetail.blueAlliance.captain) {
             bracketDetail.blueAlliance.numbers.push(bracketDetail.blueAlliance.captain);
         }
@@ -1482,6 +1490,9 @@ function processPlayoffBracket(matchData) {
         }
         if (bracketDetail.blueAlliance.round3) {
             bracketDetail.blueAlliance.numbers.push(bracketDetail.blueAlliance.round3);
+        }
+        if (bracketDetail.blueAlliance.backup) {
+            bracketDetail.blueAlliance.numbers.push(bracketDetail.blueAlliance.backup);
         }
         if (matchData.scoreRedFinal > matchData.scoreBlueFinal) {
             bracketDetail.winner = "red";
