@@ -90,7 +90,7 @@ for (var i = 0; i < allianceSelectionOrderBase.length; i++) {
 //Championship events receive special treatment. We define the Championship events here, including Michigan.
 var champSubdivisions = ["ARCHIMEDES", "CARSON", "CARVER", "CURIE", "DALY", "DARWIN", "GALILEO", "HOPPER", "NEWTON", "ROEBLING", "TESLA", "TURING"];
 var champDivisions = ["ARDA", "CANE", "CATE", "CUDA", "GARO", "HOTU"];
-var champs = ["CMP", "CMPTX", "CMPMO", "CMPMI","NECMP","MICMP"];
+var champs = ["CMP", "CMPTX", "CMPMO", "CMPMI"];
 var miDivisions = ["MICMP1", "MICMP2", "MICMP3", "MICMP4","ONCMP1","ONCMP2","NECMP1","NECMP2","TXCMP1","TXCMP2"];
 var miChamps = ["MICMP","ONCMP","NECMP","TXCMP"];
 
