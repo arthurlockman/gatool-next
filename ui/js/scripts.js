@@ -1501,12 +1501,12 @@ function processPlayoffBracket(matchData) {
         } else if ((matchData.scoreRedFinal === matchData.scoreBlueFinal) && (matchData.scoreRedFinal > 0)) {
             bracketDetail.winner = "tie"
         }
-        if (matchData.teams[0].teamNumber !== null) {
+        if (matchData.teams[0].teamNumber !== null || matchData.teams[0].teamNumber !== 0) {
             bracketDetail.redAllianceName = decompressLocalStorage("teamData" + bracketDetail.redAlliance.numbers[0]).allianceName;
         } else {
             bracketDetail.redAllianceName = "TBD";
         }
-        if (matchData.teams[4].teamNumber !== null) {
+        if (matchData.teams[4].teamNumber !== null || matchData.teams[4].teamNumber !== 0 ) {
             bracketDetail.blueAllianceName = decompressLocalStorage("teamData" + bracketDetail.blueAlliance.numbers[0]).allianceName;
         } else {
             bracketDetail.blueAllianceName = "TBD";

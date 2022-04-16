@@ -25,7 +25,7 @@ const BuildHybridSchedule = async (year: string, eventCode: string, tournamentLe
   let matchesResponse: ResponseWithHeaders;
   try {
     // TODO: revert to V3 once FIRST fixes their API
-    matchesResponse = await GetMatches(year, eventCode, tournamentLevel, 'v2.0');
+    matchesResponse = await GetMatches(year, eventCode, tournamentLevel, 'v3.0');
   } catch (e) {
     return scheduleResponse.body.Schedule;
   }
