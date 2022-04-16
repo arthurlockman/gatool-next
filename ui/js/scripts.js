@@ -1501,12 +1501,12 @@ function processPlayoffBracket(matchData) {
         } else if ((matchData.scoreRedFinal === matchData.scoreBlueFinal) && (matchData.scoreRedFinal > 0)) {
             bracketDetail.winner = "tie"
         }
-        if (matchData.teams[0].teamNumber !== null || matchData.teams[0].teamNumber !== 0) {
+        if (matchData.teams[0].teamNumber !== null && matchData.teams[0].teamNumber !== 0) {
             bracketDetail.redAllianceName = decompressLocalStorage("teamData" + bracketDetail.redAlliance.numbers[0]).allianceName;
         } else {
             bracketDetail.redAllianceName = "TBD";
         }
-        if (matchData.teams[4].teamNumber !== null || matchData.teams[4].teamNumber !== 0 ) {
+        if (matchData.teams[4].teamNumber !== null && matchData.teams[4].teamNumber !== 0 ) {
             bracketDetail.blueAllianceName = decompressLocalStorage("teamData" + bracketDetail.blueAlliance.numbers[0]).allianceName;
         } else {
             bracketDetail.blueAllianceName = "TBD";
@@ -1912,7 +1912,7 @@ function handlePlayoffBracket() {
     var matchArray = JSON.parse(localStorage.playoffList).Schedule;
     for (var i = 0; i < matchArray.length; i++) {
         processPlayoffBracket(matchArray[i]);
-        if ((i < Object.keys(playoffResultsDetails).length) && (matchArray[i].scoreRedFinal !== null) && (playoffResultsDetails[matchArray[i].matchNumber].winner === "tie") && (matchArray[i].description.split(" ")[0] !== "Final")) {
+        if ((i < Object.keys(playoffResultsDetails).length) && (matchArray[i].scoreRedFinal !== null) && (matchArray[i].scoreRedFinal !== 0) && (playoffResultsDetails[matchArray[i].matchNumber].winner === "tie") && (matchArray[i].description.split(" ")[0] !== "Final")) {
             var winner = {};
             winner.winner = playoffResultsDetails[matchArray[i].matchNumber].tiebreaker;
             winner.class = "";
