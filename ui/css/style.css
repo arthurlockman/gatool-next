@@ -139,7 +139,11 @@ color: black;
 	color: white
 }
 .playByPlayTeamName {
-	font-size: x-large;
+	font-size: 36px;
+	margin: 0px
+}
+.playByPlayTeamNameStats {
+	font-size: 24px;
 	margin: 0px
 }
 .playByPlayWinLossTie {
@@ -640,6 +644,9 @@ p {
 .playByPlayTeamName {
 	font-size: 18px
 }
+.playByPlayTeamNameStats {
+	font-size: 12px
+}
 .playByPlayRobotName {
 	font-size: 12px
 }
@@ -830,6 +837,9 @@ ul.tab li a {
 .playByPlayTeamName {
 	font-size: 13px;
 }
+.playByPlayTeamNameStats {
+	font-size: 9px;
+}
 }
 
 /* Landscape */
@@ -840,6 +850,11 @@ ul.tab li a {
 }
 .playByPlayTeamName {
 	font-size: 13px;
+	;
+	margin: 0px;
+}
+.playByPlayTeamNameStats {
+	font-size: 9px;
 	;
 	margin: 0px;
 }

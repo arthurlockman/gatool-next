@@ -278,11 +278,11 @@ window.onload = function () {
     if ($("#offseason").bootstrapSwitch('state')) {
         $(".offseason").show();
         $(".regularseason").hide();
-        switchStats();
+        switchStats("off");
     } else {
         $(".offseason").hide();
         $(".regularseason").show();
-        switchStats();
+        switchStats("on");
     }
 
     // Handle Sponsors toggle. Hide and show sponsors in the announce/PBP display.
@@ -343,11 +343,11 @@ window.onload = function () {
         if ($("#offseason").bootstrapSwitch('state')) {
             $(".offseason").show();
             $(".regularseason").hide();
-            switchStats()
+            switchStats("off")
         } else {
             $(".offseason").hide();
             $(".regularseason").show();
-            switchStats()
+            switchStats("on")
         }
         localStorage.removeItem("eventSelector");
         loadEventsList()
@@ -4395,14 +4395,20 @@ function showAllianceSelectionPlayoff(targetMode) {
     }
 }
 
-function switchStats() {
+function switchStats(state) {
     var fontSize = $('.playByPlayTeamName').css("font-size").replace("px", "");
-    if ($('.playByPlayWinLossTie').css("display") === "none") {
+    if (state === "on") {
         $('.playByPlayWinLossTie').show();
-        $('.playByPlayTeamName').css({ "font-size": (fontSize / 1.5) + "px" });
+        $('.playByPlayTeamName').addClass("playByPlayTeamNameStats");    
+    } else if (state === "off") {
+        $('.playByPlayWinLossTie').hide();
+        $('.playByPlayTeamName').removeClass("playByPlayTeamNameStats");
+    } else if ($('.playByPlayWinLossTie').css("display") === "none" ) {
+        $('.playByPlayWinLossTie').show();
+        $('.playByPlayTeamName').addClass("playByPlayTeamNameStats");
     } else {
         $('.playByPlayWinLossTie').hide();
-        $('.playByPlayTeamName').css({ "font-size": (fontSize * 1.5) + "px" });
+        $('.playByPlayTeamName').removeClass("playByPlayTeamNameStats");
     }
 
 }
