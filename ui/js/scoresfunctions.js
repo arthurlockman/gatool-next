@@ -322,6 +322,8 @@ function getAllTeamAwards(teamNumber) {
             result.champsFinalistyears = [];
             result.champsSubdivisionWinner = 0;
             result.champsSubdivisionWinneryears = [];
+            result.champsDivisionWinner = 0;
+            result.champsDivisionWinneryears = [];
             result.woodieflowers = 0;
             result.woodieflowersyears = [];
             result.deansList = 0;
@@ -345,6 +347,7 @@ function getAllTeamAwards(teamNumber) {
                     result.champsFinalist += 1;
                     result.champsFinalistyears.push(allAwards[i].year);
                 }
+
 
                 //Champs Subdivision Winner
                 //award_type === 1
@@ -392,6 +395,55 @@ function getAllTeamAwards(teamNumber) {
                 if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "new")) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Newton");
+                }
+
+                //Champs Division Winner
+                //award_type === 1
+                //year >= 2022
+                //event_key === [xxxarc,xxxgal,xxxcur,xxxxdar,xxxxtes,xxxxdal,xxxxcars,xxxxcarv,xxxxtur,xxxxroe,xxxxhop,xxxxnew]
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "arc") && allAwards[i].year >=2022) {
+                    result.champsDivisionWinner += 1;
+                    result.champsDivisionWinneryears.push(allAwards[i].year + " Archimedes");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "cur") && allAwards[i].year >=2022) {
+                    result.champsDivisionWinner += 1;
+                    result.champsDivisionWinneryears.push(allAwards[i].year + " Curie");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "dar") && allAwards[i].year >=2022) {
+                    result.champsDivisionWinner += 1;
+                    result.champsDivisionWinneryears.push(allAwards[i].year + " Darwin");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "tes") && allAwards[i].year >=2022) {
+                    result.champsDivisionWinner += 1;
+                    result.champsDivisionWinneryears.push(allAwards[i].year + " Tesla");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "dal") && allAwards[i].year >=2022) {
+                    result.champsDivisionWinner += 1;
+                    result.champsDivisionWinneryears.push(allAwards[i].year + " Daly");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "cars") && allAwards[i].year >=2022) {
+                    result.champsDivisionWinner += 1;
+                    result.champsDivisionWinneryears.push(allAwards[i].year + " Carson");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "carv") && allAwards[i].year >=2022) {
+                    result.champsDivisionWinner += 1;
+                    result.champsDivisionWinneryears.push(allAwards[i].year + " Carver");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "tur") && allAwards[i].year >=2022) {
+                    result.champsDivisionWinner += 1;
+                    result.champsDivisionWinneryears.push(allAwards[i].year + "Turing");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "roe") && allAwards[i].year >=2022) {
+                    result.champsDivisionWinner += 1;
+                    result.champsDivisionWinneryears.push(allAwards[i].year + " Roebling");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "hop") && allAwards[i].year >=2022) {
+                    result.champsDivisionWinner += 1;
+                    result.champsDivisionWinneryears.push(allAwards[i].year + " Hopper");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "new") && allAwards[i].year >=2022) {
+                    result.champsDivisionWinner += 1;
+                    result.champsDivisionWinneryears.push(allAwards[i].year + " Newton");
                 }
 
                 //Woodie Flowers
@@ -482,13 +534,18 @@ function getTeamAppearance(teamNumber) {
                 //check for district code
                 //DISTRICT_CMP = 2
                 //DISTRICT_CMP_DIVISION = 5   
-                // Ontario (>=2019), Michigan (>=2017) check for Einstein appearances
+                // Ontario (>=2019), Michigan (>=2017), Texas (>=2022), New England (>=2022), 
+                // Indiana (>=2022) check for Einstein appearances 
                 //appearances.district.abbreviation = "ont"
                 //appearances.district.abbreviation = "fim"
                 // >=2017 check for Division appearance then Champs appearances
                 //test for champs prior to 2001
                 if (appearances[i].district !== null) {
-                    if (((appearances[i].year >= 2019) && (appearances[i].district.abbreviation === "ont")) || ((appearances[i].year >= 2017) && (appearances[i].district.abbreviation === "fim"))) {
+                    if (((appearances[i].year >= 2019) && (appearances[i].district.abbreviation === "ont")) || 
+                    ((appearances[i].year >= 2017) && (appearances[i].district.abbreviation === "fim")) ||
+                    ((appearances[i].year >= 2022) && (appearances[i].district.abbreviation === "ne")) ||
+                    ((appearances[i].year >= 2022) && (appearances[i].district.abbreviation === "in")) ||
+                    ((appearances[i].year >= 2022) && (appearances[i].district.abbreviation === "tx"))) {
                         if (appearances[i].event_type === 5) {
                             result.districtChampsAppearances += 1;
                             result.districtChampsAppearancesyears.push(appearances[i].year);
@@ -527,9 +584,9 @@ function getTeamAppearance(teamNumber) {
                         result.champsAppearances += 1;
                         result.champsAppearancesyears.push(appearances[i].year);
                     }
-                    //fix this later: mapping out this year's Einstein appearances.
-                    //if (appearances[i].event_type === 4 && appearances[i].year < Number(localStorage.currentYear)) {
-                    if (appearances[i].event_type === 4) {
+                    // fix this later: mapping out this year's Einstein appearances.
+                    if (appearances[i].event_type === 4 && appearances[i].year < Number(localStorage.currentYear) && inSubdivision()) {
+                    // if (appearances[i].event_type === 4 ) {
                         result.einsteinAppearances += 1;
                         result.einsteinAppearancesyears.push(appearances[i].year);
                     }

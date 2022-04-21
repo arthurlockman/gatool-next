@@ -2131,6 +2131,8 @@ function announceDisplay() {
         }
         if (localStorage.offseason === "true") {
             $("#eventHighScorePlayByPlay").html("Offline Event")
+        } else if (localStorage.highScoreDetails == "{}") {
+            $("#eventHighScorePlayByPlay").html("No matches reported");
         } else {
             $("#eventHighScorePlayByPlay").html("<b>Current High Score: " + localStorage.matchHighScore + "<br>from " + localStorage.highScoreDetails + "</b>");
             getHighScores();
@@ -2335,6 +2337,15 @@ function announceDisplay() {
                     }
                     if (allAwardsData.champsSubdivisionWinneryears.length > 0) {
                         appearanceDisplay += allAwardsData.champsSubdivisionWinneryears.join(", ") + "<br>";
+                    }
+                    if (allAwardsData.champsDivisionWinner === 1) {
+                        appearanceDisplay += "<b>Division Winner</b><br>";
+                    }
+                    if (allAwardsData.champsDivisionWinner > 1) {
+                        appearanceDisplay += "<b>" + allAwardsData.champsDivisionWinner + " time Division Winner</b><br>";
+                    }
+                    if (allAwardsData.champsDivisionWinneryears.length > 0) {
+                        appearanceDisplay += allAwardsData.champsDivisionWinneryears.join(", ") + "<br>";
                     }
                     if (allAwardsData.woodieflowers === 1) {
                         appearanceDisplay += "<b>Woodie Flowers Awardee</b><br>";
