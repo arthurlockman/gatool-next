@@ -684,7 +684,9 @@ function prepareAllianceSelection() {
     districtRankings = {};
     currentAllianceChoice = 0;
     allianceSelectionOrder = [];
-
+    if (inChamps() || inSubdivision()) {
+        allianceSelectionLength = 23
+    }
 
     $("#allianceSelectionTable").html(`<table>
     <tr>
@@ -823,6 +825,11 @@ function prepareAllianceSelection() {
         </td>
     </tr>
 </table>`);
+if (inChamps() || inSubdivision()) {
+    $(".thirdAllianceSelection").show();
+    $("#backupTeamsTable").hide()
+}
+
     $("#showPlayoffBracket").hide();
 }
 
