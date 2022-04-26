@@ -450,7 +450,20 @@ functions:
               paths:
                 year: true
                 eventCode: true
-
+  V3-GetTeamAwards:
+    handler: handler-v3.GetTeamAwardsV3
+    description: Get awards for a specific team in a specific year
+    events:
+      - http:
+          path: api/v3/{year}/awards/team/{teamNumber}
+          method: get
+          cors: true
+          authorizer: Authorize
+          request:
+            parameters:
+              paths:
+                year: true
+                teamNumber: true
 
 resources:
   Resources:

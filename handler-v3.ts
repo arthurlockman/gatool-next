@@ -75,6 +75,11 @@ const GetHybridSchedule: Handler = async (event: APIGatewayEvent): Promise<APIGa
 };
 
 // noinspection JSUnusedGlobalSymbols
+const GetTeamAwardsV3: Handler = async (event: APIGatewayEvent) => {
+  return await GetDataFromFIRSTAndReturn(event.pathParameters.year + '/awards/team/' + event.pathParameters.teamNumber, apiVersion);
+};
+
+// noinspection JSUnusedGlobalSymbols
 const GetEventRankingsV3: Handler = async (event: APIGatewayEvent) => {
   return await GetDataFromFIRSTAndReturn(`${event.pathParameters.year}/rankings/${event.pathParameters.eventCode}`, apiVersion);
 };
@@ -274,4 +279,4 @@ const UpdateHighScores: Handler = async () => {
 
 
 export { GetEventAwards, GetEventsV3, GetScheduleV3, GetMatchesV3, GetEventScoresV3, GetHybridSchedule,
-  GetEventRankingsV3, GetDistrictRankingsV3, GetEventHighScoresV3, UpdateHighScores }
+  GetTeamAwardsV3, GetEventRankingsV3, GetDistrictRankingsV3, GetEventHighScoresV3, UpdateHighScores }

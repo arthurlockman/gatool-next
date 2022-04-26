@@ -80,7 +80,7 @@ if (!localStorage.playoffCountOverrideValue) {
 // reset some of those variables, which will be adjusted later.
 localStorage.clock = "ready";
 localStorage.matchHighScore = 0;
-localStorage.highScoreDetails = "{}";
+localStorage.highScoreDetails = "No matches reported";
 
 //This heartbeat performs a number of functions related to clocks. See the timer() function for details.
 var matchTimer = setInterval(function () {
@@ -2138,8 +2138,6 @@ function announceDisplay() {
         }
         if (localStorage.offseason === "true") {
             $("#eventHighScorePlayByPlay").html("Offline Event")
-        } else if (localStorage.highScoreDetails == "{}") {
-            $("#eventHighScorePlayByPlay").html("No matches reported");
         } else {
             $("#eventHighScorePlayByPlay").html("<b>Current High Score: " + localStorage.matchHighScore + "<br>from " + localStorage.highScoreDetails + "</b>");
             getHighScores();
@@ -2934,13 +2932,13 @@ function getTeamAwards(teamNumber, year) {
     var eventName = "";
     var promisesArray = [];
     if (teamData.rookieYear <= year) {
-        promisesArray.push(asyncAPICall(apiURL, year, "awards", teamNumber));
+        promisesArray.push(asyncAPICall(apiURLV3, year, "awards/team", teamNumber));
     }
     if (teamData.rookieYear <= Number(year) - 1) {
-        promisesArray.push(asyncAPICall(apiURL, (year - 1).toString(), "awards", teamNumber));
+        promisesArray.push(asyncAPICall(apiURLV3, (year - 1).toString(), "awards/team", teamNumber));
     }
     if (teamData.rookieYear <= Number(year) - 2) {
-        promisesArray.push(asyncAPICall(apiURL, (year - 2).toString(), "awards", teamNumber));
+        promisesArray.push(asyncAPICall(apiURLV3, (year - 2).toString(), "awards/team", teamNumber));
     }
     teamLoadProgressBar++;
     $('#teamloadprogressbar').attr("style", "width:" + (teamLoadProgressBar / teamCountTotal * 100) + "%");
@@ -4075,7 +4073,7 @@ function davidPriceFormat(priceMatchData) {
 
 function awardsHilight(awardName) {
     "use strict";
-    if (awardName === "District Chairman's Award" || awardName === "District Event Winner" || awardName === "District Event Finalist" || awardName === "Regional Engineering Inspiration Award" || awardName === "District Engineering Inspiration Award" || awardName === "District Championship Finalist" || awardName === "District Championship Winner" || awardName === "Regional Winners" || awardName === "Regional Finalists" || awardName === "Regional Chairman's Award" || awardName === "FIRST Dean's List Finalist Award" || awardName === "Championship Subdivision Winner" || awardName === "Championship Subdivision Finalist" || awardName === "Championship Winner" || awardName === "Championship Finalist" || awardName === "Chairman's Award" || awardName === "Chairman's Award Finalist" || awardName === "FIRST Dean's List Award" || awardName === "Woodie Flowers Award" || awardName === "Innovation Challenge Winner" || awardName === "Innovation Challenge Finalist") {
+    if (awardName === "District Chairman's Award" || awardName === "District Event Winner" || awardName === "District Event Finalist" || awardName === "Regional Engineering Inspiration Award" || awardName === "District Engineering Inspiration Award" || awardName === "Engineering Inspiration Award" || awardName === "District Championship Finalist" || awardName === "District Championship Winner" || awardName === "Regional Winners" || awardName === "Regional Finalists" || awardName === "Regional Chairman's Award" || awardName === "FIRST Dean's List Finalist Award" || awardName === "Championship Subdivision Winner" || awardName === "Championship Subdivision Finalist" || awardName === "Championship Division Winner" || awardName === "Championship Division Finalist" || awardName === "Championship Winner" || awardName === "Championship Finalist" || awardName === "Chairman's Award" || awardName === "Chairman's Award Finalist" || awardName === "FIRST Dean's List Award" || awardName === "Woodie Flowers Award" || awardName === "Innovation Challenge Winner" || awardName === "Innovation Challenge Finalist") {
         return { "before": "<span class ='awardHilight'>", "after": "</span>" }
     } else {
         return { "before": "<span>", "after": "</span>" }
