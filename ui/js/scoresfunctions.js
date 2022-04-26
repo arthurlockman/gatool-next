@@ -335,7 +335,7 @@ function getAllTeamAwards(teamNumber) {
                 //Chairman's Award
                 //award_type === 0
                 //event_key === xxxxcmp
-                if ((allAwards[i].award_type === 0) && ((allAwards[i].event_key === allAwards[i].year + "cmp") || (allAwards[i].event_key === allAwards[i].year + "cmptx") || (allAwards[i].event_key === allAwards[i].year + "cmpmi"))) {
+                if ((allAwards[i].award_type === 0) && ((allAwards[i].event_key === allAwards[i].year + "cmp") || (allAwards[i].event_key === allAwards[i].year + "cmptx") || (allAwards[i].event_key === allAwards[i].year + "cmpmi") || (allAwards[i].event_key === allAwards[i].year + "cmpaw"))) {
                     result.chairmans += 1;
                     result.chairmansyears.push(allAwards[i].year);
                 }
@@ -343,7 +343,7 @@ function getAllTeamAwards(teamNumber) {
                 //Champs Finalist
                 //award_type === 2
                 //event_key === xxxxcmp
-                if ((allAwards[i].award_type === 2) && ((allAwards[i].event_key === allAwards[i].year + "cmp") || (allAwards[i].event_key === allAwards[i].year + "cmptx") || (allAwards[i].event_key === allAwards[i].year + "cmpmi"))) {
+                if ((allAwards[i].award_type === 2) && ((allAwards[i].event_key === allAwards[i].year + "cmp") || (allAwards[i].event_key === allAwards[i].year + "cmptx") || (allAwards[i].event_key === allAwards[i].year + "cmpmi") || (allAwards[i].event_key === allAwards[i].year + "cmpaw"))) {
                     result.champsFinalist += 1;
                     result.champsFinalistyears.push(allAwards[i].year);
                 }
@@ -352,47 +352,51 @@ function getAllTeamAwards(teamNumber) {
                 //Champs Subdivision Winner
                 //award_type === 1
                 //event_key === [xxxarc,xxxgal,xxxcur,xxxxdar,xxxxtes,xxxxdal,xxxxcars,xxxxcarv,xxxxtur,xxxxroe,xxxxhop,xxxxnew]
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "arc") && allAwards[i].year <2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "arc") && (allAwards[i].year >=2015 && allAwards[i].year <2022)) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Archimedes");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "cur") && allAwards[i].year <2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "gal") && (allAwards[i].year >=2015 && allAwards[i].year <2022)) {
+                    result.champsSubdivisionWinner += 1;
+                    result.champsSubdivisionWinneryears.push(allAwards[i].year + " Galileo");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "cur") && (allAwards[i].year >=2015 && allAwards[i].year <2022)) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Curie");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "dar") && allAwards[i].year <2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "dar") && (allAwards[i].year >=2015 && allAwards[i].year <2022)) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Darwin");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "tes") && allAwards[i].year <2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "tes") && (allAwards[i].year >=2015 && allAwards[i].year <2022)) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Tesla");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "dal") && allAwards[i].year <2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "dal") && (allAwards[i].year >=2015 && allAwards[i].year <2022)) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Daly");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "cars") && allAwards[i].year <2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "cars") && (allAwards[i].year >=2015 && allAwards[i].year <2022)) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Carson");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "carv") && allAwards[i].year <2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "carv") && (allAwards[i].year >=2015 && allAwards[i].year <2022)) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Carver");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "tur") && allAwards[i].year <2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "tur") && (allAwards[i].year >=2015 && allAwards[i].year <2022)) {
                     result.champsSubdivisionWinner += 1;
-                    result.champsSubdivisionWinneryears.push(allAwards[i].year + "Turing");
+                    result.champsSubdivisionWinneryears.push(allAwards[i].year + " Turing");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "roe") && allAwards[i].year <2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "roe") && (allAwards[i].year >=2015 && allAwards[i].year <2022)) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Roebling");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "hop") && allAwards[i].year <2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "hop") && (allAwards[i].year >=2015 && allAwards[i].year <2022)) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Hopper");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "new") && allAwards[i].year <2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "new") && (allAwards[i].year >=2015 && allAwards[i].year <2022)) {
                     result.champsSubdivisionWinner += 1;
                     result.champsSubdivisionWinneryears.push(allAwards[i].year + " Newton");
                 }
@@ -401,63 +405,68 @@ function getAllTeamAwards(teamNumber) {
                 //award_type === 1
                 //year >= 2022
                 //event_key === [xxxarc,xxxgal,xxxcur,xxxxdar,xxxxtes,xxxxdal,xxxxcars,xxxxcarv,xxxxtur,xxxxroe,xxxxhop,xxxxnew]
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "arc") && allAwards[i].year >=2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "arc") && (allAwards[i].year >=2022 || allAwards[i].year <2015)) {
                     result.champsDivisionWinner += 1;
                     result.champsDivisionWinneryears.push(allAwards[i].year + " Archimedes");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "cur") && allAwards[i].year >=2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "gal") && (allAwards[i].year >=2022 || allAwards[i].year <2015)) {
+                    result.champsDivisionWinner += 1;
+                    result.champsDivisionWinneryears.push(allAwards[i].year + " Galileo");
+                }
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "cur") && (allAwards[i].year >=2022 || allAwards[i].year <2015)) {
                     result.champsDivisionWinner += 1;
                     result.champsDivisionWinneryears.push(allAwards[i].year + " Curie");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "dar") && allAwards[i].year >=2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "dar") && (allAwards[i].year >=2022 || allAwards[i].year <2015)) {
                     result.champsDivisionWinner += 1;
                     result.champsDivisionWinneryears.push(allAwards[i].year + " Darwin");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "tes") && allAwards[i].year >=2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "tes") && (allAwards[i].year >=2022 || allAwards[i].year <2015)) {
                     result.champsDivisionWinner += 1;
                     result.champsDivisionWinneryears.push(allAwards[i].year + " Tesla");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "dal") && allAwards[i].year >=2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "dal") && (allAwards[i].year >=2022 || allAwards[i].year <2015)) {
                     result.champsDivisionWinner += 1;
                     result.champsDivisionWinneryears.push(allAwards[i].year + " Daly");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "cars") && allAwards[i].year >=2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "cars") && (allAwards[i].year >=2022 || allAwards[i].year <2015)) {
                     result.champsDivisionWinner += 1;
                     result.champsDivisionWinneryears.push(allAwards[i].year + " Carson");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "carv") && allAwards[i].year >=2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "carv") && (allAwards[i].year >=2022 || allAwards[i].year <2015)) {
                     result.champsDivisionWinner += 1;
                     result.champsDivisionWinneryears.push(allAwards[i].year + " Carver");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "tur") && allAwards[i].year >=2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "tur") && (allAwards[i].year >=2022 || allAwards[i].year <2015)) {
                     result.champsDivisionWinner += 1;
-                    result.champsDivisionWinneryears.push(allAwards[i].year + "Turing");
+                    result.champsDivisionWinneryears.push(allAwards[i].year + " Turing");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "roe") && allAwards[i].year >=2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "roe") && (allAwards[i].year >=2022 || allAwards[i].year <2015)) {
                     result.champsDivisionWinner += 1;
                     result.champsDivisionWinneryears.push(allAwards[i].year + " Roebling");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "hop") && allAwards[i].year >=2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "hop") && (allAwards[i].year >=2022 || allAwards[i].year <2015)) {
                     result.champsDivisionWinner += 1;
                     result.champsDivisionWinneryears.push(allAwards[i].year + " Hopper");
                 }
-                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "new") && allAwards[i].year >=2022) {
+                if ((allAwards[i].award_type === 1) && (allAwards[i].event_key === allAwards[i].year + "new") && (allAwards[i].year >=2022 || allAwards[i].year <2015)) {
                     result.champsDivisionWinner += 1;
                     result.champsDivisionWinneryears.push(allAwards[i].year + " Newton");
                 }
 
                 //Woodie Flowers
                 //award_type === 3
-                //event_key === xxxxcmp, xxxxcmptx, xxxxcmpmi
-                if ((allAwards[i].award_type === 3) && ((allAwards[i].event_key === allAwards[i].year + "cmp") || (allAwards[i].event_key === allAwards[i].year + "cmptx") || (allAwards[i].event_key === allAwards[i].year + "cmpmi"))) {
+                //event_key === xxxxcmp, xxxxcmptx, xxxxcmpmi (WF award is awarded simultaneously at TX and MI, so remove MI), xxxxcmpaw
+                //if ((allAwards[i].award_type === 3) && ((allAwards[i].event_key === allAwards[i].year + "cmp") || (allAwards[i].event_key === allAwards[i].year + "cmptx") || (allAwards[i].event_key === allAwards[i].year + "cmpmi"))) {
+                if ((allAwards[i].award_type === 3) && ((allAwards[i].event_key === allAwards[i].year + "cmp") || (allAwards[i].event_key === allAwards[i].year + "cmptx") || (allAwards[i].event_key === allAwards[i].year + "cmpaw"))) {
                     result.woodieflowers += 1;
                     result.woodieflowersyears.push(allAwards[i].year + " " + allAwards[i].recipient_list[0].awardee);
                 }
 
                 //Dean's List
                 //award_type === 4
-                //event_key === xxxxcmp, xxxxcmptx, xxxxcmpmi
-                if ((allAwards[i].award_type === 4) && ((allAwards[i].event_key === allAwards[i].year + "cmp") || (allAwards[i].event_key === allAwards[i].year + "cmptx") || (allAwards[i].event_key === allAwards[i].year + "cmpmi"))) {
+                //event_key === xxxxcmp, xxxxcmptx, xxxxcmpmi, xxxxcmpaw
+                if ((allAwards[i].award_type === 4) && ((allAwards[i].event_key === allAwards[i].year + "cmp") || (allAwards[i].event_key === allAwards[i].year + "cmptx") || (allAwards[i].event_key === allAwards[i].year + "cmpmi") || (allAwards[i].event_key === allAwards[i].year + "cmpaw"))) {
                     result.deansList += 1;
                     for (var j = 0; j < allAwards[i].recipient_list.length; j++) {
                         if (allAwards[i].recipient_list[j].team_key === "frc" + teamNumber) {
@@ -471,16 +480,16 @@ function getAllTeamAwards(teamNumber) {
 
                 //Volunteer of the Year
                 //award_type === 5
-                //event_key === xxxxcmp, xxxxcmptx, xxxxcmpmi
-                if ((allAwards[i].award_type === 5) && ((allAwards[i].event_key === allAwards[i].year + "cmp") || (allAwards[i].event_key === allAwards[i].year + "cmptx") || (allAwards[i].event_key === allAwards[i].year + "cmpmi"))) {
-                    var voyEvent = "";
-                    if (allAwards[i].event_key === allAwards[i].year + "cmp") {
-                        voyEvent = "FIRST Champs";
-                    } else if (allAwards[i].event_key === allAwards[i].year + "cmptx") {
+                //event_key === xxxxcmp, xxxxcmptx, xxxxcmpmi, xxxcmpaw
+                if ((allAwards[i].award_type === 5) && ((allAwards[i].event_key === allAwards[i].year + "cmp") || (allAwards[i].event_key === allAwards[i].year + "cmptx") || (allAwards[i].event_key === allAwards[i].year + "cmpmi") || (allAwards[i].event_key === allAwards[i].year + "cmpaw"))) {
+                    var voyEvent = "FIRST Champs";
+                    if (allAwards[i].event_key === allAwards[i].year + "cmptx") {
                         voyEvent = "Houston Champs";
 
                     } else if (allAwards[i].event_key === allAwards[i].year + "cmpmi") {
                         voyEvent = "Detroit Champs";
+                    } else if (allAwards[i].event_key === allAwards[i].year + "cmpaw") {
+                        voyEvent = "At Home Champs";
                     }
 
                     result.voy += 1;

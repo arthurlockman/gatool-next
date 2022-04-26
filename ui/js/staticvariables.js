@@ -6028,9 +6028,18 @@ var events2017Data = {
     "eventCount": 196
 };
 var hallOfFame = [{
+    "Year": 2022,
+    "Chairmans": 1629,
+    "Challenge": "Rapid React Houston",
+    "Winner1": 1619,
+    "Winner2": 254,
+    "Winner3": 3175,
+    "Winner4": 6627,
+    "Winner5": null
+},{
     "Year": 2021,
     "Chairmans": 503,
-    "Challenge": "Infinite Recharge",
+    "Challenge": "Infinite Recharge at Home",
     "Winner1": null,
     "Winner2": null,
     "Winner3": null,
@@ -6093,7 +6102,7 @@ var hallOfFame = [{
 }, {
     "Year": 2017,
     "Chairmans": 2614,
-    "Challenge": "STEAMworks StLouis",
+    "Challenge": "STEAMworks St Louis",
     "Winner1": 2767,
     "Winner2": 254,
     "Winner3": 862,
