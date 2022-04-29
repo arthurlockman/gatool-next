@@ -694,7 +694,7 @@ function prepareAllianceSelection() {
 
     $("#allianceSelectionTable").html(`<div class="container">
         <div class="row">
-            <div id="allianceSelectionFilterInput" class="form-group col-sm-6"><input type="text" inputmode="tel" class="form-control" id="allianceSelectionFilter" placeholder="Type a number to filter the teams"></div>
+            <div id="allianceSelectionFilterInput" class="form-group col-sm-6"><input type="text" inputmode="tel" pattern="[0-9]*" class="form-control" id="allianceSelectionFilter" placeholder="Type a number to filter the teams"></div>
             <div id="allianceUndoButton" class="col-sm-6"><a href="#" class="btn btn-warning undoButton">Undo Alliance Selection Choice<span id="undoAlliance"></span></a></div>
         </div>
     </div>  
@@ -2469,7 +2469,7 @@ function replaceTeam(station, originalTeam) {
     var replacementTeam = originalTeam;
     var message = "You are about to replace Alliance team <b>" + originalTeam + "</b> for another team.<br>";
     message += "This is a one-time replacement, since the substitution will be recorded at <i><b>FIRST</b></i> when the match ends and the score is committed.";
-    message += '<div id = "substituteTeamInput" class="form-group"><label for="substituteTeamUpdate">Substitute Team Entry</label><input inputmode="numeric" pattern="[0-9]*" type="text" inputmode="tel" class="form-control" id="substituteTeamUpdate" placeholder="Enter a Team Number"></div>';
+    message += '<div id = "substituteTeamInput" class="form-group"><label for="substituteTeamUpdate">Substitute Team Entry</label><input inputmode="tel" pattern="[0-9]*" type="text" class="form-control" id="substituteTeamUpdate" placeholder="Enter a Team Number"></div>';
     BootstrapDialog.show({
         type: 'type-success',
         title: '<b>Alliance Team ' + originalTeam + ' Substitution</b>',
