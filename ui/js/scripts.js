@@ -694,7 +694,7 @@ function prepareAllianceSelection() {
 
     $("#allianceSelectionTable").html(`<div class="container">
         <div class="row">
-            <div id="allianceSelectionFilterInput" class="form-group col-sm-6"><input type="number" class="form-control" id="allianceSelectionFilter" placeholder="Type a number to filter the teams"></div>
+            <div id="allianceSelectionFilterInput" class="form-group col-sm-6"><input type="tel" class="form-control" id="allianceSelectionFilter" placeholder="Type a number to filter the teams"></div>
             <div id="allianceUndoButton" class="col-sm-6"><a href="#" class="btn btn-warning undoButton">Undo Alliance Selection Choice<span id="undoAlliance"></span></a></div>
         </div>
     </div>  
