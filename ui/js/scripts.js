@@ -900,6 +900,7 @@ function handleEventSelection() {
     $("#davidPriceAlliances").hide();
     $("#allianceBracket").html("Alliance Selection");
     $("#allianceSelectionFilter").val("");
+    $("#awardsFilter").val("");
     $(".allianceTeam").show();
     $(".awardAllianceTeam").show();
     $(".allianceTeam").removeClass("highlightedTeam");
@@ -2651,7 +2652,8 @@ function allianceAlert(teamContainer) {
                 hotkey: 13,
                 cssClass: "btn btn-success",
                 action: function (dialogRef) {
-                    dialogRef.close()
+                    dialogRef.close();
+                    $("#allianceSelectionFilter").focus();
                 }
             }]
         })
@@ -2666,7 +2668,8 @@ function allianceAlert(teamContainer) {
                 label: 'Alliance Captain Announce',
                 hotkey: 65,
                 action: function (dialogRef) {
-                    dialogRef.close()
+                    dialogRef.close();
+                    $("#allianceSelectionFilter").focus();
                 }
             }, {
                 icon: 'glyphicon glyphicon-thumbs-down',
@@ -2686,6 +2689,7 @@ function allianceAlert(teamContainer) {
                             cssClass: "btn btn-success",
                             action: function (dialogRef) {
                                 dialogRef.close();
+                                $("#allianceSelectionFilter").focus();
                             }
                         }, {
                             label: 'THEY DECLINE THE OFFER',
@@ -2708,6 +2712,7 @@ function allianceAlert(teamContainer) {
                                 sortAllianceTeams(allianceTeamList);
                                 displayBackupAlliances("decline");
                                 undoCounter.push("decline");
+                                $("#allianceSelectionFilter").focus();
                             }
                         }
                         ]
@@ -2730,7 +2735,8 @@ function allianceAlert(teamContainer) {
                             hotkey: 78,
                             cssClass: "btn btn-danger",
                             action: function (dialogRef) {
-                                dialogRef.close()
+                                dialogRef.close();
+                                $("#allianceSelectionFilter").focus();
                             }
                         }, {
                             icon: 'glyphicon glyphicon-thumbs-up',
@@ -2812,7 +2818,7 @@ function allianceAlert(teamContainer) {
                                     }
                                 }
                                 undoCounter.push("accept");
-
+                                $("#allianceSelectionFilter").focus();
                             }
                         }]
                     })
@@ -2875,6 +2881,7 @@ function awardsAlert(teamContainer) {
     selectedTeamInfo += currentTeamInfo.rookieYear + ", this is their " + rookieTag + " competing with <i><b>FIRST</b></i>.</span>";
     $("#awardsFilter").val("");
     $(".awardAllianceTeam").show();
+    $(".highlightedTeam").removeClass("highlightedTeam");
     BootstrapDialog.show({
         type: 'type-success',
         title: '<b>Awards Announcement</b>',
@@ -2885,7 +2892,8 @@ function awardsAlert(teamContainer) {
             hotkey: 13,
             cssClass: "btn btn-success",
             action: function (dialogRef) {
-                dialogRef.close()
+                dialogRef.close();
+                $("#awardsFilter").focus();
             }
         }]
     })
