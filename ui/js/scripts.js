@@ -327,6 +327,7 @@ window.onload = function () {
             $(".notes").hide()
         }
     };
+
     // Handle Mottoes toggle. Hide and show mottoes in the announce/PBP display.
     document.getElementById("showMottoes").onchange = function () {
         localStorage.showMottoes = $("#showMottoes").bootstrapSwitch('state');
@@ -448,6 +449,9 @@ window.onload = function () {
         }
         getTeamRanks();
     }
+
+    //enable filtering on the Awards screen
+    $("#awardsFilter").keyup(filterAwardsTeams);
 
     //Handle Event Filter change
     //document.getElementById('eventFilters').onchange = function () {
@@ -688,7 +692,13 @@ function prepareAllianceSelection() {
         allianceSelectionLength = 23
     }
 
-    $("#allianceSelectionTable").html(`<table>
+    $("#allianceSelectionTable").html(`<div class="container">
+        <div class="row">
+            <div id="allianceSelectionFilterInput" class="form-group col-sm-6"><input type="number" class="form-control" id="allianceSelectionFilter" placeholder="Type a number to filter the teams"></div>
+            <div id="allianceUndoButton" class="col-sm-6"><a href="#" class="btn btn-warning undoButton">Undo Alliance Selection Choice<span id="undoAlliance"></span></a></div>
+        </div>
+    </div>  
+    <table>
     <tr>
         <td>
             <table class="availableTeams">
@@ -824,15 +834,50 @@ function prepareAllianceSelection() {
             </table>
         </td>
     </tr>
-</table>`);
-if (inChamps() || inSubdivision()) {
-    $(".thirdAllianceSelection").show();
-    $("#backupTeamsTable").hide()
+</table>
+<p class="showAlliancePlayoff" id="showPlayoffBracket"><strong><span onclick="showAllianceSelectionPlayoff('playoff');">Tap here to show Playoff Bracket.</span></strong></p>`);
+    $("#allianceSelectionFilter").keyup(filterTeams);
+
+    if (inChamps() || inSubdivision()) {
+        $(".thirdAllianceSelection").show();
+        $("#backupTeamsTable").hide()
+    }
 }
 
-    $("#showPlayoffBracket").hide();
+function filterTeams(e) {
+    $(".allianceTeam").hide();
+    $(".allianceTeam").removeClass("highlightedTeam");
+    if (e.key === 'Enter' || e.keyCode === 13) {
+        if ($(`.allianceTeam[teamnumber=${$("#allianceSelectionFilter").val()}]`)) {
+            $(`.allianceTeam[teamnumber=${$("#allianceSelectionFilter").val()}]`).click();
+        }
+    }
+    if ($("#allianceSelectionFilter").val() === "") {
+        $(".allianceTeam").show();
+        $(".allianceTeam").removeClass("highlightedTeam");
+    } else {
+        $(`.allianceTeam[teamnumber^=${$("#allianceSelectionFilter").val()}]`).show();
+        $(`.allianceTeam[teamnumber=${$("#allianceSelectionFilter").val()}]`).addClass("highlightedTeam");
+    }
+    
 }
 
+function filterAwardsTeams(e) {
+    $(".awardAllianceTeam").hide();
+    $(".awardAllianceTeam").removeClass("highlightedTeam");
+    if (e.key === 'Enter' || e.keyCode === 13) {
+        if ($(`.awardAllianceTeam[teamnumber=${$("#awardsFilter").val()}]`)) {
+            $(`.awardAllianceTeam[teamnumber=${$("#awardsFilter").val()}]`).click();
+        }
+    }
+    if ($("#awardsFilter").val() === "") {
+        $(".awardAllianceTeam").show();
+
+    } else {
+        $(`.awardAllianceTeam[teamnumber^=${$("#awardsFilter").val()}]`).show();
+        $(`.awardAllianceTeam[teamnumber=${$("#awardsFilter").val()}]`).addClass("highlightedTeam");
+    }
+}
 
 function handleEventSelection() {
     "use strict";
@@ -854,6 +899,11 @@ function handleEventSelection() {
     $("#davidPriceNumber").html("No Sched");
     $("#davidPriceAlliances").hide();
     $("#allianceBracket").html("Alliance Selection");
+    $("#allianceSelectionFilter").val("");
+    $(".allianceTeam").show();
+    $(".awardAllianceTeam").show();
+    $(".allianceTeam").removeClass("highlightedTeam");
+    $(".awardAllianceTeam").removeClass("highlightedTeam");
     clearFileInput("QualsFiles");
     clearFileInput("PlayoffFiles");
     document.getElementById("QualsFiles").addEventListener('change', handleQualsFiles, !1);
@@ -1139,7 +1189,9 @@ function ranksQualsCompare() {
         $('#allianceSelectionTabPicker').addClass('alert-success')
     } else {
         var allianceSelectionMessage = '<p class="alert alert-danger" onclick="announceDisplay();"><strong>Do not proceed with Alliance Selection until you confirm that the rank order below agrees with the rank order in FMS. Tap this alert to see if we can get a more current schedule and rankings.</strong></p>';
-        if (haveRanks && !showAllianceSelectionOverride) allianceSelectionMessage += '<p id="showAllianceSelectionWarning" class="alert alert-warning" onclick="showAllianceSelection();">If your event shortens the Qualification Match schedule and you need to move to Alliance Selection, tap here to show Alliance Selection.</p>';
+        if (haveRanks && !showAllianceSelectionOverride) {
+            allianceSelectionMessage += '<p id="showAllianceSelectionWarning" class="alert alert-warning" onclick="showAllianceSelection();">If your event shortens the Qualification Match schedule and you need to move to Alliance Selection, tap here to show Alliance Selection.</p>';
+        }
         $("#allianceSelectionWarning").html(allianceSelectionMessage);
         $('#allianceSelectionTabPicker').addClass('alert-danger');
         $('#allianceSelectionTabPicker').removeClass('alert-success')
@@ -1513,7 +1565,7 @@ function processPlayoffBracket(matchData) {
         } else {
             bracketDetail.redAllianceName = "TBD";
         }
-        if (matchData.teams[4].teamNumber !== null && matchData.teams[4].teamNumber !== 0 ) {
+        if (matchData.teams[4].teamNumber !== null && matchData.teams[4].teamNumber !== 0) {
             bracketDetail.blueAllianceName = decompressLocalStorage("teamData" + bracketDetail.blueAlliance.numbers[0]).allianceName;
         } else {
             bracketDetail.blueAllianceName = "TBD";
@@ -2561,6 +2613,11 @@ function allianceAlert(teamContainer) {
     var declined = teamContainer.getAttribute("declined");
     var currentTeamInfo = decompressLocalStorage("teamData" + teamNumber);
     var selectedTeamInfo = "<span class = 'allianceAnnounceDialog'>Team " + teamNumber + " ";
+    $(".allianceTeam").show();
+    $(".awardAllianceTeam").show();
+    $(".allianceTeam").removeClass("highlightedTeam");
+    $(".awardAllianceTeam").removeClass("highlightedTeam");
+    $("#allianceSelectionFilter").val("");
     if (currentTeamInfo.nameShortLocal === "") {
         selectedTeamInfo += currentTeamInfo.nameShort
     } else {
@@ -2690,8 +2747,8 @@ function allianceAlert(teamContainer) {
                                 allianceSelectionTableUndo.push($("#allianceSelectionTable").html());
                                 $("#allianceUndoButton").attr("onclick", "undoAllianceSelection()");
                                 $("#allianceUndoButton").show();
+                                $("#undoAlliance").text(` ${teamNumber}`);
                                 allianceChoices[allianceSelectionOrder[currentAllianceChoice]] = Number(teamNumber);
-                                var reducedAllianceListUnsorted = allianceListUnsorted;
 
                                 var index = allianceListUnsorted.indexOf(parseInt(teamNumber));
                                 if (index > -1) {
@@ -2775,7 +2832,10 @@ function undoAllianceSelection() {
     backupAllianceList = JSON.parse(backupAllianceListUndo.pop());
     $("#allianceSelectionTable").html(allianceSelectionTableUndo.pop());
     $("#allianceUndoButton").attr("onclick", "undoAllianceSelection()");
-    if (reason === "accept") { currentAllianceChoice = currentAllianceChoice - 1; }
+    if (reason === "accept") {
+        currentAllianceChoice = currentAllianceChoice - 1;
+        $("#undoAlliance").text(` ${allianceChoices[allianceSelectionOrder[currentAllianceChoice - 1]]}`);
+    }
     if (undoCounter.length === 0) {
         $("#allianceUndoButton").attr("onclick", "");
         $("#allianceUndoButton").hide();
@@ -2813,6 +2873,8 @@ function awardsAlert(teamContainer) {
         selectedTeamInfo += "<br>Founded in "
     }
     selectedTeamInfo += currentTeamInfo.rookieYear + ", this is their " + rookieTag + " competing with <i><b>FIRST</b></i>.</span>";
+    $("#awardsFilter").val("");
+    $(".awardAllianceTeam").show();
     BootstrapDialog.show({
         type: 'type-success',
         title: '<b>Awards Announcement</b>',
@@ -4400,14 +4462,10 @@ function showAllianceSelectionPlayoff(targetMode) {
         $("#playoffBracket").show();
         $("#allianceInfo").hide();
         $("#allianceSelectionTable").hide();
-        $("#showPlayoffBracket").hide();
-        $("#showAllianceSelection").show();
     } else {
         $("#playoffBracket").hide();
         $("#allianceInfo").show();
         $("#allianceSelectionTable").show();
-        $("#showPlayoffBracket").show();
-        $("#showAllianceSelection").hide();
     }
 }
 
@@ -4415,11 +4473,11 @@ function switchStats(state) {
     var fontSize = $('.playByPlayTeamName').css("font-size").replace("px", "");
     if (state === "on") {
         $('.playByPlayWinLossTie').show();
-        $('.playByPlayTeamName').addClass("playByPlayTeamNameStats");    
+        $('.playByPlayTeamName').addClass("playByPlayTeamNameStats");
     } else if (state === "off") {
         $('.playByPlayWinLossTie').hide();
         $('.playByPlayTeamName').removeClass("playByPlayTeamNameStats");
-    } else if ($('.playByPlayWinLossTie').css("display") === "none" ) {
+    } else if ($('.playByPlayWinLossTie').css("display") === "none") {
         $('.playByPlayWinLossTie').show();
         $('.playByPlayTeamName').addClass("playByPlayTeamNameStats");
     } else {

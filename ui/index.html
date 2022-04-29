@@ -167,15 +167,16 @@
                 <p><input name="autoAdvance" id="autoAdvance" type="checkbox" value="true" checked> &nbsp;Automatically advance to the next match when loading</p>
                 <p><input name="timeDisplay" id="timeDisplay" type="checkbox" value="true" checked> &nbsp;Time Format (Wait for event to reload to see changes)</p>
                 <p><input name="playoffCountOverride" id="playoffCountOverride" type="checkbox" value="true" checked> &nbsp;Override Alliance Selection Count &nbsp;
-                <select class="selectpicker" id="playoffCountOverrideValue" data-width="fit">
-                    <option id="playoffCountOverrideValue8" value="8">8</option>
-                    <option id="playoffCountOverrideValue7" value="7">7</option>
-                    <option id="playoffCountOverrideValue6" value="6">6</option>
-                    <option id="playoffCountOverrideValue5" value="5">5</option>
-                    <option id="playoffCountOverrideValue4" value="4">4</option>
-                    <option id="playoffCountOverrideValue3" value="3">3</option>
-                    <option id="playoffCountOverrideValue2" value="2">2</option>
-                </select></p>
+                    <select class="selectpicker" id="playoffCountOverrideValue" data-width="fit">
+                        <option id="playoffCountOverrideValue8" value="8">8</option>
+                        <option id="playoffCountOverrideValue7" value="7">7</option>
+                        <option id="playoffCountOverrideValue6" value="6">6</option>
+                        <option id="playoffCountOverrideValue5" value="5">5</option>
+                        <option id="playoffCountOverrideValue4" value="4">4</option>
+                        <option id="playoffCountOverrideValue3" value="3">3</option>
+                        <option id="playoffCountOverrideValue2" value="2">2</option>
+                    </select>
+                </p>
 
 
                 <div class="container alert alert-warning col-sm-12">
@@ -286,8 +287,9 @@
                             <p>This merged doc contains all of the information in your Teams List, merged onto a template you can print and distribute to teams. <i>Note: this will save to Files on iOS 13+</i></p>
                         </td>
                         <td>
-                            <p><span style="cursor:pointer" onClick="clickRestoreBackup();"><input type="file" id="BackupFiles" class="hiddenInput" /><b><a><img style="float: left"  width="30" src="images/excelicon.png"> Tap to restore team data from Excel</a></b></span></p>
-                            <p>You can export your teams data to Excel using the button on the left, and then restore it from backup here. This is handy in low or no network situations, where you may be unable to update changes to gatool Cloud. <i>Note: Be careful if you modify the Excel file and then import it here.</i></p></p>
+                            <p><span style="cursor:pointer" onClick="clickRestoreBackup();"><input type="file" id="BackupFiles" class="hiddenInput" /><b><a><img style="float: left" width="30" src="images/excelicon.png"> Tap to restore team data from Excel</a></b></span></p>
+                            <p>You can export your teams data to Excel using the button on the left, and then restore it from backup here. This is handy in low or no network situations, where you may be unable to update changes to gatool Cloud. <i>Note: Be careful if you modify the Excel file and then import it here.</i></p>
+                            </p>
                         </td>
                     </tr>
                 </table>
@@ -840,7 +842,7 @@
                         </tr>
                         <tr>
                             <td rowspan="2" class="col1 quarterfinalRed bracketLeft bracket2">
-                                <div class="allianceTeam bracketLeft"><span class="playoffCells" id="bracketMatch1">Quarterfinal 1<br>Alliance 1 vs Alliance 8</span><br>
+                                <div class="playoffTeam bracketLeft"><span class="playoffCells" id="bracketMatch1">Quarterfinal 1<br>Alliance 1 vs Alliance 8</span><br>
                                     <table align="center">
                                         <tr>
                                             <td><span id="bracketMatch1Result" class="glyphicon glyphicon-certificate playoffBadge"></span><br>
@@ -863,7 +865,7 @@
                             <td class="bracket1">&nbsp;</td>
                             <td class="bracket1">&nbsp;</td>
                             <td rowspan="2" class="col1 quarterfinalRed bracketRight bracket2">
-                                <div class="allianceTeam bracketRight"><span class="playoffCells" id="bracketMatch3">Quarterfinal 3<br>Alliance 2 vs Alliance 7</span><br>
+                                <div class="playoffTeam bracketRight"><span class="playoffCells" id="bracketMatch3">Quarterfinal 3<br>Alliance 2 vs Alliance 7</span><br>
                                     <table align="center">
                                         <tr>
                                             <td><span id="bracketMatch3Result" class="glyphicon glyphicon-certificate playoffBadge"></span><br>
@@ -885,7 +887,7 @@
                         </tr>
                         <tr>
                             <td rowspan="3" class="col1 semifinalRed bracketLeft bracket4">
-                                <div class="allianceTeam bracketLeft"><span class="playoffCells" id="bracketMatch13">Semifinal 1<br>Alliances TBD</span><br>
+                                <div class="playoffTeam bracketLeft"><span class="playoffCells" id="bracketMatch13">Semifinal 1<br>Alliances TBD</span><br>
                                     <table align="center">
                                         <tr>
                                             <td><span id="bracketMatch13Result" class="glyphicon glyphicon-certificate playoffBadge"></span><br>
@@ -906,7 +908,7 @@
                             </td>
                             <td class="bracket1">&nbsp;</td>
                             <td rowspan="3" class="col1 semifinalBlue bracketRight bracket4">
-                                <div class="allianceTeam bracketRight"><span class="playoffCells" id="bracketMatch14">Semifinal 2<br>Alliances TBD</span><br>
+                                <div class="playoffTeam bracketRight"><span class="playoffCells" id="bracketMatch14">Semifinal 2<br>Alliances TBD</span><br>
                                     <table align="center">
                                         <tr>
                                             <td><span id="bracketMatch14Result" class="glyphicon glyphicon-certificate playoffBadge"></span><br>
@@ -929,7 +931,7 @@
                         <tr>
                             <td class="bracket2">&nbsp;</td>
                             <td class="col1 final bracket2">
-                                <div class="allianceTeam"><span class="playoffCells" id="bracketMatch19">Final<br>Alliances TBD</span><br>
+                                <div class="playoffTeam"><span class="playoffCells" id="bracketMatch19">Final<br>Alliances TBD</span><br>
                                     <table align="center">
                                         <tr>
                                             <td><span id="bracketMatch19Result" class="glyphicon glyphicon-certificate playoffBadge"></span><br>
@@ -964,7 +966,7 @@
                         </tr>
                         <tr>
                             <td rowspan="2" class="col1 quarterfinalBlue bracketLeft bracket2">
-                                <div class="allianceTeam bracketLeft"> <span class="playoffCells" id="bracketMatch2">Quarterfinal 2<br>Alliance 4 vs Alliance 5</span><br>
+                                <div class="playoffTeam bracketLeft"> <span class="playoffCells" id="bracketMatch2">Quarterfinal 2<br>Alliance 4 vs Alliance 5</span><br>
                                     <table align="center">
                                         <tr>
                                             <td><span id="bracketMatch2Result" class="glyphicon glyphicon-certificate playoffBadge"></span><br>
@@ -985,7 +987,7 @@
                             </td>
                             <td class="bracket1">&nbsp;</td>
                             <td rowspan="2" class="col1 quarterfinalBlue bracketRight  bracket2">
-                                <div class="allianceTeam bracketRight"><span class="playoffCells" id="bracketMatch4">Quarterfinal 4<br>Alliance 3 vs Alliance 6</span><br>
+                                <div class="playoffTeam bracketRight"><span class="playoffCells" id="bracketMatch4">Quarterfinal 4<br>Alliance 3 vs Alliance 6</span><br>
                                     <table align="center">
                                         <tr>
                                             <td><span id="bracketMatch4Result" class="glyphicon glyphicon-certificate playoffBadge"></span><br>
@@ -1018,10 +1020,14 @@
                 <p><span id="eventNameAllianceSelection"></span><span id="allianceselectionlastupdated"></span>Before the selection begins and to help introduce the Alliance Captains with the MC, tap the Alliance Captains to see their team name, school/orgainzaiton, and home town.<br><strong>IMPORTANT: Tap <em>Alliance Captain Announce</em> to continue announcing the Captains.</strong></p>
                 <p>When it's time for Alliance Selection, simply tap a team when their number is called. If they accept, tap <strong>Gratefully Accept</strong>. If they decline, tap <strong>Respectfully Decline</strong>.</p>
                 <span id="allianceSelectionWarning"></span>
-                <p id="allianceUndoButton" class="btn-warning">Undo Alliance Selection Choice<span id="undoAlliance"></span>
-                </p>
             </div>
             <div id="allianceSelectionTable">
+                <div class="container">
+                    <div class="row">
+                        <div id="allianceSelectionFilterInput" class="form-group col-sm-6"><input type="number" class="form-control" id="allianceSelectionFilter" placeholder="Type a number to filter the teams"></div>
+                        <div id="allianceUndoButton" class="col-sm-6"><a href="#" class="btn btn-warning undoButton">Undo Alliance Selection Choice<span id="undoAlliance"></span></a></div>
+                    </div>
+                </div>
                 <table>
                     <tr>
                         <td>
@@ -1159,177 +1165,184 @@
                         </td>
                     </tr>
                 </table>
+                <p class="showAlliancePlayoff" id="showPlayoffBracket"><strong><span onclick="showAllianceSelectionPlayoff('playoff');">Tap here to show Playoff Bracket.</span></strong></p>
             </div>
-            <p class="showAlliancePlayoff" id="showPlayoffBracket"><strong><span onclick="showAllianceSelectionPlayoff('playoff');">Tap here to show Playoff Bracket.</span></strong></p>
         </div>
-        <div id="awards" class="tabcontent container-fluid">
-            <div id="awardsInfo" class="allianceAnnounce">
-                <p><span id="eventNameAwards"></span>When it's time for Awards, simply tap a team when their number is called, announce the team, and click <b>Congratulations.</b>
-                </p>
+
+    </div>
+    <div id="awards" class="tabcontent container-fluid">
+        <div id="awardsInfo" class="allianceAnnounce">
+            <p><span id="eventNameAwards"></span>When it's time for Awards, simply tap a team when their number is called, announce the team, and click <b>Congratulations.</b>
+            </p>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="form-group col-sm-3"></div>&nbsp;<div id="awardsFilterInput" class="form-group col-sm-6"><input type="number" class="form-control" id="awardsFilter" placeholder="Type a number to filter the teams"></div><div class="form-group col-sm-3">&nbsp;</div>
             </div>
-            <div id="awardsSelectionTable">
-                <table class="awardsSelectionTable">
+        </div>
+        <div id="awardsSelectionTable">
+            <table class="awardsSelectionTable">
+                <tr>
+                    <td id="awardsTeamList1" class="col2">
+                        <div class="allianceTeam">List of teams</div>
+                    </td>
+                    <td id="awardsTeamList2" class="col2">
+                        <div class="allianceTeam">List of teams</div>
+                    </td>
+                    <td id="awardsTeamList3" class="col2">
+                        <div class="allianceTeam">List of teams</div>
+                    </td>
+                    <td id="awardsTeamList4" class="col2">
+                        <div class="allianceTeam">List of teams</div>
+                    </td>
+                    <td id="awardsTeamList5" class="col2">
+                        <div class="allianceTeam">List of teams</div>
+                    </td>
+                    <td id="awardsTeamList6" class="col2">
+                        <div class="allianceTeam">List of teams</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="teamDataEntry" class="tabcontent container-fluid">
+        <p>Use this form to update team information for <strong>Team <span id="teamNumberUpdate">xxx</span></strong>. Editable fields are shown below. Your changes will be stored locally on your machine and should not be erased if you close your browser.</p>
+        <p>Tap on each item to update its value. Tap <strong>DONE</strong> when you're finished editing, or browse to another tab to cancel editing. Items <span class="bg-success"><b>highlighted in green</b></span> have local changes. Motto and Notes are always local. To reset any value to the TIMS value, simply delete it here and tap DONE.</p>
+        <p>You can load changes to Team Data from gatool Cloud, or you can sync your local values with gatool Cloud using the buttons at the bottom of this screen.</p>
+        <p id="lastUpdatedWarning" class="alert-warning"><b>Last updated in gatool Cloud: <span id="teamUpdateLastUpdate"></span></b></p>
+        <form id="teamUpdateForm">
+            <div id="teamNameUpdateLabel" class="form-group"><label for="teamNameUpdate">Team Name (<span id="teamNameUpdateTIMS">xxx</span> in TIMS)</label> <input type="text" class="form-control" id="teamNameUpdate" placeholder="Enter a Team Name"></div>
+            <div id="organizationUpdateLabel" class="form-group"><label for="organizationUpdate">Organization/School (<span id="organizationUpdateTIMS">xxx</span> in TIMS)</label> <input type="text" class="form-control" id="organizationUpdate" placeholder="Enter an Organization or School Name">
+            </div>
+            <div id="sayNumberLabel" class="form-group"><label for="sayNumber">How to pronounce the team number (some teams are particular)</label><input type="text" class="form-control" id="sayNumber" placeholder="Tell us how to pronounce the team number"></div>
+            <div id="robotNameUpdateLabel" class="form-group"><label for="robotNameUpdate">Robot Name (<span id="robotNameUpdateTIMS">xxx</span> in TIMS) &nbsp;&nbsp;&nbsp; Robot name <input type="checkbox" id="showRobotName" name="showRobotName" value="true" checked></label><input type="text" class="form-control" id="robotNameUpdate" placeholder="Enter a Robot Name"></div>
+            <div id="teamMottoUpdateLabel" class="form-group"><label for="teamMottoUpdate">Team Motto (Team mottoes are local and do not come from <i><b>FIRST</b></i>)</label> <input type="text" class="form-control" id="teamMottoUpdate" placeholder="Enter a Team Motto"></div>
+            <div id="cityStateUpdateLabel" class="form-group"><label for="cityStateUpdate">City, State (<span id="cityStateUpdateTIMS">xxx</span> in TIMS)</label> <input type="text" class="form-control" id="cityStateUpdate" placeholder="Enter a city and state">
+            </div>
+            <div id="teamYearsNoCompeteUpdateLabel" class="form-group"><label for="teamYearsNoCompeteUpdate">Number of seasons NOT competing with <i><b>FIRST</b></i> (will be used in calculating Nth season)</label> <input type="text" class="form-control" id="teamYearsNoCompeteUpdate" placeholder="Enter the number of seasons (not the actual years!) this team has NOT competed since their founding">
+            </div>
+            <div id="teamNotesUpdateLabel" class="form-group form-flex"><label for="teamNotesUpdate">Team Notes for Announce Screen (These notes are local notes and do not come from <i><b>FIRST</b></i>)</label>
+                <div contenteditable="true" onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)" class="form-control placeholder" rows="1" id="teamNotesUpdate" placeholder="Enter some notes you would like to have on the Announce Screen"></div>
+            </div>
+            <div id="teamNotesLabel" class="form-group form-flex"><label for="teamNotes">Team Notes for Team Data screen (These notes are local notes and do not come from <i><b>FIRST</b></i>)</label>
+                <div contenteditable="true" onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)" class="form-control placeholder" rows="1" id="teamNotes" placeholder="Enter some notes you would like to have on the Team Data Screen"></div>
+            </div>
+            <div id="topSponsorsUpdateLabel" class="form-group form-flex"><label for="topSponsorsUpdate">Top Sponsors (Enter no more than 5 top sponsors from the full sponsor list below)</label> <textarea onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)" class="form-control" rows="1" id="topSponsorsUpdate" placeholder="Enter the team's top 5 sponsors"></textarea>
+            </div>
+            <div id="sponsorsUpdateLabel" class="form-group form-flex"><label for="sponsorsUpdate">Full list of Sponsors (For reference only. This field does not appear in the UI. Delete to revert to TIMS value)</label> <textarea onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)" rows="1" class="form-control" id="sponsorsUpdate" placeholder="Enter the team's Sponsors"></textarea></div>
+            <div id="awardsUpdateLabel"><label for="awardsUpdate">Awards as supplied by TIMS. THIS FIELD IS NO LONGER EDITABLE. Use Notes instead.</label>
+                <div style="display: block; width: 100%; padding: 6px 12px; font-size: 14px; line-height: 1.42857143; color: #555; background-color: #fff; background-image: none; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 15px;" id="awardsUpdate" placeholder="No team awards in the last three years"></div>
+            </div>
+            <p onclick="updateTeamInfoDone('false')" class="btn btn-success alert col-xs-12 col-sm-2"><span class="glyphicon glyphicon-check">&nbsp;</span>Done</p>
+            <p onclick="saveTeamUpdate()" class="btn btn-info alert col-xs-12 col-sm-5"><span class="glyphicon glyphicon-cloud-upload">&nbsp;</span>Save Team Data to gatool Cloud.</p>
+            <p onclick="loadTeamUpdate()" class="btn btn-warning alert col-xs-12 col-sm-5"><span class="glyphicon glyphicon-cloud-download">&nbsp;</span>Load Team Data from gatool Cloud.</p>
+        </form>
+    </div>
+    <div id="stats" class="tabcontent container-fluid">
+        <div id="topOfStats" class="row">
+            <div class="col-xs-12 col-md-6 col-sm-6">
+                <table id="worldhighscorestable" class="table table-condensed gatool-worldHighScores alert-danger">
+                    <thead>
+                        <tr>
+                            <td colspan="2">World High Scores<span id="highscoreyear"></span></td>
+                        </tr>
+                    </thead>
                     <tr>
-                        <td id="awardsTeamList1" class="col2">
-                            <div class="allianceTeam">List of teams</div>
+                        <td id="highQualsNoFouls">Qual (no penalties)<br>No matches meet criteria<br></td>
+                        <td id="highPlayoffNoFouls">Playoff (no penalties)<br>No matches meet criteria</td>
+                    </tr>
+                    <tr>
+                        <td id="highQualsOffsettingFouls">Qual (offsetting penalties)<br>No matches meet criteria<br>
                         </td>
-                        <td id="awardsTeamList2" class="col2">
-                            <div class="allianceTeam">List of teams</div>
-                        </td>
-                        <td id="awardsTeamList3" class="col2">
-                            <div class="allianceTeam">List of teams</div>
-                        </td>
-                        <td id="awardsTeamList4" class="col2">
-                            <div class="allianceTeam">List of teams</div>
-                        </td>
-                        <td id="awardsTeamList5" class="col2">
-                            <div class="allianceTeam">List of teams</div>
-                        </td>
-                        <td id="awardsTeamList6" class="col2">
-                            <div class="allianceTeam">List of teams</div>
-                        </td>
+                        <td id="highPlayoffOffsettingFouls">Playoff (offsetting penalties)<br>No matches meet criteria<br></td>
+                    </tr>
+                    <tr>
+                        <td id="highQuals">Qual<br>No matches meet criteria<br></td>
+                        <td id="highPlayoff">Playoff<br>No matches meet criteria</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-xs-12 col-md-6 col-sm-6">
+                <table id="eventhighscorestable" class="table table-condensed gatool-worldHighScores alert-info">
+                    <thead>
+                        <tr>
+                            <td colspan="2">Event High Scores: <span id="highscoreevent"></span></td>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td id="eventHighQualsNoFouls">Qual (no penalties)<br>No matches meet criteria<br></td>
+                        <td id="eventHighPlayoffNoFouls">Playoff (no penalties)<br>No matches meet criteria</td>
+                    </tr>
+                    <tr>
+                        <td id="eventHighQualsOffsettingFouls">Qual (offsetting penalties)<br>No matches meet criteria<br></td>
+                        <td id="eventHighPlayoffOffsettingFouls">Playoff (offsetting penalties)<br>No matches meet criteria<br></td>
+                    </tr>
+                    <tr>
+                        <td id="eventHighQuals">Qual<br>No matches meet criteria<br></td>
+                        <td id="eventHighPlayoff">Playoff<br>event No matches meet criteria</td>
                     </tr>
                 </table>
             </div>
         </div>
-        <div id="teamDataEntry" class="tabcontent container-fluid">
-            <p>Use this form to update team information for <strong>Team <span id="teamNumberUpdate">xxx</span></strong>. Editable fields are shown below. Your changes will be stored locally on your machine and should not be erased if you close your browser.</p>
-            <p>Tap on each item to update its value. Tap <strong>DONE</strong> when you're finished editing, or browse to another tab to cancel editing. Items <span class="bg-success"><b>highlighted in green</b></span> have local changes. Motto and Notes are always local. To reset any value to the TIMS value, simply delete it here and tap DONE.</p>
-            <p>You can load changes to Team Data from gatool Cloud, or you can sync your local values with gatool Cloud using the buttons at the bottom of this screen.</p>
-            <p id="lastUpdatedWarning" class="alert-warning"><b>Last updated in gatool Cloud: <span id="teamUpdateLastUpdate"></span></b></p>
-            <form id="teamUpdateForm">
-                <div id="teamNameUpdateLabel" class="form-group"><label for="teamNameUpdate">Team Name (<span id="teamNameUpdateTIMS">xxx</span> in TIMS)</label> <input type="text" class="form-control" id="teamNameUpdate" placeholder="Enter a Team Name"></div>
-                <div id="organizationUpdateLabel" class="form-group"><label for="organizationUpdate">Organization/School (<span id="organizationUpdateTIMS">xxx</span> in TIMS)</label> <input type="text" class="form-control" id="organizationUpdate" placeholder="Enter an Organization or School Name">
-                </div>
-                <div id="sayNumberLabel" class="form-group"><label for="sayNumber">How to pronounce the team number (some teams are particular)</label><input type="text" class="form-control" id="sayNumber" placeholder="Tell us how to pronounce the team number"></div>
-                <div id="robotNameUpdateLabel" class="form-group"><label for="robotNameUpdate">Robot Name (<span id="robotNameUpdateTIMS">xxx</span> in TIMS) &nbsp;&nbsp;&nbsp; Robot name <input type="checkbox" id="showRobotName" name="showRobotName" value="true" checked></label><input type="text" class="form-control" id="robotNameUpdate" placeholder="Enter a Robot Name"></div>
-                <div id="teamMottoUpdateLabel" class="form-group"><label for="teamMottoUpdate">Team Motto (Team mottoes are local and do not come from <i><b>FIRST</b></i>)</label> <input type="text" class="form-control" id="teamMottoUpdate" placeholder="Enter a Team Motto"></div>
-                <div id="cityStateUpdateLabel" class="form-group"><label for="cityStateUpdate">City, State (<span id="cityStateUpdateTIMS">xxx</span> in TIMS)</label> <input type="text" class="form-control" id="cityStateUpdate" placeholder="Enter a city and state">
-                </div>
-                <div id="teamYearsNoCompeteUpdateLabel" class="form-group"><label for="teamYearsNoCompeteUpdate">Number of seasons NOT competing with <i><b>FIRST</b></i> (will be used in calculating Nth season)</label> <input type="text" class="form-control" id="teamYearsNoCompeteUpdate" placeholder="Enter the number of seasons (not the actual years!) this team has NOT competed since their founding">
-                </div>
-                <div id="teamNotesUpdateLabel" class="form-group form-flex"><label for="teamNotesUpdate">Team Notes for Announce Screen (These notes are local notes and do not come from <i><b>FIRST</b></i>)</label>
-                    <div contenteditable="true" onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)" class="form-control placeholder" rows="1" id="teamNotesUpdate" placeholder="Enter some notes you would like to have on the Announce Screen"></div>
-                </div>
-                <div id="teamNotesLabel" class="form-group form-flex"><label for="teamNotes">Team Notes for Team Data screen (These notes are local notes and do not come from <i><b>FIRST</b></i>)</label>
-                    <div contenteditable="true" onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)" class="form-control placeholder" rows="1" id="teamNotes" placeholder="Enter some notes you would like to have on the Team Data Screen"></div>
-                </div>
-                <div id="topSponsorsUpdateLabel" class="form-group form-flex"><label for="topSponsorsUpdate">Top Sponsors (Enter no more than 5 top sponsors from the full sponsor list below)</label> <textarea onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)" class="form-control" rows="1" id="topSponsorsUpdate" placeholder="Enter the team's top 5 sponsors"></textarea>
-                </div>
-                <div id="sponsorsUpdateLabel" class="form-group form-flex"><label for="sponsorsUpdate">Full list of Sponsors (For reference only. This field does not appear in the UI. Delete to revert to TIMS value)</label> <textarea onfocus="textAreaAdjust(this)" onkeyup="textAreaAdjust(this)" rows="1" class="form-control" id="sponsorsUpdate" placeholder="Enter the team's Sponsors"></textarea></div>
-                <div id="awardsUpdateLabel"><label for="awardsUpdate">Awards as supplied by TIMS. THIS FIELD IS NO LONGER EDITABLE. Use Notes instead.</label>
-                    <div style="display: block; width: 100%; padding: 6px 12px; font-size: 14px; line-height: 1.42857143; color: #555; background-color: #fff; background-image: none; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 15px;" id="awardsUpdate" placeholder="No team awards in the last three years"></div>
-                </div>
-                <p onclick="updateTeamInfoDone('false')" class="btn btn-success alert col-xs-12 col-sm-2"><span class="glyphicon glyphicon-check">&nbsp;</span>Done</p>
-                <p onclick="saveTeamUpdate()" class="btn btn-info alert col-xs-12 col-sm-5"><span class="glyphicon glyphicon-cloud-upload">&nbsp;</span>Save Team Data to gatool Cloud.</p>
-                <p onclick="loadTeamUpdate()" class="btn btn-warning alert col-xs-12 col-sm-5"><span class="glyphicon glyphicon-cloud-download">&nbsp;</span>Load Team Data from gatool Cloud.</p>
-            </form>
+    </div>
+    <div id="cheatsheet" class="tabcontent container-fluid">
+        <h2>What is gatool?</h2>
+        <p> gatool is a tool to provide <i><b>FIRST®</b></i> Game Announcers with up to date information while announcing events during the <i><b>FIRST</b></i> Robotics season. As a web-based tool, it uses up-to-date information about the event to provide a comprehensive set of useful data to Game Announcers. It is designed to work on desktops, laptops and tablet devices. In a pinch, it can be used on a mobile phone.</p>
+        <p>If you are disinclined to read the documentation referenced below, we've made a short video so you can see it in action. </p>
+        <p><a target="_blank" href="https://youtu.be/8XuMEX_Mofs" target="new">Watch an overview of gatool on YouTube.</a></p>
+        <h3>You can get detailed help <a href="/help.html" target="_blank">at our help page.</a></h3>
+        <p><span id="cheatSheetImage"></span></p>
+        <p class="eventName">Terms you can use to liven up the play by play</p>
+        <ul class="announcingTips">
+            <li>Reaction time</li>
+            <li>Sky Hook</li>
+            <li>Tarmac Time</li>
+            <li>Quality Quintet</li>
+            <li>Reaching for the Rung</li>
+            <li>Hangin' at the Hangar</li>
+            <li>Long Shot</li>
+            <li>Dumping Cargo</li>
+            <li>High Shot</li>
+            <li>Conveyor Belt</li>
+            <li>Hitting the Afterburners</li>
+            <li>Raise the Landing Gear</li>
+            <li>Stevedore Shuffle</li>
+            <li>We got us a Convoy!</li>
+            <li>Cruising through the roundhouse</li>
+            <li>Cargo Delivered</li>
+            <li>Check the Manifest (count the Cargo)</li>
+            <li>Docking Maneuver</li>
+            <li>Transfer Cargo</li>
+            <li>Park at the Terminal</li>
+            <li>Supply Chain issue</li>
+        </ul>
+    </div>
+    <div id="davidPrice" class="container-fluid tabcontent">
+        <div id="davidPriceNumber" class="container-fluid davidPrice">No Sched</div>
+        <div class="davidPriceAlliances" id="davidPriceAlliances"><span id="davidPriceRedAlliance" class="redScore">0</span>
+            v <span id="davidPriceBlueAlliance" class="blueScore">0</span></div>
+    </div>
+    <div id="scoreDetails" class="tabcontent container-fluid">
+        <div class="container container-fluid">
+            <h2>Match Score details</h2>
+            <h4> Match number <span id="scoreDetailsMatchNumber">number</span> | Match Level <span id="scoreDetailsMatchLevel">quals</span>
+            </h4>
+            <table class="table table-striped" id="scoreTable">
+                <thead>
+                    <tr>
+                        <th scope="col">Red Alliance</th>
+                        <th scope="col">Blue Alliance</th>
+                    </tr>
+                </thead>
+                <tbody id="scoreTableBody">
+                    <tr>
+                        <td>Some detail</td>
+                        <td>Some other detail</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div id="stats" class="tabcontent container-fluid">
-            <div id="topOfStats" class="row">
-                <div class="col-xs-12 col-md-6 col-sm-6">
-                    <table id="worldhighscorestable" class="table table-condensed gatool-worldHighScores alert-danger">
-                        <thead>
-                            <tr>
-                                <td colspan="2">World High Scores<span id="highscoreyear"></span></td>
-                            </tr>
-                        </thead>
-                        <tr>
-                            <td id="highQualsNoFouls">Qual (no penalties)<br>No matches meet criteria<br></td>
-                            <td id="highPlayoffNoFouls">Playoff (no penalties)<br>No matches meet criteria</td>
-                        </tr>
-                        <tr>
-                            <td id="highQualsOffsettingFouls">Qual (offsetting penalties)<br>No matches meet criteria<br>
-                            </td>
-                            <td id="highPlayoffOffsettingFouls">Playoff (offsetting penalties)<br>No matches meet criteria<br></td>
-                        </tr>
-                        <tr>
-                            <td id="highQuals">Qual<br>No matches meet criteria<br></td>
-                            <td id="highPlayoff">Playoff<br>No matches meet criteria</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="col-xs-12 col-md-6 col-sm-6">
-                    <table id="eventhighscorestable" class="table table-condensed gatool-worldHighScores alert-info">
-                        <thead>
-                            <tr>
-                                <td colspan="2">Event High Scores: <span id="highscoreevent"></span></td>
-                            </tr>
-                        </thead>
-                        <tr>
-                            <td id="eventHighQualsNoFouls">Qual (no penalties)<br>No matches meet criteria<br></td>
-                            <td id="eventHighPlayoffNoFouls">Playoff (no penalties)<br>No matches meet criteria</td>
-                        </tr>
-                        <tr>
-                            <td id="eventHighQualsOffsettingFouls">Qual (offsetting penalties)<br>No matches meet criteria<br></td>
-                            <td id="eventHighPlayoffOffsettingFouls">Playoff (offsetting penalties)<br>No matches meet criteria<br></td>
-                        </tr>
-                        <tr>
-                            <td id="eventHighQuals">Qual<br>No matches meet criteria<br></td>
-                            <td id="eventHighPlayoff">Playoff<br>event No matches meet criteria</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div id="cheatsheet" class="tabcontent container-fluid">
-            <h2>What is gatool?</h2>
-            <p> gatool is a tool to provide <i><b>FIRST®</b></i> Game Announcers with up to date information while announcing events during the <i><b>FIRST</b></i> Robotics season. As a web-based tool, it uses up-to-date information about the event to provide a comprehensive set of useful data to Game Announcers. It is designed to work on desktops, laptops and tablet devices. In a pinch, it can be used on a mobile phone.</p>
-            <p>If you are disinclined to read the documentation referenced below, we've made a short video so you can see it in action. </p>
-            <p><a target="_blank" href="https://youtu.be/8XuMEX_Mofs" target="new">Watch an overview of gatool on YouTube.</a></p>
-            <h3>You can get detailed help <a href="/help.html" target="_blank">at our help page.</a></h3>
-            <p><span id="cheatSheetImage"></span></p>
-            <p class="eventName">Terms you can use to liven up the play by play</p>
-            <ul class="announcingTips">
-                <li>Reaction time</li>
-                <li>Sky Hook</li>
-                <li>Tarmac Time</li>
-                <li>Quality Quintet</li>
-                <li>Reaching for the Rung</li>
-                <li>Hangin' at the Hangar</li>
-                <li>Long Shot</li>
-                <li>Dumping Cargo</li>
-                <li>High Shot</li>
-                <li>Conveyor Belt</li>
-                <li>Hitting the Afterburners</li>
-                <li>Raise the Landing Gear</li>
-                <li>Stevedore Shuffle</li>
-                <li>We got us a Convoy!</li>
-                <li>Cruising through the roundhouse</li>
-                <li>Cargo Delivered</li>
-                <li>Check the Manifest (count the Cargo)</li>
-                <li>Docking Maneuver</li>
-                <li>Transfer Cargo</li>
-                <li>Park at the Terminal</li>
-                <li>Supply Chain issue</li>
-            </ul>
-        </div>
-        <div id="davidPrice" class="container-fluid tabcontent">
-            <div id="davidPriceNumber" class="container-fluid davidPrice">No Sched</div>
-            <div class="davidPriceAlliances" id="davidPriceAlliances"><span id="davidPriceRedAlliance" class="redScore">0</span>
-                v <span id="davidPriceBlueAlliance" class="blueScore">0</span></div>
-        </div>
-        <div id="scoreDetails" class="tabcontent container-fluid">
-            <div class="container container-fluid">
-                <h2>Match Score details</h2>
-                <h4> Match number <span id="scoreDetailsMatchNumber">number</span> | Match Level <span id="scoreDetailsMatchLevel">quals</span>
-                </h4>
-                <table class="table table-striped" id="scoreTable">
-                    <thead>
-                        <tr>
-                            <th scope="col">Red Alliance</th>
-                            <th scope="col">Blue Alliance</th>
-                        </tr>
-                    </thead>
-                    <tbody id="scoreTableBody">
-                        <tr>
-                            <td>Some detail</td>
-                            <td>Some other detail</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    </div>
     </div>
     <footer id="footer" class="container container-fluid gatool-footer footer">
         <div>
