@@ -125,6 +125,8 @@ var emptyTeamsResponse = {
     "pageTotal": 1
 }
 
+var onlineStatus = navigator.onLine;
+
 function handleAuthentication() {
     webAuth.parseHash(function (err, authResult) {
         if (authResult && authResult.accessToken && authResult.idToken) {
@@ -493,18 +495,42 @@ window.onload = function () {
     //Load the events list based on the restored values
     loadEventsList();
 
+    //try and catch orientation changes
     window.addEventListener("resize", scaleRows);
 
+    //enable keyboard navigation
     document.addEventListener('keyup', handleKeyboardNav);
 
     $("input, #awardsUpdate, #sponsorsUpdate, #topSponsorsUpdate, #teamNotes, #teamNotesUpdate").on("focus", deactivateKeys);
     $("input, #awardsUpdate, #sponsorsUpdate, #topSponsorsUpdate, #teamNotes, #teamNotesUpdate").on("blur", activateKeys);
+
+    //Add event listeners to trap when the online status changes.
+    
+    window.addEventListener('online',  updateOnlineStatus);
+    window.addEventListener('offline',  updateOnlineStatus);
+    updateOnlineStatus();
 
     scaleRows();
     document.getElementById('setupTabPicker').click();
     $("#loadingFeedback").html("gatool ready to play!");
     $("#loadingFeedback").fadeOut();
 };
+
+function updateOnlineStatus() {
+    onlineStatus = navigator.onLine;
+    if (onlineStatus) {
+        $("#setupMessage").html("Setup");
+        $("#setupTabPicker").removeClass("alert-danger");
+        $("#setupIcon").removeClass("glyphicon-signal");
+        $("#setupIcon").addClass("glyphicon-cog");
+    } else {
+        $("#setupMessage").html("Offline");
+        $("#setupIcon").removeClass("glyphicon-cog");
+        $("#setupIcon").addClass("glyphicon-signal");
+        $("#setupTabPicker").addClass("alert-danger");
+    }
+    
+}
 
 function deactivateKeys(event) {
     document.removeEventListener('keyup', handleKeyboardNav);

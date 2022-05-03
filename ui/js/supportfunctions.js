@@ -401,207 +401,240 @@ function trimArray(arr) {
 
 function loadEnvironment() {
     "use strict";
-    BootstrapDialog.show({
-        type: 'type-warning',
-        title: '<b>Load environment from the gatool Cloud</b>',
-        message: 'You are about to load your saved gatool environment from the gatool Cloud. <b>This will replace your gatool environment with what you have previously pushed to gatool Cloud.<br><b>Are you sure you want to do this?</b>',
-        buttons: [{
-            icon: 'glyphicon glyphicon-check',
-            label: "No, I don't want to<br>load my environment now.",
-            hotkey: 78, // "N".
-            cssClass: "btn btn-info col-md-5 col-xs-12 col-sm-12 alertButton",
-            action: function (dialogRef) {
-                dialogRef.close();
-            }
-        }, {
-            icon: 'glyphicon glyphicon-cloud-download',
-            label: 'Yes, I do want to<br>load my environment now.',
-            hotkey: 13, // Enter.
-            cssClass: 'btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton',
-            action: function (dialogRef) {
-
-                var req = new XMLHttpRequest();
-                req.open('GET', apiURL + 'user/preferences');
-                req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
-                req.addEventListener('load', function () {
+    if (onlineStatus) {
+        BootstrapDialog.show({
+            type: 'type-warning',
+            title: '<b>Load environment from the gatool Cloud</b>',
+            message: 'You are about to load your saved gatool environment from the gatool Cloud. <b>This will replace your gatool environment with what you have previously pushed to gatool Cloud.<br><b>Are you sure you want to do this?</b>',
+            buttons: [{
+                icon: 'glyphicon glyphicon-check',
+                label: "No, I don't want to<br>load my environment now.",
+                hotkey: 78, // "N".
+                cssClass: "btn btn-info col-md-5 col-xs-12 col-sm-12 alertButton",
+                action: function (dialogRef) {
                     dialogRef.close();
-                    if (req.status === 200) {
-                        environment = JSON.parse(req.responseText);
-                        var environmentKeys = Object.keys(environment.localStorage);
-                        for (var i = 0; i < environmentKeys.length; i++) {
-                            if (environmentKeys[i].startsWith("teamData")) {
-                                localStorage[environmentKeys[i]] = environment.localStorage[environmentKeys[i]];
-                                compressLocalStorage(environmentKeys[i], JSON.parse(environment.localStorage[environmentKeys[i]]));
-                            } else {
-                                localStorage[environmentKeys[i]] = environment.localStorage[environmentKeys[i]];
-                            }
-                        }
-                        playoffResults = environment.playoffResults;
-                        allianceTeamList = environment.allianceTeamList;
-                        allianceListUnsorted = environment.allianceListUnsorted;
-                        declinedList = environment.declinedList;
-                        declinedListUndo = environment.declinedListUndo;
-                        backupAllianceList = environment.backupAllianceList;
-                        backupAllianceListUndo = environment.backupAllianceList;
-                        rankingsList = environment.rankingsList;
-                        eventTeamList = environment.eventTeamList;
-                        eventQualsSchedule = environment.eventQualsSchedule;
-                        eventPlayoffSchedule = environment.eventPlayoffSchedule;
-                        currentAllianceChoice = environment.currentAllianceChoice;
-                        allianceChoices = environment.allianceChoices;
-                        replacementAlliance = environment.replacementAlliance;
-                        allianceChoicesUndo = environment.allianceChoicesUndo;
-                        allianceListUnsortedUndo = environment.allianceListUnsortedUndo;
-                        allianceTeamListUndo = environment.allianceTeamListUndo;
-                        teamNumberUndo = environment.teamNumberUndo;
-                        teamContainerUndo = environment.teamContainerUndo;
-                        lastMatchPlayed = environment.lastMatchPlayed;
-                        lastPlayoffMatchPlayed = environment.lastPlayoffMatchPlayed;
-                        allianceSelectionTableUndo = environment.allianceSelectionTableUndo;
-                        currentMatchData = environment.currentMatchData;
-                        teamCountTotal = environment.teamCountTotal;
-                        haveRanks = environment.haveRanks;
-                        highScores = environment.highScores;
-                        currentEventList = environment.currentEventList;
-                        lastRanksUpdate = environment.lastRanksUpdate;
-                        lastQualsUpdate = environment.lastQualsUpdate;
-                        qualsComplete = environment.qualsComplete;
-                        haveSchedule = environment.haveSchedule;
-                        matchCount = environment.matchCount;
-                        allianceSelectionReady = environment.allianceSelectionReady;
+                }
+            }, {
+                icon: 'glyphicon glyphicon-cloud-download',
+                label: 'Yes, I do want to<br>load my environment now.',
+                hotkey: 13, // Enter.
+                cssClass: 'btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton',
+                action: function (dialogRef) {
 
-                        BootstrapDialog.show({
-                            message: "Environment loaded from gatool Cloud. Your local data has been replaced.",
-                            buttons: [{
-                                icon: 'glyphicon glyphicon-cloud-download',
-                                cssClass: 'btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton',
-                                label: 'OK',
-                                hotkey: 13, // Enter.
-                                title: 'OK',
-                                action: function (dialogRef) {
-                                    dialogRef.close();
-                                    location.reload();
+                    var req = new XMLHttpRequest();
+                    req.open('GET', apiURL + 'user/preferences');
+                    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+                    req.addEventListener('load', function () {
+                        dialogRef.close();
+                        if (req.status === 200) {
+                            environment = JSON.parse(req.responseText);
+                            var environmentKeys = Object.keys(environment.localStorage);
+                            for (var i = 0; i < environmentKeys.length; i++) {
+                                if (environmentKeys[i].startsWith("teamData")) {
+                                    localStorage[environmentKeys[i]] = environment.localStorage[environmentKeys[i]];
+                                    compressLocalStorage(environmentKeys[i], JSON.parse(environment.localStorage[environmentKeys[i]]));
+                                } else {
+                                    localStorage[environmentKeys[i]] = environment.localStorage[environmentKeys[i]];
                                 }
-                            }]
-                        });
-                    }
-                });
-                req.send();
+                            }
+                            playoffResults = environment.playoffResults;
+                            allianceTeamList = environment.allianceTeamList;
+                            allianceListUnsorted = environment.allianceListUnsorted;
+                            declinedList = environment.declinedList;
+                            declinedListUndo = environment.declinedListUndo;
+                            backupAllianceList = environment.backupAllianceList;
+                            backupAllianceListUndo = environment.backupAllianceList;
+                            rankingsList = environment.rankingsList;
+                            eventTeamList = environment.eventTeamList;
+                            eventQualsSchedule = environment.eventQualsSchedule;
+                            eventPlayoffSchedule = environment.eventPlayoffSchedule;
+                            currentAllianceChoice = environment.currentAllianceChoice;
+                            allianceChoices = environment.allianceChoices;
+                            replacementAlliance = environment.replacementAlliance;
+                            allianceChoicesUndo = environment.allianceChoicesUndo;
+                            allianceListUnsortedUndo = environment.allianceListUnsortedUndo;
+                            allianceTeamListUndo = environment.allianceTeamListUndo;
+                            teamNumberUndo = environment.teamNumberUndo;
+                            teamContainerUndo = environment.teamContainerUndo;
+                            lastMatchPlayed = environment.lastMatchPlayed;
+                            lastPlayoffMatchPlayed = environment.lastPlayoffMatchPlayed;
+                            allianceSelectionTableUndo = environment.allianceSelectionTableUndo;
+                            currentMatchData = environment.currentMatchData;
+                            teamCountTotal = environment.teamCountTotal;
+                            haveRanks = environment.haveRanks;
+                            highScores = environment.highScores;
+                            currentEventList = environment.currentEventList;
+                            lastRanksUpdate = environment.lastRanksUpdate;
+                            lastQualsUpdate = environment.lastQualsUpdate;
+                            qualsComplete = environment.qualsComplete;
+                            haveSchedule = environment.haveSchedule;
+                            matchCount = environment.matchCount;
+                            allianceSelectionReady = environment.allianceSelectionReady;
 
-            }
-        }]
-    });
+                            BootstrapDialog.show({
+                                message: "Environment loaded from gatool Cloud. Your local data has been replaced.",
+                                buttons: [{
+                                    icon: 'glyphicon glyphicon-cloud-download',
+                                    cssClass: 'btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton',
+                                    label: 'OK',
+                                    hotkey: 13, // Enter.
+                                    title: 'OK',
+                                    action: function (dialogRef) {
+                                        dialogRef.close();
+                                        location.reload();
+                                    }
+                                }]
+                            });
+                        }
+                    });
+                    req.send();
+
+                }
+            }]
+        });
+    } else {
+        BootstrapDialog.show({
+            type: 'type-danger',
+            title: '<b>Load environment from the gatool Cloud</b>',
+            message: 'You appear to be offline. Please connect to the Internet and try again.',
+            buttons: [{
+                icon: 'glyphicon glyphicon-signal',
+                label: "Ok.",
+                hotkey: 13, // Enter.
+                cssClass: "btn btn-info col-md-5 col-xs-12 col-sm-12 alertButton",
+                action: function (dialogRef) {
+                    dialogRef.close();
+                }
+            }]
+        });
+    }
 }
 
 function saveEnvironment() {
     "use strict";
-
-    BootstrapDialog.show({
-        type: 'type-warning',
-        title: '<b>Save environment to the gatool Cloud</b>',
-        message: 'You are about to save your gatool environment to the gatool Cloud.<br><b>Are you sure you want to do this?</b>',
-        buttons: [{
-            icon: 'glyphicon glyphicon-check',
-            label: "No, I don't want to<br>save my environment now.",
-            hotkey: 78, // "N".
-            cssClass: "btn btn-info col-md-5 col-xs-12 col-sm-12 alertButton",
-            action: function (dialogRef) {
-                dialogRef.close();
-            }
-        }, {
-            icon: 'glyphicon glyphicon-cloud-download',
-            label: 'Yes, I do want to<br>save my environment now.',
-            hotkey: 13, // Enter.
-            cssClass: 'btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton',
-            action: function (dialogRef) {
-                environment.localStorage = {};
-                var localStorageKeys = Object.keys(localStorage);
-                for (var i = 0; i < localStorageKeys.length; i++) {
-                    if (localStorageKeys[i].startsWith("teamData")) {
-                        //if (Number(localStorageKeys[i].slice(8)>9000)) {
-                        environment.localStorage[localStorageKeys[i]] = JSON.stringify(decompressLocalStorage(localStorageKeys[i]));
-                        //}                  
-                    } else {
-                        environment.localStorage[localStorageKeys[i]] = localStorage[localStorageKeys[i]];
-                    }
-                }
-                environment.playoffResults = playoffResults;
-                environment.allianceTeamList = allianceTeamList;
-                environment.allianceListUnsorted = allianceListUnsorted;
-                environment.declinedList = declinedList;
-                environment.backupAllianceList = backupAllianceList;
-                environment.backupAllianceListUndo = backupAllianceListUndo;
-                environment.declinedListUndo = declinedListUndo;
-                environment.rankingsList = rankingsList;
-                environment.eventTeamList = eventTeamList;
-                environment.eventQualsSchedule = eventQualsSchedule;
-                environment.eventPlayoffSchedule = eventPlayoffSchedule;
-                environment.currentAllianceChoice = currentAllianceChoice;
-                environment.allianceChoices = allianceChoices;
-                environment.replacementAlliance = replacementAlliance;
-                environment.allianceChoicesUndo = allianceChoicesUndo;
-                environment.allianceListUnsortedUndo = allianceListUnsortedUndo;
-                environment.allianceTeamListUndo = allianceTeamListUndo;
-                environment.teamNumberUndo = teamNumberUndo;
-                environment.teamContainerUndo = teamContainerUndo;
-                environment.lastMatchPlayed = lastMatchPlayed;
-                environment.lastPlayoffMatchPlayed = lastPlayoffMatchPlayed;
-                environment.allianceSelectionTableUndo = allianceSelectionTableUndo;
-                environment.currentMatchData = currentMatchData;
-                environment.teamCountTotal = teamCountTotal;
-                environment.haveRanks = haveRanks;
-                environment.highScores = highScores;
-                environment.currentEventList = currentEventList;
-                environment.lastRanksUpdate = lastRanksUpdate;
-                environment.lastQualsUpdate = lastQualsUpdate;
-                environment.qualsComplete = qualsComplete;
-                environment.haveSchedule = haveSchedule;
-                environment.matchCount = matchCount;
-                environment.allianceSelectionReady = allianceSelectionReady;
-
-                var req = new XMLHttpRequest();
-                req.open('PUT', apiURL + 'user/preferences');
-                req.setRequestHeader("Content-type", "application/json");
-                req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
-                req.addEventListener('load', function () {
+    if (onlineStatus) {
+        BootstrapDialog.show({
+            type: 'type-warning',
+            title: '<b>Save environment to the gatool Cloud</b>',
+            message: 'You are about to save your gatool environment to the gatool Cloud.<br><b>Are you sure you want to do this?</b>',
+            buttons: [{
+                icon: 'glyphicon glyphicon-check',
+                label: "No, I don't want to<br>save my environment now.",
+                hotkey: 78, // "N".
+                cssClass: "btn btn-info col-md-5 col-xs-12 col-sm-12 alertButton",
+                action: function (dialogRef) {
                     dialogRef.close();
-                    if (req.status === 200) {
-                        BootstrapDialog.show({
-                            message: "Environment saved to gatool Cloud.",
-                            buttons: [{
-                                icon: 'glyphicon glyphicon-cloud-download',
-                                cssClass: 'btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton',
-                                label: 'OK',
-                                hotkey: 13, // Enter.
-                                title: 'OK',
-                                action: function (dialogRef) {
-                                    dialogRef.close();
-
-                                }
-                            }]
-                        });
-                    } else {
-                        BootstrapDialog.show({
-                            message: "Environment not saved to gatool Cloud.<br>Please try again.",
-                            buttons: [{
-                                icon: 'glyphicon glyphicon-cloud-download',
-                                cssClass: 'btn btn-danger col-md-5 col-xs-12 col-sm-12 alertButton',
-                                label: 'OK',
-                                hotkey: 13, // Enter.
-                                title: 'OK',
-                                action: function (dialogRef) {
-                                    dialogRef.close();
-
-                                }
-                            }]
-                        });
+                }
+            }, {
+                icon: 'glyphicon glyphicon-cloud-download',
+                label: 'Yes, I do want to<br>save my environment now.',
+                hotkey: 13, // Enter.
+                cssClass: 'btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton',
+                action: function (dialogRef) {
+                    environment.localStorage = {};
+                    var localStorageKeys = Object.keys(localStorage);
+                    for (var i = 0; i < localStorageKeys.length; i++) {
+                        if (localStorageKeys[i].startsWith("teamData")) {
+                            //if (Number(localStorageKeys[i].slice(8)>9000)) {
+                            environment.localStorage[localStorageKeys[i]] = JSON.stringify(decompressLocalStorage(localStorageKeys[i]));
+                            //}                  
+                        } else {
+                            environment.localStorage[localStorageKeys[i]] = localStorage[localStorageKeys[i]];
+                        }
                     }
-                });
-                req.send(JSON.stringify(environment));
+                    environment.playoffResults = playoffResults;
+                    environment.allianceTeamList = allianceTeamList;
+                    environment.allianceListUnsorted = allianceListUnsorted;
+                    environment.declinedList = declinedList;
+                    environment.backupAllianceList = backupAllianceList;
+                    environment.backupAllianceListUndo = backupAllianceListUndo;
+                    environment.declinedListUndo = declinedListUndo;
+                    environment.rankingsList = rankingsList;
+                    environment.eventTeamList = eventTeamList;
+                    environment.eventQualsSchedule = eventQualsSchedule;
+                    environment.eventPlayoffSchedule = eventPlayoffSchedule;
+                    environment.currentAllianceChoice = currentAllianceChoice;
+                    environment.allianceChoices = allianceChoices;
+                    environment.replacementAlliance = replacementAlliance;
+                    environment.allianceChoicesUndo = allianceChoicesUndo;
+                    environment.allianceListUnsortedUndo = allianceListUnsortedUndo;
+                    environment.allianceTeamListUndo = allianceTeamListUndo;
+                    environment.teamNumberUndo = teamNumberUndo;
+                    environment.teamContainerUndo = teamContainerUndo;
+                    environment.lastMatchPlayed = lastMatchPlayed;
+                    environment.lastPlayoffMatchPlayed = lastPlayoffMatchPlayed;
+                    environment.allianceSelectionTableUndo = allianceSelectionTableUndo;
+                    environment.currentMatchData = currentMatchData;
+                    environment.teamCountTotal = teamCountTotal;
+                    environment.haveRanks = haveRanks;
+                    environment.highScores = highScores;
+                    environment.currentEventList = currentEventList;
+                    environment.lastRanksUpdate = lastRanksUpdate;
+                    environment.lastQualsUpdate = lastQualsUpdate;
+                    environment.qualsComplete = qualsComplete;
+                    environment.haveSchedule = haveSchedule;
+                    environment.matchCount = matchCount;
+                    environment.allianceSelectionReady = allianceSelectionReady;
 
-            }
-        }]
-    });
+                    var req = new XMLHttpRequest();
+                    req.open('PUT', apiURL + 'user/preferences');
+                    req.setRequestHeader("Content-type", "application/json");
+                    req.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+                    req.addEventListener('load', function () {
+                        dialogRef.close();
+                        if (req.status === 200) {
+                            BootstrapDialog.show({
+                                message: "Environment saved to gatool Cloud.",
+                                buttons: [{
+                                    icon: 'glyphicon glyphicon-cloud-download',
+                                    cssClass: 'btn btn-success col-md-5 col-xs-12 col-sm-12 alertButton',
+                                    label: 'OK',
+                                    hotkey: 13, // Enter.
+                                    title: 'OK',
+                                    action: function (dialogRef) {
+                                        dialogRef.close();
+
+                                    }
+                                }]
+                            });
+                        } else {
+                            BootstrapDialog.show({
+                                message: "Environment not saved to gatool Cloud.<br>Please try again.",
+                                buttons: [{
+                                    icon: 'glyphicon glyphicon-cloud-download',
+                                    cssClass: 'btn btn-danger col-md-5 col-xs-12 col-sm-12 alertButton',
+                                    label: 'OK',
+                                    hotkey: 13, // Enter.
+                                    title: 'OK',
+                                    action: function (dialogRef) {
+                                        dialogRef.close();
+
+                                    }
+                                }]
+                            });
+                        }
+                    });
+                    req.send(JSON.stringify(environment));
+
+                }
+            }]
+        });
+    } else {
+        BootstrapDialog.show({
+            type: 'type-danger',
+            title: '<b>Save environment to the gatool Cloud</b>',
+            message: 'You appear to be offline. Please connect to the Internet and try again.',
+            buttons: [{
+                icon: 'glyphicon glyphicon-signal',
+                label: "Ok.",
+                hotkey: 13, // Enter.
+                cssClass: "btn btn-info col-md-5 col-xs-12 col-sm-12 alertButton",
+                action: function (dialogRef) {
+                    dialogRef.close();
+                }
+            }]
+        });
+    }
 }
 
 function inChamps() {
@@ -650,7 +683,7 @@ function inMiDivision() {
 }
 
 function eventWeek(event) {
-    if (event.weekNumber <=7) {
+    if (event.weekNumber <= 7) {
         return `filtersweek${event.weekNumber}`;
     } else if (event.weekNumber == 8) {
         return "filtershouston";
