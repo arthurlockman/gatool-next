@@ -212,11 +212,11 @@
                 <div class="container alert alert-warning col-sm-12">
                     <p><strong>gatool cloud Teams Information</strong></p>
                     <p>Use these buttons to save your local teams data changes and to load teams data changes from gatool cloud. </p>
-                    <div onclick="saveTeamUpdates()" class="btn btn-info alert col-md-6 col-xs-6 col-sm-6">
+                    <div id="saveTeamUpdates" class="btn btn-info alert col-md-6 col-xs-6 col-sm-6 onlineButton">
                         <div><span class="glyphicon glyphicon-cloud-upload">&nbsp;</span>Save Teams data<br>to gatool Cloud
                         </div>
                     </div>
-                    <div onclick="loadTeamUpdates()" class="btn btn-warning alert col-md-6 col-xs-6 col-sm-6">
+                    <div id="loadTeamUpdates" class="btn btn-warning alert col-md-6 col-xs-6 col-sm-6 onlineButton">
                         <div><span class="glyphicon glyphicon-cloud-download">&nbsp;</span>Load Teams data<br>from gatool Cloud
                         </div>
                     </div>
@@ -224,11 +224,11 @@
                 <div class="container alert alert-warning col-sm-12">
                     <p><strong>gatool Cloud Sync</strong></p>
                     <p>Use these buttons to save your gatool environment to gatool cloud. You can then load it on another device. </p>
-                    <div onclick="saveEnvironment()" class="btn btn-success alert col-md-6 col-xs-6 col-sm-6">
+                    <div id="saveEnvironment" class="btn btn-success alert col-md-6 col-xs-6 col-sm-6 onlineButton">
                         <div><span class="glyphicon glyphicon-cloud-upload">&nbsp;</span>Save Environment<br>to gatool Cloud
                         </div>
                     </div>
-                    <div onclick="loadEnvironment()" class="btn btn-primary alert col-md-6 col-xs-6 col-sm-6">
+                    <div id="loadEnvironment" class="btn btn-primary alert col-md-6 col-xs-6 col-sm-6 onlineButton">
                         <div><span class="glyphicon glyphicon-cloud-download">&nbsp;</span>Load Environment<br>from gatool Cloud
                         </div>
                     </div>
@@ -1024,7 +1024,7 @@
             <div id="allianceSelectionTable">
                 <div class="container">
                     <div class="row">
-                        <div id="allianceSelectionFilterInput" class="form-group col-sm-6"><input type="text" inputmode="tel" pattern="[0-9]*" class="form-control" id="allianceSelectionFilter" placeholder="Type a number to filter the teams"></div>
+                        <div id="allianceSelectionFilterInput" class="form-group col-sm-6"><input type="text" inputmode="tel" pattern="[0-9]*" class="form-control" id="allianceSelectionFilter" placeholder="Type a number to filter the teams" onfocus="deactivateKeys();" onblur="activateKeys();"></div>
                         <div id="allianceUndoButton" class="col-sm-6"><a href="#" class="btn btn-warning undoButton">Undo Alliance Selection Choice<span id="undoAlliance"></span></a></div>
                     </div>
                 </div>
@@ -1177,7 +1177,7 @@
         </div>
         <div class="container">
             <div class="row">
-                <div class="form-group col-sm-3"></div>&nbsp;<div id="awardsFilterInput" class="form-group col-sm-6"><input type="text" inputmode="tel" pattern="[0-9]*" class="form-control" id="awardsFilter" placeholder="Type a number to filter the teams"></div><div class="form-group col-sm-3">&nbsp;</div>
+                <div class="form-group col-sm-3"></div>&nbsp;<div id="awardsFilterInput" class="form-group col-sm-6"><input type="text" inputmode="tel" pattern="[0-9]*" class="form-control" id="awardsFilter" placeholder="Type a number to filter the teams" onfocus="deactivateKeys();" onblur="activateKeys();"></div><div class="form-group col-sm-3">&nbsp;</div>
             </div>
         </div>
         <div id="awardsSelectionTable">
@@ -1234,8 +1234,8 @@
                 <div style="display: block; width: 100%; padding: 6px 12px; font-size: 14px; line-height: 1.42857143; color: #555; background-color: #fff; background-image: none; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 15px;" id="awardsUpdate" placeholder="No team awards in the last three years"></div>
             </div>
             <p onclick="updateTeamInfoDone('false')" class="btn btn-success alert col-xs-12 col-sm-2"><span class="glyphicon glyphicon-check">&nbsp;</span>Done</p>
-            <p onclick="saveTeamUpdate()" class="btn btn-info alert col-xs-12 col-sm-5"><span class="glyphicon glyphicon-cloud-upload">&nbsp;</span>Save Team Data to gatool Cloud.</p>
-            <p onclick="loadTeamUpdate()" class="btn btn-warning alert col-xs-12 col-sm-5"><span class="glyphicon glyphicon-cloud-download">&nbsp;</span>Load Team Data from gatool Cloud.</p>
+            <p id="saveTeamUpdate" class="btn btn-info alert col-xs-12 col-sm-5 onlineButton"><span class="glyphicon glyphicon-cloud-upload">&nbsp;</span>Save Team Data to gatool Cloud.</p>
+            <p id="loadTeamUpdate" class="btn btn-warning alert col-xs-12 col-sm-5 onlineButton"><span class="glyphicon glyphicon-cloud-download">&nbsp;</span>Load Team Data from gatool Cloud.</p>
         </form>
     </div>
     <div id="stats" class="tabcontent container-fluid">
